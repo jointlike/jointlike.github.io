@@ -488,239 +488,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/machine_learn_start/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/24/machine_learn_start/" class="post-title-link" itemprop="url">机器学习</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-27 16:26:53" itemprop="dateModified" datetime="2019-02-27T16:26:53+08:00">2019-02-27</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概念理解："><a href="#概念理解：" class="headerlink" title="概念理解："></a>概念理解：</h2><p>机器学习是对依据经验提升自身性能或丰富自身知识的各种算法和系统的系统性研究。<br>机器学习所关注的问题是使用正确的特征来构建正确的模型，以完成既定的任务。（任务，模型，特征）<br>模型赋予机器学习领域以多样性，而特征和任务则为其带来某种程度的一致性。</p>
-<p>常见的分类模型有逻辑回归（LR）、朴素贝叶斯、SVM、GBDT和随机森林（RandomForest）、FFM 等  </p>
-<p>LR(Logistic Regression)  </p>
-<p>SVM(Support Vector Machine)  </p>
-<p>GBDT(Gradient Boosting Decision Tree)  </p>
-<p>FM（Factorization Machine） </p>
-<p>FFM（Field-aware Factorization Machine）  </p>
-<p>标称型数据（类别）：一般在有限的数据中取，而且只存在‘是’和‘否’两种不同的结果（一般用于分类）<br>数值型数据：可以在无限的数据中取，而且数值比较具体化，例如4.02,6.23这种值（一般用于回归分析）  </p>
-<p>系统性能体现在是否能真正达到目标期望，但存在过拟合问题，可能在某一方面相同问题上表现优异而相似问题上则表现糟糕，因此要考虑系统的推广性，适应性，个性化。</p>
-<h2 id="机器学习分类："><a href="#机器学习分类：" class="headerlink" title="机器学习分类："></a>机器学习分类：</h2><ul>
-<li><ol>
-<li>监督学习  </li>
-</ol>
-</li>
-</ul>
-<p>有目标期望的学习  </p>
-<ul>
-<li><p>1) 分类<br>目标变量是离散型，如是/否、1/2/3、A/B/C或者红/黄/黑等<br>常用分类器算法：<br>k-近邻算法、朴素贝叶斯算法、支持向量机、决策树  </p>
-</li>
-<li><p>2) 回归<br>目标变量是连续型的数值，如0.0～100.00、999～999或者+∞～∞等<br>常用回归算法：<br>线性回归、局部加权线性回归、Ridge 回归、Lasso 最小回归系数估计  </p>
-</li>
-</ul>
-<ul>
-<li><ol start="2">
-<li>无监督学习  </li>
-</ol>
-</li>
-</ul>
-<p>无目标期望的学习</p>
-<ul>
-<li><p>1）聚类<br>自分类<br>常用算法：<br>K-均值（K-mean）、DBSCAN </p>
-</li>
-<li><p>2）密度估计<br>估计数据与每个分组的相似程度<br>常用算法：<br>最大期望算法、Parzen窗设计  </p>
-</li>
-</ul>
-<p>另外，还可以根据模型的输出是否含有目标变量来划分模型，如果有则称其为预测性模型，否则称其为描述性模型。</p>
-<h2 id="机器学习方法论："><a href="#机器学习方法论：" class="headerlink" title="机器学习方法论："></a>机器学习方法论：</h2><ul>
-<li><ol>
-<li><p>理解数据  </p>
-<ul>
-<li>数据类型，离散型或连续型  </li>
-<li>数据缺陷，是否缺失等  </li>
-<li>数据噪声，是否存在干扰数据  </li>
-</ul>
-</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>一般从训练集中拿出一定比例数据做测试，避免真实数据过拟合影响准确率。抽取的方法为了避免运气不好，常使用交叉验证（cross validation）。交叉验证：对数据集中的数据分块，对训练集数据和测试集数据轮流交互验证，让每一部分数据都可以作为测试数据，最后对测试集性能取平均值。交叉验证主要用于有监督数据。</li>
-</ol>
-</li>
-</ul>
-<h2 id="机器学习的步骤："><a href="#机器学习的步骤：" class="headerlink" title="机器学习的步骤："></a>机器学习的步骤：</h2><ul>
-<li><ol>
-<li>收集数据  </li>
-</ol>
-</li>
-<li><ol start="2">
-<li>存储数据  </li>
-</ol>
-</li>
-<li><ol start="3">
-<li>分析数据（人工和自动化）</li>
-</ol>
-</li>
-<li><ol start="4">
-<li>训练算法–模型（无监督学习不需要训练）</li>
-</ol>
-</li>
-<li><ol start="5">
-<li>测试算法</li>
-</ol>
-</li>
-<li><ol start="6">
-<li>使用算法</li>
-</ol>
-</li>
-</ul>
-<h2 id="术语："><a href="#术语：" class="headerlink" title="术语："></a>术语：</h2><p>损失函数或代价函数：用来验证并作为回归函数的目标函数，越逼近拟合效果越好。即代价函数值越小越好。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/machine_learn_用户画像/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1080,6 +847,239 @@
 <li>有效性分析：重要性，权重</li>
 <li>监控重要特征</li>
 </ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/machine_learn_start/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/machine_learn_start/" class="post-title-link" itemprop="url">机器学习</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:26:53" itemprop="dateModified" datetime="2019-02-27T16:26:53+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念理解："><a href="#概念理解：" class="headerlink" title="概念理解："></a>概念理解：</h2><p>机器学习是对依据经验提升自身性能或丰富自身知识的各种算法和系统的系统性研究。<br>机器学习所关注的问题是使用正确的特征来构建正确的模型，以完成既定的任务。（任务，模型，特征）<br>模型赋予机器学习领域以多样性，而特征和任务则为其带来某种程度的一致性。</p>
+<p>常见的分类模型有逻辑回归（LR）、朴素贝叶斯、SVM、GBDT和随机森林（RandomForest）、FFM 等  </p>
+<p>LR(Logistic Regression)  </p>
+<p>SVM(Support Vector Machine)  </p>
+<p>GBDT(Gradient Boosting Decision Tree)  </p>
+<p>FM（Factorization Machine） </p>
+<p>FFM（Field-aware Factorization Machine）  </p>
+<p>标称型数据（类别）：一般在有限的数据中取，而且只存在‘是’和‘否’两种不同的结果（一般用于分类）<br>数值型数据：可以在无限的数据中取，而且数值比较具体化，例如4.02,6.23这种值（一般用于回归分析）  </p>
+<p>系统性能体现在是否能真正达到目标期望，但存在过拟合问题，可能在某一方面相同问题上表现优异而相似问题上则表现糟糕，因此要考虑系统的推广性，适应性，个性化。</p>
+<h2 id="机器学习分类："><a href="#机器学习分类：" class="headerlink" title="机器学习分类："></a>机器学习分类：</h2><ul>
+<li><ol>
+<li>监督学习  </li>
+</ol>
+</li>
+</ul>
+<p>有目标期望的学习  </p>
+<ul>
+<li><p>1) 分类<br>目标变量是离散型，如是/否、1/2/3、A/B/C或者红/黄/黑等<br>常用分类器算法：<br>k-近邻算法、朴素贝叶斯算法、支持向量机、决策树  </p>
+</li>
+<li><p>2) 回归<br>目标变量是连续型的数值，如0.0～100.00、999～999或者+∞～∞等<br>常用回归算法：<br>线性回归、局部加权线性回归、Ridge 回归、Lasso 最小回归系数估计  </p>
+</li>
+</ul>
+<ul>
+<li><ol start="2">
+<li>无监督学习  </li>
+</ol>
+</li>
+</ul>
+<p>无目标期望的学习</p>
+<ul>
+<li><p>1）聚类<br>自分类<br>常用算法：<br>K-均值（K-mean）、DBSCAN </p>
+</li>
+<li><p>2）密度估计<br>估计数据与每个分组的相似程度<br>常用算法：<br>最大期望算法、Parzen窗设计  </p>
+</li>
+</ul>
+<p>另外，还可以根据模型的输出是否含有目标变量来划分模型，如果有则称其为预测性模型，否则称其为描述性模型。</p>
+<h2 id="机器学习方法论："><a href="#机器学习方法论：" class="headerlink" title="机器学习方法论："></a>机器学习方法论：</h2><ul>
+<li><ol>
+<li><p>理解数据  </p>
+<ul>
+<li>数据类型，离散型或连续型  </li>
+<li>数据缺陷，是否缺失等  </li>
+<li>数据噪声，是否存在干扰数据  </li>
+</ul>
+</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>一般从训练集中拿出一定比例数据做测试，避免真实数据过拟合影响准确率。抽取的方法为了避免运气不好，常使用交叉验证（cross validation）。交叉验证：对数据集中的数据分块，对训练集数据和测试集数据轮流交互验证，让每一部分数据都可以作为测试数据，最后对测试集性能取平均值。交叉验证主要用于有监督数据。</li>
+</ol>
+</li>
+</ul>
+<h2 id="机器学习的步骤："><a href="#机器学习的步骤：" class="headerlink" title="机器学习的步骤："></a>机器学习的步骤：</h2><ul>
+<li><ol>
+<li>收集数据  </li>
+</ol>
+</li>
+<li><ol start="2">
+<li>存储数据  </li>
+</ol>
+</li>
+<li><ol start="3">
+<li>分析数据（人工和自动化）</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>训练算法–模型（无监督学习不需要训练）</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>测试算法</li>
+</ol>
+</li>
+<li><ol start="6">
+<li>使用算法</li>
+</ol>
+</li>
+</ul>
+<h2 id="术语："><a href="#术语：" class="headerlink" title="术语："></a>术语：</h2><p>损失函数或代价函数：用来验证并作为回归函数的目标函数，越逼近拟合效果越好。即代价函数值越小越好。</p>
 
           
         
@@ -1501,6 +1501,188 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_monitor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/k8s_monitor/" class="post-title-link" itemprop="url">Kubernetes监控</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:13:50" itemprop="dateModified" datetime="2019-02-27T16:13:50+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Node节点"><a href="#Node节点" class="headerlink" title="Node节点"></a>Node节点</h2><ul>
+<li><p>基础命令</p>
+<p>  <code>kubectl describe node node3</code></p>
+</li>
+</ul>
+<h2 id="kubelet"><a href="#kubelet" class="headerlink" title="kubelet"></a>kubelet</h2><ul>
+<li>组件  <ol>
+<li><strong>cAdvisor</strong><br>描述：收集本机以及容器的监控数据(cpu,memory,filesystem,network,uptime)</li>
+</ol>
+</li>
+</ul>
+<h2 id="Heapster"><a href="#Heapster" class="headerlink" title="Heapster"></a>Heapster</h2><ul>
+<li><p>描述  </p>
+<blockquote>
+<p>Heapster首先从K8S Master获取集群中所有Node的信息，然后通过这些Node上的kubelet获取有用数据，而kubelet本身的数据则是从cAdvisor得到。所有获取到的数据都被推到Heapster配置的后端存储中，并还支持数据的可视化。现在后端存储 + 可视化的方法，如InfluxDB + grafana。</p>
+</blockquote>
+</li>
+<li><p>组件  </p>
+<ol>
+<li><strong>InfluxDB</strong><br>描述：存储监控数据</li>
+</ol>
+</li>
+</ul>
+<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><blockquote>
+<ol>
+<li><a href="https://segmentfault.com/a/1190000007708162" target="_blank" rel="noopener">Kubernetes监控之Heapster介绍</a></li>
+</ol>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_资源有效性/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1692,348 +1874,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_资源等级/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/24/k8s_资源等级/" class="post-title-link" itemprop="url">Kubernetes之QoS</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-27 16:27:03" itemprop="dateModified" datetime="2019-02-27T16:27:03+08:00">2019-02-27</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="http://dockone.io/article/2592" target="_blank" rel="noopener">Kubernetes之服务质量保证（QoS）</a></p>
-<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods</p>
-<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort</p>
-<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。</p>
-<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。</p>
-<p>OOM分数值根据OOM_ADJ参数计算得出，对于Guaranteed级别的pod，OOM_ADJ参数设置成了-998，对于BestEffort级别的pod，OOM_ADJ参数设置成了1000，对于Burstable级别的POD，OOM_ADJ参数取值从2到999。对于kuberntes保留资源，比如kubelet，docker，OOM_ADJ参数设置成了-999，表示不会被OOM kill掉。OOM_ADJ参数设置的越大，通过OOM_ADJ参数计算出来OOM分数越高，表明该pod优先级就越低，当出现资源竞争时会越早被kill掉，对于OOM_ADJ参数是-999的表示kubernetes永远不会因为OOM而被kill掉。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_monitor/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/24/k8s_monitor/" class="post-title-link" itemprop="url">Kubernetes监控</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-27 16:13:50" itemprop="dateModified" datetime="2019-02-27T16:13:50+08:00">2019-02-27</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Node节点"><a href="#Node节点" class="headerlink" title="Node节点"></a>Node节点</h2><ul>
-<li><p>基础命令</p>
-<p>  <code>kubectl describe node node3</code></p>
-</li>
-</ul>
-<h2 id="kubelet"><a href="#kubelet" class="headerlink" title="kubelet"></a>kubelet</h2><ul>
-<li>组件  <ol>
-<li><strong>cAdvisor</strong><br>描述：收集本机以及容器的监控数据(cpu,memory,filesystem,network,uptime)</li>
-</ol>
-</li>
-</ul>
-<h2 id="Heapster"><a href="#Heapster" class="headerlink" title="Heapster"></a>Heapster</h2><ul>
-<li><p>描述  </p>
-<blockquote>
-<p>Heapster首先从K8S Master获取集群中所有Node的信息，然后通过这些Node上的kubelet获取有用数据，而kubelet本身的数据则是从cAdvisor得到。所有获取到的数据都被推到Heapster配置的后端存储中，并还支持数据的可视化。现在后端存储 + 可视化的方法，如InfluxDB + grafana。</p>
-</blockquote>
-</li>
-<li><p>组件  </p>
-<ol>
-<li><strong>InfluxDB</strong><br>描述：存储监控数据</li>
-</ol>
-</li>
-</ul>
-<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><blockquote>
-<ol>
-<li><a href="https://segmentfault.com/a/1190000007708162" target="_blank" rel="noopener">Kubernetes监控之Heapster介绍</a></li>
-</ol>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_配置热更新/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2151,6 +1991,166 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">volumeMounts:</span><br><span class="line">- name: config-volume</span><br><span class="line">  mountPath: /etc/config</span><br><span class="line">volumes:</span><br><span class="line">  - name: config-volume</span><br><span class="line">    configMap:</span><br><span class="line">      name: special-config</span><br></pre></td></tr></table></figure>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>更新 ConfigMap 后：</p>
 <p>使用该 ConfigMap 挂载的 Env 不会同步更新<br>使用该 ConfigMap 挂载的 Volume 中的数据需要一段时间（实测大概10秒）才能同步更新<br>ENV 是在容器启动的时候注入的，启动之后 kubernetes 就不会再改变环境变量的值，且同一个 namespace 中的 pod 的环境变量是不断累加的，参考 <a href="https://jimmysong.io/posts/exploring-kubernetes-env-with-docker/" target="_blank" rel="noopener">Kubernetes中的服务发现与docker容器间的环境变量传递源码探究</a>。为了更新容器中使用 ConfigMap 挂载的配置，可以通过滚动更新 pod 的方式来强制重新挂载 ConfigMap，也可以在更新了 ConfigMap 后，先将副本数设置为 0，然后再扩容。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_资源等级/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/k8s_资源等级/" class="post-title-link" itemprop="url">Kubernetes之QoS</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:27:03" itemprop="dateModified" datetime="2019-02-27T16:27:03+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="http://dockone.io/article/2592" target="_blank" rel="noopener">Kubernetes之服务质量保证（QoS）</a></p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods</p>
+<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort</p>
+<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。</p>
+<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。</p>
+<p>OOM分数值根据OOM_ADJ参数计算得出，对于Guaranteed级别的pod，OOM_ADJ参数设置成了-998，对于BestEffort级别的pod，OOM_ADJ参数设置成了1000，对于Burstable级别的POD，OOM_ADJ参数取值从2到999。对于kuberntes保留资源，比如kubelet，docker，OOM_ADJ参数设置成了-999，表示不会被OOM kill掉。OOM_ADJ参数设置的越大，通过OOM_ADJ参数计算出来OOM分数越高，表明该pod优先级就越低，当出现资源竞争时会越早被kill掉，对于OOM_ADJ参数是-999的表示kubernetes永远不会因为OOM而被kill掉。</p>
 
           
         

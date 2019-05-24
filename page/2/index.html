@@ -981,6 +981,198 @@ kubectl config use-context employee-context
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/ceph_deploy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/ceph_deploy/" class="post-title-link" itemprop="url">ceph 部署与概念</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:21:17" itemprop="dateModified" datetime="2019-02-27T16:21:17+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>-存储类型：<br>1.NAS - Network Attached Storage<br>2.SAN - storage area network<br>3.DAS - Direct Attached Storage</p>
+<p>-存储协议：<br>1.NFS –linux<br>2.SMB –windows</p>
+<p>-存储方案：<br>1.PV:persistant volume (node)<br>2.PVC: persistant volume claim (pod)</p>
+<p>理论：best 官网文档。 kuberneters 英文官网文档。<br><a href="https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html</a></p>
+<p>kubernetes持久化存储：<br><a href="https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc</a></p>
+<p>ceph/daemon 部署：<br><a href="https://hub.docker.com/r/ceph/daemon/" target="_blank" rel="noopener">https://hub.docker.com/r/ceph/daemon/</a><br><a href="https://www.jianshu.com/p/f08ed7287416" target="_blank" rel="noopener">https://www.jianshu.com/p/f08ed7287416</a><br><a href="https://www.linuxidc.com/Linux/2017-10/148041.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/148041.htm</a><br><a href="https://www.kubernetes.org.cn/ingress" target="_blank" rel="noopener">https://www.kubernetes.org.cn/ingress</a></p>
+<p>——实践步骤——-<br>体系结构<br>配置文件<br>部署环境配置<br>部署：</p>
+<ol>
+<li>部署 CEPH 的用户<br>ssh user@ceph-server<br>sudo useradd -d /home/{username} -m {username}<br>sudo passwd {username}</li>
+</ol>
+<p>授权<br>echo “{username} ALL = (root) NOPASSWD:ALL” | sudo tee /etc/sudoers.d/{username}<br>sudo chmod 0440 /etc/sudoers.d/{username}</p>
+<ol start="2">
+<li><p>无密码 SSH 登录<br>ssh-keygen<br>ssh-copy-id {username}@node1<br>ssh-copy-id {username}@node2<br>ssh-copy-id {username}@node3</p>
+</li>
+<li><p>deploy mon<br>docker run -it –net=host \<br>–hostname=cephmonhost \<br>–name=cephtimon \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-e MON_IP=172.20.36.231 \<br>-e CEPH_PUBLIC_NETWORK=172.20.36.0/24 \<br>ceph/daemon mon</p>
+</li>
+</ol>
+<p>ctrl+P+Q</p>
+<ol start="4">
+<li>deploy mgr<br>docker run -d –net=host \<br>–hostname=cephmgrhost \<br>–name=cephtimmgr \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>ceph/daemon mgr</li>
+</ol>
+<ol start="5">
+<li>distribut keyring<h1 id="ssh-root-node2-mkdir-p-var-lib-ceph"><a href="#ssh-root-node2-mkdir-p-var-lib-ceph" class="headerlink" title="ssh root@node2 mkdir -p /var/lib/ceph"></a>ssh root@node2 mkdir -p /var/lib/ceph</h1><h1 id="scp-r-etc-ceph-root-node2-etc"><a href="#scp-r-etc-ceph-root-node2-etc" class="headerlink" title="scp -r /etc/ceph root@node2:/etc"></a>scp -r /etc/ceph root@node2:/etc</h1><h1 id="scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph"><a href="#scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph" class="headerlink" title="scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph"></a>scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph</h1></li>
+</ol>
+<ol start="6">
+<li>zap disk<br>docker run -d –privileged=true \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon zap_device</li>
+</ol>
+<ol start="7">
+<li><p>deploy osd<br>docker run -it –net=host \<br>–hostname=cephosdhost \<br>–name=cephtimosd \<br>–pid=host \<br>–privileged=true \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon osd</p>
+</li>
+<li><p>deploy mds</p>
+</li>
+</ol>
+<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>-e CEPHFS_CREATE=1 \<br>ceph/daemon mds</p>
+<ol start="9">
+<li>deploy rgw</li>
+</ol>
+<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>ceph/daemon rgw</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/ceph_cmd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1482,198 +1674,6 @@ format: 1
 <p>rbd -pptmindpool ls</p>
 <p>importmyimage1</p>
 <p>本文出自 “康建华” 博客，转载请与作者联系！</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/ceph_deploy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/24/ceph_deploy/" class="post-title-link" itemprop="url">ceph 部署与概念</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-27 16:21:17" itemprop="dateModified" datetime="2019-02-27T16:21:17+08:00">2019-02-27</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>-存储类型：<br>1.NAS - Network Attached Storage<br>2.SAN - storage area network<br>3.DAS - Direct Attached Storage</p>
-<p>-存储协议：<br>1.NFS –linux<br>2.SMB –windows</p>
-<p>-存储方案：<br>1.PV:persistant volume (node)<br>2.PVC: persistant volume claim (pod)</p>
-<p>理论：best 官网文档。 kuberneters 英文官网文档。<br><a href="https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html</a></p>
-<p>kubernetes持久化存储：<br><a href="https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc</a></p>
-<p>ceph/daemon 部署：<br><a href="https://hub.docker.com/r/ceph/daemon/" target="_blank" rel="noopener">https://hub.docker.com/r/ceph/daemon/</a><br><a href="https://www.jianshu.com/p/f08ed7287416" target="_blank" rel="noopener">https://www.jianshu.com/p/f08ed7287416</a><br><a href="https://www.linuxidc.com/Linux/2017-10/148041.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/148041.htm</a><br><a href="https://www.kubernetes.org.cn/ingress" target="_blank" rel="noopener">https://www.kubernetes.org.cn/ingress</a></p>
-<p>——实践步骤——-<br>体系结构<br>配置文件<br>部署环境配置<br>部署：</p>
-<ol>
-<li>部署 CEPH 的用户<br>ssh user@ceph-server<br>sudo useradd -d /home/{username} -m {username}<br>sudo passwd {username}</li>
-</ol>
-<p>授权<br>echo “{username} ALL = (root) NOPASSWD:ALL” | sudo tee /etc/sudoers.d/{username}<br>sudo chmod 0440 /etc/sudoers.d/{username}</p>
-<ol start="2">
-<li><p>无密码 SSH 登录<br>ssh-keygen<br>ssh-copy-id {username}@node1<br>ssh-copy-id {username}@node2<br>ssh-copy-id {username}@node3</p>
-</li>
-<li><p>deploy mon<br>docker run -it –net=host \<br>–hostname=cephmonhost \<br>–name=cephtimon \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-e MON_IP=172.20.36.231 \<br>-e CEPH_PUBLIC_NETWORK=172.20.36.0/24 \<br>ceph/daemon mon</p>
-</li>
-</ol>
-<p>ctrl+P+Q</p>
-<ol start="4">
-<li>deploy mgr<br>docker run -d –net=host \<br>–hostname=cephmgrhost \<br>–name=cephtimmgr \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>ceph/daemon mgr</li>
-</ol>
-<ol start="5">
-<li>distribut keyring<h1 id="ssh-root-node2-mkdir-p-var-lib-ceph"><a href="#ssh-root-node2-mkdir-p-var-lib-ceph" class="headerlink" title="ssh root@node2 mkdir -p /var/lib/ceph"></a>ssh root@node2 mkdir -p /var/lib/ceph</h1><h1 id="scp-r-etc-ceph-root-node2-etc"><a href="#scp-r-etc-ceph-root-node2-etc" class="headerlink" title="scp -r /etc/ceph root@node2:/etc"></a>scp -r /etc/ceph root@node2:/etc</h1><h1 id="scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph"><a href="#scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph" class="headerlink" title="scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph"></a>scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph</h1></li>
-</ol>
-<ol start="6">
-<li>zap disk<br>docker run -d –privileged=true \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon zap_device</li>
-</ol>
-<ol start="7">
-<li><p>deploy osd<br>docker run -it –net=host \<br>–hostname=cephosdhost \<br>–name=cephtimosd \<br>–pid=host \<br>–privileged=true \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon osd</p>
-</li>
-<li><p>deploy mds</p>
-</li>
-</ol>
-<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>-e CEPHFS_CREATE=1 \<br>ceph/daemon mds</p>
-<ol start="9">
-<li>deploy rgw</li>
-</ol>
-<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>ceph/daemon rgw</p>
 
           
         
