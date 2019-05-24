@@ -521,7 +521,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/hadoop_cdh5/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_monitor/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -541,7 +541,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/hadoop_cdh5/" class="post-title-link" itemprop="url">hadoop 部署</a>
+                <a href="/2018/05/24/k8s_monitor/" class="post-title-link" itemprop="url">Kubernetes监控</a>
               
             
           </h2>
@@ -584,7 +584,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
 
                 
                 
@@ -621,32 +621,33 @@
       
         
           
-            <p>基于cloudera,oracle jdk 1.8.0.111, centos 6.8</p>
-<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a><strong>环境配置</strong></h3><ol start="0">
-<li><p>要求：CENTOS6(el6)，主4C8G，从2C4G 20G</p>
+            <h2 id="Node节点"><a href="#Node节点" class="headerlink" title="Node节点"></a>Node节点</h2><ul>
+<li><p>基础命令</p>
+<p>  <code>kubectl describe node node3</code></p>
 </li>
-<li><p>关闭selinux</p>
-</li>
+</ul>
+<h2 id="kubelet"><a href="#kubelet" class="headerlink" title="kubelet"></a>kubelet</h2><ul>
+<li>组件</li>
+</ul>
+<ol>
+<li><strong>cAdvisor</strong><br> 描述：收集本机以及容器的监控数据(cpu,memory,filesystem,network,uptime)</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/selinux/config</span><br><span class="line"></span><br><span class="line">SELINUX=disabled</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">2. 配置hostname, host????????????????????</span><br></pre></td></tr></table></figure>
-<p>vi /etc/sysconfig/network<br>vi /etc/hosts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. ssh打通</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line">ssh-keygen -t rsa  </span><br><span class="line">cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys  </span><br><span class="line">scp ~/.ssh/authorized_keys root@datanode1:~/.ssh/</span><br><span class="line">(ssh-copy-id hosts)  </span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. 主从时间同步ntp</span><br><span class="line">```  </span><br><span class="line"># vim /etc/ntp.conf   </span><br><span class="line">driftfile /var/lib/ntp/drift</span><br><span class="line">restrict 127.0.0.1</span><br><span class="line">restrict -6 ::1</span><br><span class="line">restrict default nomodify notrap </span><br><span class="line">server ntp3.aliyun.com prefer </span><br><span class="line">server ntp7.aliyun.com iburst</span><br><span class="line">includefile /etc/ntp/crypto/pw</span><br><span class="line">keys /etc/ntp/keys</span><br><span class="line"></span><br><span class="line"># 时间同步</span><br><span class="line">service ntpd start</span><br><span class="line">chkconfig ntpd on</span><br><span class="line"></span><br><span class="line"># 查看</span><br><span class="line">ntpstat </span><br><span class="line"></span><br><span class="line">synchronised to NTP server (203.107.6.88) at stratum 3 </span><br><span class="line">   time correct to within 40 ms</span><br><span class="line">   polling server every 1024 s</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">5. 装mysql </span><br><span class="line">```  </span><br><span class="line">yum install -y mysql mysql-server mysql-devel </span><br><span class="line">chkconfig mysqld on  </span><br><span class="line">service mysqld start  </span><br><span class="line">create database hive DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">create database oozie DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">grant all on *.* to root@&quot;%&quot; Identified by &quot;hadoop&quot;;</span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;%&apos; IDENTIFIED BY &apos;hadoop&apos; WITH GRANT OPTION;   </span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">6. 安装java</span><br><span class="line"></span><br><span class="line">注意需要是 oracle java</span><br></pre></td></tr></table></figure></p>
-<p>#openjdk<br>rpm -e –nodeps java-1.6.0-openjdk-1.6.0.0-1.66.1.13.0.el6.x86_64</p>
-<p>#sun jdk<br>yum -y install oracle-j2sdk1.7.x86_64</p>
-<p>vi /etc/profile</p>
-<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><p>export JAVA_HOME=/opt/java<br>export PATH=$JAVA_HOME/bin:$PATH<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[JDBC 参考](http://dev.mysql.com/downloads/connector/j/)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">7. 内核缓存配置</span><br><span class="line"></span><br><span class="line">`vi /etc/sysctl.conf`  </span><br><span class="line">`vm.swappiness=10`</span><br><span class="line">`vi /etc/rc.local` </span><br><span class="line">`echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag`</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">### **部署**</span><br><span class="line"></span><br><span class="line">1. ????CM.??????????5.9??   </span><br><span class="line"></span><br><span class="line">  &gt; Cloudera Manager 5.9??http://archive-primary.cloudera.com/cm5/cm/5/cloudera-manager-el6-cm5.9.0_x86_64.tar.gz  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 ???????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 sha?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1  </span><br><span class="line"></span><br><span class="line">  &gt; manifest ?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/manifest.json  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2. ????????????????  </span><br><span class="line"></span><br><span class="line">  - ??? tar -zxvf cloudera-manager-el6-cm5.9.0_x86_64.tar.gz -P /opt/cloudera/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1 CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha</span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv manifest.json /opt/clourdera/parcel.repo/  </span><br><span class="line"></span><br><span class="line">3. ?????????  </span><br><span class="line">```  </span><br><span class="line">/opt/cloudera/share/cmf/schema/scm_prepare_database.sh mysql cm -hlocalhost -uroot -phdp --scm-host localhost scm scm scm</span><br><span class="line">??????????????/usr/share/cmf</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. ????????????????cloudera-daemon, cloudera-server</span><br></pre></td></tr></table></figure></p>
-<p>sudo yum –nogpgcheck localinstall cloudera-manager-daemons-<em>.rpm<br>sudo yum –nogpgcheck localinstall cloudera-manager-server-</em>.rpm<br><code>`</code></p>
-<ol start="7">
-<li>????localhost:7180???????,????????</li>
-</ol>
-<p>??????jdbc???????????oozie hive??????jdbc????????????</p>
-<h3 id><a href="#" class="headerlink" title="??????"></a>??????</h3><ol>
-<li><p>jdk ??????????????????????????????yum repo?????</p>
+<h2 id="Heapster"><a href="#Heapster" class="headerlink" title="Heapster"></a>Heapster</h2><ul>
+<li><p>描述</p>
+<blockquote>
+<p>Heapster首先从K8S Master获取集群中所有Node的信息，然后通过这些Node上的kubelet获取有用数据，而kubelet本身的数据则是从cAdvisor得到。所有获取到的数据都被推到Heapster配置的后端存储中，并还支持数据的可视化。现在后端存储 + 可视化的方法，如InfluxDB + grafana。</p>
+</blockquote>
 </li>
-<li><p>????????????????  </p>
+<li><p>组件</p>
 </li>
+</ul>
+<ol>
+<li><strong>InfluxDB</strong><br>描述：存储监控数据</li>
 </ol>
-<h3 id="-1"><a href="#-1" class="headerlink" title="????????"></a>????????</h3><blockquote>
-<p><a href="http://www.aboutyun.com/thread-9086-1-1.html" target="_blank" rel="noopener">Cloudera Manager 5 ?? CDH5 ????????????????</a><br><a href="https://www.cloudera.com/documentation/enterprise/latest/topics/install_cm_server.html" target="_blank" rel="noopener">Install Cloudera </a><br><a href="https://www.jianshu.com/p/57179e03795f" target="_blank" rel="noopener">?????CDH5??????</a><br><a href="https://blog.csdn.net/qq_30004245/article/details/75735275?locationNum=9&amp;fps=1" target="_blank" rel="noopener">Cloudera Hadoop???????????</a><br><a href="https://zhuanlan.zhihu.com/p/25533211" target="_blank" rel="noopener">??CDH5??hadoop???</a><br><a href="https://blog.csdn.net/hliq5399/article/details/78193113#t5" target="_blank" rel="noopener">??????????Hadoop??????</a><br><a href="https://www.jianshu.com/p/72dc1c591647" target="_blank" rel="noopener">CDH5???????????</a></p>
+<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><blockquote>
+<ol>
+<li><a href="https://segmentfault.com/a/1190000007708162" target="_blank" rel="noopener">Kubernetes监控之Heapster介绍</a></li>
+</ol>
 </blockquote>
 
           
@@ -820,7 +821,7 @@
       
         
           
-            <h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p><img src="./images/tools/git_cheatsheet.png" alt="not photos"></p>
+            <h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p><img src="/images/tools/git_cheatsheet.png" alt="not photos"></p>
 
           
         
