@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="熟悉Python、强大编码能力与独立项目开发能力，对机器学习tensorflow深度学习具备开发能力。熟悉微信小程序，前端html，js，css，vue，熟悉爬虫，mysql，redis，kafka, CI/CD, docker, k8s集群应用。了解Go语言/C/Java Hadoop ceph。做过运营、产品，业务理解快产品思维好，良好的线代、概率论，数据处理能力，善于分析问题解决问题">
-<meta name="keywords" content="python, machine learning, data mining, PM, foreign trade, jointlike, timwells,">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于">
-<meta property="og:url" content="https://jointlike.github.io/about/index.html">
+  <meta name="description" content="-存储类型：1.NAS - Network Attached Storage2.SAN - storage area network3.DAS - Direct Attached Storage -存储协议：1.NFS –linux2.SMB –windows -存储方案：1.PV:persistant volume (node)2.PVC: persistant volume claim (po">
+<meta name="keywords" content="分布式存储,ceph">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ceph 部署与概念">
+<meta property="og:url" content="https://jointlike.github.io/2018/05/24/ceph_deploy/index.html">
 <meta property="og:site_name" content="jointlike by TimWells">
-<meta property="og:description" content="熟悉Python、强大编码能力与独立项目开发能力，对机器学习tensorflow深度学习具备开发能力。熟悉微信小程序，前端html，js，css，vue，熟悉爬虫，mysql，redis，kafka, CI/CD, docker, k8s集群应用。了解Go语言/C/Java Hadoop ceph。做过运营、产品，业务理解快产品思维好，良好的线代、概率论，数据处理能力，善于分析问题解决问题">
+<meta property="og:description" content="-存储类型：1.NAS - Network Attached Storage2.SAN - storage area network3.DAS - Direct Attached Storage -存储协议：1.NFS –linux2.SMB –windows -存储方案：1.PV:persistant volume (node)2.PVC: persistant volume claim (po">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-24T08:24:28.493Z">
+<meta property="og:updated_time" content="2018-05-24T06:50:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于">
-<meta name="twitter:description" content="熟悉Python、强大编码能力与独立项目开发能力，对机器学习tensorflow深度学习具备开发能力。熟悉微信小程序，前端html，js，css，vue，熟悉爬虫，mysql，redis，kafka, CI/CD, docker, k8s集群应用。了解Go语言/C/Java Hadoop ceph。做过运营、产品，业务理解快产品思维好，良好的线代、概率论，数据处理能力，善于分析问题解决问题">
+<meta name="twitter:title" content="ceph 部署与概念">
+<meta name="twitter:description" content="-存储类型：1.NAS - Network Attached Storage2.SAN - storage area network3.DAS - Direct Attached Storage -存储协议：1.NFS –linux2.SMB –windows -存储方案：1.PV:persistant volume (node)2.PVC: persistant volume claim (po">
 
 
 
@@ -115,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="https://jointlike.github.io/about/">
+  <link rel="canonical" href="https://jointlike.github.io/2018/05/24/ceph_deploy/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>关于 | jointlike by TimWells</title>
+  <title>ceph 部署与概念 | jointlike by TimWells</title>
   
 
 
@@ -228,7 +228,7 @@
         
         
           
-          <li class="menu-item menu-item-about menu-item-active">
+          <li class="menu-item menu-item-about">
 
     
     
@@ -321,74 +321,226 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/ceph_deploy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h2 class="post-title" itemprop="name headline">关于
-
-</h2>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <p>熟悉Python、强大编码能力与独立项目开发能力，对机器学习tensorflow深度学习具备开发能力。熟悉微信小程序，前端html，js，css，vue，熟悉爬虫，mysql，redis，kafka, CI/CD, docker, k8s集群应用。了解Go语言/C/Java Hadoop ceph。做过运营、产品，业务理解快产品思维好，良好的线代、概率论，数据处理能力，善于分析问题解决问题</p>
+          <h2 class="post-title" itemprop="name headline">ceph 部署与概念
 
+              
+            
+          </h2>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/分布式存储系统/" itemprop="url" rel="index"><span itemprop="name">分布式存储系统</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>-存储类型：<br>1.NAS - Network Attached Storage<br>2.SAN - storage area network<br>3.DAS - Direct Attached Storage</p>
+<p>-存储协议：<br>1.NFS –linux<br>2.SMB –windows</p>
+<p>-存储方案：<br>1.PV:persistant volume (node)<br>2.PVC: persistant volume claim (pod)</p>
+<p>理论：best 官网文档。 kuberneters 英文官网文档。<br><a href="https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html</a></p>
+<p>kubernetes持久化存储：<br><a href="https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc</a></p>
+<p>ceph/daemon 部署：<br><a href="https://hub.docker.com/r/ceph/daemon/" target="_blank" rel="noopener">https://hub.docker.com/r/ceph/daemon/</a><br><a href="https://www.jianshu.com/p/f08ed7287416" target="_blank" rel="noopener">https://www.jianshu.com/p/f08ed7287416</a><br><a href="https://www.linuxidc.com/Linux/2017-10/148041.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/148041.htm</a><br><a href="https://www.kubernetes.org.cn/ingress" target="_blank" rel="noopener">https://www.kubernetes.org.cn/ingress</a></p>
+<p>——实践步骤——-<br>体系结构<br>配置文件<br>部署环境配置<br>部署：</p>
+<ol>
+<li>部署 CEPH 的用户<br>ssh user@ceph-server<br>sudo useradd -d /home/{username} -m {username}<br>sudo passwd {username}</li>
+</ol>
+<p>授权<br>echo “{username} ALL = (root) NOPASSWD:ALL” | sudo tee /etc/sudoers.d/{username}<br>sudo chmod 0440 /etc/sudoers.d/{username}</p>
+<ol start="2">
+<li><p>无密码 SSH 登录<br>ssh-keygen<br>ssh-copy-id {username}@node1<br>ssh-copy-id {username}@node2<br>ssh-copy-id {username}@node3</p>
+</li>
+<li><p>deploy mon<br>docker run -it –net=host \<br>–hostname=cephmonhost \<br>–name=cephtimon \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-e MON_IP=172.20.36.231 \<br>-e CEPH_PUBLIC_NETWORK=172.20.36.0/24 \<br>ceph/daemon mon</p>
+</li>
+</ol>
+<p>ctrl+P+Q</p>
+<ol start="4">
+<li>deploy mgr<br>docker run -d –net=host \<br>–hostname=cephmgrhost \<br>–name=cephtimmgr \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>ceph/daemon mgr</li>
+</ol>
+<ol start="5">
+<li>distribut keyring<h1 id="ssh-root-node2-mkdir-p-var-lib-ceph"><a href="#ssh-root-node2-mkdir-p-var-lib-ceph" class="headerlink" title="ssh root@node2 mkdir -p /var/lib/ceph"></a>ssh root@node2 mkdir -p /var/lib/ceph</h1><h1 id="scp-r-etc-ceph-root-node2-etc"><a href="#scp-r-etc-ceph-root-node2-etc" class="headerlink" title="scp -r /etc/ceph root@node2:/etc"></a>scp -r /etc/ceph root@node2:/etc</h1><h1 id="scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph"><a href="#scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph" class="headerlink" title="scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph"></a>scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph</h1></li>
+</ol>
+<ol start="6">
+<li>zap disk<br>docker run -d –privileged=true \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon zap_device</li>
+</ol>
+<ol start="7">
+<li><p>deploy osd<br>docker run -it –net=host \<br>–hostname=cephosdhost \<br>–name=cephtimosd \<br>–pid=host \<br>–privileged=true \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon osd</p>
+</li>
+<li><p>deploy mds</p>
+</li>
+</ol>
+<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>-e CEPHFS_CREATE=1 \<br>ceph/daemon mds</p>
+<ol start="9">
+<li>deploy rgw</li>
+</ol>
+<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>ceph/daemon rgw</p>
+
       
     </div>
-    
-
-
 
     
+
     
     
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/分布式存储/" rel="tag"># 分布式存储</a>
+          
+            <a href="/tags/ceph/" rel="tag"># ceph</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/24/hadoop_guide/" rel="next" title="hadoop 使用">
+                <i class="fa fa-chevron-left"></i> hadoop 使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/24/ceph_cmd/" rel="prev" title="ceph 概念命令">
+                ceph 概念命令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
 
@@ -417,8 +569,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -566,6 +727,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ssh-root-node2-mkdir-p-var-lib-ceph"><span class="nav-number">1.</span> <span class="nav-text">ssh root@node2 mkdir -p /var/lib/ceph</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scp-r-etc-ceph-root-node2-etc"><span class="nav-number">2.</span> <span class="nav-text">scp -r /etc/ceph root@node2:/etc</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph"><span class="nav-number">3.</span> <span class="nav-text">scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       

@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="概念： 以太坊：www.ethereum.org ，是一个区块链系统，相对于比特币网络系统的纯货币功能，以太坊区块链增加了智能合约，大大拓宽了其应用领域。用户基于其上创建区块链应用DAPP。  以太币：ETHER，一种类似于比特币的电子货币，以太坊区块链系统上的所有操作都需要消耗以太币；  外有账户（EOA），由私人密码控制  合同账户，由它们的合同编码控制，只能由外有账户“激活”  “智能合约”">
-<meta name="keywords" content="区块链,以太坊">
+  <meta name="description" content="健康检查使用Liveness及Readness探针1.Liveness探针：主要用于判断Container是否处于运行状态，比如当服务crash或者死锁等情况发生时，kubelet会kill掉Container, 然后根据其设置的restart policy进行相应操作（可能会在本机重新启动Container，或者因为设置Kubernetes QoS，本机没有资源情况下会被分发的其他机器上重新启动">
+<meta name="keywords" content="分布式系统,Kubernetes,k8s">
 <meta property="og:type" content="article">
-<meta property="og:title" content="以太坊">
-<meta property="og:url" content="https://jointlike.github.io/2018/05/24/block_chain/index.html">
+<meta property="og:title" content="Kubernetes之健康检查与服务依赖处理">
+<meta property="og:url" content="https://jointlike.github.io/2018/05/24/k8s_资源有效性/index.html">
 <meta property="og:site_name" content="jointlike by TimWells">
-<meta property="og:description" content="概念： 以太坊：www.ethereum.org ，是一个区块链系统，相对于比特币网络系统的纯货币功能，以太坊区块链增加了智能合约，大大拓宽了其应用领域。用户基于其上创建区块链应用DAPP。  以太币：ETHER，一种类似于比特币的电子货币，以太坊区块链系统上的所有操作都需要消耗以太币；  外有账户（EOA），由私人密码控制  合同账户，由它们的合同编码控制，只能由外有账户“激活”  “智能合约”">
+<meta property="og:description" content="健康检查使用Liveness及Readness探针1.Liveness探针：主要用于判断Container是否处于运行状态，比如当服务crash或者死锁等情况发生时，kubelet会kill掉Container, 然后根据其设置的restart policy进行相应操作（可能会在本机重新启动Container，或者因为设置Kubernetes QoS，本机没有资源情况下会被分发的其他机器上重新启动">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-24T06:50:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="以太坊">
-<meta name="twitter:description" content="概念： 以太坊：www.ethereum.org ，是一个区块链系统，相对于比特币网络系统的纯货币功能，以太坊区块链增加了智能合约，大大拓宽了其应用领域。用户基于其上创建区块链应用DAPP。  以太币：ETHER，一种类似于比特币的电子货币，以太坊区块链系统上的所有操作都需要消耗以太币；  外有账户（EOA），由私人密码控制  合同账户，由它们的合同编码控制，只能由外有账户“激活”  “智能合约”">
+<meta name="twitter:title" content="Kubernetes之健康检查与服务依赖处理">
+<meta name="twitter:description" content="健康检查使用Liveness及Readness探针1.Liveness探针：主要用于判断Container是否处于运行状态，比如当服务crash或者死锁等情况发生时，kubelet会kill掉Container, 然后根据其设置的restart policy进行相应操作（可能会在本机重新启动Container，或者因为设置Kubernetes QoS，本机没有资源情况下会被分发的其他机器上重新启动">
 
 
 
@@ -115,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="https://jointlike.github.io/2018/05/24/block_chain/">
+  <link rel="canonical" href="https://jointlike.github.io/2018/05/24/k8s_资源有效性/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>以太坊 | jointlike by TimWells</title>
+  <title>Kubernetes之健康检查与服务依赖处理 | jointlike by TimWells</title>
   
 
 
@@ -341,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/block_chain/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源有效性/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -358,7 +358,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">以太坊
+          <h2 class="post-title" itemprop="name headline">Kubernetes之健康检查与服务依赖处理
 
               
             
@@ -402,7 +402,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/区块链/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Kubernetes/" itemprop="url" rel="index"><span itemprop="name">Kubernetes</span></a></span>
 
                 
                 
@@ -437,23 +437,43 @@
       
 
       
-        <h2 id="概念："><a href="#概念：" class="headerlink" title="概念："></a>概念：</h2><ul>
-<li><p>以太坊：<a href="http://www.ethereum.org" target="_blank" rel="noopener">www.ethereum.org</a> ，是一个区块链系统，相对于比特币网络系统的纯货币功能，以太坊区块链增加了智能合约，大大拓宽了其应用领域。用户基于其上创建区块链应用DAPP。</p>
+        <h1 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h1><h2 id="使用Liveness及Readness探针"><a href="#使用Liveness及Readness探针" class="headerlink" title="使用Liveness及Readness探针"></a>使用Liveness及Readness探针</h2><p>1.Liveness探针：主要用于判断Container是否处于运行状态，比如当服务crash或者死锁等情况发生时，kubelet会kill掉Container, 然后根据其设置的restart policy进行相应操作（可能会在本机重新启动Container，或者因为设置Kubernetes QoS，本机没有资源情况下会被分发的其他机器上重新启动）。<br>2.Readness探针：主要用于进一步判断服务是否已经正常工作，如果服务没有加载完成或工作异常，服务所在的Pod的IP地址会从服务的endpoints中被移除，也就是说，当服务没有ready时，会将其从服务的load balancer中移除，不会再接受或响应任何请求。</p>
+<p>liveness可用不一定readness可用，容器存活期间服务可能卡死状态。因此服务检查周期要短于健康检查周期。</p>
+<hr>
+<h2 id="探针处理Handler类型"><a href="#探针处理Handler类型" class="headerlink" title="探针处理Handler类型"></a>探针处理Handler类型</h2><p>无论对于Readness或Liveness探针，Handler均支持以下3种类型：ExecAction, TCPSocketAction, HTTPGetAction。每种类型说明与举例如下：</p>
+<ol>
+<li><p>ExecAction：Container内部执行某个具体的命令，成功返回：shell命令返回0。<br>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">   exec:</span><br><span class="line">     command:</span><br><span class="line">     - cat</span><br><span class="line">     - /tmp/healthy</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 5</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>以太币：ETHER，一种类似于比特币的电子货币，以太坊区块链系统上的所有操作都需要消耗以太币；</p>
+<li><p>TCPSocketAction：通过container的IP、port执行tcp进行检查，确认port是否打开，类似telnet<br>例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">readinessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 10</span><br><span class="line"> livenessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 15</span><br><span class="line">   periodSeconds: 20</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>外有账户（EOA），由私人密码控制</p>
+<li><p>HTTPGetAction: 通过container的IP、port、path，用HTTP Get请求进行检查，程序自定义返回结果及程序可用标准。<br>例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">  httpGet:</span><br><span class="line">    path: /healthz</span><br><span class="line">    port: 8080</span><br><span class="line">    httpHeaders:</span><br><span class="line">    - name: X-Custom-Header</span><br><span class="line">      value: Awesome</span><br><span class="line">  initialDelaySeconds: 3</span><br><span class="line">  periodSeconds: 3</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>合同账户，由它们的合同编码控制，只能由外有账户“激活”</p>
-</li>
-<li><p>“智能合约”Smart Contract，用程序代码（Solidity代码）写的合约，使得合约双方不需要信任彼此也可以进行交易；</p>
-</li>
-<li><p>“矿工”以太坊网络中收集、传播、确认和执行交易的节点</p>
-</li>
-</ul>
-<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><blockquote>
-<p>1.<a href="https://www.cnblogs.com/tinyxiong/p/7878468.html" target="_blank" rel="noopener">以太坊</a><br>2.<a href="https://www.btctrade.com/ethcoin/2706.html" target="_blank" rel="noopener">以太坊（ETH）为什么如此火爆 最短的时间内读懂以太坊</a><br>3.<a href="http://www.cocoachina.com/blockchain/20180226/22352.html" target="_blank" rel="noopener">以太坊开发入门，完整入门</a></p>
-</blockquote>
+</ol>
+<hr>
+<h2 id="服务可用性与自动恢复"><a href="#服务可用性与自动恢复" class="headerlink" title="服务可用性与自动恢复"></a>服务可用性与自动恢复</h2><ol>
+<li>如果服务的健康检查（readiness）失败，故障的服务实例从service endpoint中下线，外部请求将不会再转发到该服务上，一定程度上保证正在提供的服务的正确性，如果服务自我恢复了（比如网络问题），会自动重新加入service endpoint对外提供服务。</li>
+<li>如果设置了Container（liveness）的探针，对故障服务的Container（liveness）的探针同样会失败，container会被kill掉，并根据原设置的container重启策略，系统倾向于在其原所在的机器上重启该container、或其他机器重新创建一个pod。</li>
+<li>由于上面的机制，整个服务实现了自身可用与自动恢复。</li>
+</ol>
+<hr>
+<p>##使用建议：</p>
+<ol>
+<li>建议对全部服务同时设置服务（readiness）和Container（liveness）的健康检查</li>
+<li>通过TCP对端口检查形式（TCPSocketAction），仅适用于端口已关闭或进程停止情况。因为即使服务异常，只要端口是打开状态，健康检查仍然是通过的。</li>
+<li>基于第二点，一般建议用ExecAction自定义健康检查逻辑，或采用HTTP Get请求进行检查（HTTPGetAction）。</li>
+<li>无论采用哪种类型的探针，一般建议设置检查服务（readiness）的时间短于检查Container（liveness）的时间，也可以将检查服务（readiness）的探针与Container（liveness）的探针设置为一致。目的是故障服务先下线，如果过一段时间还无法自动恢复，那么根据重启策略，重启该container、或其他机器重新创建一个pod恢复故障服务。</li>
+</ol>
+<hr>
+<h1 id="服务依赖"><a href="#服务依赖" class="headerlink" title="服务依赖"></a>服务依赖</h1><h2 id="理解Init-Container"><a href="#理解Init-Container" class="headerlink" title="理解Init Container"></a>理解Init Container</h2><p>一个pod中可以有一或多个Init Container。Pod的中多个Init Container启动顺序为yaml文件中的描述顺序，且串行方式启动，下一个Init/app Container必须等待上一个Init Container完成后方可启动</p>
+<p>由于Init Container必须要在pod状态变为Ready之前完成，所以其不需要readiness探针。另外在资源的requests与limits上与普通Container有细微差别，详见 Resources，除以上2点外，Init Container与普通Container并无明显区别</p>
+<p>Init Containers用途</p>
+<ol>
+<li>前文已经提及，由于Init Container必须在app Containers启动之前完成，所以可利用其特性，用作服务依赖处理。比如某一个服务A，需依赖db或memcached，那么可以利用服务A pod的Init Container判断db/memcached是否正常提供服务，如果启动服务失败或工作异常，设置Init Container启动失败，那么pod中的服务A就不会被启动了。</li>
+<li>应用镜像因安全原因等没办法安装或运行的工具，可放到Init Container中运行。另外，Init Container独立于业务服务，与业务无关的工具如sed, awk, python, dig等也可以按需放到Init Container之中。最后，Init Container也可以被授权访问应用Container无权访问的内容。</li>
+</ol>
 
       
     </div>
@@ -477,9 +497,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/区块链/" rel="tag"># 区块链</a>
+            <a href="/tags/分布式系统/" rel="tag"># 分布式系统</a>
           
-            <a href="/tags/以太坊/" rel="tag"># 以太坊</a>
+            <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
+          
+            <a href="/tags/k8s/" rel="tag"># k8s</a>
           
         </div>
       
@@ -492,8 +514,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/24/k8s_资源等级/" rel="next" title="Kubernetes之QoS">
-                <i class="fa fa-chevron-left"></i> Kubernetes之QoS
+              <a href="/2018/05/24/block_chain/" rel="next" title="以太坊">
+                <i class="fa fa-chevron-left"></i> 以太坊
               </a>
             
           </div>
@@ -502,8 +524,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/24/k8s_资源有效性/" rel="prev" title="Kubernetes之健康检查与服务依赖处理">
-                Kubernetes之健康检查与服务依赖处理 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/24/k8s_monitor/" rel="prev" title="Kubernetes监控">
+                Kubernetes监控 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -717,7 +739,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念："><span class="nav-number">1.</span> <span class="nav-text">概念：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考："><span class="nav-number">2.</span> <span class="nav-text">参考：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#健康检查"><span class="nav-number">1.</span> <span class="nav-text">健康检查</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Liveness及Readness探针"><span class="nav-number">1.1.</span> <span class="nav-text">使用Liveness及Readness探针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#探针处理Handler类型"><span class="nav-number">1.2.</span> <span class="nav-text">探针处理Handler类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务可用性与自动恢复"><span class="nav-number">1.3.</span> <span class="nav-text">服务可用性与自动恢复</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#服务依赖"><span class="nav-number">2.</span> <span class="nav-text">服务依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#理解Init-Container"><span class="nav-number">2.1.</span> <span class="nav-text">理解Init Container</span></a></li></ol></li></ol></div>
             
 
           </div>

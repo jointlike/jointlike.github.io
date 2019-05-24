@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="熟悉Python、强大编码能力与独立项目开发能力，对机器学习tensorflow深度学习具备开发能力。熟悉微信小程序，前端html，js，css，vue，熟悉爬虫，mysql，redis，kafka, CI/CD, docker, k8s集群应用。了解Go语言/C/Java Hadoop ceph。做过运营、产品，业务理解快产品思维好，良好的线代、概率论，数据处理能力，善于分析问题解决问题">
-<meta name="keywords" content="python, machine learning, data mining, PM, foreign trade, jointlike, timwells,">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于">
-<meta property="og:url" content="https://jointlike.github.io/about/index.html">
+  <meta name="description" content="Kubernetes之服务质量保证（QoS） 知识点QoS优先级3种QoS优先级从有低到高（从左向右）：Best-Effort pods -&amp;gt; Burstable pods -&amp;gt; Guaranteed pods Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort Burstable: pod中只">
+<meta name="keywords" content="分布式系统,Kubernetes,k8s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes之QoS">
+<meta property="og:url" content="https://jointlike.github.io/2018/05/24/k8s_资源等级/index.html">
 <meta property="og:site_name" content="jointlike by TimWells">
-<meta property="og:description" content="熟悉Python、强大编码能力与独立项目开发能力，对机器学习tensorflow深度学习具备开发能力。熟悉微信小程序，前端html，js，css，vue，熟悉爬虫，mysql，redis，kafka, CI/CD, docker, k8s集群应用。了解Go语言/C/Java Hadoop ceph。做过运营、产品，业务理解快产品思维好，良好的线代、概率论，数据处理能力，善于分析问题解决问题">
+<meta property="og:description" content="Kubernetes之服务质量保证（QoS） 知识点QoS优先级3种QoS优先级从有低到高（从左向右）：Best-Effort pods -&amp;gt; Burstable pods -&amp;gt; Guaranteed pods Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort Burstable: pod中只">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-24T08:24:28.493Z">
+<meta property="og:updated_time" content="2018-05-24T06:50:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于">
-<meta name="twitter:description" content="熟悉Python、强大编码能力与独立项目开发能力，对机器学习tensorflow深度学习具备开发能力。熟悉微信小程序，前端html，js，css，vue，熟悉爬虫，mysql，redis，kafka, CI/CD, docker, k8s集群应用。了解Go语言/C/Java Hadoop ceph。做过运营、产品，业务理解快产品思维好，良好的线代、概率论，数据处理能力，善于分析问题解决问题">
+<meta name="twitter:title" content="Kubernetes之QoS">
+<meta name="twitter:description" content="Kubernetes之服务质量保证（QoS） 知识点QoS优先级3种QoS优先级从有低到高（从左向右）：Best-Effort pods -&amp;gt; Burstable pods -&amp;gt; Guaranteed pods Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort Burstable: pod中只">
 
 
 
@@ -115,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="https://jointlike.github.io/about/">
+  <link rel="canonical" href="https://jointlike.github.io/2018/05/24/k8s_资源等级/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>关于 | jointlike by TimWells</title>
+  <title>Kubernetes之QoS | jointlike by TimWells</title>
   
 
 
@@ -228,7 +228,7 @@
         
         
           
-          <li class="menu-item menu-item-about menu-item-active">
+          <li class="menu-item menu-item-about">
 
     
     
@@ -321,74 +321,196 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源等级/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h2 class="post-title" itemprop="name headline">关于
-
-</h2>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <p>熟悉Python、强大编码能力与独立项目开发能力，对机器学习tensorflow深度学习具备开发能力。熟悉微信小程序，前端html，js，css，vue，熟悉爬虫，mysql，redis，kafka, CI/CD, docker, k8s集群应用。了解Go语言/C/Java Hadoop ceph。做过运营、产品，业务理解快产品思维好，良好的线代、概率论，数据处理能力，善于分析问题解决问题</p>
+          <h2 class="post-title" itemprop="name headline">Kubernetes之QoS
 
+              
+            
+          </h2>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Kubernetes/" itemprop="url" rel="index"><span itemprop="name">Kubernetes</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p><a href="http://dockone.io/article/2592" target="_blank" rel="noopener">Kubernetes之服务质量保证（QoS）</a></p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods</p>
+<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort</p>
+<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。</p>
+<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。</p>
+<p>OOM分数值根据OOM_ADJ参数计算得出，对于Guaranteed级别的pod，OOM_ADJ参数设置成了-998，对于BestEffort级别的pod，OOM_ADJ参数设置成了1000，对于Burstable级别的POD，OOM_ADJ参数取值从2到999。对于kuberntes保留资源，比如kubelet，docker，OOM_ADJ参数设置成了-999，表示不会被OOM kill掉。OOM_ADJ参数设置的越大，通过OOM_ADJ参数计算出来OOM分数越高，表明该pod优先级就越低，当出现资源竞争时会越早被kill掉，对于OOM_ADJ参数是-999的表示kubernetes永远不会因为OOM而被kill掉。</p>
+
       
     </div>
-    
-
-
 
     
+
     
     
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/分布式系统/" rel="tag"># 分布式系统</a>
+          
+            <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
+          
+            <a href="/tags/k8s/" rel="tag"># k8s</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/24/k8s_配置热更新/" rel="next" title="Kubernetes ConfigMap热更新">
+                <i class="fa fa-chevron-left"></i> Kubernetes ConfigMap热更新
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/24/block_chain/" rel="prev" title="以太坊">
+                以太坊 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
 
@@ -417,8 +539,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -566,6 +697,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#知识点"><span class="nav-number">1.</span> <span class="nav-text">知识点</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
