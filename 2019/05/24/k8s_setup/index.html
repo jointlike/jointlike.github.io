@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="准备 准备虚拟机，配置环境，关闭防火墙systemctl disable firewalldsystemctl stop firewalld   安装etcdyum install etcd -y   配置1234567891011121314151617181920#[member]  ETCD_NAME=etcd1  ETCD_DATA_DIR=&amp;quot;/var/lib/etcd/test">
+<meta name="keywords" content="python, machine learning, data mining, PM, foreign trade, jointlike, timwells,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kubernetes setup">
+<meta property="og:url" content="https://jointlike.github.io/2019/05/24/k8s_setup/index.html">
+<meta property="og:site_name" content="jointlike by TimWells">
+<meta property="og:description" content="准备 准备虚拟机，配置环境，关闭防火墙systemctl disable firewalldsystemctl stop firewalld   安装etcdyum install etcd -y   配置1234567891011121314151617181920#[member]  ETCD_NAME=etcd1  ETCD_DATA_DIR=&amp;quot;/var/lib/etcd/test">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-02-27T08:13:14.014Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="kubernetes setup">
+<meta name="twitter:description" content="准备 准备虚拟机，配置环境，关闭防火墙systemctl disable firewalldsystemctl stop firewalld   安装etcdyum install etcd -y   配置1234567891011121314151617181920#[member]  ETCD_NAME=etcd1  ETCD_DATA_DIR=&amp;quot;/var/lib/etcd/test">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://jointlike.github.io/2019/05/24/k8s_setup/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>kubernetes setup | jointlike by TimWells</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">jointlike by TimWells</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_setup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">kubernetes setup
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:13:14" itemprop="dateModified" datetime="2019-02-27T16:13:14+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ol>
+<li><p>准备虚拟机，配置环境，关闭防火墙<br>systemctl disable firewalld<br>systemctl stop firewalld </p>
+</li>
+<li><p>安装etcd<br>yum install etcd -y</p>
+</li>
+</ol>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#[member]  </span><br><span class="line">ETCD_NAME=etcd1  </span><br><span class="line">ETCD_DATA_DIR=&quot;/var/lib/etcd/test.etcd&quot;  </span><br><span class="line">#ETCD_WAL_DIR=&quot;&quot;  </span><br><span class="line">#ETCD_SNAPSHOT_COUNT=&quot;10000&quot;  </span><br><span class="line">#ETCD_HEARTBEAT_INTERVAL=&quot;100&quot;  </span><br><span class="line">#ETCD_ELECTION_TIMEOUT=&quot;1000&quot;  </span><br><span class="line">ETCD_LISTEN_PEER_URLS=&quot;http://0.0.0.0:2380&quot;  </span><br><span class="line">ETCD_LISTEN_CLIENT_URLS=&quot;http://0.0.0.0:2379,http://0.0.0.0:4001&quot;  </span><br><span class="line">#ETCD_MAX_SNAPSHOTS=&quot;5&quot;  </span><br><span class="line">#ETCD_MAX_WALS=&quot;5&quot;  </span><br><span class="line">#ETCD_CORS=&quot;&quot;  </span><br><span class="line">#  </span><br><span class="line">#[cluster]  </span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;http://master1:2380&quot;  </span><br><span class="line"># if you use different ETCD_NAME (e.g. test), set ETCD_INITIAL_CLUSTER value for this name, i.e. &quot;test=http://...&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER=&quot;etcd1=http://master1:2380,etcd2=http://master2:2380,etcd3=http://master3:2380&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster-baby&quot;  </span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS=&quot;http://master1:2379,http://master1:4001&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker -y  </span><br><span class="line">chkconfig docker on  </span><br><span class="line">service docker start </span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+<h3 id="安装k8s"><a href="#安装k8s" class="headerlink" title="安装k8s"></a>安装k8s</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install kubernetes -y</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>修改配置 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure the kube-apiserver  </span><br><span class="line">#  </span><br><span class="line">  </span><br><span class="line"># The address on the local server to listen to.  </span><br><span class="line">KUBE_API_ADDRESS=&quot;--insecure-bind-address=0.0.0.0&quot;  </span><br><span class="line">  </span><br><span class="line"># The port on the local server to listen on.  </span><br><span class="line">KUBE_API_PORT=&quot;--port=8080&quot;  </span><br><span class="line">  </span><br><span class="line"># Port minions listen on  </span><br><span class="line"># KUBELET_PORT=&quot;--kubelet-port=10250&quot;  </span><br><span class="line">  </span><br><span class="line"># Comma separated list of nodes in the etcd cluster  </span><br><span class="line">KUBE_ETCD_SERVERS=&quot;--etcd-servers=http://etcd:2379&quot;  </span><br><span class="line">  </span><br><span class="line"># Address range to use for services  </span><br><span class="line">KUBE_SERVICE_ADDRESSES=&quot;--service-cluster-ip-range=10.254.0.0/16&quot;  </span><br><span class="line">  </span><br><span class="line"># default admission control policies  </span><br><span class="line"># KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota&quot;  </span><br><span class="line">KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ResourceQuota&quot;  </span><br><span class="line">  </span><br><span class="line"># Add your own!  </span><br><span class="line">KUBE_API_ARGS=&quot;&quot;  </span><br><span class="line">---</span><br><span class="line">###  </span><br><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure various aspects of all  </span><br><span class="line"># kubernetes services, including  </span><br><span class="line">#  </span><br><span class="line">#   kube-apiserver.service  </span><br><span class="line">#   kube-controller-manager.service  </span><br><span class="line">#   kube-scheduler.service  </span><br><span class="line">#   kubelet.service  </span><br><span class="line">#   kube-proxy.service  </span><br><span class="line"># logging to stderr means we get it in the systemd journal  </span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;  </span><br><span class="line">  </span><br><span class="line"># journal message level, 0 is debug  </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;  </span><br><span class="line">  </span><br><span class="line"># Should this cluster be allowed to run privileged docker containers  </span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;  </span><br><span class="line">  </span><br><span class="line"># How the controller-manager, scheduler, and proxy find the apiserver  </span><br><span class="line">KUBE_MASTER=&quot;--master=http://master1:8080&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动<br>systemctl enable kube-apiserver<br>systemctl start kube-apiserver<br>systemctl enable kube-controller-manager<br>systemctl start kube-controller-manager<br>systemctl enable kube-scheduler<br>systemctl start kube-scheduler  </p>
+</li>
+</ul>
+<ul>
+<li><p>deploy node</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker -y  </span><br><span class="line">chkconfig docker on  </span><br><span class="line">service docker start  </span><br><span class="line">yum install kubernetes -y</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure various aspects of all  </span><br><span class="line"># kubernetes services, including  </span><br><span class="line">#  </span><br><span class="line">#   kube-apiserver.service  </span><br><span class="line">#   kube-controller-manager.service  </span><br><span class="line">#   kube-scheduler.service  </span><br><span class="line">#   kubelet.service  </span><br><span class="line">#   kube-proxy.service  </span><br><span class="line"># logging to stderr means we get it in the systemd journal  </span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;  </span><br><span class="line">  </span><br><span class="line"># journal message level, 0 is debug  </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;  </span><br><span class="line">  </span><br><span class="line"># Should this cluster be allowed to run privileged docker containers  </span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;  </span><br><span class="line">  </span><br><span class="line"># How the controller-manager, scheduler, and proxy find the apiserver  </span><br><span class="line">KUBE_MASTER=&quot;--master=http://etcd:8080&quot;  </span><br><span class="line">###  </span><br><span class="line"># kubernetes kubelet (minion) config  </span><br><span class="line">  </span><br><span class="line"># The address for the info server to serve on (set to 0.0.0.0 or &quot;&quot; for all interfaces)  </span><br><span class="line">KUBELET_ADDRESS=&quot;--address=0.0.0.0&quot;  </span><br><span class="line">  </span><br><span class="line"># The port for the info server to serve on  </span><br><span class="line"># KUBELET_PORT=&quot;--port=10250&quot;  </span><br><span class="line">  </span><br><span class="line"># You may leave this blank to use the actual hostname  </span><br><span class="line">KUBELET_HOSTNAME=&quot;--hostname-override=node1&quot;  </span><br><span class="line">  </span><br><span class="line"># location of the api-server  </span><br><span class="line">KUBELET_API_SERVER=&quot;--api-servers=http://etcd:8080&quot;  </span><br><span class="line">  </span><br><span class="line"># pod infrastructure container  </span><br><span class="line">KUBELET_POD_INFRA_CONTAINER=&quot;--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest&quot;  </span><br><span class="line">  </span><br><span class="line"># Add your own!  </span><br><span class="line">KUBELET_ARGS=&quot;&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable kubelet  </span><br><span class="line">systemctl start kubelet  </span><br><span class="line">systemctl enable kube-proxy  </span><br><span class="line">systemctl start kube-proxy</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建覆盖网络flannel</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install flannel -y  </span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">- 在master、node上均编辑 /etc/sysconfig/flanneld 文件</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="Flanneld-configuration-options"><a href="#Flanneld-configuration-options" class="headerlink" title="Flanneld configuration options"></a>Flanneld configuration options</h1><h1 id="etcd-url-location-Point-this-to-the-server-where-etcd-runs"><a href="#etcd-url-location-Point-this-to-the-server-where-etcd-runs" class="headerlink" title="etcd url location.  Point this to the server where etcd runs"></a>etcd url location.  Point this to the server where etcd runs</h1><p>FLANNEL_ETCD_ENDPOINTS=”<a href="http://etcd:2379&quot;" target="_blank" rel="noopener">http://etcd:2379&quot;</a>  </p>
+<h1 id="etcd-config-key-This-is-the-configuration-key-that-flannel-queries"><a href="#etcd-config-key-This-is-the-configuration-key-that-flannel-queries" class="headerlink" title="etcd config key.  This is the configuration key that flannel queries"></a>etcd config key.  This is the configuration key that flannel queries</h1><h1 id="For-address-range-assignment"><a href="#For-address-range-assignment" class="headerlink" title="For address range assignment"></a>For address range assignment</h1><p>FLANNEL_ETCD_PREFIX=”/atomic.io/network”  </p>
+<h1 id="Any-additional-options-that-you-want-to-pass"><a href="#Any-additional-options-that-you-want-to-pass" class="headerlink" title="Any additional options that you want to pass"></a>Any additional options that you want to pass</h1><p>#FLANNEL_OPTIONS=””<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 配置etcd中关于flannel的key--</span><br></pre></td></tr></table></figure></p>
+<p>etcdctl mk /atomic.io/network/config ‘{ “Network”: “10.0.0.0/16” }’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 重新启动</span><br><span class="line">启动修改后的 flannel</span><br></pre></td></tr></table></figure></p>
+<p>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kube-apiserver<br>systemctl restart kube-controller-manager<br>systemctl restart kube-scheduler  </p>
+<p>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kubelet<br>systemctl restart kube-proxy<br><code>`</code> </p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/24/k8s_资源等级/" rel="next" title="Kubernetes之QoS">
+                <i class="fa fa-chevron-left"></i> Kubernetes之QoS
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/24/machine_learn_concept/" rel="prev" title="算法学习">
+                算法学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">TimWells</p>
+              <div class="site-description motion-element" itemprop="description">高效研究，快乐生活，用于python编程知识速查！大家玩的开心！</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1807520300@qq.com" title="E-Mail &rarr; mailto:1807520300@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#准备"><span class="nav-number">1.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署"><span class="nav-number">3.</span> <span class="nav-text">部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装docker"><span class="nav-number">3.1.</span> <span class="nav-text">安装docker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装k8s"><span class="nav-number">3.2.</span> <span class="nav-text">安装k8s</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#Flanneld-configuration-options"><span class="nav-number"></span> <span class="nav-text">Flanneld configuration options</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#etcd-url-location-Point-this-to-the-server-where-etcd-runs"><span class="nav-number"></span> <span class="nav-text">etcd url location.  Point this to the server where etcd runs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#etcd-config-key-This-is-the-configuration-key-that-flannel-queries"><span class="nav-number"></span> <span class="nav-text">etcd config key.  This is the configuration key that flannel queries</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#For-address-range-assignment"><span class="nav-number"></span> <span class="nav-text">For address range assignment</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Any-additional-options-that-you-want-to-pass"><span class="nav-number"></span> <span class="nav-text">Any additional options that you want to pass</span></a></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TimWells</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

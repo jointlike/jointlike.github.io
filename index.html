@@ -1,0 +1,2474 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+<meta name="keywords" content="python, machine learning, data mining, PM, foreign trade, jointlike, timwells,">
+<meta property="og:type" content="website">
+<meta property="og:title" content="jointlike by TimWells">
+<meta property="og:url" content="https://jointlike.github.io/index.html">
+<meta property="og:site_name" content="jointlike by TimWells">
+<meta property="og:description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jointlike by TimWells">
+<meta name="twitter:description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://jointlike.github.io/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>jointlike by TimWells</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+  page-home">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">jointlike by TimWells</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home menu-item-active">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/the theory of communication/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/the theory of communication/" class="post-title-link" itemprop="url">信息系统</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:25:57" itemprop="dateModified" datetime="2019-02-27T16:25:57+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>组成：</p>
+<ol>
+<li>信源：信息的来源或产生待发送的信息的实体</li>
+<li>信宿：信息的归宿或接受者</li>
+<li>信道：传送信息的通道，如电话通信中包括中继器在内的同轴电缆系统，卫星通信中地球站的收发信机、天线和卫星上的转发器等。</li>
+<li>编码器： 在信息论中泛指所有变换信号的设备，实际上就是终端机的发送部分。它包括从心愿到信道的所有设备，如量化器、压缩编码器、调制器等，使信源输出的信号转换成适于信道传送的信号。</li>
+<li>译码器：是编码器的逆变换设备，把信道上送来的信号转换成信宿所能接收信号，可包括解调器、译码器、数模转换器等。</li>
+</ol>
+<p>当信源和信宿已给定、信道也选定后，决定信息系统性能就在于编码器和译码器。设计一个信息系统时，除了选择信道和设计其附属设施外，主要工作也就是设计编译码器。一般情况下，信息系统的主要性能指标是它的有效性和可靠性。有效性就是在系统中传送尽可能多的信息，而可靠性要求信宿收到的信息尽可能地与信源发出的信息一致，或者说失真尽可能小。最佳编译器就是要使系统最有效和最可靠。但是，可靠性和有效性往往是相互矛盾的。越有效常导致不可靠，反之也是如此。从定量意义上说，应使系统在规定的失真或者基本无失真的条件下，传送最大的信息率；或者在规定信息率的条件下，失真最小。计算这最大信息率并证明达到或者接近这一值的编译码器是存在的，就是信息论的基本任务。只讨论这样的问题的理论可称为香农信息论，一般认为信息论的内容应更广泛一些，即包括提取信息和保证信息安全的理论。后者就是估计理论、检测理论和密码学。</p>
+<p>信息论是建立在概率论基础上而形成的，也就是从信源符号和信道噪声的概率特性出发的。这类信息通常称为语法信息。其实，信息系统的基本规律也应包括语义和语用信息。语法信息是信源输出符号的构造或起客观特性所表现与信宿的主观要求无关，而语义则应考虑各符号的意义，同样一种意义，可用不同语言或文字来表示，各种语言所包含的语法信息可以是不同的。一般地说，语义信息率可小于语法信息率。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/machine_learn_用户画像/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/machine_learn_用户画像/" class="post-title-link" itemprop="url">用户画像</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:26:45" itemprop="dateModified" datetime="2019-02-27T16:26:45+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>极致营销：什么日期，什么时间，什么地点，什么终端，什么入口，向什么客户推荐什么产品，正是当前客户需要的或者刚好激发客户产生了新的消费需求，而金额刚刚好足够用户破产。<br>智能话费冲值与加油用户画像信息提取：主题推荐：话费、流量、油卡、小易</p>
+<ol>
+<li>人口属性，用户自然属性包括性别、年龄、地区</li>
+<li>设备属性，用户设备特征包括系统、机型、运营商</li>
+<li>消费特征，用户消费场景及其他包括地区、地点、渠道（终端渠道、入口页面）、日期、时间、金额大小、频率</li>
+<li>行为数据，用户操作行为系统监控行为数据包括浏览行为、下单支付行为、移动行为、使用行为（如最近频繁电话等），行为包括时间、路径、速度等</li>
+<li>因果数据，影响用户消费行为的数据天气变化、自然灾害、节日、周期行为（月底、工资日）</li>
+<li>关系数据，待探索的可能影响用户行为的数据包括其他平台的消费数据、某物品的消费关联、某行为的波动影响（如社交视频增多）</li>
+<li>内部推导的用户类型：用户年龄层、消费层级、社会身份、当前平台生命周期（新老用户、僵死用户）、有车无车族、家庭信息、关联推导</li>
+</ol>
+<h1 id="技术实现点："><a href="#技术实现点：" class="headerlink" title="技术实现点："></a>技术实现点：</h1><h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><pre><code>标签解决的是描述（或命名）问题，但在实际应用中，还需要解决数据之间的关联，所以通常将标签作为一个体系来设计，以解决数据之间的关联问题。即：树
+
+标签包含：名称、分类、级别、属性、赋值
+</code></pre><ol>
+<li><p>标签命名&amp;赋值<br> 名称和值，如生日 0828</p>
+</li>
+<li><p>标签级别（标签的体系结构）</p>
+<p> 分级有两个层面的含义，其一是：指标到最低层级的涵盖的层级；其二是指：指标的运算层级。其一非常好理解，这里重点说运算层级。</p>
+<pre><code>标签从运算层级角度可以分为三层：事实标签、模型标签、预测标签。
+
+事实标签：是通过对于原始数据库的数据进行统计分析而来的，比如用户投诉次数，是基于用户一段时间内实际投诉的行为做的统计。
+
+模型标签：模型标签是以事实标签为基础，通过构建事实标签与业务问题之间的模型，进行模型分析得到。比如，结合用户实际投诉次数、用户购买品类、用户支付的金额等，进行用户投诉倾向类型的识别，方便客服进行分类处理。
+
+预测标签：则是在模型的基础上做预测，比如针对投诉倾向类型结构的变化，预测平台舆情风险指数。
+</code></pre></li>
+<li><p>标签属性</p>
+<pre><code>标签属性可以理解为针对标签进行的再标注，这一环节的工作主要目的是帮助内部理解标签赋值的来源，进而理解指标的含义。如图所示，可以总结为5种来源：
+
+固有属性：是指这些指标的赋值体现的是用户生而有之或者事实存在的，不以外界条件或者自身认知的改变而改变的属性。比如：性别、年龄、是否生育等。
+</code></pre><p> 推导属性：由其他属性推导而来的属性，比如星座，我们可以通过用户的生日推导，比如用户的品类偏好，则可以通过日常购买来推导。</p>
+<p> 行为属性：产品内外实际发生的行为被记录后形成的赋值，比如用户的登陆时间，页面停留时长等。</p>
+<p> 态度属性：用户自我表达的态度和意愿。比如说我们通过一份问卷向用户询问一些问题，并形成标签，如询问用户：是否愿意结婚，是否喜欢某个品牌等。当然在大数据的需求背景下，利用问卷收集用户标签的方法效率显得过低，更多的是利用产品中相关的模块做了用户态度信息收集。</p>
+<p> 测试属性：测试属性是指来自用户的态度表达，但并不是用户直接表达的内容，而是通过分析用户的表达，结构化处理后，得出的测试结论。比如，用户填答了一系列的态度问卷，推导出用户的价值观类型等。</p>
+</li>
+</ol>
+<h1 id="技术实现流程："><a href="#技术实现流程：" class="headerlink" title="技术实现流程："></a>技术实现流程：</h1><p>原始数据</p>
+<p>加工清洗分类基础数据</p>
+<p>训练数据、测试数据</p>
+<p>分类、预测、聚类发现</p>
+<p>应用：产品创新、优化体验、服务升级、提升效率、防范风险</p>
+<p>（1）原始输入层</p>
+<pre><code>主要指用户的历史数据信息，如会员信息、消费信息、网络行为信息。经过数据的清洗，从而达到用户标签体系的事实层。
+</code></pre><p>（2）事实层</p>
+<pre><code>事实层是用户信息的准确描述层，其最重要的特点是，可以从用户身上得到确定与肯定的验证。如用户的人口属性、性别、年龄、籍贯、会员信息等。
+</code></pre><p>（3）模型预测层</p>
+<pre><code>通过利用统计建模，数据挖掘、机器学习的思想，对事实层的数据进行分析利用，从而得到描述用户更为深刻的信息。如通过建模分析，可以对用户的性别偏好进行预测，从而能对没有收集到性别数据的新用户进行预测。还可以通过建模与数据挖掘，使用聚类、关联思想，发现人群的聚集特征。
+</code></pre><p>（4）营销模型预测</p>
+<pre><code>利用模型预测层结果，对不同用户群体，相同需求的客户，通过打标签，建立营销模型，从而分析用户的活跃度、忠诚度、流失度、影响力等可以用来进行营销的数据。
+</code></pre><p>（5）业务层</p>
+<pre><code>业务层可以是展现层。它是业务逻辑的直接体现，如图中所表示的，有车一族、有房一族等。
+</code></pre>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/machine_learn_特征工程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/machine_learn_特征工程/" class="post-title-link" itemprop="url">关于特征工程</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:26:49" itemprop="dateModified" datetime="2019-02-27T16:26:49+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>指的是把原始数据转变为模型的训练数据的过程，目的是为了获得更好的训练数据特征，提高机器学习的上限，使得机器学习模型逼近这个上限（附图）。</p>
+<h1 id="数据特征准备"><a href="#数据特征准备" class="headerlink" title="数据特征准备"></a>数据特征准备</h1><ol>
+<li>基于业务需求与理解，要实现目标需求需要哪些数据，确定变量</li>
+<li>可用性评估：获取难度，覆盖率，准确率</li>
+<li>获取方法</li>
+<li>存储方法</li>
+</ol>
+<h1 id="一般步骤流程"><a href="#一般步骤流程" class="headerlink" title="一般步骤流程"></a>一般步骤流程</h1><p>处理流程不分先后，以达到训练模型的最佳期望为目的。</p>
+<ol>
+<li><p>数据预处理（清洗与构建）</p>
+</li>
+<li><p>数据补充</p>
+</li>
+<li><p>数据降维</p>
+</li>
+<li><p>特征监控</p>
+</li>
+</ol>
+<h2 id="数据预处理（清洗与构建）"><a href="#数据预处理（清洗与构建）" class="headerlink" title="数据预处理（清洗与构建）"></a>数据预处理（清洗与构建）</h2><ol>
+<li>数据规整：清洗异常样本，如删除极值</li>
+</ol>
+<ol start="2">
+<li>数据转换：标准化，归一化，离散化（二值化），one-hot(dummy coding)哑编码，其他变换</li>
+</ol>
+<p>2.1 标准化（无量纲化）<br>基于特征矩阵的列，将特征值转换至服从标准正态分布,去除均值和方差缩放，通过(X-X_mean)/std计算每个属性(每列)，进而使所有数据聚集在0附近，方差为1，公式为：x’ = (X-X_mean)/std<br>使用sklearn.preprocessing库的StandardScaler类对数据进行标准化的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import StandardScaler</span><br><span class="line"># 标准化，返回值为标准化后的数据</span><br><span class="line">StandardScaler().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
+<p>2.2 归一化：区间缩放<br>区间缩放法的思路有多种，常见的一种为利用两个最值进行缩放即基于最大最小值，将特征值转换到[0, 1]区间上，公式表达为：x’ = x-min/max-min<br>使用preproccessing库的MinMaxScaler类对数据进行区间缩放的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import MinMaxScaler</span><br><span class="line">#区间缩放，返回值为缩放到[0, 1]区间的数据</span><br><span class="line">MinMaxScaler().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
+<p>2.3 归一化：正则化<br>标准化是依照特征矩阵的列处理数据，其通过求z-score的方法，将样本的特征值转换到同一量纲下。归一化是依照特征矩阵的行处理数据，其目的在于样本向量在点乘运算或其他核函数计算相似性时，拥有统一的标准，也就是说都转化为“单位向量”。规则为l2的归一化公式如下：x’ = x/(Ej-&gt;m x[j]^2)^1/2</p>
+<p>使用preproccessing库的Normalizer类对数据进行归一化的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import Normalizer</span><br><span class="line">#归一化，返回值为归一化后的数据</span><br><span class="line">Normalizer().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
+<p>2.4 二值化<br>定量特征二值化的核心在于设定一个阈值，大于阈值的赋值为1，小于等于阈值的赋值为0，公式表达如下：<br>x’= { 1, x &gt; threshold; 0, x &lt;= threashold</p>
+<p>使用preproccessing库的Binarizer类对数据进行二值化的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import Binarizer</span><br><span class="line">#二值化，阈值设置为3，返回值为二值化后的数据</span><br><span class="line">Binarizer(threshold=3).fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
+<p>2.5 哑编码<br>对定性特征用定量表示，为避免数值大小对模型产生影响所有用dummy coding<br>使用preproccessing库的OneHotEncoder类对数据进行哑编码的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import OneHotEncoder</span><br><span class="line">#哑编码，对IRIS数据集的目标值，返回值为哑编码后的数据</span><br><span class="line">OneHotEncoder().fit_transform(iris.target.reshape((-1,1)))</span><br></pre></td></tr></table></figure></p>
+<p>2.6 数据变换<br>常见的数据变换有基于多项式的、基于指数函数的、基于对数函数的。4个特征，度为2的多项式转换公式如下：</p>
+<p>x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15 = 1,x1,x2,x3,x4,x1^2,x1<em>x2,x1</em>x3,x1<em>x4,x2^2,x2</em>x3,x2<em>x4,x3^2,x3</em>x4,x4^2</p>
+<p>使用preproccessing库的PolynomialFeatures类对数据进行多项式转换的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import PolynomialFeatures</span><br><span class="line">#多项式转换</span><br><span class="line">#参数degree为度，默认值为2</span><br><span class="line">PolynomialFeatures().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
+<p>基于单变元函数的数据变换可以使用一个统一的方式完成，使用preproccessing库的FunctionTransformer对数据进行对数函数转换的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from numpy import log1p</span><br><span class="line">from sklearn.preprocessing import FunctionTransformer</span><br><span class="line">#自定义转换函数为对数函数的数据变换</span><br><span class="line">#第一个参数是单变元函数</span><br><span class="line">FunctionTransformer(log1p).fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
+<ol start="3">
+<li>数据补充<br>3.1 缺失值计算</li>
+</ol>
+<p>特征值为NaN（not a number）,表示数据缺失。<br>使用preproccessing库的Imputer类对数据进行缺失值计算的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from numpy import vstack, array, nan</span><br><span class="line">from sklearn.preprocessing import Imputer</span><br><span class="line">#缺失值计算，返回值为计算缺失值后的数据</span><br><span class="line">#参数missing_value为缺失值的表示形式，默认为NaN</span><br><span class="line">#参数strategy为缺失值填充方式，默认为mean（均值）</span><br><span class="line">Imputer().fit_transform(vstack((array([nan, nan, nan, nan]), iris.data)))</span><br></pre></td></tr></table></figure></p>
+<p>3.2 特征衍生：</p>
+<ul>
+<li>对原始数据加工，生成符合训练需求的变量</li>
+</ul>
+<h2 id="数据选择方法"><a href="#数据选择方法" class="headerlink" title="数据选择方法"></a>数据选择方法</h2><ol>
+<li>filter：方差选择法，相关系数，卡方检验，信息增益、互信息<br>过滤法，按照发散性或者相关性对各个特征进行评分，设定阈值或者待选择阈值的个数，选择特征。</li>
+<li>wrapper： 递归特征消除法<br>包装法，根据目标函数（通常是预测效果评分），每次选择若干特征，或者排除若干特征。</li>
+<li>embedded： 基于惩罚项的特征选择法，基于树形模型的特征选择法<br>嵌入法，先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据系数从大到小选择特征。类似于Filter方法，但是是通过训练来确定特征的优劣。</li>
+</ol>
+<h2 id="数据降维"><a href="#数据降维" class="headerlink" title="数据降维"></a>数据降维</h2><ul>
+<li>PCA主成分分析法 </li>
+<li>LDA线性判别分析法</li>
+</ul>
+<h2 id="数据特征验证与监控"><a href="#数据特征验证与监控" class="headerlink" title="数据特征验证与监控"></a>数据特征验证与监控</h2><ol>
+<li>有效性分析：重要性，权重</li>
+<li>监控重要特征</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/machine_learn_start/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/machine_learn_start/" class="post-title-link" itemprop="url">机器学习</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:26:53" itemprop="dateModified" datetime="2019-02-27T16:26:53+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念理解："><a href="#概念理解：" class="headerlink" title="概念理解："></a>概念理解：</h2><p>机器学习是对依据经验提升自身性能或丰富自身知识的各种算法和系统的系统性研究。<br>机器学习所关注的问题是使用正确的特征来构建正确的模型，以完成既定的任务。（任务，模型，特征）<br>模型赋予机器学习领域以多样性，而特征和任务则为其带来某种程度的一致性。</p>
+<p>常见的分类模型有逻辑回归（LR）、朴素贝叶斯、SVM、GBDT和随机森林（RandomForest）、FFM 等  </p>
+<p>LR(Logistic Regression)  </p>
+<p>SVM(Support Vector Machine)  </p>
+<p>GBDT(Gradient Boosting Decision Tree)  </p>
+<p>FM（Factorization Machine） </p>
+<p>FFM（Field-aware Factorization Machine）  </p>
+<p>标称型数据（类别）：一般在有限的数据中取，而且只存在‘是’和‘否’两种不同的结果（一般用于分类）<br>数值型数据：可以在无限的数据中取，而且数值比较具体化，例如4.02,6.23这种值（一般用于回归分析）  </p>
+<p>系统性能体现在是否能真正达到目标期望，但存在过拟合问题，可能在某一方面相同问题上表现优异而相似问题上则表现糟糕，因此要考虑系统的推广性，适应性，个性化。</p>
+<h2 id="机器学习分类："><a href="#机器学习分类：" class="headerlink" title="机器学习分类："></a>机器学习分类：</h2><ul>
+<li><ol>
+<li>监督学习  </li>
+</ol>
+</li>
+</ul>
+<p>有目标期望的学习  </p>
+<ul>
+<li><p>1) 分类<br>目标变量是离散型，如是/否、1/2/3、A/B/C或者红/黄/黑等<br>常用分类器算法：<br>k-近邻算法、朴素贝叶斯算法、支持向量机、决策树  </p>
+</li>
+<li><p>2) 回归<br>目标变量是连续型的数值，如0.0～100.00、999～999或者+∞～∞等<br>常用回归算法：<br>线性回归、局部加权线性回归、Ridge 回归、Lasso 最小回归系数估计  </p>
+</li>
+</ul>
+<ul>
+<li><ol start="2">
+<li>无监督学习  </li>
+</ol>
+</li>
+</ul>
+<p>无目标期望的学习</p>
+<ul>
+<li><p>1）聚类<br>自分类<br>常用算法：<br>K-均值（K-mean）、DBSCAN </p>
+</li>
+<li><p>2）密度估计<br>估计数据与每个分组的相似程度<br>常用算法：<br>最大期望算法、Parzen窗设计  </p>
+</li>
+</ul>
+<p>另外，还可以根据模型的输出是否含有目标变量来划分模型，如果有则称其为预测性模型，否则称其为描述性模型。</p>
+<h2 id="机器学习方法论："><a href="#机器学习方法论：" class="headerlink" title="机器学习方法论："></a>机器学习方法论：</h2><ul>
+<li><ol>
+<li><p>理解数据  </p>
+<ul>
+<li>数据类型，离散型或连续型  </li>
+<li>数据缺陷，是否缺失等  </li>
+<li>数据噪声，是否存在干扰数据  </li>
+</ul>
+</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>一般从训练集中拿出一定比例数据做测试，避免真实数据过拟合影响准确率。抽取的方法为了避免运气不好，常使用交叉验证（cross validation）。交叉验证：对数据集中的数据分块，对训练集数据和测试集数据轮流交互验证，让每一部分数据都可以作为测试数据，最后对测试集性能取平均值。交叉验证主要用于有监督数据。</li>
+</ol>
+</li>
+</ul>
+<h2 id="机器学习的步骤："><a href="#机器学习的步骤：" class="headerlink" title="机器学习的步骤："></a>机器学习的步骤：</h2><ul>
+<li><ol>
+<li>收集数据  </li>
+</ol>
+</li>
+<li><ol start="2">
+<li>存储数据  </li>
+</ol>
+</li>
+<li><ol start="3">
+<li>分析数据（人工和自动化）</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>训练算法–模型（无监督学习不需要训练）</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>测试算法</li>
+</ol>
+</li>
+<li><ol start="6">
+<li>使用算法</li>
+</ol>
+</li>
+</ul>
+<h2 id="术语："><a href="#术语：" class="headerlink" title="术语："></a>术语：</h2><p>损失函数或代价函数：用来验证并作为回归函数的目标函数，越逼近拟合效果越好。即代价函数值越小越好。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/machine_learn_concept/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/machine_learn_concept/" class="post-title-link" itemprop="url">算法学习</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:26:56" itemprop="dateModified" datetime="2019-02-27T16:26:56+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念备忘："><a href="#概念备忘：" class="headerlink" title="概念备忘："></a>概念备忘：</h2><p>对数，是幂运算的逆运算。2 的三次方为8 。 log8 = 3。3为对数的值。</p>
+<p>大O表示法，操作数。</p>
+<p>数组与链表各自优势不足</p>
+<p>选择排序，O(n^2)</p>
+<p>循环，递归与尾递归</p>
+<p>调用栈</p>
+<p>快速排序</p>
+<p>合并排序</p>
+<p>散列表（字典）</p>
+<p>图模拟</p>
+<p>广度优先，狄克斯特拉算法（广度加权）</p>
+<p>动态规划</p>
+<p>K邻近算法 KNN 特征靠近谁就是谁（ocr） - 创建推荐系统 - 机器学习</p>
+<p>其他：</p>
+<p>树结构（二分法只有在有序时才管用，可提高二分法的插入效率） B树、红黑树</p>
+<p>反向索引（散列-字典技术） - 用户搜索引擎</p>
+<p>傅里叶变换 （分解技术） - 剔除无用的音符，像素点等 MP3技术及jpg图片压缩技术，地震预测，DNA等</p>
+<p>mapreduce hadoop 并行计算</p>
+<p>布隆过滤器 - 概率性数据结构 。 hyperloglog</p>
+<p>SHA （secure hash algorithm）算法. - 可用于比较两个很大的文件是否相同。加密后的结果一样即可。用户存储密码 ， 算法特征：局部不敏感，改一点全不同<br>simhash 局部敏感，改一点细微差别，可用于比较相似度。</p>
+<p>线性规划<br>：用于在给定约束条件下最大限度地改善指定的指标。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_setup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/k8s_setup/" class="post-title-link" itemprop="url">kubernetes setup</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:13:14" itemprop="dateModified" datetime="2019-02-27T16:13:14+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ol>
+<li><p>准备虚拟机，配置环境，关闭防火墙<br>systemctl disable firewalld<br>systemctl stop firewalld </p>
+</li>
+<li><p>安装etcd<br>yum install etcd -y</p>
+</li>
+</ol>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#[member]  </span><br><span class="line">ETCD_NAME=etcd1  </span><br><span class="line">ETCD_DATA_DIR=&quot;/var/lib/etcd/test.etcd&quot;  </span><br><span class="line">#ETCD_WAL_DIR=&quot;&quot;  </span><br><span class="line">#ETCD_SNAPSHOT_COUNT=&quot;10000&quot;  </span><br><span class="line">#ETCD_HEARTBEAT_INTERVAL=&quot;100&quot;  </span><br><span class="line">#ETCD_ELECTION_TIMEOUT=&quot;1000&quot;  </span><br><span class="line">ETCD_LISTEN_PEER_URLS=&quot;http://0.0.0.0:2380&quot;  </span><br><span class="line">ETCD_LISTEN_CLIENT_URLS=&quot;http://0.0.0.0:2379,http://0.0.0.0:4001&quot;  </span><br><span class="line">#ETCD_MAX_SNAPSHOTS=&quot;5&quot;  </span><br><span class="line">#ETCD_MAX_WALS=&quot;5&quot;  </span><br><span class="line">#ETCD_CORS=&quot;&quot;  </span><br><span class="line">#  </span><br><span class="line">#[cluster]  </span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;http://master1:2380&quot;  </span><br><span class="line"># if you use different ETCD_NAME (e.g. test), set ETCD_INITIAL_CLUSTER value for this name, i.e. &quot;test=http://...&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER=&quot;etcd1=http://master1:2380,etcd2=http://master2:2380,etcd3=http://master3:2380&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster-baby&quot;  </span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS=&quot;http://master1:2379,http://master1:4001&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker -y  </span><br><span class="line">chkconfig docker on  </span><br><span class="line">service docker start </span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+<h3 id="安装k8s"><a href="#安装k8s" class="headerlink" title="安装k8s"></a>安装k8s</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install kubernetes -y</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>修改配置 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure the kube-apiserver  </span><br><span class="line">#  </span><br><span class="line">  </span><br><span class="line"># The address on the local server to listen to.  </span><br><span class="line">KUBE_API_ADDRESS=&quot;--insecure-bind-address=0.0.0.0&quot;  </span><br><span class="line">  </span><br><span class="line"># The port on the local server to listen on.  </span><br><span class="line">KUBE_API_PORT=&quot;--port=8080&quot;  </span><br><span class="line">  </span><br><span class="line"># Port minions listen on  </span><br><span class="line"># KUBELET_PORT=&quot;--kubelet-port=10250&quot;  </span><br><span class="line">  </span><br><span class="line"># Comma separated list of nodes in the etcd cluster  </span><br><span class="line">KUBE_ETCD_SERVERS=&quot;--etcd-servers=http://etcd:2379&quot;  </span><br><span class="line">  </span><br><span class="line"># Address range to use for services  </span><br><span class="line">KUBE_SERVICE_ADDRESSES=&quot;--service-cluster-ip-range=10.254.0.0/16&quot;  </span><br><span class="line">  </span><br><span class="line"># default admission control policies  </span><br><span class="line"># KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota&quot;  </span><br><span class="line">KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ResourceQuota&quot;  </span><br><span class="line">  </span><br><span class="line"># Add your own!  </span><br><span class="line">KUBE_API_ARGS=&quot;&quot;  </span><br><span class="line">---</span><br><span class="line">###  </span><br><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure various aspects of all  </span><br><span class="line"># kubernetes services, including  </span><br><span class="line">#  </span><br><span class="line">#   kube-apiserver.service  </span><br><span class="line">#   kube-controller-manager.service  </span><br><span class="line">#   kube-scheduler.service  </span><br><span class="line">#   kubelet.service  </span><br><span class="line">#   kube-proxy.service  </span><br><span class="line"># logging to stderr means we get it in the systemd journal  </span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;  </span><br><span class="line">  </span><br><span class="line"># journal message level, 0 is debug  </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;  </span><br><span class="line">  </span><br><span class="line"># Should this cluster be allowed to run privileged docker containers  </span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;  </span><br><span class="line">  </span><br><span class="line"># How the controller-manager, scheduler, and proxy find the apiserver  </span><br><span class="line">KUBE_MASTER=&quot;--master=http://master1:8080&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动<br>systemctl enable kube-apiserver<br>systemctl start kube-apiserver<br>systemctl enable kube-controller-manager<br>systemctl start kube-controller-manager<br>systemctl enable kube-scheduler<br>systemctl start kube-scheduler  </p>
+</li>
+</ul>
+<ul>
+<li><p>deploy node</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker -y  </span><br><span class="line">chkconfig docker on  </span><br><span class="line">service docker start  </span><br><span class="line">yum install kubernetes -y</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure various aspects of all  </span><br><span class="line"># kubernetes services, including  </span><br><span class="line">#  </span><br><span class="line">#   kube-apiserver.service  </span><br><span class="line">#   kube-controller-manager.service  </span><br><span class="line">#   kube-scheduler.service  </span><br><span class="line">#   kubelet.service  </span><br><span class="line">#   kube-proxy.service  </span><br><span class="line"># logging to stderr means we get it in the systemd journal  </span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;  </span><br><span class="line">  </span><br><span class="line"># journal message level, 0 is debug  </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;  </span><br><span class="line">  </span><br><span class="line"># Should this cluster be allowed to run privileged docker containers  </span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;  </span><br><span class="line">  </span><br><span class="line"># How the controller-manager, scheduler, and proxy find the apiserver  </span><br><span class="line">KUBE_MASTER=&quot;--master=http://etcd:8080&quot;  </span><br><span class="line">###  </span><br><span class="line"># kubernetes kubelet (minion) config  </span><br><span class="line">  </span><br><span class="line"># The address for the info server to serve on (set to 0.0.0.0 or &quot;&quot; for all interfaces)  </span><br><span class="line">KUBELET_ADDRESS=&quot;--address=0.0.0.0&quot;  </span><br><span class="line">  </span><br><span class="line"># The port for the info server to serve on  </span><br><span class="line"># KUBELET_PORT=&quot;--port=10250&quot;  </span><br><span class="line">  </span><br><span class="line"># You may leave this blank to use the actual hostname  </span><br><span class="line">KUBELET_HOSTNAME=&quot;--hostname-override=node1&quot;  </span><br><span class="line">  </span><br><span class="line"># location of the api-server  </span><br><span class="line">KUBELET_API_SERVER=&quot;--api-servers=http://etcd:8080&quot;  </span><br><span class="line">  </span><br><span class="line"># pod infrastructure container  </span><br><span class="line">KUBELET_POD_INFRA_CONTAINER=&quot;--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest&quot;  </span><br><span class="line">  </span><br><span class="line"># Add your own!  </span><br><span class="line">KUBELET_ARGS=&quot;&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable kubelet  </span><br><span class="line">systemctl start kubelet  </span><br><span class="line">systemctl enable kube-proxy  </span><br><span class="line">systemctl start kube-proxy</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建覆盖网络flannel</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install flannel -y  </span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">- 在master、node上均编辑 /etc/sysconfig/flanneld 文件</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="Flanneld-configuration-options"><a href="#Flanneld-configuration-options" class="headerlink" title="Flanneld configuration options"></a>Flanneld configuration options</h1><h1 id="etcd-url-location-Point-this-to-the-server-where-etcd-runs"><a href="#etcd-url-location-Point-this-to-the-server-where-etcd-runs" class="headerlink" title="etcd url location.  Point this to the server where etcd runs"></a>etcd url location.  Point this to the server where etcd runs</h1><p>FLANNEL_ETCD_ENDPOINTS=”<a href="http://etcd:2379&quot;" target="_blank" rel="noopener">http://etcd:2379&quot;</a>  </p>
+<h1 id="etcd-config-key-This-is-the-configuration-key-that-flannel-queries"><a href="#etcd-config-key-This-is-the-configuration-key-that-flannel-queries" class="headerlink" title="etcd config key.  This is the configuration key that flannel queries"></a>etcd config key.  This is the configuration key that flannel queries</h1><h1 id="For-address-range-assignment"><a href="#For-address-range-assignment" class="headerlink" title="For address range assignment"></a>For address range assignment</h1><p>FLANNEL_ETCD_PREFIX=”/atomic.io/network”  </p>
+<h1 id="Any-additional-options-that-you-want-to-pass"><a href="#Any-additional-options-that-you-want-to-pass" class="headerlink" title="Any additional options that you want to pass"></a>Any additional options that you want to pass</h1><p>#FLANNEL_OPTIONS=””<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 配置etcd中关于flannel的key--</span><br></pre></td></tr></table></figure></p>
+<p>etcdctl mk /atomic.io/network/config ‘{ “Network”: “10.0.0.0/16” }’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 重新启动</span><br><span class="line">启动修改后的 flannel</span><br></pre></td></tr></table></figure></p>
+<p>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kube-apiserver<br>systemctl restart kube-controller-manager<br>systemctl restart kube-scheduler  </p>
+<p>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kubelet<br>systemctl restart kube-proxy<br><code>`</code> </p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_资源等级/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/k8s_资源等级/" class="post-title-link" itemprop="url">Kubernetes之QoS</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:27:03" itemprop="dateModified" datetime="2019-02-27T16:27:03+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="http://dockone.io/article/2592" target="_blank" rel="noopener">Kubernetes之服务质量保证（QoS）</a></p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods</p>
+<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort</p>
+<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。</p>
+<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。</p>
+<p>OOM分数值根据OOM_ADJ参数计算得出，对于Guaranteed级别的pod，OOM_ADJ参数设置成了-998，对于BestEffort级别的pod，OOM_ADJ参数设置成了1000，对于Burstable级别的POD，OOM_ADJ参数取值从2到999。对于kuberntes保留资源，比如kubelet，docker，OOM_ADJ参数设置成了-999，表示不会被OOM kill掉。OOM_ADJ参数设置的越大，通过OOM_ADJ参数计算出来OOM分数越高，表明该pod优先级就越低，当出现资源竞争时会越早被kill掉，对于OOM_ADJ参数是-999的表示kubernetes永远不会因为OOM而被kill掉。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_资源有效性/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/k8s_资源有效性/" class="post-title-link" itemprop="url">Kubernetes之健康检查与服务依赖处理</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:27:00" itemprop="dateModified" datetime="2019-02-27T16:27:00+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h1><h2 id="使用Liveness及Readness探针"><a href="#使用Liveness及Readness探针" class="headerlink" title="使用Liveness及Readness探针"></a>使用Liveness及Readness探针</h2><p>1.Liveness探针：主要用于判断Container是否处于运行状态，比如当服务crash或者死锁等情况发生时，kubelet会kill掉Container, 然后根据其设置的restart policy进行相应操作（可能会在本机重新启动Container，或者因为设置Kubernetes QoS，本机没有资源情况下会被分发的其他机器上重新启动）。<br>2.Readness探针：主要用于进一步判断服务是否已经正常工作，如果服务没有加载完成或工作异常，服务所在的Pod的IP地址会从服务的endpoints中被移除，也就是说，当服务没有ready时，会将其从服务的load balancer中移除，不会再接受或响应任何请求。</p>
+<p>liveness可用不一定readness可用，容器存活期间服务可能卡死状态。因此服务检查周期要短于健康检查周期。</p>
+<hr>
+<h2 id="探针处理Handler类型"><a href="#探针处理Handler类型" class="headerlink" title="探针处理Handler类型"></a>探针处理Handler类型</h2><p>无论对于Readness或Liveness探针，Handler均支持以下3种类型：ExecAction, TCPSocketAction, HTTPGetAction。每种类型说明与举例如下：</p>
+<ol>
+<li><p>ExecAction：Container内部执行某个具体的命令，成功返回：shell命令返回0。<br>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">   exec:</span><br><span class="line">     command:</span><br><span class="line">     - cat</span><br><span class="line">     - /tmp/healthy</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 5</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>TCPSocketAction：通过container的IP、port执行tcp进行检查，确认port是否打开，类似telnet<br>例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">readinessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 10</span><br><span class="line"> livenessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 15</span><br><span class="line">   periodSeconds: 20</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>HTTPGetAction: 通过container的IP、port、path，用HTTP Get请求进行检查，程序自定义返回结果及程序可用标准。<br>例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">  httpGet:</span><br><span class="line">    path: /healthz</span><br><span class="line">    port: 8080</span><br><span class="line">    httpHeaders:</span><br><span class="line">    - name: X-Custom-Header</span><br><span class="line">      value: Awesome</span><br><span class="line">  initialDelaySeconds: 3</span><br><span class="line">  periodSeconds: 3</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h2 id="服务可用性与自动恢复"><a href="#服务可用性与自动恢复" class="headerlink" title="服务可用性与自动恢复"></a>服务可用性与自动恢复</h2><ol>
+<li>如果服务的健康检查（readiness）失败，故障的服务实例从service endpoint中下线，外部请求将不会再转发到该服务上，一定程度上保证正在提供的服务的正确性，如果服务自我恢复了（比如网络问题），会自动重新加入service endpoint对外提供服务。</li>
+<li>如果设置了Container（liveness）的探针，对故障服务的Container（liveness）的探针同样会失败，container会被kill掉，并根据原设置的container重启策略，系统倾向于在其原所在的机器上重启该container、或其他机器重新创建一个pod。</li>
+<li>由于上面的机制，整个服务实现了自身可用与自动恢复。</li>
+</ol>
+<hr>
+<p>##使用建议：</p>
+<ol>
+<li>建议对全部服务同时设置服务（readiness）和Container（liveness）的健康检查</li>
+<li>通过TCP对端口检查形式（TCPSocketAction），仅适用于端口已关闭或进程停止情况。因为即使服务异常，只要端口是打开状态，健康检查仍然是通过的。</li>
+<li>基于第二点，一般建议用ExecAction自定义健康检查逻辑，或采用HTTP Get请求进行检查（HTTPGetAction）。</li>
+<li>无论采用哪种类型的探针，一般建议设置检查服务（readiness）的时间短于检查Container（liveness）的时间，也可以将检查服务（readiness）的探针与Container（liveness）的探针设置为一致。目的是故障服务先下线，如果过一段时间还无法自动恢复，那么根据重启策略，重启该container、或其他机器重新创建一个pod恢复故障服务。</li>
+</ol>
+<hr>
+<h1 id="服务依赖"><a href="#服务依赖" class="headerlink" title="服务依赖"></a>服务依赖</h1><h2 id="理解Init-Container"><a href="#理解Init-Container" class="headerlink" title="理解Init Container"></a>理解Init Container</h2><p>一个pod中可以有一或多个Init Container。Pod的中多个Init Container启动顺序为yaml文件中的描述顺序，且串行方式启动，下一个Init/app Container必须等待上一个Init Container完成后方可启动</p>
+<p>由于Init Container必须要在pod状态变为Ready之前完成，所以其不需要readiness探针。另外在资源的requests与limits上与普通Container有细微差别，详见 Resources，除以上2点外，Init Container与普通Container并无明显区别</p>
+<p>Init Containers用途</p>
+<ol>
+<li>前文已经提及，由于Init Container必须在app Containers启动之前完成，所以可利用其特性，用作服务依赖处理。比如某一个服务A，需依赖db或memcached，那么可以利用服务A pod的Init Container判断db/memcached是否正常提供服务，如果启动服务失败或工作异常，设置Init Container启动失败，那么pod中的服务A就不会被启动了。</li>
+<li>应用镜像因安全原因等没办法安装或运行的工具，可放到Init Container中运行。另外，Init Container独立于业务服务，与业务无关的工具如sed, awk, python, dig等也可以按需放到Init Container之中。最后，Init Container也可以被授权访问应用Container无权访问的内容。</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_配置热更新/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/k8s_配置热更新/" class="post-title-link" itemprop="url">Kubernetes ConfigMap热更新</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:27:07" itemprop="dateModified" datetime="2019-02-27T16:27:07+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Kubernetes-ConfigMap热更新"><a href="#Kubernetes-ConfigMap热更新" class="headerlink" title="Kubernetes ConfigMap热更新"></a><a href="https://www.kubernetes.org.cn/3138.html" target="_blank" rel="noopener">Kubernetes ConfigMap热更新</a></h2><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>ConfigMap是用来存储配置文件的kubernetes资源对象，所有的配置内容都存储在etcd中</p>
+<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><ol>
+<li><p>文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: env-config</span><br><span class="line">  namespace: default</span><br><span class="line">data:</span><br><span class="line">  log_level: INFO</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap ...</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ol>
+<li><p>evn挂载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">envFrom:</span><br><span class="line">- configMapRef:</span><br><span class="line">    name: env-config</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>volume挂载：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">volumeMounts:</span><br><span class="line">- name: config-volume</span><br><span class="line">  mountPath: /etc/config</span><br><span class="line">volumes:</span><br><span class="line">  - name: config-volume</span><br><span class="line">    configMap:</span><br><span class="line">      name: special-config</span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>更新 ConfigMap 后：</p>
+<p>使用该 ConfigMap 挂载的 Env 不会同步更新<br>使用该 ConfigMap 挂载的 Volume 中的数据需要一段时间（实测大概10秒）才能同步更新<br>ENV 是在容器启动的时候注入的，启动之后 kubernetes 就不会再改变环境变量的值，且同一个 namespace 中的 pod 的环境变量是不断累加的，参考 <a href="https://jimmysong.io/posts/exploring-kubernetes-env-with-docker/" target="_blank" rel="noopener">Kubernetes中的服务发现与docker容器间的环境变量传递源码探究</a>。为了更新容器中使用 ConfigMap 挂载的配置，可以通过滚动更新 pod 的方式来强制重新挂载 ConfigMap，也可以在更新了 ConfigMap 后，先将副本数设置为 0，然后再扩容。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_monitor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/k8s_monitor/" class="post-title-link" itemprop="url">Kubernetes监控</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:13:50" itemprop="dateModified" datetime="2019-02-27T16:13:50+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Node节点"><a href="#Node节点" class="headerlink" title="Node节点"></a>Node节点</h2><ul>
+<li><p>基础命令</p>
+<p>  <code>kubectl describe node node3</code></p>
+</li>
+</ul>
+<h2 id="kubelet"><a href="#kubelet" class="headerlink" title="kubelet"></a>kubelet</h2><ul>
+<li>组件  <ol>
+<li><strong>cAdvisor</strong><br>描述：收集本机以及容器的监控数据(cpu,memory,filesystem,network,uptime)</li>
+</ol>
+</li>
+</ul>
+<h2 id="Heapster"><a href="#Heapster" class="headerlink" title="Heapster"></a>Heapster</h2><ul>
+<li><p>描述  </p>
+<blockquote>
+<p>Heapster首先从K8S Master获取集群中所有Node的信息，然后通过这些Node上的kubelet获取有用数据，而kubelet本身的数据则是从cAdvisor得到。所有获取到的数据都被推到Heapster配置的后端存储中，并还支持数据的可视化。现在后端存储 + 可视化的方法，如InfluxDB + grafana。</p>
+</blockquote>
+</li>
+<li><p>组件  </p>
+<ol>
+<li><strong>InfluxDB</strong><br>描述：存储监控数据</li>
+</ol>
+</li>
+</ul>
+<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><blockquote>
+<ol>
+<li><a href="https://segmentfault.com/a/1190000007708162" target="_blank" rel="noopener">Kubernetes监控之Heapster介绍</a></li>
+</ol>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">TimWells</p>
+              <div class="site-description motion-element" itemprop="description">高效研究，快乐生活，用于python编程知识速查！大家玩的开心！</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1807520300@qq.com" title="E-Mail &rarr; mailto:1807520300@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TimWells</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

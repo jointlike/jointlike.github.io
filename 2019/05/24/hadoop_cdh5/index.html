@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="基于cloudera,oracle jdk 1.8.0.111, centos 6.8 准备环境配置 要求：CENTOS6(el6)，主4C8G，从2C4G 20G  关闭selinux   123456vi /etc/selinux/configSELINUX=disabled```  2. 配置hostname, host???????????????????? vi /etc/sysconf">
+<meta name="keywords" content="python, machine learning, data mining, PM, foreign trade, jointlike, timwells,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hadoop 部署">
+<meta property="og:url" content="https://jointlike.github.io/2019/05/24/hadoop_cdh5/index.html">
+<meta property="og:site_name" content="jointlike by TimWells">
+<meta property="og:description" content="基于cloudera,oracle jdk 1.8.0.111, centos 6.8 准备环境配置 要求：CENTOS6(el6)，主4C8G，从2C4G 20G  关闭selinux   123456vi /etc/selinux/configSELINUX=disabled```  2. 配置hostname, host???????????????????? vi /etc/sysconf">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-02-27T08:20:53.405Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hadoop 部署">
+<meta name="twitter:description" content="基于cloudera,oracle jdk 1.8.0.111, centos 6.8 准备环境配置 要求：CENTOS6(el6)，主4C8G，从2C4G 20G  关闭selinux   123456vi /etc/selinux/configSELINUX=disabled```  2. 配置hostname, host???????????????????? vi /etc/sysconf">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://jointlike.github.io/2019/05/24/hadoop_cdh5/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>hadoop 部署 | jointlike by TimWells</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">jointlike by TimWells</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/hadoop_cdh5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">hadoop 部署
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:20:53" itemprop="dateModified" datetime="2019-02-27T16:20:53+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>基于cloudera,oracle jdk 1.8.0.111, centos 6.8</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a><strong>环境配置</strong></h3><ol start="0">
+<li><p>要求：CENTOS6(el6)，主4C8G，从2C4G 20G</p>
+</li>
+<li><p>关闭selinux</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/selinux/config</span><br><span class="line"></span><br><span class="line">SELINUX=disabled</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">2. 配置hostname, host????????????????????</span><br></pre></td></tr></table></figure>
+<p>vi /etc/sysconfig/network<br>vi /etc/hosts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. ssh打通</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line">ssh-keygen -t rsa  </span><br><span class="line">cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys  </span><br><span class="line">scp ~/.ssh/authorized_keys root@datanode1:~/.ssh/</span><br><span class="line">(ssh-copy-id hosts)  </span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. 主从时间同步ntp</span><br><span class="line">```  </span><br><span class="line"># vim /etc/ntp.conf   </span><br><span class="line">driftfile /var/lib/ntp/drift</span><br><span class="line">restrict 127.0.0.1</span><br><span class="line">restrict -6 ::1</span><br><span class="line">restrict default nomodify notrap </span><br><span class="line">server ntp3.aliyun.com prefer </span><br><span class="line">server ntp7.aliyun.com iburst</span><br><span class="line">includefile /etc/ntp/crypto/pw</span><br><span class="line">keys /etc/ntp/keys</span><br><span class="line"></span><br><span class="line"># 时间同步</span><br><span class="line">service ntpd start</span><br><span class="line">chkconfig ntpd on</span><br><span class="line"></span><br><span class="line"># 查看</span><br><span class="line">ntpstat </span><br><span class="line"></span><br><span class="line">synchronised to NTP server (203.107.6.88) at stratum 3 </span><br><span class="line">   time correct to within 40 ms</span><br><span class="line">   polling server every 1024 s</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">5. 装mysql </span><br><span class="line">```  </span><br><span class="line">yum install -y mysql mysql-server mysql-devel </span><br><span class="line">chkconfig mysqld on  </span><br><span class="line">service mysqld start  </span><br><span class="line">create database hive DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">create database oozie DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">grant all on *.* to root@&quot;%&quot; Identified by &quot;hadoop&quot;;</span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;%&apos; IDENTIFIED BY &apos;hadoop&apos; WITH GRANT OPTION;   </span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">6. 安装java</span><br><span class="line"></span><br><span class="line">注意需要是 oracle java</span><br></pre></td></tr></table></figure></p>
+<p>#openjdk<br>rpm -e –nodeps java-1.6.0-openjdk-1.6.0.0-1.66.1.13.0.el6.x86_64</p>
+<p>#sun jdk<br>yum -y install oracle-j2sdk1.7.x86_64</p>
+<p>vi /etc/profile</p>
+<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><p>export JAVA_HOME=/opt/java<br>export PATH=$JAVA_HOME/bin:$PATH<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[JDBC 参考](http://dev.mysql.com/downloads/connector/j/)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">7. 内核缓存配置</span><br><span class="line"></span><br><span class="line">`vi /etc/sysctl.conf`  </span><br><span class="line">`vm.swappiness=10`</span><br><span class="line">`vi /etc/rc.local` </span><br><span class="line">`echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag`</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">### **部署**</span><br><span class="line"></span><br><span class="line">1. ????CM.??????????5.9??   </span><br><span class="line"></span><br><span class="line">  &gt; Cloudera Manager 5.9??http://archive-primary.cloudera.com/cm5/cm/5/cloudera-manager-el6-cm5.9.0_x86_64.tar.gz  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 ???????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 sha?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1  </span><br><span class="line"></span><br><span class="line">  &gt; manifest ?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/manifest.json  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2. ????????????????  </span><br><span class="line"></span><br><span class="line">  - ??? tar -zxvf cloudera-manager-el6-cm5.9.0_x86_64.tar.gz -P /opt/cloudera/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1 CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha</span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv manifest.json /opt/clourdera/parcel.repo/  </span><br><span class="line"></span><br><span class="line">3. ?????????  </span><br><span class="line">```  </span><br><span class="line">/opt/cloudera/share/cmf/schema/scm_prepare_database.sh mysql cm -hlocalhost -uroot -phdp --scm-host localhost scm scm scm</span><br><span class="line">??????????????/usr/share/cmf</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. ????????????????cloudera-daemon, cloudera-server</span><br></pre></td></tr></table></figure></p>
+<p>sudo yum –nogpgcheck localinstall cloudera-manager-daemons-<em>.rpm<br>sudo yum –nogpgcheck localinstall cloudera-manager-server-</em>.rpm<br><code>`</code></p>
+<ol start="7">
+<li>????localhost:7180???????,????????</li>
+</ol>
+<p>??????jdbc???????????oozie hive??????jdbc????????????</p>
+<h3 id><a href="#" class="headerlink" title="??????"></a>??????</h3><ol>
+<li><p>jdk ??????????????????????????????yum repo?????</p>
+</li>
+<li><p>????????????????  </p>
+</li>
+</ol>
+<h3 id="-1"><a href="#-1" class="headerlink" title="????????"></a>????????</h3><blockquote>
+<p><a href="http://www.aboutyun.com/thread-9086-1-1.html" target="_blank" rel="noopener">Cloudera Manager 5 ?? CDH5 ????????????????</a><br><a href="https://www.cloudera.com/documentation/enterprise/latest/topics/install_cm_server.html" target="_blank" rel="noopener">Install Cloudera </a><br><a href="https://www.jianshu.com/p/57179e03795f" target="_blank" rel="noopener">?????CDH5??????</a><br><a href="https://blog.csdn.net/qq_30004245/article/details/75735275?locationNum=9&amp;fps=1" target="_blank" rel="noopener">Cloudera Hadoop???????????</a><br><a href="https://zhuanlan.zhihu.com/p/25533211" target="_blank" rel="noopener">??CDH5??hadoop???</a><br><a href="https://blog.csdn.net/hliq5399/article/details/78193113#t5" target="_blank" rel="noopener">??????????Hadoop??????</a><br><a href="https://www.jianshu.com/p/72dc1c591647" target="_blank" rel="noopener">CDH5???????????</a></p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/24/k8s_authorization/" rel="next" title="k8s权限管理">
+                <i class="fa fa-chevron-left"></i> k8s权限管理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/24/hadoop_guide/" rel="prev" title="hadoop 使用">
+                hadoop 使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">TimWells</p>
+              <div class="site-description motion-element" itemprop="description">高效研究，快乐生活，用于python编程知识速查！大家玩的开心！</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1807520300@qq.com" title="E-Mail &rarr; mailto:1807520300@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#准备"><span class="nav-number">1.</span> <span class="nav-text">准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境配置"><span class="nav-number">1.1.</span> <span class="nav-text">环境配置</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#环境变量"><span class="nav-number"></span> <span class="nav-text">环境变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#"><span class="nav-number">0.1.</span> <span class="nav-text">??????</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#-1"><span class="nav-number">0.2.</span> <span class="nav-text">????????</span></a></li></ol></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TimWells</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

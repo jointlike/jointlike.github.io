@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="补充：https://www.cnblogs.com/cf532088799/p/7977083.html 原理概述：K8s授权管理分用户认证和授权两部分，授权根据RBAC角色控制方法为不同用户配置不同角色完成权限管理   管理组件RBAC 是让用户能够访问 Kubernetes API 资源的授权方式。   认证顺序 用户认证   权限认证    用户类型k8s里面有两种用户，一种是User，一">
+<meta name="keywords" content="python, machine learning, data mining, PM, foreign trade, jointlike, timwells,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s权限管理">
+<meta property="og:url" content="https://jointlike.github.io/2019/05/24/k8s_authorization/index.html">
+<meta property="og:site_name" content="jointlike by TimWells">
+<meta property="og:description" content="补充：https://www.cnblogs.com/cf532088799/p/7977083.html 原理概述：K8s授权管理分用户认证和授权两部分，授权根据RBAC角色控制方法为不同用户配置不同角色完成权限管理   管理组件RBAC 是让用户能够访问 Kubernetes API 资源的授权方式。   认证顺序 用户认证   权限认证    用户类型k8s里面有两种用户，一种是User，一">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-28T16:30:49.236Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="k8s权限管理">
+<meta name="twitter:description" content="补充：https://www.cnblogs.com/cf532088799/p/7977083.html 原理概述：K8s授权管理分用户认证和授权两部分，授权根据RBAC角色控制方法为不同用户配置不同角色完成权限管理   管理组件RBAC 是让用户能够访问 Kubernetes API 资源的授权方式。   认证顺序 用户认证   权限认证    用户类型k8s里面有两种用户，一种是User，一">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://jointlike.github.io/2019/05/24/k8s_authorization/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>k8s权限管理 | jointlike by TimWells</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">jointlike by TimWells</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/k8s_authorization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">k8s权限管理
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-04-29 00:30:49" itemprop="dateModified" datetime="2019-04-29T00:30:49+08:00">2019-04-29</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>补充：<br><a href="https://www.cnblogs.com/cf532088799/p/7977083.html" target="_blank" rel="noopener">https://www.cnblogs.com/cf532088799/p/7977083.html</a></p>
+<h2 id="原理概述："><a href="#原理概述：" class="headerlink" title="原理概述："></a>原理概述：</h2><p>K8s授权管理分用户认证和授权两部分，授权根据RBAC角色控制方法为不同用户配置不同角色完成权限管理  </p>
+<h2 id="管理组件"><a href="#管理组件" class="headerlink" title="管理组件"></a>管理组件</h2><p>RBAC 是让用户能够访问 Kubernetes API 资源的授权方式。  </p>
+<h2 id="认证顺序"><a href="#认证顺序" class="headerlink" title="认证顺序"></a>认证顺序</h2><ol>
+<li>用户认证  </li>
+<li>权限认证  </li>
+</ol>
+<h2 id="用户类型"><a href="#用户类型" class="headerlink" title="用户类型"></a>用户类型</h2><p>k8s里面有两种用户，一种是User，一种就是service account，User给人用的，service account给进程用的，让进程有相关的权限。<br>如dasboard就是一个进程，我们就可以创建一个service account给它，让它去访问k8s。</p>
+<h2 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h2><p>角色是一系列的权限的集合，例如一个角色可以包含读取 Pod 的权限和列出 Pod 的权限， ClusterRole 跟 Role 类似，但是可以在集群中到处使用（ Role 是 namespace 一级的）。</p>
+<p>角色绑定 RoleBinding 把角色映射到用户，从而让这些用户继承角色在 namespace 中的权限。ClusterRoleBinding 让用户继承 ClusterRole 在整个集群中的权限。</p>
+<h2 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a>操作流程：</h2><ol>
+<li><p>创建用户，serviceaccount 或 user. user需要自设token。请看下面详细操作  </p>
+</li>
+<li><p>创建角色，分为 ClusterRole, Role. 指定操作资源及操作类型（增删改查等）  </p>
+</li>
+<li><p>绑定用户与角色，kind: ClusterRoleBinding or RoleBinding   </p>
+</li>
+</ol>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true</a><br><a href="https://www.kubernetes.org.cn/3238.html" target="_blank" rel="noopener">https://www.kubernetes.org.cn/3238.html</a><br><a href="https://kubernetes.io/docs/admin/authentication/" target="_blank" rel="noopener">https://kubernetes.io/docs/admin/authentication/</a><br><a href="http://www.infoq.com/cn/articles/Kubernetes-API" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/Kubernetes-API</a><br><a href="https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/" target="_blank" rel="noopener">https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/</a><br><a href="https://blog.csdn.net/qq_34463875/article/details/78728041" target="_blank" rel="noopener">https://blog.csdn.net/qq_34463875/article/details/78728041</a></p>
+</blockquote>
+<h2 id="更多知识点："><a href="#更多知识点：" class="headerlink" title="更多知识点："></a>更多知识点：</h2><ul>
+<li><p>集群用户权限管理： 内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod<br>（如：dashboard）的权限来访问。serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
+</li>
+<li><p>在 pod 创建之初 service account 就必须已经存在，否则创建将被拒绝设置非默认的 service account，<br>只需要在 pod 的spec.serviceAccountName 字段中将name设置为您想要用的 service account 名字即可。<br>不能更新已创建的 pod 的 service account。</p>
+</li>
+<li><p>可以在现有的serviceaccount 中增加imagePullSecrets 使pod构建镜像时在当前命名空间默认引用私有仓库的认证。</p>
+</li>
+<li><p>内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod的权限来访问。<br>serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
+</li>
+<li><p>kubeconfig namespace 设置可以限定角色可访问的命名空间，若角色权限过大，binding中也可以进一步限定。</p>
+</li>
+</ul>
+<h2 id="案例："><a href="#案例：" class="headerlink" title="案例："></a>案例：</h2><ol>
+<li>service account(sc)案例   </li>
+</ol>
+<p>进程用户（service account）权限管理，是专门为进程用户创建，也可以达到权限管理的目的，然而建议是同一个进程多个用户。作为示例我们这里部署一个进程权限管理作为演示。部署流程如下：</p>
+<p>1). 创建sc   </p>
+<pre><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: admin-dashboard
+  name: admin-dashboard
+  namespace: kube-system
+</code></pre><p>2). 创建角色</p>
+<pre><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  #无命名空间，clusterrole用于全集群
+  name: admin-dashboard-minimal
+rules:
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;secrets&quot;]
+  verbs: [&quot;create&quot;]
+- apiGroups: [&quot;&quot;, &quot;extensions&quot;, &quot;apps&quot;]
+  resources: [&quot;deployments&quot;, &quot;pods&quot;, &quot;services&quot;]
+  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;, &quot;delete&quot;]
+</code></pre><p>3). 绑定角色</p>
+<pre><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-dashboard-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin-dashboard-minimal
+subjects:
+- kind: ServiceAccount
+  name: admin-dashboard
+  namespace: kube-system
+</code></pre><p>4). kubernetes dashboard必须以nodeport方式部署。</p>
+<ol start="2">
+<li>普通用户案例</li>
+</ol>
+<p>普通用户权限管理：k8s APIserver不支持普通用户创建，只需生成token（# head -c 16 /dev/urandom | od -An -t x| tr -d ‘ ‘）,<br>将该用户的token追加到kuberentesAPI启动参数中指定的token（通常在/etc/kubernetes/token.csv）文件中即可。设置用户ssh认证，<br>根据绑定的角色权限并追加到kubeconfig文件中，供客户端访问。终端命令行可以通过不同用户用不同上下文达到访问权限管理。<br>这个上下文可以转换成第三方用户管理平台，Header追加。authorization Bearer token 来访问。注意：普通用户需要重启（重新部署）apiserver。</p>
+<p>1). 创建用户token并录入token指定tom用户名。任何Linux终端执行如下（可选）：  </p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">	head -c 16 /dev/urandom | od -An -t x| tr -d &apos; &apos;  </span><br><span class="line">	```  </span><br><span class="line">	生成的token以&apos;token,user,uid,&quot;group1,group2,group3&quot;&apos;格式写入到其中一个master节点`/etc/kubernetes/ssl/token.csv`文件中。uid不重复的编号即可。如：716c8d3cd0e75dc25d1eb758e4635d39, tom, 10002, dev1    </span><br><span class="line">	然后重启apiserver以是当前新加的token生效，然后继续以下操作。</span><br><span class="line">	说明：此步骤可选, 2）中命令可生成用户</span><br><span class="line"></span><br><span class="line">2). SSH认证并绑定tom：  </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	### 生成证书</span><br><span class="line">	openssl genrsa -out employee.key 2048</span><br><span class="line">	openssl req -new -key employee.key -out employee.csr -subj &quot;/CN=tom/O=dev1&quot;  #用户tom，分组dev1</span><br><span class="line">	openssl x509 -req -in employee.csr -CA /etc/kubernetes/ssl/k8s-root-ca.pem -CAkey /etc/kubernetes/ssl/k8s-root-ca-key.pem -CAcreateserial -out employee.crt -days 5000</span><br><span class="line">	</span><br><span class="line">	### 将证书和tom用户绑定</span><br><span class="line">	kubectl config set-credentials tom --client-certificate=employee.crt --client-key=employee.key </span><br><span class="line">	kubectl config set-context employee-context --cluster=kubernetes --namespace=shelve-mgr --user=tom</span><br><span class="line">	</span><br><span class="line">	## 可用kubectl config view 查看添加是否成功。cluster, context, user</span><br><span class="line"></span><br><span class="line">3). 创建角色   </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	kind: Role</span><br><span class="line">	apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">	metadata:</span><br><span class="line">	  namespace: shelve-mgr</span><br><span class="line">	  name: employee</span><br><span class="line">	rules:</span><br><span class="line">	- apiGroups: [&quot;&quot;]</span><br><span class="line">	  resources: [&quot;pods&quot;]</span><br><span class="line">	  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;]</span><br></pre></td></tr></table></figure>
+</code></pre><p>4). 角色绑定   </p>
+<pre><code>```
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: employee-role-binding
+  namespace: shelve-mgr
+subjects:
+- kind: User
+  name: tom
+roleRef:
+  kind: Role
+  name: employee
+  apiGroup: &quot;&quot;
+```  
+</code></pre><p>完成用户配置，现在用户终端受当前角色权限限制。普通用户需要重启apiserver后方可生效。</p>
+<p>1). 配置kubectl默认终端用户  </p>
+<pre><code>```  
+# 验证
+kubectl --config=employee-context get pods
+# 设置默认会话上下文
+kubectl config use-context employee-context
+```  
+</code></pre><p>2). 其他客户端及api请求以header中携带 Authorization: Bearer + token方式访问。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/24/ceph_cmd/" rel="next" title="ceph 概念命令">
+                <i class="fa fa-chevron-left"></i> ceph 概念命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/24/hadoop_cdh5/" rel="prev" title="hadoop 部署">
+                hadoop 部署 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">TimWells</p>
+              <div class="site-description motion-element" itemprop="description">高效研究，快乐生活，用于python编程知识速查！大家玩的开心！</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1807520300@qq.com" title="E-Mail &rarr; mailto:1807520300@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理概述："><span class="nav-number">1.</span> <span class="nav-text">原理概述：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管理组件"><span class="nav-number">2.</span> <span class="nav-text">管理组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#认证顺序"><span class="nav-number">3.</span> <span class="nav-text">认证顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户类型"><span class="nav-number">4.</span> <span class="nav-text">用户类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#角色"><span class="nav-number">5.</span> <span class="nav-text">角色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作流程："><span class="nav-number">6.</span> <span class="nav-text">操作流程：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">7.</span> <span class="nav-text">参考链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多知识点："><span class="nav-number">8.</span> <span class="nav-text">更多知识点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#案例："><span class="nav-number">9.</span> <span class="nav-text">案例：</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TimWells</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

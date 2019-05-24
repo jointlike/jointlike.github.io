@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="-存储类型：1.NAS - Network Attached Storage2.SAN - storage area network3.DAS - Direct Attached Storage -存储协议：1.NFS –linux2.SMB –windows -存储方案：1.PV:persistant volume (node)2.PVC: persistant volume claim (po">
+<meta name="keywords" content="python, machine learning, data mining, PM, foreign trade, jointlike, timwells,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ceph 部署与概念">
+<meta property="og:url" content="https://jointlike.github.io/2019/05/24/ceph_deploy/index.html">
+<meta property="og:site_name" content="jointlike by TimWells">
+<meta property="og:description" content="-存储类型：1.NAS - Network Attached Storage2.SAN - storage area network3.DAS - Direct Attached Storage -存储协议：1.NFS –linux2.SMB –windows -存储方案：1.PV:persistant volume (node)2.PVC: persistant volume claim (po">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-02-27T08:21:17.077Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ceph 部署与概念">
+<meta name="twitter:description" content="-存储类型：1.NAS - Network Attached Storage2.SAN - storage area network3.DAS - Direct Attached Storage -存储协议：1.NFS –linux2.SMB –windows -存储方案：1.PV:persistant volume (node)2.PVC: persistant volume claim (po">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://jointlike.github.io/2019/05/24/ceph_deploy/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ceph 部署与概念 | jointlike by TimWells</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">jointlike by TimWells</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/ceph_deploy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">ceph 部署与概念
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-24 14:48:30" itemprop="dateCreated datePublished" datetime="2019-05-24T14:48:30+08:00">2019-05-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-27 16:21:17" itemprop="dateModified" datetime="2019-02-27T16:21:17+08:00">2019-02-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>-存储类型：<br>1.NAS - Network Attached Storage<br>2.SAN - storage area network<br>3.DAS - Direct Attached Storage</p>
+<p>-存储协议：<br>1.NFS –linux<br>2.SMB –windows</p>
+<p>-存储方案：<br>1.PV:persistant volume (node)<br>2.PVC: persistant volume claim (pod)</p>
+<p>理论：best 官网文档。 kuberneters 英文官网文档。<br><a href="https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html</a></p>
+<p>kubernetes持久化存储：<br><a href="https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc</a></p>
+<p>ceph/daemon 部署：<br><a href="https://hub.docker.com/r/ceph/daemon/" target="_blank" rel="noopener">https://hub.docker.com/r/ceph/daemon/</a><br><a href="https://www.jianshu.com/p/f08ed7287416" target="_blank" rel="noopener">https://www.jianshu.com/p/f08ed7287416</a><br><a href="https://www.linuxidc.com/Linux/2017-10/148041.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/148041.htm</a><br><a href="https://www.kubernetes.org.cn/ingress" target="_blank" rel="noopener">https://www.kubernetes.org.cn/ingress</a></p>
+<p>——实践步骤——-<br>体系结构<br>配置文件<br>部署环境配置<br>部署：</p>
+<ol>
+<li>部署 CEPH 的用户<br>ssh user@ceph-server<br>sudo useradd -d /home/{username} -m {username}<br>sudo passwd {username}</li>
+</ol>
+<p>授权<br>echo “{username} ALL = (root) NOPASSWD:ALL” | sudo tee /etc/sudoers.d/{username}<br>sudo chmod 0440 /etc/sudoers.d/{username}</p>
+<ol start="2">
+<li><p>无密码 SSH 登录<br>ssh-keygen<br>ssh-copy-id {username}@node1<br>ssh-copy-id {username}@node2<br>ssh-copy-id {username}@node3</p>
+</li>
+<li><p>deploy mon<br>docker run -it –net=host \<br>–hostname=cephmonhost \<br>–name=cephtimon \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-e MON_IP=172.20.36.231 \<br>-e CEPH_PUBLIC_NETWORK=172.20.36.0/24 \<br>ceph/daemon mon</p>
+</li>
+</ol>
+<p>ctrl+P+Q</p>
+<ol start="4">
+<li>deploy mgr<br>docker run -d –net=host \<br>–hostname=cephmgrhost \<br>–name=cephtimmgr \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>ceph/daemon mgr</li>
+</ol>
+<ol start="5">
+<li>distribut keyring<h1 id="ssh-root-node2-mkdir-p-var-lib-ceph"><a href="#ssh-root-node2-mkdir-p-var-lib-ceph" class="headerlink" title="ssh root@node2 mkdir -p /var/lib/ceph"></a>ssh root@node2 mkdir -p /var/lib/ceph</h1><h1 id="scp-r-etc-ceph-root-node2-etc"><a href="#scp-r-etc-ceph-root-node2-etc" class="headerlink" title="scp -r /etc/ceph root@node2:/etc"></a>scp -r /etc/ceph root@node2:/etc</h1><h1 id="scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph"><a href="#scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph" class="headerlink" title="scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph"></a>scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph</h1></li>
+</ol>
+<ol start="6">
+<li>zap disk<br>docker run -d –privileged=true \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon zap_device</li>
+</ol>
+<ol start="7">
+<li><p>deploy osd<br>docker run -it –net=host \<br>–hostname=cephosdhost \<br>–name=cephtimosd \<br>–pid=host \<br>–privileged=true \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon osd</p>
+</li>
+<li><p>deploy mds</p>
+</li>
+</ol>
+<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>-e CEPHFS_CREATE=1 \<br>ceph/daemon mds</p>
+<ol start="9">
+<li>deploy rgw</li>
+</ol>
+<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>ceph/daemon rgw</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/24/block_chain/" rel="next" title="以太坊">
+                <i class="fa fa-chevron-left"></i> 以太坊
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/24/ceph_cmd/" rel="prev" title="ceph 概念命令">
+                ceph 概念命令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">TimWells</p>
+              <div class="site-description motion-element" itemprop="description">高效研究，快乐生活，用于python编程知识速查！大家玩的开心！</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1807520300@qq.com" title="E-Mail &rarr; mailto:1807520300@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ssh-root-node2-mkdir-p-var-lib-ceph"><span class="nav-number">1.</span> <span class="nav-text">ssh root@node2 mkdir -p /var/lib/ceph</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scp-r-etc-ceph-root-node2-etc"><span class="nav-number">2.</span> <span class="nav-text">scp -r /etc/ceph root@node2:/etc</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph"><span class="nav-number">3.</span> <span class="nav-text">scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TimWells</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
