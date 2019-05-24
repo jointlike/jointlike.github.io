@@ -1,0 +1,2463 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+<meta name="keywords" content="python, machine learning, data mining, PM, foreign trade, jointlike, timwells,">
+<meta property="og:type" content="website">
+<meta property="og:title" content="jointlike by TimWells">
+<meta property="og:url" content="https://jointlike.github.io/page/3/index.html">
+<meta property="og:site_name" content="jointlike by TimWells">
+<meta property="og:description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jointlike by TimWells">
+<meta name="twitter:description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://jointlike.github.io/page/3/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>jointlike by TimWells</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+  page-home">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">jointlike by TimWells</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_惯例/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/python_惯例/" class="post-title-link" itemprop="url">转：Python惯例</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Python惯例"><a href="#Python惯例" class="headerlink" title="Python惯例"></a>Python惯例</h2><p>“惯例”这个词指的是“习惯的做法，常规的办法，一贯的做法”，与这个词对应的英文单词叫“idiom”。由于Python跟其他很多编程语言在语法和使用上还是有比较显著的差别，因此作为一个Python开发者如果不能掌握这些惯例，就无法写出“Pythonic”的代码。下面我们总结了一些在Python开发中的惯用的代码。</p>
+<ol>
+<li><p>让代码既可以被导入又可以被执行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用下面的方式判断逻辑“真”或“假”。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">if</span> x:</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> x:</span><br></pre></td></tr></table></figure>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">name = <span class="string">'jackfrued'</span></span><br><span class="line">fruits = [<span class="string">'apple'</span>, <span class="string">'orange'</span>, <span class="string">'grape'</span>]</span><br><span class="line">owners = &#123;<span class="string">'1001'</span>: <span class="string">'骆昊'</span>, <span class="string">'1002'</span>: <span class="string">'王大锤'</span>&#125;</span><br><span class="line"><span class="keyword">if</span> name <span class="keyword">and</span> fruits <span class="keyword">and</span> owners:</span><br><span class="line">    print(<span class="string">'I love fruits!'</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">name = <span class="string">'jackfrued'</span></span><br><span class="line">fruits = [<span class="string">'apple'</span>, <span class="string">'orange'</span>, <span class="string">'grape'</span>]</span><br><span class="line">owners = &#123;<span class="string">'1001'</span>: <span class="string">'骆昊'</span>, <span class="string">'1002'</span>: <span class="string">'王大锤'</span>&#125;</span><br><span class="line"><span class="keyword">if</span> name != <span class="string">''</span> <span class="keyword">and</span> len(fruits) &gt; <span class="number">0</span> <span class="keyword">and</span> owners != &#123;&#125;:</span><br><span class="line">    print(<span class="string">'I love fruits!'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>善于使用in运算符。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">if</span> x <span class="keyword">in</span> items: <span class="comment"># 包含</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> items: <span class="comment"># 迭代</span></span><br></pre></td></tr></table></figure>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">name = <span class="string">'Hao LUO'</span></span><br><span class="line"><span class="keyword">if</span> <span class="string">'L'</span> <span class="keyword">in</span> name:</span><br><span class="line">    print(<span class="string">'The name has an L in it.'</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">name = <span class="string">'Hao LUO'</span></span><br><span class="line"><span class="keyword">if</span> name.find(<span class="string">'L'</span>) != <span class="number">-1</span>:</span><br><span class="line">    print(<span class="string">'This name has an L in it!'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不使用临时变量交换两个值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">a, b = b, a</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用序列构建字符串。</p>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">chars = [<span class="string">'j'</span>, <span class="string">'a'</span>, <span class="string">'c'</span>, <span class="string">'k'</span>, <span class="string">'f'</span>, <span class="string">'r'</span>, <span class="string">'u'</span>, <span class="string">'e'</span>, <span class="string">'d'</span>]</span><br><span class="line">name = <span class="string">''</span>.join(chars)</span><br><span class="line">print(name)  <span class="comment"># jackfrued</span></span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">chars = [<span class="string">'j'</span>, <span class="string">'a'</span>, <span class="string">'c'</span>, <span class="string">'k'</span>, <span class="string">'f'</span>, <span class="string">'r'</span>, <span class="string">'u'</span>, <span class="string">'e'</span>, <span class="string">'d'</span>]</span><br><span class="line">name = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> char <span class="keyword">in</span> chars:</span><br><span class="line">    name += char</span><br><span class="line">print(name)  <span class="comment"># jackfrued</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>EAFP优于LBYL。</p>
+<p>EAFP - <strong>E</strong>asier to <strong>A</strong>sk <strong>F</strong>orgiveness than <strong>P</strong>ermission.</p>
+<p>LBYL - <strong>L</strong>ook <strong>B</strong>efore <strong>Y</strong>ou <strong>L</strong>eap.</p>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">d = &#123;<span class="string">'x'</span>: <span class="string">'5'</span>&#125;</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    value = int(d[<span class="string">'x'</span>])</span><br><span class="line">    print(value)</span><br><span class="line"><span class="keyword">except</span> (KeyError, TypeError, ValueError):</span><br><span class="line">    value = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">d = &#123;<span class="string">'x'</span>: <span class="string">'5'</span>&#125;</span><br><span class="line"><span class="keyword">if</span> <span class="string">'x'</span> <span class="keyword">in</span> d <span class="keyword">and</span> isinstance(d[<span class="string">'x'</span>], str) \</span><br><span class="line">		<span class="keyword">and</span> d[<span class="string">'x'</span>].isdigit():</span><br><span class="line">    value = int(d[<span class="string">'x'</span>])</span><br><span class="line">    print(value)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    value = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用enumerate进行迭代。</p>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">fruits = [<span class="string">'orange'</span>, <span class="string">'grape'</span>, <span class="string">'pitaya'</span>, <span class="string">'blueberry'</span>]</span><br><span class="line"><span class="keyword">for</span> index, fruit <span class="keyword">in</span> enumerate(fruits):</span><br><span class="line">	print(index, <span class="string">':'</span>, fruit)</span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">fruits = [<span class="string">'orange'</span>, <span class="string">'grape'</span>, <span class="string">'pitaya'</span>, <span class="string">'blueberry'</span>]</span><br><span class="line">index = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> fruit <span class="keyword">in</span> fruits:</span><br><span class="line">    print(index, <span class="string">':'</span>, fruit)</span><br><span class="line">    index += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用生成式生成列表。</p>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">data = [<span class="number">7</span>, <span class="number">20</span>, <span class="number">3</span>, <span class="number">15</span>, <span class="number">11</span>]</span><br><span class="line">result = [num * <span class="number">3</span> <span class="keyword">for</span> num <span class="keyword">in</span> data <span class="keyword">if</span> num &gt; <span class="number">10</span>]</span><br><span class="line">print(result)  <span class="comment"># [60, 45, 33]</span></span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">data = [<span class="number">7</span>, <span class="number">20</span>, <span class="number">3</span>, <span class="number">15</span>, <span class="number">11</span>]</span><br><span class="line">result = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">    <span class="keyword">if</span> i &gt; <span class="number">10</span>:</span><br><span class="line">        result.append(i * <span class="number">3</span>)</span><br><span class="line">print(result)  <span class="comment"># [60, 45, 33]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用zip组合键和值来创建字典。</p>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">keys = [<span class="string">'1001'</span>, <span class="string">'1002'</span>, <span class="string">'1003'</span>]</span><br><span class="line">values = [<span class="string">'骆昊'</span>, <span class="string">'王大锤'</span>, <span class="string">'白元芳'</span>]</span><br><span class="line">d = dict(zip(keys, values))</span><br><span class="line">print(d)</span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">keys = [<span class="string">'1001'</span>, <span class="string">'1002'</span>, <span class="string">'1003'</span>]</span><br><span class="line">values = [<span class="string">'骆昊'</span>, <span class="string">'王大锤'</span>, <span class="string">'白元芳'</span>]</span><br><span class="line">d = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> i, key <span class="keyword">in</span> enumerate(keys):</span><br><span class="line">    d[key] = values[i]</span><br><span class="line">print(d)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p><strong>说明</strong>：这篇文章的内容来自于网络，有兴趣的读者可以阅读<a href="http://safehammad.com/downloads/python-idioms-2014-01-16.pdf" target="_blank" rel="noopener">原文</a>。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/the theory of communication/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/the theory of communication/" class="post-title-link" itemprop="url">NLP 信息系统</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>组成：</p>
+<ol>
+<li>信源：信息的来源或产生待发送的信息的实体</li>
+<li>信宿：信息的归宿或接受者</li>
+<li>信道：传送信息的通道，如电话通信中包括中继器在内的同轴电缆系统，卫星通信中地球站的收发信机、天线和卫星上的转发器等。</li>
+<li>编码器： 在信息论中泛指所有变换信号的设备，实际上就是终端机的发送部分。它包括从心愿到信道的所有设备，如量化器、压缩编码器、调制器等，使信源输出的信号转换成适于信道传送的信号。</li>
+<li>译码器：是编码器的逆变换设备，把信道上送来的信号转换成信宿所能接收信号，可包括解调器、译码器、数模转换器等。</li>
+</ol>
+<p>当信源和信宿已给定、信道也选定后，决定信息系统性能就在于编码器和译码器。设计一个信息系统时，除了选择信道和设计其附属设施外，主要工作也就是设计编译码器。一般情况下，信息系统的主要性能指标是它的有效性和可靠性。有效性就是在系统中传送尽可能多的信息，而可靠性要求信宿收到的信息尽可能地与信源发出的信息一致，或者说失真尽可能小。最佳编译器就是要使系统最有效和最可靠。但是，可靠性和有效性往往是相互矛盾的。越有效常导致不可靠，反之也是如此。从定量意义上说，应使系统在规定的失真或者基本无失真的条件下，传送最大的信息率；或者在规定信息率的条件下，失真最小。计算这最大信息率并证明达到或者接近这一值的编译码器是存在的，就是信息论的基本任务。只讨论这样的问题的理论可称为香农信息论，一般认为信息论的内容应更广泛一些，即包括提取信息和保证信息安全的理论。后者就是估计理论、检测理论和密码学。</p>
+<p>信息论是建立在概率论基础上而形成的，也就是从信源符号和信道噪声的概率特性出发的。这类信息通常称为语法信息。其实，信息系统的基本规律也应包括语义和语用信息。语法信息是信源输出符号的构造或起客观特性所表现与信宿的主观要求无关，而语义则应考虑各符号的意义，同样一种意义，可用不同语言或文字来表示，各种语言所包含的语法信息可以是不同的。一般地说，语义信息率可小于语法信息率。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_那些年我们踩过的那些坑/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/python_那些年我们踩过的那些坑/" class="post-title-link" itemprop="url">转：python的那些坑</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="那些年我们踩过的那些坑"><a href="#那些年我们踩过的那些坑" class="headerlink" title="那些年我们踩过的那些坑"></a>那些年我们踩过的那些坑</h2><h3 id="坑1-整数比较的坑"><a href="#坑1-整数比较的坑" class="headerlink" title="坑1 - 整数比较的坑"></a>坑1 - 整数比较的坑</h3><p>在 Python 中一切都是对象，整数也是对象，在比较两个整数时有两个运算符<code>==</code>和<code>is</code>，它们的区别是：</p>
+<ul>
+<li><code>is</code>比较的是两个整数对象的id值是否相等，也就是比较两个引用是否代表了内存中同一个地址。</li>
+<li><code>==</code>比较的是两个整数对象的内容是否相等，使用<code>==</code>时其实是调用了对象的<code>__eq__()</code>方法。</li>
+</ul>
+<p>知道了<code>is</code>和<code>==</code>的区别之后，我们可以来看看下面的代码，了解Python中整数比较有哪些坑：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	x = y = <span class="number">-1</span></span><br><span class="line">	<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">		x += <span class="number">1</span></span><br><span class="line">		y += <span class="number">1</span></span><br><span class="line">		<span class="keyword">if</span> x <span class="keyword">is</span> y:</span><br><span class="line">			print(<span class="string">'%d is %d'</span> % (x, y))</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			print(<span class="string">'Attention! %d is not %d'</span> % (x, y))</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">			</span><br><span class="line">	x = y = <span class="number">0</span></span><br><span class="line">	<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">		x -= <span class="number">1</span></span><br><span class="line">		y -= <span class="number">1</span></span><br><span class="line">		<span class="keyword">if</span> x <span class="keyword">is</span> y:</span><br><span class="line">			print(<span class="string">'%d is %d'</span> % (x, y))</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			print(<span class="string">'Attention! %d is not %d'</span> % (x, y))</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+<p>上面代码的部分运行结果如下图所示，出现这个结果的原因是Python出于对性能的考虑所做的一项优化。对于整数对象，Python把一些频繁使用的整数对象缓存起来，保存到一个叫<code>small_ints</code>的链表中，在Python的整个生命周期内，任何需要引用这些整数对象的地方，都不再重新创建新的对象，而是直接引用缓存中的对象。Python把频繁使用的整数对象的值定在[-5, 256]这个区间，如果需要这个范围的整数，就直接从<code>small_ints</code>中获取引用而不是临时创建新的对象。因为大于256或小于-5的整数不在该范围之内，所以就算两个整数的值是一样，但它们是不同的对象。</p>
+<p><img src="./res/int-is-comparation.png" alt></p>
+<p>当然仅仅如此这个坑就不值一提了，如果你理解了上面的规则，我们就再看看下面的代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> dis</span><br><span class="line">a = <span class="number">257</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	b = <span class="number">257</span>  <span class="comment"># 第6行</span></span><br><span class="line">	c = <span class="number">257</span>  <span class="comment"># 第7行</span></span><br><span class="line">	print(b <span class="keyword">is</span> c)  <span class="comment"># True</span></span><br><span class="line">	print(a <span class="keyword">is</span> b)  <span class="comment"># False</span></span><br><span class="line">	print(a <span class="keyword">is</span> c)  <span class="comment"># False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+<p>程序的执行结果已经用注释写在代码上了。够坑吧！看上去<code>a</code>、<code>b</code>和<code>c</code>的值都是一样的，但是<code>is</code>运算的结果却不一样。为什么会出现这样的结果，首先我们来说说Python程序中的代码块。所谓代码块是程序的一个最小的基本执行单位，一个模块文件、一个函数体、一个类、交互式命令中的单行代码都叫做一个代码块。上面的代码由两个代码块构成，<code>a = 257</code>是一个代码块，<code>main</code>函数是另外一个代码块。Python内部为了进一步提高性能，凡是在一个代码块中创建的整数对象，如果值不在<code>small_ints</code>缓存范围之内，但在同一个代码块中已经存在一个值与其相同的整数对象了，那么就直接引用该对象，否则创建一个新的对象出来，这条规则对不在<code>small_ints</code>范围的负数并不适用，对负数值浮点数也不适用，但对非负浮点数和字符串都是适用的，这一点读者可以自行证明。所以 <code>b is c</code>返回了<code>True</code>，而<code>a</code>和<code>b</code>不在同一个代码块中，虽然值都是257，但却是两个不同的对象，<code>is</code>运算的结果自然是<code>False</code>了。<br>为了验证刚刚的结论，我们可以借用<code>dis</code>模块（听名字就知道是进行反汇编的模块）从字节码的角度来看看这段代码。如果不理解什么是字节码，可以先看看<a href="(http://www.cnblogs.com/restran/p/4903056.html">《谈谈 Python 程序的运行原理》</a>)这篇文章。可以先用<code>import dis</code>导入<code>dis</code>模块并按照如下所示的方式修改代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">	main()</span><br><span class="line">	dis.dis(main)</span><br></pre></td></tr></table></figure>
+<p>代码的执行结果如下图所示。可以看出代码第6行和第7行，也就是<code>main</code>函数中的257是从同一个位置加载的，因此是同一个对象；而代码第9行的<code>a</code>明显是从不同的地方加载的，因此引用的是不同的对象。</p>
+<p><img src="./res/result-of-dis.png" alt></p>
+<p>如果还想对这个问题进行进一步深挖，推荐大家阅读<a href="https://foofish.net/python_int_implement.html" target="_blank" rel="noopener">《Python整数对象实现原理》</a>这篇文章。</p>
+<h3 id="坑2-嵌套列表的坑"><a href="#坑2-嵌套列表的坑" class="headerlink" title="坑2 - 嵌套列表的坑"></a>坑2 - 嵌套列表的坑</h3><p>Python中有一种内置的数据类型叫列表，它是一种容器，可以用来承载其他的对象（准确的说是其他对象的引用），列表中的对象可以称为列表的元素，很明显我们可以把列表作为列表中的元素，这就是所谓的嵌套列表。嵌套列表可以模拟出现实中的表格、矩阵、2D游戏的地图（如植物大战僵尸的花园）、棋盘（如国际象棋、黑白棋）等。但是在使用嵌套的列表时要小心，否则很可能遭遇非常尴尬的情况，下面是一个小例子。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	names = [<span class="string">'关羽'</span>, <span class="string">'张飞'</span>, <span class="string">'赵云'</span>, <span class="string">'马超'</span>, <span class="string">'黄忠'</span>]</span><br><span class="line">	subjs = [<span class="string">'语文'</span>, <span class="string">'数学'</span>, <span class="string">'英语'</span>]</span><br><span class="line">	scores = [[<span class="number">0</span>] * <span class="number">3</span>] * <span class="number">5</span></span><br><span class="line">	<span class="keyword">for</span> row, name <span class="keyword">in</span> enumerate(names):</span><br><span class="line">		print(<span class="string">'请输入%s的成绩'</span> % name)</span><br><span class="line">		<span class="keyword">for</span> col, subj <span class="keyword">in</span> enumerate(subjs):</span><br><span class="line">			scores[row][col] = float(input(subj + <span class="string">': '</span>))</span><br><span class="line">	print(scores)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+<p>我们希望录入5个学生3门课程的成绩，于是定义了一个有5个元素的列表，而列表中的每个元素又是一个由3个元素构成的列表，这样一个列表的列表刚好跟一个表格是一致的，相当于有5行3列，接下来我们通过嵌套的for-in循环输入每个学生3门课程的成绩。程序执行完成后我们发现，每个学生3门课程的成绩是一模一样的，而且就是最后录入的那个学生的成绩。</p>
+<p>要想把这个坑填平，我们首先要区分对象和对象的引用这两个概念，而要区分这两个概念，还得先说说内存中的栈和堆。我们经常会听人说起“堆栈”这个词，但实际上“堆”和“栈”是两个不同的概念。众所周知，一个程序运行时需要占用一些内存空间来存储数据和代码，那么这些内存从逻辑上又可以做进一步的划分。对底层语言（如C语言）有所了解的程序员大都知道，程序中可以使用的内存从逻辑上可以为五个部分，按照地址从高到低依次是：栈（stack）、堆（heap）、数据段（data segment）、只读数据段（static area）和代码段（code segment）。其中，栈用来存储局部、临时变量，以及函数调用时保存现场和恢复现场需要用到的数据，这部分内存在代码块开始执行时自动分配，代码块执行结束时自动释放，通常由编译器自动管理；堆的大小不固定，可以动态的分配和回收，因此如果程序中有大量的数据需要处理，这些数据通常都放在堆上，如果堆空间没有正确的被释放会引发内存泄露的问题，而像Python、Java等编程语言都使用了垃圾回收机制来实现自动化的内存管理（自动回收不再使用的堆空间）。所以下面的代码中，变量<code>a</code>并不是真正的对象，它是对象的引用，相当于记录了对象在堆空间的地址，通过这个地址我们可以访问到对应的对象；同理，变量<code>b</code>是列表容器的引用，它引用了堆空间上的列表容器，而列表容器中并没有保存真正的对象，它保存的也仅仅是对象的引用。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = object()</span><br><span class="line">b = [<span class="string">'apple'</span>, <span class="string">'pitaya'</span>, <span class="string">'grape'</span>]</span><br></pre></td></tr></table></figure>
+<p>知道了这一点，我们可以回过头看看刚才的程序，我们对列表进行<code>[[0] * 3] * 5</code>操作时，仅仅是将<code>[0, 0, 0]</code>这个列表的地址进行了复制，并没有创建新的列表对象，所以容器中虽然有5个元素，但是这5个元素引用了同一个列表对象，这一点可以通过<code>id</code>函数检查<code>scores[0]</code>和<code>scores[1]</code>的地址得到证实。所以正确的代码应该按照如下的方式进行修改。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	names = [<span class="string">'关羽'</span>, <span class="string">'张飞'</span>, <span class="string">'赵云'</span>, <span class="string">'马超'</span>, <span class="string">'黄忠'</span>]</span><br><span class="line">	subjs = [<span class="string">'语文'</span>, <span class="string">'数学'</span>, <span class="string">'英语'</span>]</span><br><span class="line">	scores = [[]] * <span class="number">5</span></span><br><span class="line">	<span class="keyword">for</span> row, name <span class="keyword">in</span> enumerate(names):</span><br><span class="line">		print(<span class="string">'请输入%s的成绩'</span> % name)</span><br><span class="line">		scores[row] = [<span class="number">0</span>] * <span class="number">3</span></span><br><span class="line">		<span class="keyword">for</span> col, subj <span class="keyword">in</span> enumerate(subjs):</span><br><span class="line">			scores[row][col] = float(input(subj + <span class="string">': '</span>))</span><br><span class="line">	print(scores)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	names = [<span class="string">'关羽'</span>, <span class="string">'张飞'</span>, <span class="string">'赵云'</span>, <span class="string">'马超'</span>, <span class="string">'黄忠'</span>]</span><br><span class="line">	subjs = [<span class="string">'语文'</span>, <span class="string">'数学'</span>, <span class="string">'英语'</span>]</span><br><span class="line">	scores = [[<span class="number">0</span>] * <span class="number">3</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">5</span>)]</span><br><span class="line">	<span class="keyword">for</span> row, name <span class="keyword">in</span> enumerate(names):</span><br><span class="line">		print(<span class="string">'请输入%s的成绩'</span> % name)</span><br><span class="line">		scores[row] = [<span class="number">0</span>] * <span class="number">3</span></span><br><span class="line">		<span class="keyword">for</span> col, subj <span class="keyword">in</span> enumerate(subjs):</span><br><span class="line">			scores[row][col] = float(input(subj + <span class="string">': '</span>))</span><br><span class="line">	print(scores)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+<p>如果对内存的使用不是很理解，可以看看<a href="http://www.pythontutor.com/" target="_blank" rel="noopener">PythonTutor网站</a>上提供的代码可视化执行功能，通过可视化执行，我们可以看到内存是如何分配的，从而避免在使用嵌套列表或者复制对象时可能遇到的坑。</p>
+<p><img src="./res/python-tutor-visualize.png" alt></p>
+<p><img src="./res/python-tutor-visualize2.png" alt></p>
+<h3 id="坑3-访问修饰符的坑"><a href="#坑3-访问修饰符的坑" class="headerlink" title="坑3 - 访问修饰符的坑"></a>坑3 - 访问修饰符的坑</h3><p>用Python做过面向对象编程的人都知道，Python的类提供了两种访问控制权限，一种是公开，一种是私有（在属性或方法前加上双下划线）。而用惯了Java或C#这类编程语言的人都知道，类中的属性（数据抽象）通常都是私有的，其目的是为了将数据保护起来；而类中的方法（行为抽象）通常都是公开的，因为方法是对象向外界提供的服务。但是Python并没有从语法层面确保私有成员的私密性，因为它只是对类中所谓的私有成员进行了命名的变换，如果知道命名的规则照样可以直接访问私有成员，请看下面的代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></span><br><span class="line">        self.__name = name</span><br><span class="line">        self.__age = age</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.__name + <span class="string">': '</span> + str(self.__age)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    stu = Student(<span class="string">'骆昊'</span>, <span class="number">38</span>)</span><br><span class="line">    <span class="comment"># 'Student' object has no attribute '__name'</span></span><br><span class="line">    <span class="comment"># print(stu.__name)</span></span><br><span class="line">    <span class="comment"># 用下面的方式照样可以访问类中的私有成员</span></span><br><span class="line">    print(stu._Student__name)</span><br><span class="line">    print(stu._Student__age)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>Python为什么要做出这样的设定呢？用一句广为流传的格言来解释这个问题：“We are all consenting adults here”（我们都是成年人）。这句话表达了很多Python程序员的一个共同观点，那就是开放比封闭要好，我们应该自己对自己的行为负责而不是从语言层面来限制对数据或方法的访问。</p>
+<p>所以在Python中我们实在没有必要将类中的属性或方法用双下划线开头的命名处理成私有的成员，因为这并没有任何实际的意义。如果想对属性或方法进行保护，我们建议用单下划线开头的受保护成员，虽然它也不能真正保护这些属性或方法，但是它相当于给调用者一个暗示，让调用者知道这是不应该直接访问的属性或方法，而且这样做并不影响子类去继承这些东西。</p>
+<p>需要提醒大家注意的是，Python类中的那些魔法方法，如<code>__str__</code>、<code>__repr__</code>等，这些方法并不是私有成员哦，虽然它们以双下划线开头，但是他们也是以双下划线结尾的，这种命名并不是私有成员的命名，这一点对初学者来说真的很坑。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_about_nginx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/python_about_nginx/" class="post-title-link" itemprop="url">nginx配置优化</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="nginx配置优化"><a href="#nginx配置优化" class="headerlink" title="nginx配置优化"></a>nginx配置优化</h2><ol>
+<li>全局<blockquote>
+<p>worker_processes  4; nginx运行工作进程个数，一般设置cpu的核心或者核心数x2</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>worker_rlimit_nofile 65535; 这个指令是指当一个nginx进程打开的最多文件描述符数目，理论值应该是最多打开文件数（ulimit -n）与nginx进程数相除，但是nginx分配请求并不是那么均匀，所以最好与ulimit -n的值保持一致。</p>
+</blockquote>
+<ol start="2">
+<li>Nginx事件处理模型<blockquote>
+<p>nginx采用epoll事件模型，处理效率高</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>work_connections是单个worker进程允许客户端最大连接数，这个数值一般根据服务器性能和内存来制定，实际最大值就是worker进程数乘以work_connections</p>
+</blockquote>
+<ol start="3">
+<li>开启高效传输模式<blockquote>
+<p>sendfile on；//开启高效文件传输模式，sendfile指令指定nginx是否调用sendfile函数来输出文件，对于普通应用设为 on，如果用来进行下载等应用磁盘IO重负载应用，可设置为off，以平衡磁盘与网络I/O处理速度，降低系统的负载。sendfile()可以在磁盘和TCP socket之间互相拷贝数据(或任意两个文件描述符)。Pre-sendfile是传送数据之前在用户空间申请数据缓冲区。之后用read()将数据从文件拷贝到这个缓冲区，write()将缓冲区数据写入网络。sendfile()是立即将数据从磁盘读到OS缓存。因为这种拷贝是在内核完成的，sendfile()要比组合read()和write()以及打开关闭丢弃缓冲更加有效(更多有关于sendfile)</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>tcp_nopush on；必须在sendfile开启模式才有效，防止网路阻塞，积极的减少网络报文段的数量（将响应头和正文的开始部分一起发送，而不一个接一个的发送。）</p>
+</blockquote>
+<ol start="4">
+<li>限制连接超时时间</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">keepalived_timeout客户端连接保持会话超时时间，超过这个时间，服务器断开这个链接</span><br><span class="line"></span><br><span class="line">tcp_nodelay；也是防止网络阻塞，不过要包涵在keepalived参数才有效</span><br><span class="line"></span><br><span class="line">client_header_buffer_size 4k;</span><br><span class="line">客户端请求头部的缓冲区大小，这个可以根据你的系统分页大小来设置，一般一个请求头的大小不会超过 1k，不过由于一般系统分页都要大于1k，所以这里设置为分页大小。分页大小可以用命令getconf PAGESIZE取得。</span><br><span class="line">open_file_cache max=102400 inactive=20s;</span><br><span class="line">这个将为打开文件指定缓存，默认是没有启用的，max指定缓存数量，建议和打开文件</span><br><span class="line">数一致，inactive 是指经过多长时间文件没被请求后删除缓存。</span><br><span class="line">open_file_cache_valid 30s;</span><br><span class="line">这个是指多长时间检查一次缓存的有效信息。</span><br><span class="line">open_file_cache_min_uses 1;</span><br><span class="line">open_file_cache指令中的inactive 参数时间内文件的最少使用次数，如果超过这个数字，文</span><br><span class="line">件描述符一直是在缓存中打开的，如上例，如果有一个文件在inactive 时间内一次没被使用，它将被移除。</span><br><span class="line"></span><br><span class="line">client_header_timeout设置请求头的超时时间。我们也可以把这个设置低些，如果超过这个时间没有发送任何数据，nginx将返回request time out的错误</span><br><span class="line"></span><br><span class="line">client_body_timeout设置请求体的超时时间。我们也可以把这个设置低些，超过这个时间没有发送任何数据，和上面一样的错误提示</span><br><span class="line"></span><br><span class="line">reset_timeout_connection 告诉nginx关闭不响应的客户端连接。这将会释放那个客户端所占有的内存空间。</span><br><span class="line"></span><br><span class="line">send_timeout响应客户端超时时间，这个超时时间仅限于两个活动之间的时间，如果超过这个时间，客户端没有任何活动，nginx关闭连接</span><br><span class="line"></span><br><span class="line">server_tokens  并不会让nginx执行的速度更快，但它可以关闭在错误页面中的nginx版本数字，这样对于安全性是有好处的。</span><br><span class="line"></span><br><span class="line">client_max_body_size上传文件大小限制</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li><p>fastcgi调优</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">fastcgi_connect_timeout 600; #指定连接到后端FastCGI的超时时间。</span><br><span class="line"></span><br><span class="line">fastcgi_send_timeout 600; #向FastCGI传送请求的超时时间。</span><br><span class="line"></span><br><span class="line">fastcgi_read_timeout 600; #指定接收FastCGI应答的超时时间。</span><br><span class="line"></span><br><span class="line">fastcgi_buffer_size 64k; #指定读取FastCGI应答第一部分需要用多大的缓冲区，默认的缓冲区大小为fastcgi_buffers指令中的每块大小，可以将这个值设置更小。</span><br><span class="line"></span><br><span class="line">fastcgi_buffers 4 64k; #指定本地需要用多少和多大的缓冲区来缓冲FastCGI的应答请求，如果一个php脚本所产生的页面大小为256KB，那么会分配4个64KB的缓冲区来缓存，如果页面大小大于256KB，那么大于256KB的部分会缓存到fastcgi_temp_path指定的路径中，但是这并不是好方法，因为内存中的数据处理速度要快于磁盘。一般这个值应该为站点中php脚本所产生的页面大小的中间值，如果站点大部分脚本所产生的页面大小为256KB，那么可以把这个值设置为“8 32K”、“4 64k”等。</span><br><span class="line"></span><br><span class="line">fastcgi_busy_buffers_size 128k; #建议设置为fastcgi_buffers的两倍，繁忙时候的buffer</span><br><span class="line"></span><br><span class="line">fastcgi_temp_file_write_size 128k;  #在写入fastcgi_temp_path时将用多大的数据块，默认值是fastcgi_buffers的两倍，该数值设置小时若负载上来时可能报502BadGateway</span><br><span class="line"></span><br><span class="line">fastcgi_temp_path #缓存临时目录</span><br><span class="line"></span><br><span class="line">fastcgi_intercept_errors on;#这个指令指定是否传递4xx和5xx错误信息到客户端，或者允许nginx使用error_page处理错误信息。</span><br><span class="line"></span><br><span class="line">注：静态文件不存在会返回404页面，但是php页面则返回空白页！！</span><br><span class="line"></span><br><span class="line">fastcgi_cache_path /usr/local/nginx1.10/fastcgi_cachelevels=1:2 keys_zone=cache_fastcgi:128minactive=1d max_size=10g;# fastcgi_cache缓存目录，可以设置目录层级，比如1:2会生成16*256个子目录，cache_fastcgi是这个缓存空间的名字，cache是用多少内存（这样热门的内容nginx直接放内存，提高访问速度），inactive表示默认失效时间，如果缓存数据在失效时间内没有被访问,将被删除，max_size表示最多用多少硬盘空间。</span><br><span class="line"></span><br><span class="line">fastcgi_cache cache_fastcgi;  #表示开启FastCGI缓存并为其指定一个名称。开启缓存非常有用，可以有效降低CPU的负载，并且防止502的错误放生。cache_fastcgi为proxy_cache_path指令创建的缓存区名称</span><br><span class="line"></span><br><span class="line">fastcgi_cache_valid 200 302 1h; #用来指定应答代码的缓存时间，实例中的值表示将200和302应答缓存一小时，要和fastcgi_cache配合使用</span><br><span class="line"></span><br><span class="line">fastcgi_cache_valid 301 1d;     #将301应答缓存一天</span><br><span class="line"></span><br><span class="line">fastcgi_cache_valid any 1m;     #将其他应答缓存为1分钟</span><br><span class="line"></span><br><span class="line">fastcgi_cache_min_uses 1;       #该指令用于设置经过多少次请求的相同URL将被缓存。</span><br><span class="line"></span><br><span class="line">fastcgi_cache_key http://$host$request_uri; #该指令用来设置web缓存的Key值,nginx根据Key值md5哈希存储.一般根据$host(域名)、$request_uri(请求的路径)等变量组合成proxy_cache_key 。</span><br><span class="line"></span><br><span class="line">fastcgi_pass #指定FastCGI服务器监听端口与地址，可以是本机或者其它</span><br><span class="line"></span><br><span class="line">总结：</span><br><span class="line"></span><br><span class="line">nginx的缓存功能有：proxy_cache / fastcgi_cache</span><br><span class="line"></span><br><span class="line">proxy_cache的作用是缓存后端服务器的内容，可能是任何内容，包括静态的和动态。</span><br><span class="line">fastcgi_cache的作用是缓存fastcgi生成的内容，很多情况是php生成的动态的内容。</span><br><span class="line">proxy_cache缓存减少了nginx与后端通信的次数，节省了传输时间和后端宽带。</span><br><span class="line">fastcgi_cache缓存减少了nginx与php的通信的次数，更减轻了php和数据库(mysql)的压力。</span><br><span class="line"></span><br><span class="line"> CGI是为了保证web server传递过来的数据是标准格式的，方便CGI程序的编写者。Fastcgi是用来提高CGI程序性能的。php-fpm是fastcgi进程的管理器，用来管理fastcgi进程的</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>gzip压缩传输优化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">使用gzip压缩功能，可能为我们节约带宽，加快传输速度，有更好的体验，也为我们节约成本，所以说这是一个重点。</span><br><span class="line"></span><br><span class="line">Nginx启用压缩功能需要你来ngx_http_gzip_module模块，apache使用的是mod_deflate</span><br><span class="line"></span><br><span class="line">一般我们需要压缩的内容有：文本，js，html，css，对于图片，视频，flash什么的不压缩，同时也要注意，我们使用gzip的功能是需要消耗CPU的！</span><br><span class="line"></span><br><span class="line">gzip on;</span><br><span class="line"></span><br><span class="line">gzip_min_length 2k;</span><br><span class="line"></span><br><span class="line">gzip_buffers    4 32k;</span><br><span class="line"></span><br><span class="line">gzip_http_version 1.1;</span><br><span class="line"></span><br><span class="line">gzip_comp_level 6;</span><br><span class="line"></span><br><span class="line">gzip_typestext/plain text/css text/javascriptapplication/json application/javascript application/x-javascriptapplication/xml;</span><br><span class="line"></span><br><span class="line">gzip_vary on;</span><br><span class="line"></span><br><span class="line">gzip_proxied any;</span><br><span class="line"></span><br><span class="line">gzip on;    #开启压缩功能</span><br><span class="line"></span><br><span class="line">gzip_min_length 1k; #设置允许压缩的页面最小字节数，页面字节数从header头的Content-Length中获取，默认值是0，不管页面多大都进行压缩，建议设置成大于1K，如果小与1K可能会越压越大。</span><br><span class="line"></span><br><span class="line">gzip_buffers 4 32k; #压缩缓冲区大小，表示申请4个单位为32K的内存作为压缩结果流缓存，默认值是申请与原始数据大小相同的内存空间来存储gzip压缩结果。</span><br><span class="line"></span><br><span class="line">gzip_http_version 1.1; #压缩版本，用于设置识别HTTP协议版本，默认是1.1，目前大部分浏览器已经支持GZIP解压，使用默认即可</span><br><span class="line"></span><br><span class="line">gzip_comp_level 6; #压缩比例，用来指定GZIP压缩比，1压缩比最小，处理速度最快，9压缩比最大，传输速度快，但是处理慢，也比较消耗CPU资源。</span><br><span class="line"></span><br><span class="line">gzip_types text/css text/xml application/javascript; #用来指定压缩的类型，‘text/html’类型总是会被压缩。</span><br><span class="line"></span><br><span class="line">默认值: gzip_types text/html (默认不对js/css文件进行压缩)</span><br><span class="line"># 压缩类型，匹配MIME��型进行压缩</span><br><span class="line"># 不能用通配符 text/*</span><br><span class="line"># (无论是否指定)text/html默认已经压缩 </span><br><span class="line"># 设置哪压缩种文本文件可参考 conf/mime.types</span><br><span class="line"></span><br><span class="line">gzip_vary on;  #varyheader支持，改选项可以让前端的缓存服务器缓存经过GZIP压缩的页面，例如用Squid缓存经过nginx压缩的数据</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>expires缓存调优</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">缓存，主要针对于图片，css，js等元素更改机会比较少的情况下使用，特别是图片，占用带宽大，我们完全可以设置图片在浏览器本地缓存365d，css，js，html可以缓存个10来天，这样用户第一次打开加载慢一点，第二次，就非常快了！缓存的时候，我们需要将需要缓存的拓展名列出来， Expires缓存配置在server字段里面</span><br><span class="line"></span><br><span class="line">location ~* \.(ico|jpe?g|gif|png|bmp|swf|flv)$ &#123;</span><br><span class="line"></span><br><span class="line">  expires 30d;</span><br><span class="line"></span><br><span class="line">  #log_not_found off;</span><br><span class="line"></span><br><span class="line">  access_log off;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location ~* \.(js|css)$ &#123;</span><br><span class="line"></span><br><span class="line">  expires 7d;</span><br><span class="line"></span><br><span class="line">  log_not_found off;</span><br><span class="line"></span><br><span class="line">  access_log off;</span><br><span class="line"></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">注：log_not_found off;是否在error_log中记录不存在的错误。默认是。</span><br><span class="line"></span><br><span class="line">总结：</span><br><span class="line"></span><br><span class="line">expire功能优点 （1）expires可以降低网站购买的带宽，节约成本（2）同时提升用户访问体验（3）减轻服务的压力，节约服务器成本，是web服务非常重要的功能。 expire功能缺点：被缓存的页面或数据更新了，用户看到的可能还是旧的内容，反而影响用户体验。解决办法：第一个缩短缓存时间，例如：1天，但不彻底，除非更新频率大于1天；第二个对缓存的对象改名。</span><br><span class="line"></span><br><span class="line">网站不希望被缓存的内容 1）网站流量统计工具2）更新频繁的文件（google的logo）</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>防盗链</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">防止别人直接从你网站引用图片等链接，消耗了你的资源和网络流量，那么我们的解决办法由几种： 1：水印，品牌宣传，你的带宽，服务器足够 2：防火墙，直接控制，前提是你知道IP来源 3：防盗链策略下面的方法是直接给予404的错误提示</span><br><span class="line"></span><br><span class="line">location ~*^.+\.(jpg|gif|png|swf|flv|wma|wmv|asf|mp3|mmf|zip|rar)$ &#123;</span><br><span class="line"></span><br><span class="line">    valid_referers noneblocked  www.benet.com benet.com;</span><br><span class="line"></span><br><span class="line">    if($invalid_referer) &#123;</span><br><span class="line"></span><br><span class="line">      #return 302  http://www.benet.com/img/nolink.jpg;</span><br><span class="line"></span><br><span class="line">      return 404;</span><br><span class="line"></span><br><span class="line">        break;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    access_log off;</span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">参数可以使如下形式：</span><br><span class="line">none 意思是不存在的Referer头(表示空的，也就是直接访问，比如直接在浏览器打开一个图片)</span><br><span class="line">blocked 意为根据防火墙伪装Referer头，如：“Referer:XXXXXXX”。</span><br><span class="line">server_names 为一个或多个服务器的列表，0.5.33版本以后可以在名称中使用“*”通配符。</span><br></pre></td></tr></table></figure>
+<ol start="9">
+<li>内核参数优化</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">fs.file-max = 999999：这个参数表示进程（比如一个worker进程）可以同时打开的最大句柄数，这个参数直线限制最大并发连接数，需根据实际情况配置。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_max_tw_buckets = 6000 #这个参数表示操作系统允许TIME_WAIT套接字数量的最大值，如果超过这个数字，TIME_WAIT套接字将立刻被清除并打印警告信息。该参数默认为180000，过多的TIME_WAIT套接字会使Web服务器变慢。</span><br><span class="line"></span><br><span class="line">注：主动关闭连接的服务端会产生TIME_WAIT状态的连接</span><br><span class="line">net.ipv4.ip_local_port_range = 1024 65000 #允许系统打开的端口范围。</span><br><span class="line">net.ipv4.tcp_tw_recycle = 1#启用timewait快速回收。</span><br><span class="line">net.ipv4.tcp_tw_reuse = 1#开启重用。允许将TIME-WAIT sockets重新用于新的TCP连接。这对于服务器来说很有意义，因为服务器上总会有大量TIME-WAIT状态的连接。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_keepalive_time = 30：这个参数表示当keepalive启用时，TCP发送keepalive消息的频度。默认是2小时，若将其设置的小一些，可以更快地清理无效的连接。</span><br><span class="line">net.ipv4.tcp_syncookies = 1#开启SYN Cookies，当出现SYN等待队列溢出时，启用cookies来处理。</span><br><span class="line">net.core.somaxconn = 40960 #web 应用中 listen 函数的 backlog 默认会给我们内核参数的 net.core.somaxconn 限制到128，而nginx定义的NGX_LISTEN_BACKLOG 默认为511，所以有必要调整这个值。</span><br><span class="line"></span><br><span class="line">注：对于一个TCP连接，Server与Client需要通过三次握手来建立网络连接.当三次握手成功后,我们可以看到端口的状态由LISTEN转变为ESTABLISHED,接着这条链路上就可以开始传送数据了.每一个处于监听(Listen)状态的端口,都有自己的监听队列.监听队列的长度与如somaxconn参数和使用该端口的程序中listen()函数有关</span><br><span class="line"></span><br><span class="line">somaxconn参数:定义了系统中每一个端口最大的监听队列的长度,这是个全局的参数,默认值为128，对于一个经常处理新连接的高负载 web服务环境来说，默认的 128 太小了。大多数环境这个值建议增加到 1024 或者更多。大的侦听队列对防止拒绝服务 DoS 攻击也会有所帮助。</span><br><span class="line">net.core.netdev_max_backlog = 262144 #每个网络接口接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目。</span><br><span class="line">net.ipv4.tcp_max_syn_backlog = 262144 #这个参数标示TCP三次握手建立阶段接受SYN请求队列的最大长度，默认为1024，将其设置得大一些可以使出现Nginx繁忙来不及accept新连接的情况时，Linux不至于丢失客户端发起的连接请求。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_rmem = 10240 87380 12582912#这个参数定义了TCP接受缓存（用于TCP接受滑动窗口）的最小值、默认值、最大值。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_wmem = 10240 87380 12582912：这个参数定义了TCP发送缓存（用于TCP发送滑动窗口）的最小值、默认值、最大值。</span><br><span class="line">net.core.rmem_default = 6291456：这个参数表示内核套接字接受缓存区默认的大小。</span><br><span class="line"></span><br><span class="line">net.core.wmem_default = 6291456：这个参数表示内核套接字发送缓存区默认的大小。</span><br><span class="line"></span><br><span class="line">net.core.rmem_max = 12582912：这个参数表示内核套接字接受缓存区的最大大小。</span><br><span class="line"></span><br><span class="line">net.core.wmem_max = 12582912：这个参数表示内核套接字发送缓存区的最大大小。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_syncookies = 1：该参数与性能无关，用于解决TCP的SYN攻击。</span><br></pre></td></tr></table></figure>
+<p>下面贴一个完整的内核优化设置：</p>
+<p>fs.file-max = 999999</p>
+<p>net.ipv4.ip_forward = 0</p>
+<p>net.ipv4.conf.default.rp_filter = 1</p>
+<p>net.ipv4.conf.default.accept_source_route = 0</p>
+<p>kernel.sysrq = 0</p>
+<p>kernel.core_uses_pid = 1</p>
+<p>net.ipv4.tcp_syncookies = 1</p>
+<p>kernel.msgmnb = 65536</p>
+<p>kernel.msgmax = 65536</p>
+<p>kernel.shmmax = 68719476736</p>
+<p>kernel.shmall = 4294967296</p>
+<p>net.ipv4.tcp_max_tw_buckets = 6000</p>
+<p>net.ipv4.tcp_sack = 1</p>
+<p>net.ipv4.tcp_window_scaling = 1</p>
+<p>net.ipv4.tcp_rmem = 10240 87380 12582912</p>
+<p>net.ipv4.tcp_wmem = 10240 87380 12582912</p>
+<p>net.core.wmem_default = 8388608</p>
+<p>net.core.rmem_default = 8388608</p>
+<p>net.core.rmem_max = 16777216</p>
+<p>net.core.wmem_max = 16777216</p>
+<p>net.core.netdev_max_backlog = 262144</p>
+<p>net.core.somaxconn = 40960</p>
+<p>net.ipv4.tcp_max_orphans = 3276800</p>
+<p>net.ipv4.tcp_max_syn_backlog = 262144</p>
+<p>net.ipv4.tcp_timestamps = 0</p>
+<p>net.ipv4.tcp_synack_retries = 1</p>
+<p>net.ipv4.tcp_syn_retries = 1</p>
+<p>net.ipv4.tcp_tw_recycle = 1</p>
+<p>net.ipv4.tcp_tw_reuse = 1</p>
+<p>net.ipv4.tcp_mem = 94500000 915000000 927000000</p>
+<p>net.ipv4.tcp_fin_timeout = 1</p>
+<p>net.ipv4.tcp_keepalive_time = 30</p>
+<p>net.ipv4.ip_local_port_range = 1024 65000</p>
+<p>执行sysctl  -p使内核修改生效</p>
+<p>（10）关于系统连接数的优化：</p>
+<p>linux 默认值 open files为1024</p>
+<p>#ulimit -n</p>
+<p>1024</p>
+<p>说明server只允许同时打开1024个文件</p>
+<p>使用ulimit -a 可以查看当前系统的所有限制值，使用ulimit -n 可以查看当前的最大打开文件数。</p>
+<p>新装的linux 默认只有1024 ，当作负载较大的服务器时，很容易遇到error: too many open files。因此，需要将其改大</p>
+<p>在/etc/security/limits.conf最后增加：</p>
+<ul>
+<li><p>soft    nofile          65535</p>
+</li>
+<li><p>hard    nofile          65535</p>
+</li>
+<li><p>soft    noproc          65535</p>
+</li>
+<li><p>hard    noproc          65535</p>
+</li>
+</ul>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
+<li><a href="https://www.cnblogs.com/huamei2008/p/8747706.html" target="_blank" rel="noopener">Nginx配置性能优化</a></li>
+<li><a href="https://www.cnblogs.com/paul8339/p/6943396.html" target="_blank" rel="noopener">Nginx配置项优化详解【转】</a></li>
+<li><a href="https://blog.csdn.net/aoshilang2249/article/details/68940698" target="_blank" rel="noopener">nginx 关于Nginx的一些优化(突破十万并发)</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/数据结构与算法_常用数据结构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/数据结构与算法_常用数据结构/" class="post-title-link" itemprop="url">Python数据结构</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="常用数据结构"><a href="#常用数据结构" class="headerlink" title="常用数据结构"></a>常用数据结构</h2><p><a href="http://data.biancheng.net/intro/" target="_blank" rel="noopener">数据结构与算法教程【全】</a></p>
+<h3 id="数据的逻辑结构"><a href="#数据的逻辑结构" class="headerlink" title="数据的逻辑结构"></a>数据的逻辑结构</h3><p>一、集合结构:结构中的数据元素之间除了同属于一个集合的关系外，无任何其他关系。</p>
+<p>二、线性表</p>
+<ol>
+<li>数组/栈/队列：顺序存储，随机访问</li>
+<li>链表：链表存储，顺序访问</li>
+</ol>
+<p>三、散列表<br>前面使用的探查技术（probing），如果发生冲突，则将尝试列表中的下一个位置。<br>如果使用二度哈希（rehashing），则将导致所有的哈希被重新计算。<br>而链接技术（chaining）将采用额外的数据结构来处理冲突。Dictionary&lt;K,T&gt; 中的每个位置（slot）都映射到了一个链表。当冲突发生时，冲突的元素将被添加到桶（bucket）列表中。</p>
+<p>四、树与二叉树<br>  1.二叉树<br>  2.堆<br>  3.查找树<br>  4.平衡树<br>  5.线索</p>
+<p>五、图</p>
+<h3 id="数据的存储结构"><a href="#数据的存储结构" class="headerlink" title="数据的存储结构"></a>数据的存储结构</h3><p>存储结构是指数据结构在计算机中的表示（又称映像），也称物理结构。它包括数据元素的表示和关系的表示。<br>数据的存储结构是逻辑结构用计算机语言的实现，它依赖于计算机语言。<br>数据的存储结构主要有：顺序存储、链式存储、索引存储和散列存储。</p>
+<p>1.顺序存储:把逻辑上相邻的元素存储在物理位置上也相邻的存储单元里，元素之间的关系由存储单元的邻接关系来体现。<br>其优点是可以实现随机存取，每个元素占用最少的存储空间；缺点是只能使用相邻的一整块存储单元，因此可能产生较多的外部碎片。<br>通常借助于程序语言的数组实现。</p>
+<p>2.链接存储：不要求逻辑上相邻的元素在物理位置上也相邻，借助指示元素存储地址的指针表示元素之间的逻辑关系。<br>其优点是不会出现碎片现象，充分利用所有存储单元；缺点是每个元素因存储指针而占用额外的存储空间，并且只能实现顺序存取。</p>
+<p>3.索引存储：在存储元素信息的同时，还建立附加的索引表。索引表中的每一项称为索引项，索引项的一般形式是：（关键字，地址）。<br>其优点是检索速度快；缺点是增加了附加的索引表，会占用较多的存储空间。另外，在增加和删除数据时要修改索引表，因而会花费较多的时间。<br>若每个结点在索引表中都有一个索引项，则该索引表称之为稠密索引(Dense Index)。若一组结点在索引表中只对应一个索引项，则该索引表称为稀疏索引(Spare Index)。索引项的一般形式是：<br>关键字是能唯一标识一个结点的那些数据项。稠密索引中索引项的地址指示结点所在的存储位置;稀疏索引中索引项的地址指示一组结点的起始存储位置。</p>
+<p>4.散列存储：该方法的基本思想是：根据结点的关键字直接计算出该结点的存储地址。</p>
+<h3 id="数据运算"><a href="#数据运算" class="headerlink" title="数据运算"></a>数据运算</h3><p>施加在数据上的运算包括运算的定义和实现。运算的定义是针对逻辑结构的，指出运算的功能；运算的实现是针对存储结构的，指出运算的具体操作步骤。</p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><ol>
+<li><a href="https://blog.fundebug.com/2018/08/27/code-interview-data-structure/" target="_blank" rel="noopener">代码面试需要知道的8种数据结构(附面试题及答案链接)</a></li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://www.cnblogs.com/wanghuaijun/p/7302303.html" target="_blank" rel="noopener">常见数据结构与算法整理总结（上）</a></li>
+<li><a href="https://blog.csdn.net/yeyazhishang/article/details/82353846" target="_blank" rel="noopener">数据结构：八大数据结构分类</a></li>
+<li><a href="https://www.cnblogs.com/gaochundong/p/data_structures_and_asymptotic_analysis.html" target="_blank" rel="noopener">数据结构：八大数据结构分类</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/block_chain/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/block_chain/" class="post-title-link" itemprop="url">以太坊</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念："><a href="#概念：" class="headerlink" title="概念："></a>概念：</h2><ul>
+<li><p>以太坊：<a href="http://www.ethereum.org" target="_blank" rel="noopener">www.ethereum.org</a> ，是一个区块链系统，相对于比特币网络系统的纯货币功能，以太坊区块链增加了智能合约，大大拓宽了其应用领域。用户基于其上创建区块链应用DAPP。</p>
+</li>
+<li><p>以太币：ETHER，一种类似于比特币的电子货币，以太坊区块链系统上的所有操作都需要消耗以太币；</p>
+</li>
+<li><p>外有账户（EOA），由私人密码控制</p>
+</li>
+<li><p>合同账户，由它们的合同编码控制，只能由外有账户“激活”</p>
+</li>
+<li><p>“智能合约”Smart Contract，用程序代码（Solidity代码）写的合约，使得合约双方不需要信任彼此也可以进行交易；</p>
+</li>
+<li><p>“矿工”以太坊网络中收集、传播、确认和执行交易的节点</p>
+</li>
+</ul>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><blockquote>
+<p>1.<a href="https://www.cnblogs.com/tinyxiong/p/7878468.html" target="_blank" rel="noopener">以太坊</a><br>2.<a href="https://www.btctrade.com/ethcoin/2706.html" target="_blank" rel="noopener">以太坊（ETH）为什么如此火爆 最短的时间内读懂以太坊</a><br>3.<a href="http://www.cocoachina.com/blockchain/20180226/22352.html" target="_blank" rel="noopener">以太坊开发入门，完整入门</a></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_PEP 8风格指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/python_PEP 8风格指南/" class="post-title-link" itemprop="url">转：PEP 8风格指南</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="PEP-8风格指南"><a href="#PEP-8风格指南" class="headerlink" title="PEP 8风格指南"></a>PEP 8风格指南</h2><p>PEP是Python Enhancement Proposal的缩写，通常翻译为“Python增强提案”。每个PEP都是一份为Python社区提供的指导Python往更好的方向发展的技术文档，其中的第8号增强提案（PEP 8）是针对Python语言编订的代码风格指南。尽管我们可以在保证语法没有问题的前提下随意书写Python代码，但是在实际开发中，采用一致的风格书写出可读性强的代码是每个专业的程序员应该做到的事情，也是每个公司的编程规范中会提出的要求，这些在多人协作开发一个项目（团队开发）的时候显得尤为重要。我们可以从Python官方网站的<a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="noopener">PEP 8链接</a>中找到该文档，下面我们对该文档的关键部分做一个简单的总结。</p>
+<h3 id="空格的使用"><a href="#空格的使用" class="headerlink" title="空格的使用"></a>空格的使用</h3><ol>
+<li><u>使用空格来表示缩进而不要用制表符（Tab）。</u>这一点对习惯了其他编程语言的人来说简直觉得不可理喻，因为绝大多数的程序员都会用Tab来表示缩进，但是要知道Python并没有像C/C++或Java那样的用花括号来构造一个代码块的语法，在Python中分支和循环结构都使用缩进来表示哪些代码属于同一个级别，鉴于此Python代码对缩进以及缩进宽度的依赖比其他很多语言都强得多。在不同的编辑器中，Tab的宽度可能是2、4或8个字符，甚至是其他更离谱的值，用Tab来表示缩进对Python代码来说可能是一场灾难。</li>
+<li><u>和语法相关的每一层缩进都用4个空格来表示。</u></li>
+<li><u>每行的字符数不要超过79个字符，如果表达式因太长而占据了多行，除了首行之外的其余各行都应该在正常的缩进宽度上再加上4个空格。</u></li>
+<li><u>函数和类的定义，代码前后都要用两个空行进行分隔。</u></li>
+<li><u>在同一个类中，各个方法之间应该用一个空行进行分隔。</u></li>
+<li><u>二元运算符的左右两侧应该保留一个空格，而且只要一个空格就好。</u></li>
+</ol>
+<h3 id="标识符命名"><a href="#标识符命名" class="headerlink" title="标识符命名"></a>标识符命名</h3><p>PEP 8倡导用不同的命名风格来命名Python中不同的标识符，以便在阅读代码时能够通过标识符的名称来确定该标识符在Python中扮演了怎样的角色（在这一点上，Python自己的内置模块以及某些第三方模块都做得并不是很好）。</p>
+<ol>
+<li><u>变量、函数和属性应该使用小写字母来拼写，如果有多个单词就使用下划线进行连接。</u></li>
+<li><u>类中受保护的实例属性，应该以一个下划线开头。</u></li>
+<li><u>类中私有的实例属性，应该以两个下划线开头。</u></li>
+<li><u>类和异常的命名，应该每个单词首字母大写。</u></li>
+<li><u>模块级别的常量，应该采用全大写字母，如果有多个单词就用下划线进行连接。</u></li>
+<li><u>类的实例方法，应该把第一个参数命名为<code>self</code>以表示对象自身。</u></li>
+<li><u>类的类方法，应该把第一个参数命名为<code>cls</code>以表示该类自身。</u></li>
+</ol>
+<h3 id="表达式和语句"><a href="#表达式和语句" class="headerlink" title="表达式和语句"></a>表达式和语句</h3><p>在Python之禅（可以使用<code>import this</code>查看）中有这么一句名言：“There should be one– and preferably only one –obvious way to do it.”，翻译成中文是“做一件事应该有而且最好只有一种确切的做法”，这句话传达的思想在PEP 8中也是无处不在的。</p>
+<ol>
+<li><u>采用内联形式的否定词，而不要把否定词放在整个表达式的前面。</u>例如<code>if a is not b</code>就比<code>if not a is b</code>更容易让人理解。</li>
+<li>不要用检查长度的方式来判断字符串、列表等是否为<code>None</code>或者没有元素，应该用<code>if not x</code>这样的写法来检查它。</li>
+<li><u>就算<code>if</code>分支、<code>for</code>循环、<code>except</code>异常捕获等中只有一行代码，也不要将代码和<code>if</code>、<code>for</code>、<code>except</code>等写在一起，分开写才会让代码更清晰。</u></li>
+<li><u><code>import</code>语句总是放在文件开头的地方。</u></li>
+<li><u>引入模块的时候，<code>from math import sqrt</code>比<code>import math</code>更好。</u></li>
+<li><u>如果有多个<code>import</code>语句，应该将其分为三部分，从上到下分别是Python标准模块、第三方模块和自定义模块，每个部分内部应该按照模块名称的字母表顺序来排列。</u></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_用函数还是用复杂的表达式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/python_用函数还是用复杂的表达式/" class="post-title-link" itemprop="url">转：python编程思考</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="要不要使用复杂表达式"><a href="#要不要使用复杂表达式" class="headerlink" title="要不要使用复杂表达式"></a>要不要使用复杂表达式</h2><p>Perl语言的原作者Larry Wall曾经说过，伟大的程序员都有三个优点：懒惰、暴躁和自负。乍一看这三个词语没有一个是褒义词，但在程序员的世界里，这三个词有不同的意义。首先，懒惰会促使程序员去写一些省事儿的程序来辅助自己或别人更好的完成工作，这样我们就无需做那些重复和繁琐的劳动；同理能够用3行代码解决的事情，我们也绝不会写出10行代码来。其次，暴躁会让程序员主动的去完成一些你还没有提出的工作，去优化自己的代码让它更有效率，能够3秒钟完成的任务，我们绝不能容忍1分钟的等待。最后，自负会促使程序员写出可靠无误的代码，我们写代码不是为了接受批评和指责，而是为了让其他人来膜拜。</p>
+<p>那么接下来就有一个很有意思的问题值得探讨一下，我们需要一个程序从输入的三个数中找出最大的那个数。这个程序对任何会编程的人来说都是小菜一碟，甚至不会编程的人经过10分钟的学习也能搞定。下面是用来解决这个问题的Python代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line"><span class="keyword">if</span> a &gt; b:</span><br><span class="line">	the_max = a</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	the_max = b</span><br><span class="line"><span class="keyword">if</span> c &gt; the_max:</span><br><span class="line">	the_max = c</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
+<p>但是我们刚才说了，程序员都是懒惰的，很多程序员都会使用三元条件运算符来改写上面的代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">the_max = a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b</span><br><span class="line">the_max = c <span class="keyword">if</span> c &gt; the_max <span class="keyword">else</span> the_max</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
+<p>需要说明的是，Python在2.5版本以前是没有上面代码第4行和第5行中使用的三元条件运算符的，究其原因是Guido van Rossum（Python之父）认为三元条件运算符并不能帮助 Python变得更加简洁，于是那些习惯了在C/C++或Java中使用三元条件运算符（在这些语言中，三元条件运算符也称为“Elvis运算符”，因为<code>?:</code>放在一起很像著名摇滚歌手猫王Elvis的大背头）的程序员试着用<code>and</code>和<code>or</code>运算符的短路特性来模拟出三元操作符，于是在那个年代，上面的代码是这样写的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">the_max = a &gt; b <span class="keyword">and</span> a <span class="keyword">or</span> b</span><br><span class="line">the_max = c &gt; the_max <span class="keyword">and</span> c <span class="keyword">or</span> the_max</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
+<p>但是这种做法在某些场景下是不能成立的，且看下面的代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">0</span></span><br><span class="line">b = <span class="number">-100</span></span><br><span class="line"><span class="comment"># 下面的代码本来预期输出a的值，结果却得到了b的值</span></span><br><span class="line"><span class="comment"># 因为a的值0在进行逻辑运算时会被视为False来处理</span></span><br><span class="line">print(<span class="literal">True</span> <span class="keyword">and</span> a <span class="keyword">or</span> b)</span><br><span class="line"><span class="comment"># print(a if True else b)</span></span><br></pre></td></tr></table></figure>
+<p>所以在Python 2.5以后引入了三元条件运算符来避免上面的风险（上面代码被注释掉的最后一句话）。那么，问题又来了，上面的代码还可以写得更简短吗？答案是肯定的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, (a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b) <span class="keyword">if</span> (a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b) &gt; c <span class="keyword">else</span> c)</span><br></pre></td></tr></table></figure>
+<p>但是，这样做真的好吗？如此复杂的表达式是不是让代码变得晦涩了很多呢？我们发现，在实际开发中很多开发者都喜欢过度的使用某种语言的特性或语法糖，于是简单的多行代码变成了复杂的单行表达式，这样做真的好吗？这个问题我也不止一次的问过自己，现在我能给出的答案是下面的代码，使用辅助函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">the_max</span><span class="params">(x, y)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> x <span class="keyword">if</span> x &gt; y <span class="keyword">else</span> y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max(the_max(a, b), c))</span><br></pre></td></tr></table></figure>
+<p>上面的代码中，我定义了一个辅助函数<code>the_max</code>用来找出参数传入的两个值中较大的那一个，于是下面的输出语句可以通过两次调用<code>the_max</code>函数来找出三个数中的最大值，现在代码的可读性是不是好了很多。用辅助函数来替代复杂的表达式真的是一个不错的选择，关键是比较大小的逻辑转移到这个辅助函数后不仅可以反复调用它，而且还可以进行级联操作。</p>
+<p>当然，很多语言中比较大小的函数根本没有必要自己来实现（通常都是内置函数），Python也是如此。Python内置的max函数利用了Python对可变参数的支持，允许一次性传入多个值或者一个迭代器并找出那个最大值，所以上面讨论的问题在Python中也就是一句话的事，但是从复杂表达式到使用辅助函数简化复杂表达式这个思想是非常值得玩味的，所以分享出来跟大家做一个交流。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, max(a, b, c))</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_配置热更新/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/k8s_配置热更新/" class="post-title-link" itemprop="url">Kubernetes ConfigMap热更新</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Kubernetes-ConfigMap热更新"><a href="#Kubernetes-ConfigMap热更新" class="headerlink" title="Kubernetes ConfigMap热更新"></a><a href="https://www.kubernetes.org.cn/3138.html" target="_blank" rel="noopener">Kubernetes ConfigMap热更新</a></h2><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>ConfigMap是用来存储配置文件的kubernetes资源对象，所有的配置内容都存储在etcd中</p>
+<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><ol>
+<li><p>文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: env-config</span><br><span class="line">  namespace: default</span><br><span class="line">data:</span><br><span class="line">  log_level: INFO</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap ...</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ol>
+<li><p>evn挂载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">envFrom:</span><br><span class="line">- configMapRef:</span><br><span class="line">    name: env-config</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>volume挂载：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">volumeMounts:</span><br><span class="line">- name: config-volume</span><br><span class="line">  mountPath: /etc/config</span><br><span class="line">volumes:</span><br><span class="line">  - name: config-volume</span><br><span class="line">    configMap:</span><br><span class="line">      name: special-config</span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>更新 ConfigMap 后：</p>
+<p>使用该 ConfigMap 挂载的 Env 不会同步更新<br>使用该 ConfigMap 挂载的 Volume 中的数据需要一段时间（实测大概10秒）才能同步更新<br>ENV 是在容器启动的时候注入的，启动之后 kubernetes 就不会再改变环境变量的值，且同一个 namespace 中的 pod 的环境变量是不断累加的，参考 <a href="https://jimmysong.io/posts/exploring-kubernetes-env-with-docker/" target="_blank" rel="noopener">Kubernetes中的服务发现与docker容器间的环境变量传递源码探究</a>。为了更新容器中使用 ConfigMap 挂载的配置，可以通过滚动更新 pod 的方式来强制重新挂载 ConfigMap，也可以在更新了 ConfigMap 后，先将副本数设置为 0，然后再扩容。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+  </nav>
+
+
+
+          </div>
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">TimWells</p>
+              <div class="site-description motion-element" itemprop="description">高效研究，快乐生活，用于python编程知识速查！大家玩的开心！</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">43</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/jointlike" title="GitHub &rarr; https://github.com/jointlike" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1807520300@qq.com" title="E-Mail &rarr; mailto:1807520300@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TimWells</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

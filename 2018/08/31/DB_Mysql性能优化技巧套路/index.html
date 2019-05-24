@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="所谓技术，都是套路。–Tim  注意点数据库优化常伴随如下问题：  面对的是生产环境数据库系统 任何优化技巧本身都有风险 任何优化技巧都有副作用  套路SQL及索引优化 &amp;gt; 数据库表结构优化 &amp;gt; 数据库配置优化 &amp;gt; 系统配置优化 &amp;gt; 硬件优化 SQL及索引优化分析sql方法–EXPLAIN：EXPLAIN SELECT * FROM employees.titles WH">
+<meta name="keywords" content="数据库,mysql性能优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库mysql性能优化套路">
+<meta property="og:url" content="https://jointlike.github.io/2018/08/31/DB_Mysql性能优化技巧套路/index.html">
+<meta property="og:site_name" content="jointlike by TimWells">
+<meta property="og:description" content="所谓技术，都是套路。–Tim  注意点数据库优化常伴随如下问题：  面对的是生产环境数据库系统 任何优化技巧本身都有风险 任何优化技巧都有副作用  套路SQL及索引优化 &amp;gt; 数据库表结构优化 &amp;gt; 数据库配置优化 &amp;gt; 系统配置优化 &amp;gt; 硬件优化 SQL及索引优化分析sql方法–EXPLAIN：EXPLAIN SELECT * FROM employees.titles WH">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-31T09:54:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据库mysql性能优化套路">
+<meta name="twitter:description" content="所谓技术，都是套路。–Tim  注意点数据库优化常伴随如下问题：  面对的是生产环境数据库系统 任何优化技巧本身都有风险 任何优化技巧都有副作用  套路SQL及索引优化 &amp;gt; 数据库表结构优化 &amp;gt; 数据库配置优化 &amp;gt; 系统配置优化 &amp;gt; 硬件优化 SQL及索引优化分析sql方法–EXPLAIN：EXPLAIN SELECT * FROM employees.titles WH">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://jointlike.github.io/2018/08/31/DB_Mysql性能优化技巧套路/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>数据库mysql性能优化套路 | jointlike by TimWells</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">jointlike by TimWells</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/08/31/DB_Mysql性能优化技巧套路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">数据库mysql性能优化套路
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-08-31 17:54:54" itemprop="dateCreated datePublished" datetime="2018-08-31T17:54:54+08:00">2018-08-31</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>所谓技术，都是套路。–Tim</p>
+</blockquote>
+<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><p>数据库优化常伴随如下问题：</p>
+<ul>
+<li>面对的是生产环境数据库系统</li>
+<li>任何优化技巧本身都有风险</li>
+<li>任何优化技巧都有副作用</li>
+</ul>
+<h1 id="套路"><a href="#套路" class="headerlink" title="套路"></a>套路</h1><p>SQL及索引优化 &gt; 数据库表结构优化 &gt; 数据库配置优化 &gt; 系统配置优化 &gt; 硬件优化</p>
+<h2 id="SQL及索引优化"><a href="#SQL及索引优化" class="headerlink" title="SQL及索引优化"></a>SQL及索引优化</h2><p>分析sql方法–EXPLAIN：EXPLAIN SELECT * FROM employees.titles WHERE emp_no=’10001’;</p>
+<h3 id="推荐："><a href="#推荐：" class="headerlink" title="推荐："></a>推荐：</h3><p>建索引，一般在 where 及 order by 中涉及到的列上建索引，尽量不要对可以重复的字段建索引。</p>
+<p>善用 limit</p>
+<p>I/O规划与配置，开启查询缓存</p>
+<h3 id="不推荐："><a href="#不推荐：" class="headerlink" title="不推荐："></a>不推荐：</h3><p>避免在 where 中使用 != 或 &lt;&gt;，因为会放弃索引，也不要进行 null 值判断。</p>
+<p>避免在 where 中对字段进行函数操作、表达式操作。</p>
+<p>避免使用select * from …</p>
+<p>避免在 where 中使用or，可以用union all代替：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select id from t where num=10 or num=20</span><br><span class="line"></span><br><span class="line">//改为</span><br><span class="line"></span><br><span class="line">select id from t where num=10</span><br><span class="line">union all</span><br><span class="line">select id from t where num=20</span><br></pre></td></tr></table></figure></p>
+<p>避免使用 like- %，在此种情况下可以进行全文索引。</p>
+<p>避免某些 SQL 函数直接在 SQL 语句中使用，从而导致 Mysql 缓存失效。</p>
+<p>避免使用没有意义的查询，如需晚餐一个空表结构，select col1 into #t from t where l=0</p>
+<p>避免使用大事务操作，提高系统并发能力。</p>
+<p>避免向客户端返回大数据量，仅返回必要的数据。</p>
+<p>慎重使用 in / not in，否则会导致全表扫描。能用between就不要用in, 或用exists代替，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select num from a where exists(select l from b where num=a.num)</span><br></pre></td></tr></table></figure></p>
+<p>不是所有的索引都对查询有效，SQL是根据表中数据进行查询优化的，当索引列有大量数据重复时，SQL查询可能不会取利用索引。适当的索引数量减少空间占用，并且不会影响insert 及 update 的效率。</p>
+<h2 id="数据库表结构优化"><a href="#数据库表结构优化" class="headerlink" title="数据库表结构优化"></a>数据库表结构优化</h2><p>表的设计。垂直分割表，使得固定表与变长表分割，从而降低表的复杂度和字段的数目。</p>
+<p>字段大小合宜。字段的取值是有限而且是固定的，这种情况下可以用 enum，IP 字段可以用 unsigned int 来存储。</p>
+<h2 id="数据库配置优化"><a href="#数据库配置优化" class="headerlink" title="数据库配置优化"></a>数据库配置优化</h2><h3 id="存储引擎层（innodb基础优化参数）"><a href="#存储引擎层（innodb基础优化参数）" class="headerlink" title="存储引擎层（innodb基础优化参数）"></a>存储引擎层（innodb基础优化参数）</h3><p>default-storage-engine</p>
+<p>innodb_buffer_pool_size# 没有固定大小，50%测试值，看看情况再微调。但是尽量设置不要超过物理内存70% innodb_file_per_table=(1,0) </p>
+<p>innodb_flush_log_at_trx_commit=(0,1,2)#1是最安全的，0是性能最高，2折中 </p>
+<p>binlog_sync</p>
+<p>Innodb_flush_method=(O_DIRECT, fdatasync)</p>
+<p>innodb_log_buffer_size#100M以下 </p>
+<p>innodb_log_file_size#100M 以下 </p>
+<p>innodb_log_files_in_group#5个成员以下,一般2-3个够用（iblogfile0-N） </p>
+<p>innodb_max_dirty_pages_pct#达到百分之75的时候刷写 内存脏页到磁盘。 log_bin </p>
+<p>max_binlog_cache_size#可以不设置 </p>
+<p>max_binlog_size#可以不设置 </p>
+<p>innodb_additional_mem_pool_size#小于2G内存的机器，推荐值是20M。32G内存以上100M</p>
+<h3 id="数据库参数优化"><a href="#数据库参数优化" class="headerlink" title="数据库参数优化"></a>数据库参数优化</h3><p>调整：<br>实例整体（高级优化，扩展）</p>
+<p>thread_concurrency#并发线程数量个数 </p>
+<p>sort_buffer_size#排序缓存 </p>
+<p>read_buffer_size#顺序读取缓存 </p>
+<p>read_rnd_buffer_size#随机读取缓存 </p>
+<p>key_buffer_size#索引缓存 </p>
+<p>thread_cache_size#线程缓存(1G—&gt;8, 2G—&gt;16, 3G—&gt;32, &gt;3G—&gt;64)</p>
+<p>连接层（基础优化）</p>
+<p>设置合理的连接客户和连接方式</p>
+<p>max_connections#最大连接数，看交易笔数设置 </p>
+<p>max_connect_errors#最大错误连接数，能大则大 </p>
+<p>connect_timeout#连接超时 </p>
+<p>max_user_connections#最大用户连接数 </p>
+<p>skip-name-resolve#跳过域名解析 </p>
+<p>wait_timeout#等待超时 </p>
+<p>back_log#可以在堆栈中的连接数量</p>
+<p>SQL层（基础优化）</p>
+<p>query_cache_size： 查询缓存</p>
+<p>OLAP类型数据库,需要重点加大此内存缓存.</p>
+<p>但是一般不会超过GB.</p>
+<p>对于经常被修改的数据，缓存会立马失效。</p>
+<p>我们可以实用内存数据库（redis、memecache），替代他的功能。</p>
+<h2 id="系统配置优化"><a href="#系统配置优化" class="headerlink" title="系统配置优化"></a>系统配置优化</h2><h3 id="底层系统"><a href="#底层系统" class="headerlink" title="底层系统"></a>底层系统</h3><p>Cpu：基本不需要调整，在硬件选择方面下功夫即可。</p>
+<p>内存：基本不需要调整，在硬件选择方面下功夫即可。</p>
+<p>SWAP：MySQL尽量避免使用swap。阿里云的服务器中默认swap为0</p>
+<p>IO：raid、no lvm、 ext4或xfs、ssd、IO调度策略</p>
+<p>Swap调整(不使用swap分区)</p>
+<p>/proc/sys/vm/swappiness的内容改成0（临时）</p>
+<p>/etc/sysctl.conf上添加vm.swappiness=0（永久）</p>
+<p>这个参数决定了Linux是倾向于使用swap，还是倾向于释放文件系统cache。在内存紧张的情况下，数值越低越倾向于释放文件系统cache。当然，这个参数只能减少使用swap的概率，并不能避免Linux使用swap。</p>
+<p>修改MySQL的配置参数innodb_flush_method，开启O_DIRECT模式。这种情况下，InnoDB的buffer pool会直接绕过文件系统cache来访问磁盘，但是redo log依旧会使用文件系统cache。值得注意的是，Redo log是覆写模式的，即使使用了文件系统的cache，也不会占用太多</p>
+<p>IO调度策略</p>
+<p>echo deadline&gt;/sys/block/sda/queue/scheduler#临时修改为deadline</p>
+<p>永久修改如下：</p>
+<p>vi /boot/grub/grub.conf</p>
+<p>更改到如下内容:</p>
+<p>kernel /boot/vmlinuz-2.6.18-8.el5 ro root=LABEL=/ elevator=deadline rhgb quiet</p>
+<p>Linux系统内核参数优化</p>
+<p>vim/etc/sysctl.conf</p>
+<p>net.ipv4.ip_local_port_range =102465535# 用户端口范围 </p>
+<p>net.ipv4.tcp_max_syn_backlog =4096</p>
+<p>net.ipv4.tcp_fin_timeout =30</p>
+<p>fs.file-max=65535# 系统最大文件句柄，控制的是能打开文件最大数量</p>
+<p>用户限制参数（mysql可以不设置以下配置）</p>
+<p>vim/etc/security/limits.conf</p>
+<ul>
+<li><p>soft nproc65535</p>
+</li>
+<li><p>hard nproc65535</p>
+</li>
+<li><p>soft nofile65535</p>
+</li>
+<li><p>hard nofile65535</p>
+</li>
+</ul>
+<h2 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h2><p>CPU计算性能优化<br>IO高性能硬盘优化<br>网络优化</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://www.cnblogs.com/excellencesy/p/9770619.html" target="_blank" rel="noopener">史上最全的 MySQL 高性能优化实战总结！</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/mysql性能优化/" rel="tag"># mysql性能优化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/24/ceph_cmd/" rel="next" title="ceph 概念命令">
+                <i class="fa fa-chevron-left"></i> ceph 概念命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/31/DB_Mysql数据库索引技术原理/" rel="prev" title="Mysql数据库索引技术原理">
+                Mysql数据库索引技术原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">TimWells</p>
+              <div class="site-description motion-element" itemprop="description">高效研究，快乐生活，用于python编程知识速查！大家玩的开心！</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">43</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/jointlike" title="GitHub &rarr; https://github.com/jointlike" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1807520300@qq.com" title="E-Mail &rarr; mailto:1807520300@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#注意点"><span class="nav-number">1.</span> <span class="nav-text">注意点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#套路"><span class="nav-number">2.</span> <span class="nav-text">套路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL及索引优化"><span class="nav-number">2.1.</span> <span class="nav-text">SQL及索引优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推荐："><span class="nav-number">2.1.1.</span> <span class="nav-text">推荐：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不推荐："><span class="nav-number">2.1.2.</span> <span class="nav-text">不推荐：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库表结构优化"><span class="nav-number">2.2.</span> <span class="nav-text">数据库表结构优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库配置优化"><span class="nav-number">2.3.</span> <span class="nav-text">数据库配置优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#存储引擎层（innodb基础优化参数）"><span class="nav-number">2.3.1.</span> <span class="nav-text">存储引擎层（innodb基础优化参数）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库参数优化"><span class="nav-number">2.3.2.</span> <span class="nav-text">数据库参数优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统配置优化"><span class="nav-number">2.4.</span> <span class="nav-text">系统配置优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#底层系统"><span class="nav-number">2.4.1.</span> <span class="nav-text">底层系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件"><span class="nav-number">2.5.</span> <span class="nav-text">硬件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">2.6.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TimWells</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
