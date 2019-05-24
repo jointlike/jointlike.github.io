@@ -1378,6 +1378,458 @@ SELECT column_name(s) FROM table_name2
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/ceph_deploy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/ceph_deploy/" class="post-title-link" itemprop="url">ceph 部署与概念</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>-存储类型：<br>1.NAS - Network Attached Storage<br>2.SAN - storage area network<br>3.DAS - Direct Attached Storage</p>
+<p>-存储协议：<br>1.NFS –linux<br>2.SMB –windows</p>
+<p>-存储方案：<br>1.PV:persistant volume (node)<br>2.PVC: persistant volume claim (pod)</p>
+<p>理论：best 官网文档。 kuberneters 英文官网文档。<br><a href="https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html</a></p>
+<p>kubernetes持久化存储：<br><a href="https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc</a></p>
+<p>ceph/daemon 部署：<br><a href="https://hub.docker.com/r/ceph/daemon/" target="_blank" rel="noopener">https://hub.docker.com/r/ceph/daemon/</a><br><a href="https://www.jianshu.com/p/f08ed7287416" target="_blank" rel="noopener">https://www.jianshu.com/p/f08ed7287416</a><br><a href="https://www.linuxidc.com/Linux/2017-10/148041.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/148041.htm</a><br><a href="https://www.kubernetes.org.cn/ingress" target="_blank" rel="noopener">https://www.kubernetes.org.cn/ingress</a></p>
+<p>——实践步骤——-<br>体系结构<br>配置文件<br>部署环境配置<br>部署：</p>
+<ol>
+<li>部署 CEPH 的用户<br>ssh user@ceph-server<br>sudo useradd -d /home/{username} -m {username}<br>sudo passwd {username}</li>
+</ol>
+<p>授权<br>echo “{username} ALL = (root) NOPASSWD:ALL” | sudo tee /etc/sudoers.d/{username}<br>sudo chmod 0440 /etc/sudoers.d/{username}</p>
+<ol start="2">
+<li><p>无密码 SSH 登录<br>ssh-keygen<br>ssh-copy-id {username}@node1<br>ssh-copy-id {username}@node2<br>ssh-copy-id {username}@node3</p>
+</li>
+<li><p>deploy mon<br>docker run -it –net=host \<br>–hostname=cephmonhost \<br>–name=cephtimon \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-e MON_IP=172.20.36.231 \<br>-e CEPH_PUBLIC_NETWORK=172.20.36.0/24 \<br>ceph/daemon mon</p>
+</li>
+</ol>
+<p>ctrl+P+Q</p>
+<ol start="4">
+<li>deploy mgr<br>docker run -d –net=host \<br>–hostname=cephmgrhost \<br>–name=cephtimmgr \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>ceph/daemon mgr</li>
+</ol>
+<ol start="5">
+<li>distribut keyring<h1 id="ssh-root-node2-mkdir-p-var-lib-ceph"><a href="#ssh-root-node2-mkdir-p-var-lib-ceph" class="headerlink" title="ssh root@node2 mkdir -p /var/lib/ceph"></a>ssh root@node2 mkdir -p /var/lib/ceph</h1><h1 id="scp-r-etc-ceph-root-node2-etc"><a href="#scp-r-etc-ceph-root-node2-etc" class="headerlink" title="scp -r /etc/ceph root@node2:/etc"></a>scp -r /etc/ceph root@node2:/etc</h1><h1 id="scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph"><a href="#scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph" class="headerlink" title="scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph"></a>scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph</h1></li>
+</ol>
+<ol start="6">
+<li>zap disk<br>docker run -d –privileged=true \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon zap_device</li>
+</ol>
+<ol start="7">
+<li><p>deploy osd<br>docker run -it –net=host \<br>–hostname=cephosdhost \<br>–name=cephtimosd \<br>–pid=host \<br>–privileged=true \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon osd</p>
+</li>
+<li><p>deploy mds</p>
+</li>
+</ol>
+<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>-e CEPHFS_CREATE=1 \<br>ceph/daemon mds</p>
+<ol start="9">
+<li>deploy rgw</li>
+</ol>
+<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>ceph/daemon rgw</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_authorization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/k8s_authorization/" class="post-title-link" itemprop="url">k8s权限管理</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>补充：<br><a href="https://www.cnblogs.com/cf532088799/p/7977083.html" target="_blank" rel="noopener">https://www.cnblogs.com/cf532088799/p/7977083.html</a></p>
+<h2 id="原理概述："><a href="#原理概述：" class="headerlink" title="原理概述："></a>原理概述：</h2><p>K8s授权管理分用户认证和授权两部分，授权根据RBAC角色控制方法为不同用户配置不同角色完成权限管理  </p>
+<h2 id="管理组件"><a href="#管理组件" class="headerlink" title="管理组件"></a>管理组件</h2><p>RBAC 是让用户能够访问 Kubernetes API 资源的授权方式。  </p>
+<h2 id="认证顺序"><a href="#认证顺序" class="headerlink" title="认证顺序"></a>认证顺序</h2><ol>
+<li>用户认证  </li>
+<li>权限认证  </li>
+</ol>
+<h2 id="用户类型"><a href="#用户类型" class="headerlink" title="用户类型"></a>用户类型</h2><p>k8s里面有两种用户，一种是User，一种就是service account，User给人用的，service account给进程用的，让进程有相关的权限。<br>如dasboard就是一个进程，我们就可以创建一个service account给它，让它去访问k8s。</p>
+<h2 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h2><p>角色是一系列的权限的集合，例如一个角色可以包含读取 Pod 的权限和列出 Pod 的权限， ClusterRole 跟 Role 类似，但是可以在集群中到处使用（ Role 是 namespace 一级的）。</p>
+<p>角色绑定 RoleBinding 把角色映射到用户，从而让这些用户继承角色在 namespace 中的权限。ClusterRoleBinding 让用户继承 ClusterRole 在整个集群中的权限。</p>
+<h2 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a>操作流程：</h2><ol>
+<li><p>创建用户，serviceaccount 或 user. user需要自设token。请看下面详细操作  </p>
+</li>
+<li><p>创建角色，分为 ClusterRole, Role. 指定操作资源及操作类型（增删改查等）  </p>
+</li>
+<li><p>绑定用户与角色，kind: ClusterRoleBinding or RoleBinding   </p>
+</li>
+</ol>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true</a><br><a href="https://www.kubernetes.org.cn/3238.html" target="_blank" rel="noopener">https://www.kubernetes.org.cn/3238.html</a><br><a href="https://kubernetes.io/docs/admin/authentication/" target="_blank" rel="noopener">https://kubernetes.io/docs/admin/authentication/</a><br><a href="http://www.infoq.com/cn/articles/Kubernetes-API" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/Kubernetes-API</a><br><a href="https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/" target="_blank" rel="noopener">https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/</a><br><a href="https://blog.csdn.net/qq_34463875/article/details/78728041" target="_blank" rel="noopener">https://blog.csdn.net/qq_34463875/article/details/78728041</a></p>
+</blockquote>
+<h2 id="更多知识点："><a href="#更多知识点：" class="headerlink" title="更多知识点："></a>更多知识点：</h2><ul>
+<li><p>集群用户权限管理： 内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod<br>（如：dashboard）的权限来访问。serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
+</li>
+<li><p>在 pod 创建之初 service account 就必须已经存在，否则创建将被拒绝设置非默认的 service account，<br>只需要在 pod 的spec.serviceAccountName 字段中将name设置为您想要用的 service account 名字即可。<br>不能更新已创建的 pod 的 service account。</p>
+</li>
+<li><p>可以在现有的serviceaccount 中增加imagePullSecrets 使pod构建镜像时在当前命名空间默认引用私有仓库的认证。</p>
+</li>
+<li><p>内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod的权限来访问。<br>serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
+</li>
+<li><p>kubeconfig namespace 设置可以限定角色可访问的命名空间，若角色权限过大，binding中也可以进一步限定。</p>
+</li>
+</ul>
+<h2 id="案例："><a href="#案例：" class="headerlink" title="案例："></a>案例：</h2><ol>
+<li>service account(sc)案例   </li>
+</ol>
+<p>进程用户（service account）权限管理，是专门为进程用户创建，也可以达到权限管理的目的，然而建议是同一个进程多个用户。作为示例我们这里部署一个进程权限管理作为演示。部署流程如下：</p>
+<p>1). 创建sc   </p>
+<pre><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: admin-dashboard
+  name: admin-dashboard
+  namespace: kube-system
+</code></pre><p>2). 创建角色</p>
+<pre><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  #无命名空间，clusterrole用于全集群
+  name: admin-dashboard-minimal
+rules:
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;secrets&quot;]
+  verbs: [&quot;create&quot;]
+- apiGroups: [&quot;&quot;, &quot;extensions&quot;, &quot;apps&quot;]
+  resources: [&quot;deployments&quot;, &quot;pods&quot;, &quot;services&quot;]
+  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;, &quot;delete&quot;]
+</code></pre><p>3). 绑定角色</p>
+<pre><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-dashboard-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin-dashboard-minimal
+subjects:
+- kind: ServiceAccount
+  name: admin-dashboard
+  namespace: kube-system
+</code></pre><p>4). kubernetes dashboard必须以nodeport方式部署。</p>
+<ol start="2">
+<li>普通用户案例</li>
+</ol>
+<p>普通用户权限管理：k8s APIserver不支持普通用户创建，只需生成token（# head -c 16 /dev/urandom | od -An -t x| tr -d ‘ ‘）,<br>将该用户的token追加到kuberentesAPI启动参数中指定的token（通常在/etc/kubernetes/token.csv）文件中即可。设置用户ssh认证，<br>根据绑定的角色权限并追加到kubeconfig文件中，供客户端访问。终端命令行可以通过不同用户用不同上下文达到访问权限管理。<br>这个上下文可以转换成第三方用户管理平台，Header追加。authorization Bearer token 来访问。注意：普通用户需要重启（重新部署）apiserver。</p>
+<p>1). 创建用户token并录入token指定tom用户名。任何Linux终端执行如下（可选）：  </p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">	head -c 16 /dev/urandom | od -An -t x| tr -d &apos; &apos;  </span><br><span class="line">	```  </span><br><span class="line">	生成的token以&apos;token,user,uid,&quot;group1,group2,group3&quot;&apos;格式写入到其中一个master节点`/etc/kubernetes/ssl/token.csv`文件中。uid不重复的编号即可。如：716c8d3cd0e75dc25d1eb758e4635d39, tom, 10002, dev1    </span><br><span class="line">	然后重启apiserver以是当前新加的token生效，然后继续以下操作。</span><br><span class="line">	说明：此步骤可选, 2）中命令可生成用户</span><br><span class="line"></span><br><span class="line">2). SSH认证并绑定tom：  </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	### 生成证书</span><br><span class="line">	openssl genrsa -out employee.key 2048</span><br><span class="line">	openssl req -new -key employee.key -out employee.csr -subj &quot;/CN=tom/O=dev1&quot;  #用户tom，分组dev1</span><br><span class="line">	openssl x509 -req -in employee.csr -CA /etc/kubernetes/ssl/k8s-root-ca.pem -CAkey /etc/kubernetes/ssl/k8s-root-ca-key.pem -CAcreateserial -out employee.crt -days 5000</span><br><span class="line">	</span><br><span class="line">	### 将证书和tom用户绑定</span><br><span class="line">	kubectl config set-credentials tom --client-certificate=employee.crt --client-key=employee.key </span><br><span class="line">	kubectl config set-context employee-context --cluster=kubernetes --namespace=shelve-mgr --user=tom</span><br><span class="line">	</span><br><span class="line">	## 可用kubectl config view 查看添加是否成功。cluster, context, user</span><br><span class="line"></span><br><span class="line">3). 创建角色   </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	kind: Role</span><br><span class="line">	apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">	metadata:</span><br><span class="line">	  namespace: shelve-mgr</span><br><span class="line">	  name: employee</span><br><span class="line">	rules:</span><br><span class="line">	- apiGroups: [&quot;&quot;]</span><br><span class="line">	  resources: [&quot;pods&quot;]</span><br><span class="line">	  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;]</span><br></pre></td></tr></table></figure>
+</code></pre><p>4). 角色绑定   </p>
+<pre><code>```
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: employee-role-binding
+  namespace: shelve-mgr
+subjects:
+- kind: User
+  name: tom
+roleRef:
+  kind: Role
+  name: employee
+  apiGroup: &quot;&quot;
+```  
+</code></pre><p>完成用户配置，现在用户终端受当前角色权限限制。普通用户需要重启apiserver后方可生效。</p>
+<p>1). 配置kubectl默认终端用户  </p>
+<pre><code>```  
+# 验证
+kubectl --config=employee-context get pods
+# 设置默认会话上下文
+kubectl config use-context employee-context
+```  
+</code></pre><p>2). 其他客户端及api请求以header中携带 Authorization: Bearer + token方式访问。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/ceph_cmd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1937,7 +2389,7 @@ format: 1
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/数据结构与算法_常用程序算法/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/hadoop_cdh5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -1957,7 +2409,7 @@ format: 1
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/数据结构与算法_常用程序算法/" class="post-title-link" itemprop="url">Python常用算法</a>
+                <a href="/2018/05/24/hadoop_cdh5/" class="post-title-link" itemprop="url">hadoop 部署</a>
               
             
           </h2>
@@ -2000,7 +2452,7 @@ format: 1
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
 
                 
                 
@@ -2037,81 +2489,33 @@ format: 1
       
         
           
-            <h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><p>平均性能为O(n^2)的有：直接插入排序，选择排序，冒泡排序<br>希尔排序对增量的标准没有较为满意的答案，增量对性能会有影响。<br>归并排序效率非常不错，在数据规模较大的情况下，比希尔排序和堆排序要好。<br>多数先进的算法都是因为跳跃式的比较，降低了比较次数，但牺牲了排序的稳定 性。<br>平均性能为O(nlogn)的有：快速排序，归并排序，希尔排序，堆排序。其中，快排是最好的，其次是归并和希尔，堆排序在数据量很大时效果明显（堆排序适合处理大数据）。</p>
-<h3 id="1-冒泡排序-–-重要"><a href="#1-冒泡排序-–-重要" class="headerlink" title="1.冒泡排序 – 重要"></a>1.冒泡排序 – 重要</h3><p>原理：冒泡排序（英语：Bubble Sort）是一种简单的排序算法。它重复地遍历要排序的数列，一次比较两个元素，如果他们的顺序错误就把他们交换过来。遍历数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。这个算法的名字由来是因为越小的元素会经由交换慢慢“浮”到数列的顶端。</p>
-<p>时间复杂度： O(n) - O(n2)</p>
-<p>空间复杂度：n<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def bubble_sort(li):</span><br><span class="line">    for i in range(len(li) - 1):</span><br><span class="line">        for j in range(len(li) - i - 1):</span><br><span class="line">            if li[j] &gt; li[j+1]:</span><br><span class="line">                li[j], li[j+1] = li[j+1], li[j]</span><br><span class="line">    return li</span><br><span class="line"></span><br><span class="line">list1 = [15, 66, 20, 350, 464, 88, 995, 100]</span><br><span class="line">print(bubble_sort(list1))</span><br></pre></td></tr></table></figure></p>
-<h3 id="2-快速排序（二分）-–-重要"><a href="#2-快速排序（二分）-–-重要" class="headerlink" title="2.快速排序（二分） – 重要"></a>2.快速排序（二分） – 重要</h3><p>原理：快速排序（英语：Quicksort），又称划分交换排序（partition-exchange sort），通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。</p>
-<p>实现步骤为：</p>
-<ol>
-<li>从数列中挑出一个元素，称为”基准”（pivot），</li>
-<li>重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区结束之后，该基准就处于数列的中间位置。这个称为分区（partition）操作。</li>
-<li>递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。<br>递归的最底部情形，是数列的大小是零或一，也就是永远都已经被排序好了。虽然一直递归下去，但是这个算法总会结束，因为在每次的迭代（iteration）中，它至少会把一个元素摆到它最后的位置去。</li>
-</ol>
-<p>时间复杂度：O(nlogn) - O(n2)</p>
-<p>空间复杂度：n<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def quick_sort(arr):</span><br><span class="line">    if len(arr) &gt; 1:</span><br><span class="line">        pivot = arr.pop()</span><br><span class="line">    else:</span><br><span class="line">        return arr</span><br><span class="line">    small = []</span><br><span class="line">    big = []</span><br><span class="line">    for i in arr:</span><br><span class="line">        if i &gt; pivot:</span><br><span class="line">            big.append(i)</span><br><span class="line">        else:</span><br><span class="line">            small.append(i)</span><br><span class="line">    return quick_sort(small) + [pivot] + quick_sort(big)</span><br></pre></td></tr></table></figure></p>
-<h3 id="3-归并排序-Merge-Sort（分治）-–-重要"><a href="#3-归并排序-Merge-Sort（分治）-–-重要" class="headerlink" title="3.归并排序 Merge Sort（分治） – 重要"></a>3.归并排序 Merge Sort（分治） – 重要</h3><p>原理：归并排序是采用分治法的一个非常典型的应用。归并排序的思想就是先递归分解数组，再合并数组。<br>将数组分解最小之后，然后合并两个有序数组，基本思路是比较两个数组的最前面的数，谁小就先取谁，取了后相应的指针就往后移一位。然后再比较，直至一个数组为空，最后把另一个数组的剩余部分复制过来即可。</p>
-<p>时间复杂度：O(nlogn) - O(nlogn)</p>
-<p>空间复杂度：n<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">def mergesort(seq):</span><br><span class="line">    &quot;&quot;&quot;归并排序&quot;&quot;&quot;</span><br><span class="line">    if len(seq) &lt;= 1:</span><br><span class="line">        return seq</span><br><span class="line">    mid = len(seq) // 2  # 将列表分成更小的两个列表</span><br><span class="line">    # 分别对左右两个列表进行处理，分别返回两个排序好的列表</span><br><span class="line">    left = mergesort(seq[:mid])</span><br><span class="line">    right = mergesort(seq[mid:])</span><br><span class="line">    # 对排序好的两个列表合并，产生一个新的排序好的列表</span><br><span class="line">    return merge(left, right)</span><br><span class="line"></span><br><span class="line">def merge(left, right):</span><br><span class="line">    &quot;&quot;&quot;合并两个已排序好的列表，产生一个新的已排序好的列表&quot;&quot;&quot;</span><br><span class="line">    result = []  # 新的已排序好的列表</span><br><span class="line">    i = 0  # 下标</span><br><span class="line">    j = 0</span><br><span class="line">    # 对两个列表中的元素 两两对比。</span><br><span class="line">    # 将最小的元素，放到result中，并对当前列表下标加1</span><br><span class="line">    while i &lt; len(left) and j &lt; len(right):</span><br><span class="line">        if left[i] &lt;= right[j]:</span><br><span class="line">            result.append(left[i])</span><br><span class="line">            i += 1</span><br><span class="line">        else:</span><br><span class="line">            result.append(right[j])</span><br><span class="line">            j += 1</span><br><span class="line">    result += left[i:]</span><br><span class="line">    result += right[j:]</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure></p>
-<h3 id="4-插入排序"><a href="#4-插入排序" class="headerlink" title="4.插入排序"></a>4.插入排序</h3><p>原理：排扑克，插入排序（英语：Insertion Sort）是一种简单直观的排序算法。它的工作原理是通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。插入排序在实现上，在从后向前扫描过程中，需要反复把已排序元素逐步向后挪位，为最新元素提供插入空间。<br>时间复杂度：O(n) - O(n2)<br>空间复杂度：比冒泡多</p>
-<h3 id="5-希尔排序-–重要"><a href="#5-希尔排序-–重要" class="headerlink" title="5.希尔排序 –重要"></a>5.希尔排序 –重要</h3><h3 id="6-堆排序-–重要"><a href="#6-堆排序-–重要" class="headerlink" title="6.堆排序 –重要"></a>6.堆排序 –重要</h3><h3 id="7-计数排序-–重要"><a href="#7-计数排序-–重要" class="headerlink" title="7.计数排序 –重要"></a>7.计数排序 –重要</h3><hr>
-<h2 id="查找-遍历"><a href="#查找-遍历" class="headerlink" title="查找/遍历"></a>查找/遍历</h2><p>查找是在大量的信息中寻找一个特定的信息元素，在计算机应用中，查找是常用的基本运算，例如编译程序中符号表的查找。本文简单概括性的介绍了常见的七种查找算法，说是七种，其实二分查找、插值查找以及斐波那契查找都可以归为一类——插值查找。插值查找和斐波那契查找是在二分查找的基础上的优化查找算法。树表查找和哈希查找会在后续的博文中进行详细介绍。</p>
-<p>　　查找定义：根据给定的某个值，在查找表中确定一个其关键字等于给定值的数据元素（或记录）。</p>
-<p>　　查找算法分类：<br>　　1）静态查找和动态查找；<br>　　　　注：静态或者动态都是针对查找表而言的。动态表指查找表中有删除和插入操作的表。<br>　　2）无序查找和有序查找。<br>　　　　无序查找：被查找数列有序无序均可；<br>　　　　有序查找：被查找数列必须为有序数列。<br>　　平均查找长度（Average Search Length，ASL）：需和指定key进行比较的关键字的个数的期望值，称为查找算法在查找成功时的平均查找长度。<br>　　对于含有n个数据元素的查找表，查找成功的平均查找长度为：ASL = Pi*Ci的和。<br>　　Pi：查找表中第i个数据元素的概率。<br>　　Ci：找到第i个数据元素时已经比较过的次数</p>
-<p>1.顺序查找</p>
-<p>说明：顺序查找适合于存储结构为顺序存储或链接存储的线性表。<br>　　基本思想：顺序查找也称为线形查找，属于无序查找算法。从数据结构线形表的一端开始，顺序扫描，依次将扫描到的结点关键字与给定值k相比较，若相等则表示查找成功；若扫描结束仍没有找到关键字等于k的结点，表示查找失败。<br>　　复杂度分析：　<br>　　查找成功时的平均查找长度为：（假设每个数据元素的概率相等） ASL = 1/n(1+2+3+…+n) = (n+1)/2 ;<br>　　当查找不成功时，需要n+1次比较，时间复杂度为O(n);<br>　　所以，顺序查找的时间复杂度为O(n)。</p>
-<p>2.哈希查找：速度快，python字典基本能实现常数，最坏的也只是对数O(log(n))</p>
-<p>3.二分查找</p>
-<p>说明：元素必须是有序的，如果是无序的则要先进行排序操作。</p>
-<p>　　基本思想：也称为是折半查找，属于有序查找算法。用给定值k先与中间结点的关键字比较，中间结点把线形表分成两个子表，若相等则查找成功；若不相等，再根据k与该中间结点关键字的比较结果确定下一步查找哪个子表，这样递归进行，直到查找到或查找结束发现表中没有这样的结点。</p>
-<p>　　复杂度分析：最坏情况下，关键词比较次数为log2(n+1)，且期望时间复杂度为O(log2n)；</p>
-<p>　　注：折半查找的前提条件是需要有序表顺序存储，对于静态查找表，一次排序后不再变化，折半查找能得到不错的效率。但对于需要频繁执行插入或删除操作的数据集来说，维护有序的排序会带来不小的工作量，那就不建议使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">def binary_search(list,item):</span><br><span class="line">    low = 0</span><br><span class="line">    high = len(list)-1</span><br><span class="line">    while low&lt;=high:</span><br><span class="line">        mid = (low+high) // 2</span><br><span class="line">        guess = list[mid]</span><br><span class="line">        if guess&gt;item:</span><br><span class="line">            high = mid-1</span><br><span class="line">        elif guess&lt;item:</span><br><span class="line">            low = mid+1</span><br><span class="line">        else:</span><br><span class="line">            return mid</span><br><span class="line">    return None</span><br><span class="line">mylist = [1,3,5,7,9]</span><br><span class="line">print(binary_search(mylist,3))</span><br></pre></td></tr></table></figure>
-<p>4.斐波那契</p>
-<p>斐波那契数列（Fibonacci sequence），又称黄金分割数列，因数学家列昂纳多·斐波那契（Leonardoda Fibonacci）以兔子繁殖为例子而引入，故又称为“兔子数列”。</p>
-<p>二分查找的改进，运用斐波那契数列设置分隔数<br>基本原理：<br>1.黄金分割比1：0.618，斐波那契数列：1，1，2，3，5，8，13……（两数比接近0.618且和为后一个数）<br>2.查询序列有序，且长度为某斐波那契数-1，即len = F[k] -1,（不足可复制最后一个元素）<br>3.分割点F[k-1]，前F{k-1]-1、后F[k-2]-1，共F[k] -1<br>4.确定查询点位置，在前半部分则k=k-1，在后半部分则k=k-2，3中关系仍然成立</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def fib(n):</span><br><span class="line">    if n &lt; 2:</span><br><span class="line">        return n</span><br><span class="line">    else:</span><br><span class="line">        return fib(n-1)+fib(n-2)</span><br><span class="line"></span><br><span class="line">fib(15)</span><br></pre></td></tr></table></figure>
-<p>5.插值查找</p>
-<p>在介绍插值查找之前，首先考虑一个新问题，为什么上述算法一定要是折半，而不是折四分之一或者折更多呢？<br>　　打个比方，在英文字典里面查“apple”，你下意识翻开字典是翻前面的书页还是后面的书页呢？如果再让你查“zoo”，你又怎么查？很显然，这里你绝对不会是从中间开始查起，而是有一定目的的往前或往后翻。<br>　　同样的，比如要在取值范围1 ~ 10000 之间 100 个元素从小到大均匀分布的数组中查找5， 我们自然会考虑从数组下标较小的开始查找。<br>　　经过以上分析，折半查找这种查找方式，不是自适应的（也就是说是傻瓜式的）。二分查找中查找点计算如下：<br>　　mid=(low+high)/2, 即mid=low+1/2<em>(high-low);<br>　　通过类比，我们可以将查找的点改进为如下：<br>　　mid=low+(key-a[low])/(a[high]-a[low])</em>(high-low)，<br>　　也就是将上述的比例参数1/2改进为自适应的，根据关键字在整个有序表中所处的位置，让mid值的变化更靠近关键字key，这样也就间接地减少了比较次数。<br>　　基本思想：基于二分查找算法，将查找点的选择改进为自适应选择，可以提高查找效率。当然，差值查找也属于有序查找。<br>　　注：对于表长较大，而关键字分布又比较均匀的查找表来说，插值查找算法的平均性能比折半查找要好的多。反之，数组中如果分布非常不均匀，那么插值查找未必是很合适的选择。<br>　　复杂度分析：查找成功或者失败的时间复杂度均为O(log2(log2n))。 </p>
-<p>6.分块查找</p>
-<p>7.二叉树遍历<br>前序（先中间，再左边，后右边）<br>中序（先左边，再中间，后右边）<br>后序（先左边，再右边，后中间）</p>
-<p>8.平衡查找树AVL</p>
-<h2 id="递归与分治"><a href="#递归与分治" class="headerlink" title="递归与分治"></a>递归与分治</h2><p>递归算法：直接或者间接不断反复调用自身来达到解决问题的方法。这就要求原始问题可以分解成相同问题的子问题。<br>示例：阶乘、斐波纳契数列、汉诺塔问题</p>
-<p>斐波纳契数列：又称黄金分割数列，指的是这样一个数列：1、1、2、3、5、8、13、21、……在数学上，斐波纳契数列以如下被以递归的方法定义：F1=1,F2=1,Fn=F（n-1）+F（n-2）（n&gt;2,n∈N*））。</p>
-<p>分治算法：待解决复杂的问题能够简化为几个若干个小规模相同的问题，然后逐步划分，达到易于解决的程度。<br>1、将原问题分解为n个规模较小的子问题，各子问题间独立存在，并且与原问题形式相同<br>2、递归的解决各个子问题<br>3、将各个子问题的解合并得到原问题的解</p>
-<p>示例：棋盘覆盖、找出伪币、求最值</p>
-<p>棋盘覆盖：在一个(2^k)*(2^k)个方格组成的棋盘上，有一个特殊方格与其他方格不同，称为特殊方格，称这样的棋盘为一个特殊棋盘。要求对棋盘的其余部分用L型方块填满</p>
-<h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><p>动态规划（Dynamic programming）是一种在数学、计算机科学和经济学中使用的，通过把原问题分解为相对简单的子问题的方式求解复杂问题的方法。 动态规划常常适用于有重叠子问题和最优子结构性质的问题，动态规划方法所耗时间往往远少于朴素解法。<br>动态规划与分治法相似，都是组合子问题的解来解决原问题的解，与分治法的不同在于：分治法的子问题是相互独立存在的，而动态规划应用于子问题重叠的情况。<br>动态规划背后的基本思想非常简单。大致上，若要解一个给定问题，我们需要解其不同部分（即子问题），再合并子问题的解以得出原问题的解。 通常许多子问题非常相似，为此动态规划法试图仅仅解决每个子问题一次，从而减少计算量： 一旦某个给定子问题的解已经算出，则将其记忆化存储，以便下次需要同一个子问题解之时直接查表。 这种做法在重复子问题的数目关于输入的规模呈指数增长时特别有用。动态规划中三个核心概念：最优子结构，边界，状态转移公式。</p>
-<p>算法步骤：</p>
-<ol>
-<li><p>最优子结构性质。如果问题的最优解所包含的子问题的解也是最优的，我们就称该问题具有最优子结构性质（即满足最优化原理）。最优子结构性质为动态规划算法解决问题提供了重要线索。</p>
+            <p>基于cloudera,oracle jdk 1.8.0.111, centos 6.8</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a><strong>环境配置</strong></h3><ol start="0">
+<li><p>要求：CENTOS6(el6)，主4C8G，从2C4G 20G</p>
 </li>
-<li><p>子问题重叠性质。子问题重叠性质是指在用递归算法自顶向下对问题进行求解时，每次产生的子问题并不总是新问题，有些子问题会被重复计算多次。动态规划算法正是利用了这种子问题的重叠性质，对每一个子问题只计算一次，然后将其计算结果保存在一个表格中，当再次需要计算已经计算过的子问题时，只是在表格中简单地查看一下结果，从而获得较高的效率。</p>
+<li><p>关闭selinux</p>
 </li>
 </ol>
-<p>优化：</p>
-<ol>
-<li>不要递归(自顶向下），算法复杂度比较大。用迭代（自底向上）算法时间复杂度为常数。</li>
-<li>不要用备忘录算法，存储中间状态，增加空间复杂度。</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/selinux/config</span><br><span class="line"></span><br><span class="line">SELINUX=disabled</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">2. 配置hostname, host????????????????????</span><br></pre></td></tr></table></figure>
+<p>vi /etc/sysconfig/network<br>vi /etc/hosts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. ssh打通</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line">ssh-keygen -t rsa  </span><br><span class="line">cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys  </span><br><span class="line">scp ~/.ssh/authorized_keys root@datanode1:~/.ssh/</span><br><span class="line">(ssh-copy-id hosts)  </span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. 主从时间同步ntp</span><br><span class="line">```  </span><br><span class="line"># vim /etc/ntp.conf   </span><br><span class="line">driftfile /var/lib/ntp/drift</span><br><span class="line">restrict 127.0.0.1</span><br><span class="line">restrict -6 ::1</span><br><span class="line">restrict default nomodify notrap </span><br><span class="line">server ntp3.aliyun.com prefer </span><br><span class="line">server ntp7.aliyun.com iburst</span><br><span class="line">includefile /etc/ntp/crypto/pw</span><br><span class="line">keys /etc/ntp/keys</span><br><span class="line"></span><br><span class="line"># 时间同步</span><br><span class="line">service ntpd start</span><br><span class="line">chkconfig ntpd on</span><br><span class="line"></span><br><span class="line"># 查看</span><br><span class="line">ntpstat </span><br><span class="line"></span><br><span class="line">synchronised to NTP server (203.107.6.88) at stratum 3 </span><br><span class="line">   time correct to within 40 ms</span><br><span class="line">   polling server every 1024 s</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">5. 装mysql </span><br><span class="line">```  </span><br><span class="line">yum install -y mysql mysql-server mysql-devel </span><br><span class="line">chkconfig mysqld on  </span><br><span class="line">service mysqld start  </span><br><span class="line">create database hive DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">create database oozie DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">grant all on *.* to root@&quot;%&quot; Identified by &quot;hadoop&quot;;</span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;%&apos; IDENTIFIED BY &apos;hadoop&apos; WITH GRANT OPTION;   </span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">6. 安装java</span><br><span class="line"></span><br><span class="line">注意需要是 oracle java</span><br></pre></td></tr></table></figure></p>
+<p>#openjdk<br>rpm -e –nodeps java-1.6.0-openjdk-1.6.0.0-1.66.1.13.0.el6.x86_64</p>
+<p>#sun jdk<br>yum -y install oracle-j2sdk1.7.x86_64</p>
+<p>vi /etc/profile</p>
+<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><p>export JAVA_HOME=/opt/java<br>export PATH=$JAVA_HOME/bin:$PATH<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[JDBC 参考](http://dev.mysql.com/downloads/connector/j/)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">7. 内核缓存配置</span><br><span class="line"></span><br><span class="line">`vi /etc/sysctl.conf`  </span><br><span class="line">`vm.swappiness=10`</span><br><span class="line">`vi /etc/rc.local` </span><br><span class="line">`echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag`</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">### **部署**</span><br><span class="line"></span><br><span class="line">1. ????CM.??????????5.9??   </span><br><span class="line"></span><br><span class="line">  &gt; Cloudera Manager 5.9??http://archive-primary.cloudera.com/cm5/cm/5/cloudera-manager-el6-cm5.9.0_x86_64.tar.gz  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 ???????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 sha?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1  </span><br><span class="line"></span><br><span class="line">  &gt; manifest ?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/manifest.json  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2. ????????????????  </span><br><span class="line"></span><br><span class="line">  - ??? tar -zxvf cloudera-manager-el6-cm5.9.0_x86_64.tar.gz -P /opt/cloudera/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1 CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha</span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv manifest.json /opt/clourdera/parcel.repo/  </span><br><span class="line"></span><br><span class="line">3. ?????????  </span><br><span class="line">```  </span><br><span class="line">/opt/cloudera/share/cmf/schema/scm_prepare_database.sh mysql cm -hlocalhost -uroot -phdp --scm-host localhost scm scm scm</span><br><span class="line">??????????????/usr/share/cmf</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. ????????????????cloudera-daemon, cloudera-server</span><br></pre></td></tr></table></figure></p>
+<p>sudo yum –nogpgcheck localinstall cloudera-manager-daemons-<em>.rpm<br>sudo yum –nogpgcheck localinstall cloudera-manager-server-</em>.rpm<br><code>`</code></p>
+<ol start="7">
+<li>????localhost:7180???????,????????</li>
 </ol>
-<p>例子：</p>
-<ol>
-<li>动态规划,爬台阶问题。10级台阶，每次只能爬1级或2级，10级台阶有多少种爬法?<br>分析问题：下一步方法数总是前两步之和<br>f(n)最优子结构：f(n-1) ,f(n-2)<br>边界：f(1), f(2)<br>状态转移公式：f(n) = f(n-1)+f(n-2)</li>
+<p>??????jdbc???????????oozie hive??????jdbc????????????</p>
+<h3 id><a href="#" class="headerlink" title="??????"></a>??????</h3><ol>
+<li><p>jdk ??????????????????????????????yum repo?????</p>
+</li>
+<li><p>????????????????  </p>
+</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">def dynamic_programe(n):</span><br><span class="line">    if n &lt; 1:</span><br><span class="line">        return 0</span><br><span class="line">    if n &lt;= 2:</span><br><span class="line">        return n</span><br><span class="line">    start = 1</span><br><span class="line">    second = 2</span><br><span class="line">    res = start+second</span><br><span class="line">    for i in range(4,n+1):</span><br><span class="line">        second, res = res, res+second</span><br><span class="line">    return res</span><br><span class="line">%time dynamic_programe(10)</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>0/1背包问题：给定种物品和一个容量为300KG的背包，物品的重量是[22,44,65,24,88,99]KG，其价值为[19,39,23,53,43,13]，背包问题是如何使选择装入背包内的物品，使得装入背包中的物品的总价值最大。其中，每种物品只有全部装入背包或不装入背包两种选择。</li>
-</ol>
-<h2 id="贪心算法"><a href="#贪心算法" class="headerlink" title="贪心算法"></a>贪心算法</h2><p>贪心算法是就问题而言，选择当下最好的选择，而不从整体最优考虑，通过局部最优希望导致全局最优。<br>贪心算法的要素<br>1）贪心选择性质：可以通过局部最优选择来构造全局最优解。换言之，直接做出在当前问题中看来最优的选择，而不必考虑子问题的解。<br>2）最优子结构：一个问题的最优解包含其子问题的最优解。<br>贪心算法的设计步骤：<br>1）将最优化问题转换为这样的形式：对其做出一次选择后，只剩下一个子问题需要求解<br>2）证明做出贪心选择后，原问题总是存在最优解，即贪心选择总是安全的<br>3）证明做出贪心选择后，剩余的子问题满足性质：其最优解与贪心选择组合即可得到原问题的最优解，这样就得到了最优子结构。<br>示例：背包问题，均分纸牌，最大整数</p>
-<h2 id="回溯法"><a href="#回溯法" class="headerlink" title="回溯法"></a>回溯法</h2><p>回溯法是一种搜索算法，从根节点出发，按照深度优先搜索的策略进行搜索，到达某一节点后 ，探索该节点是否包含该问题的解，如果包含则进入下一个节点进行搜索，若是不包含则回溯到父节点选择其他支路进行搜索。</p>
-<p>回溯法的设计步骤：<br>1）针对所给的原问题，定义问题的解空间<br>2）确定易于搜索的解空间结构<br>3）以深度优先方式搜索解空间，并在搜索过程中用剪枝函数除去无效搜索。<br>示例：0-背包问题、旅行商问题、八皇后问题</p>
-<h2 id="分支限界法"><a href="#分支限界法" class="headerlink" title="分支限界法"></a>分支限界法</h2><p>和回溯法相似，也是一种搜索算法，但回溯法是找出问题的许多解，而分支限界法是找出原问题的一个解。或是在满足约束条件的解中找出使某一目标函数值达到极大或极小的解，即在某种意义下的最优解<br>在当前节点（扩展节点）处，先生成其所有的儿子节点（分支），然后再从当前的活节点（当前节点的子节点）表中选择下一个扩展节点。为了有效地选择下一个扩展节点，加速搜索的进程，在每一个活节点处，计算一个函数值（限界），并根据函数值，从当前活节点表中选择一个最有利的节点作为扩展节点，使搜索朝着解空间上有最优解的分支推进，以便尽快地找出一个最优解。</p>
-<p>分支限界法：<br>1）FIFO分支限界法<br>3）优先队列分支限界法：按照优先队列中规定的优先级选取优先级最高的节点成为当前扩展节点。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a href="https://www.cnblogs.com/bulingpan/p/6416362.html" target="_blank" rel="noopener">五大常用算法的简单介绍</a></li>
-<li><a href="https://www.cnblogs.com/wujingqiao/articles/8961890.html" target="_blank" rel="noopener">十大排序算法和七大查找算法总结（原理讲解和代码实现）——-（一）排序算法篇</a></li>
-<li><a href="[十大排序算法和七大查找算法总结（原理讲解和代码实现）-------（一）排序算法篇](https://www.cnblogs.com/wujingqiao/articles/8961890.html">排序算法原理参考</a>)</li>
-</ol>
+<h3 id="-1"><a href="#-1" class="headerlink" title="????????"></a>????????</h3><blockquote>
+<p><a href="http://www.aboutyun.com/thread-9086-1-1.html" target="_blank" rel="noopener">Cloudera Manager 5 ?? CDH5 ????????????????</a><br><a href="https://www.cloudera.com/documentation/enterprise/latest/topics/install_cm_server.html" target="_blank" rel="noopener">Install Cloudera </a><br><a href="https://www.jianshu.com/p/57179e03795f" target="_blank" rel="noopener">?????CDH5??????</a><br><a href="https://blog.csdn.net/qq_30004245/article/details/75735275?locationNum=9&amp;fps=1" target="_blank" rel="noopener">Cloudera Hadoop???????????</a><br><a href="https://zhuanlan.zhihu.com/p/25533211" target="_blank" rel="noopener">??CDH5??hadoop???</a><br><a href="https://blog.csdn.net/hliq5399/article/details/78193113#t5" target="_blank" rel="noopener">??????????Hadoop??????</a><br><a href="https://www.jianshu.com/p/72dc1c591647" target="_blank" rel="noopener">CDH5???????????</a></p>
+</blockquote>
 
           
         
@@ -2333,458 +2737,6 @@ format: 1
 <li><p>Sqoop<br>数据同步工具，Sqoop是SQL-to-Hadoop的缩写，主要用于传统数据库和Hadoop之间传输数据， 数据的导入和导出本质上是Mapreduce程序，充分利用了MR的并行化和容错性。</p>
 </li>
 </ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/ceph_deploy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/ceph_deploy/" class="post-title-link" itemprop="url">ceph 部署与概念</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>-存储类型：<br>1.NAS - Network Attached Storage<br>2.SAN - storage area network<br>3.DAS - Direct Attached Storage</p>
-<p>-存储协议：<br>1.NFS –linux<br>2.SMB –windows</p>
-<p>-存储方案：<br>1.PV:persistant volume (node)<br>2.PVC: persistant volume claim (pod)</p>
-<p>理论：best 官网文档。 kuberneters 英文官网文档。<br><a href="https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html</a></p>
-<p>kubernetes持久化存储：<br><a href="https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc</a></p>
-<p>ceph/daemon 部署：<br><a href="https://hub.docker.com/r/ceph/daemon/" target="_blank" rel="noopener">https://hub.docker.com/r/ceph/daemon/</a><br><a href="https://www.jianshu.com/p/f08ed7287416" target="_blank" rel="noopener">https://www.jianshu.com/p/f08ed7287416</a><br><a href="https://www.linuxidc.com/Linux/2017-10/148041.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/148041.htm</a><br><a href="https://www.kubernetes.org.cn/ingress" target="_blank" rel="noopener">https://www.kubernetes.org.cn/ingress</a></p>
-<p>——实践步骤——-<br>体系结构<br>配置文件<br>部署环境配置<br>部署：</p>
-<ol>
-<li>部署 CEPH 的用户<br>ssh user@ceph-server<br>sudo useradd -d /home/{username} -m {username}<br>sudo passwd {username}</li>
-</ol>
-<p>授权<br>echo “{username} ALL = (root) NOPASSWD:ALL” | sudo tee /etc/sudoers.d/{username}<br>sudo chmod 0440 /etc/sudoers.d/{username}</p>
-<ol start="2">
-<li><p>无密码 SSH 登录<br>ssh-keygen<br>ssh-copy-id {username}@node1<br>ssh-copy-id {username}@node2<br>ssh-copy-id {username}@node3</p>
-</li>
-<li><p>deploy mon<br>docker run -it –net=host \<br>–hostname=cephmonhost \<br>–name=cephtimon \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-e MON_IP=172.20.36.231 \<br>-e CEPH_PUBLIC_NETWORK=172.20.36.0/24 \<br>ceph/daemon mon</p>
-</li>
-</ol>
-<p>ctrl+P+Q</p>
-<ol start="4">
-<li>deploy mgr<br>docker run -d –net=host \<br>–hostname=cephmgrhost \<br>–name=cephtimmgr \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>ceph/daemon mgr</li>
-</ol>
-<ol start="5">
-<li>distribut keyring<h1 id="ssh-root-node2-mkdir-p-var-lib-ceph"><a href="#ssh-root-node2-mkdir-p-var-lib-ceph" class="headerlink" title="ssh root@node2 mkdir -p /var/lib/ceph"></a>ssh root@node2 mkdir -p /var/lib/ceph</h1><h1 id="scp-r-etc-ceph-root-node2-etc"><a href="#scp-r-etc-ceph-root-node2-etc" class="headerlink" title="scp -r /etc/ceph root@node2:/etc"></a>scp -r /etc/ceph root@node2:/etc</h1><h1 id="scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph"><a href="#scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph" class="headerlink" title="scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph"></a>scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph</h1></li>
-</ol>
-<ol start="6">
-<li>zap disk<br>docker run -d –privileged=true \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon zap_device</li>
-</ol>
-<ol start="7">
-<li><p>deploy osd<br>docker run -it –net=host \<br>–hostname=cephosdhost \<br>–name=cephtimosd \<br>–pid=host \<br>–privileged=true \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon osd</p>
-</li>
-<li><p>deploy mds</p>
-</li>
-</ol>
-<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>-e CEPHFS_CREATE=1 \<br>ceph/daemon mds</p>
-<ol start="9">
-<li>deploy rgw</li>
-</ol>
-<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>ceph/daemon rgw</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_authorization/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/k8s_authorization/" class="post-title-link" itemprop="url">k8s权限管理</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>补充：<br><a href="https://www.cnblogs.com/cf532088799/p/7977083.html" target="_blank" rel="noopener">https://www.cnblogs.com/cf532088799/p/7977083.html</a></p>
-<h2 id="原理概述："><a href="#原理概述：" class="headerlink" title="原理概述："></a>原理概述：</h2><p>K8s授权管理分用户认证和授权两部分，授权根据RBAC角色控制方法为不同用户配置不同角色完成权限管理  </p>
-<h2 id="管理组件"><a href="#管理组件" class="headerlink" title="管理组件"></a>管理组件</h2><p>RBAC 是让用户能够访问 Kubernetes API 资源的授权方式。  </p>
-<h2 id="认证顺序"><a href="#认证顺序" class="headerlink" title="认证顺序"></a>认证顺序</h2><ol>
-<li>用户认证  </li>
-<li>权限认证  </li>
-</ol>
-<h2 id="用户类型"><a href="#用户类型" class="headerlink" title="用户类型"></a>用户类型</h2><p>k8s里面有两种用户，一种是User，一种就是service account，User给人用的，service account给进程用的，让进程有相关的权限。<br>如dasboard就是一个进程，我们就可以创建一个service account给它，让它去访问k8s。</p>
-<h2 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h2><p>角色是一系列的权限的集合，例如一个角色可以包含读取 Pod 的权限和列出 Pod 的权限， ClusterRole 跟 Role 类似，但是可以在集群中到处使用（ Role 是 namespace 一级的）。</p>
-<p>角色绑定 RoleBinding 把角色映射到用户，从而让这些用户继承角色在 namespace 中的权限。ClusterRoleBinding 让用户继承 ClusterRole 在整个集群中的权限。</p>
-<h2 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a>操作流程：</h2><ol>
-<li><p>创建用户，serviceaccount 或 user. user需要自设token。请看下面详细操作  </p>
-</li>
-<li><p>创建角色，分为 ClusterRole, Role. 指定操作资源及操作类型（增删改查等）  </p>
-</li>
-<li><p>绑定用户与角色，kind: ClusterRoleBinding or RoleBinding   </p>
-</li>
-</ol>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><blockquote>
-<p><a href="https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true</a><br><a href="https://www.kubernetes.org.cn/3238.html" target="_blank" rel="noopener">https://www.kubernetes.org.cn/3238.html</a><br><a href="https://kubernetes.io/docs/admin/authentication/" target="_blank" rel="noopener">https://kubernetes.io/docs/admin/authentication/</a><br><a href="http://www.infoq.com/cn/articles/Kubernetes-API" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/Kubernetes-API</a><br><a href="https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/" target="_blank" rel="noopener">https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/</a><br><a href="https://blog.csdn.net/qq_34463875/article/details/78728041" target="_blank" rel="noopener">https://blog.csdn.net/qq_34463875/article/details/78728041</a></p>
-</blockquote>
-<h2 id="更多知识点："><a href="#更多知识点：" class="headerlink" title="更多知识点："></a>更多知识点：</h2><ul>
-<li><p>集群用户权限管理： 内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod<br>（如：dashboard）的权限来访问。serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
-</li>
-<li><p>在 pod 创建之初 service account 就必须已经存在，否则创建将被拒绝设置非默认的 service account，<br>只需要在 pod 的spec.serviceAccountName 字段中将name设置为您想要用的 service account 名字即可。<br>不能更新已创建的 pod 的 service account。</p>
-</li>
-<li><p>可以在现有的serviceaccount 中增加imagePullSecrets 使pod构建镜像时在当前命名空间默认引用私有仓库的认证。</p>
-</li>
-<li><p>内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod的权限来访问。<br>serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
-</li>
-<li><p>kubeconfig namespace 设置可以限定角色可访问的命名空间，若角色权限过大，binding中也可以进一步限定。</p>
-</li>
-</ul>
-<h2 id="案例："><a href="#案例：" class="headerlink" title="案例："></a>案例：</h2><ol>
-<li>service account(sc)案例   </li>
-</ol>
-<p>进程用户（service account）权限管理，是专门为进程用户创建，也可以达到权限管理的目的，然而建议是同一个进程多个用户。作为示例我们这里部署一个进程权限管理作为演示。部署流程如下：</p>
-<p>1). 创建sc   </p>
-<pre><code>apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    k8s-app: admin-dashboard
-  name: admin-dashboard
-  namespace: kube-system
-</code></pre><p>2). 创建角色</p>
-<pre><code>apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  #无命名空间，clusterrole用于全集群
-  name: admin-dashboard-minimal
-rules:
-- apiGroups: [&quot;&quot;]
-  resources: [&quot;secrets&quot;]
-  verbs: [&quot;create&quot;]
-- apiGroups: [&quot;&quot;, &quot;extensions&quot;, &quot;apps&quot;]
-  resources: [&quot;deployments&quot;, &quot;pods&quot;, &quot;services&quot;]
-  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;, &quot;delete&quot;]
-</code></pre><p>3). 绑定角色</p>
-<pre><code>apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: admin-dashboard-rolebinding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: admin-dashboard-minimal
-subjects:
-- kind: ServiceAccount
-  name: admin-dashboard
-  namespace: kube-system
-</code></pre><p>4). kubernetes dashboard必须以nodeport方式部署。</p>
-<ol start="2">
-<li>普通用户案例</li>
-</ol>
-<p>普通用户权限管理：k8s APIserver不支持普通用户创建，只需生成token（# head -c 16 /dev/urandom | od -An -t x| tr -d ‘ ‘）,<br>将该用户的token追加到kuberentesAPI启动参数中指定的token（通常在/etc/kubernetes/token.csv）文件中即可。设置用户ssh认证，<br>根据绑定的角色权限并追加到kubeconfig文件中，供客户端访问。终端命令行可以通过不同用户用不同上下文达到访问权限管理。<br>这个上下文可以转换成第三方用户管理平台，Header追加。authorization Bearer token 来访问。注意：普通用户需要重启（重新部署）apiserver。</p>
-<p>1). 创建用户token并录入token指定tom用户名。任何Linux终端执行如下（可选）：  </p>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">	head -c 16 /dev/urandom | od -An -t x| tr -d &apos; &apos;  </span><br><span class="line">	```  </span><br><span class="line">	生成的token以&apos;token,user,uid,&quot;group1,group2,group3&quot;&apos;格式写入到其中一个master节点`/etc/kubernetes/ssl/token.csv`文件中。uid不重复的编号即可。如：716c8d3cd0e75dc25d1eb758e4635d39, tom, 10002, dev1    </span><br><span class="line">	然后重启apiserver以是当前新加的token生效，然后继续以下操作。</span><br><span class="line">	说明：此步骤可选, 2）中命令可生成用户</span><br><span class="line"></span><br><span class="line">2). SSH认证并绑定tom：  </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	### 生成证书</span><br><span class="line">	openssl genrsa -out employee.key 2048</span><br><span class="line">	openssl req -new -key employee.key -out employee.csr -subj &quot;/CN=tom/O=dev1&quot;  #用户tom，分组dev1</span><br><span class="line">	openssl x509 -req -in employee.csr -CA /etc/kubernetes/ssl/k8s-root-ca.pem -CAkey /etc/kubernetes/ssl/k8s-root-ca-key.pem -CAcreateserial -out employee.crt -days 5000</span><br><span class="line">	</span><br><span class="line">	### 将证书和tom用户绑定</span><br><span class="line">	kubectl config set-credentials tom --client-certificate=employee.crt --client-key=employee.key </span><br><span class="line">	kubectl config set-context employee-context --cluster=kubernetes --namespace=shelve-mgr --user=tom</span><br><span class="line">	</span><br><span class="line">	## 可用kubectl config view 查看添加是否成功。cluster, context, user</span><br><span class="line"></span><br><span class="line">3). 创建角色   </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	kind: Role</span><br><span class="line">	apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">	metadata:</span><br><span class="line">	  namespace: shelve-mgr</span><br><span class="line">	  name: employee</span><br><span class="line">	rules:</span><br><span class="line">	- apiGroups: [&quot;&quot;]</span><br><span class="line">	  resources: [&quot;pods&quot;]</span><br><span class="line">	  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;]</span><br></pre></td></tr></table></figure>
-</code></pre><p>4). 角色绑定   </p>
-<pre><code>```
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: employee-role-binding
-  namespace: shelve-mgr
-subjects:
-- kind: User
-  name: tom
-roleRef:
-  kind: Role
-  name: employee
-  apiGroup: &quot;&quot;
-```  
-</code></pre><p>完成用户配置，现在用户终端受当前角色权限限制。普通用户需要重启apiserver后方可生效。</p>
-<p>1). 配置kubectl默认终端用户  </p>
-<pre><code>```  
-# 验证
-kubectl --config=employee-context get pods
-# 设置默认会话上下文
-kubectl config use-context employee-context
-```  
-</code></pre><p>2). 其他客户端及api请求以header中携带 Authorization: Bearer + token方式访问。</p>
 
           
         
@@ -3083,9 +3035,7 @@ kubectl config use-context employee-context
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>

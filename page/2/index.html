@@ -341,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源等级/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_setup/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -361,7 +361,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/k8s_资源等级/" class="post-title-link" itemprop="url">Kubernetes之QoS</a>
+                <a href="/2018/05/24/k8s_setup/" class="post-title-link" itemprop="url">kubernetes 部署</a>
               
             
           </h2>
@@ -441,189 +441,42 @@
       
         
           
-            <p><a href="http://dockone.io/article/2592" target="_blank" rel="noopener">Kubernetes之服务质量保证（QoS）</a></p>
-<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods</p>
-<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort</p>
-<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。</p>
-<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。</p>
-<p>OOM分数值根据OOM_ADJ参数计算得出，对于Guaranteed级别的pod，OOM_ADJ参数设置成了-998，对于BestEffort级别的pod，OOM_ADJ参数设置成了1000，对于Burstable级别的POD，OOM_ADJ参数取值从2到999。对于kuberntes保留资源，比如kubelet，docker，OOM_ADJ参数设置成了-999，表示不会被OOM kill掉。OOM_ADJ参数设置的越大，通过OOM_ADJ参数计算出来OOM分数越高，表明该pod优先级就越低，当出现资源竞争时会越早被kill掉，对于OOM_ADJ参数是-999的表示kubernetes永远不会因为OOM而被kill掉。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/machine_learn_concept/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/machine_learn_concept/" class="post-title-link" itemprop="url">ML机器学习入门</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概念备忘："><a href="#概念备忘：" class="headerlink" title="概念备忘："></a>概念备忘：</h2><p>对数，是幂运算的逆运算。2 的三次方为8 。 log8 = 3。3为对数的值。</p>
-<p>大O表示法，操作数。</p>
-<p>数组与链表各自优势不足</p>
-<p>选择排序，O(n^2)</p>
-<p>循环，递归与尾递归</p>
-<p>调用栈</p>
-<p>快速排序</p>
-<p>合并排序</p>
-<p>散列表（字典）</p>
-<p>图模拟</p>
-<p>广度优先，狄克斯特拉算法（广度加权）</p>
-<p>动态规划</p>
-<p>K邻近算法 KNN 特征靠近谁就是谁（ocr） - 创建推荐系统 - 机器学习</p>
-<p>其他：</p>
-<p>树结构（二分法只有在有序时才管用，可提高二分法的插入效率） B树、红黑树</p>
-<p>反向索引（散列-字典技术） - 用户搜索引擎</p>
-<p>傅里叶变换 （分解技术） - 剔除无用的音符，像素点等 MP3技术及jpg图片压缩技术，地震预测，DNA等</p>
-<p>mapreduce hadoop 并行计算</p>
-<p>布隆过滤器 - 概率性数据结构 。 hyperloglog</p>
-<p>SHA （secure hash algorithm）算法. - 可用于比较两个很大的文件是否相同。加密后的结果一样即可。用户存储密码 ， 算法特征：局部不敏感，改一点全不同<br>simhash 局部敏感，改一点细微差别，可用于比较相似度。</p>
-<p>线性规划<br>：用于在给定约束条件下最大限度地改善指定的指标。</p>
+            <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ol>
+<li><p>准备虚拟机，配置环境，关闭防火墙<br>systemctl disable firewalld<br>systemctl stop firewalld </p>
+</li>
+<li><p>安装etcd<br>yum install etcd -y</p>
+</li>
+</ol>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#[member]  </span><br><span class="line">ETCD_NAME=etcd1  </span><br><span class="line">ETCD_DATA_DIR=&quot;/var/lib/etcd/test.etcd&quot;  </span><br><span class="line">#ETCD_WAL_DIR=&quot;&quot;  </span><br><span class="line">#ETCD_SNAPSHOT_COUNT=&quot;10000&quot;  </span><br><span class="line">#ETCD_HEARTBEAT_INTERVAL=&quot;100&quot;  </span><br><span class="line">#ETCD_ELECTION_TIMEOUT=&quot;1000&quot;  </span><br><span class="line">ETCD_LISTEN_PEER_URLS=&quot;http://0.0.0.0:2380&quot;  </span><br><span class="line">ETCD_LISTEN_CLIENT_URLS=&quot;http://0.0.0.0:2379,http://0.0.0.0:4001&quot;  </span><br><span class="line">#ETCD_MAX_SNAPSHOTS=&quot;5&quot;  </span><br><span class="line">#ETCD_MAX_WALS=&quot;5&quot;  </span><br><span class="line">#ETCD_CORS=&quot;&quot;  </span><br><span class="line">#  </span><br><span class="line">#[cluster]  </span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;http://master1:2380&quot;  </span><br><span class="line"># if you use different ETCD_NAME (e.g. test), set ETCD_INITIAL_CLUSTER value for this name, i.e. &quot;test=http://...&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER=&quot;etcd1=http://master1:2380,etcd2=http://master2:2380,etcd3=http://master3:2380&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster-baby&quot;  </span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS=&quot;http://master1:2379,http://master1:4001&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker -y  </span><br><span class="line">chkconfig docker on  </span><br><span class="line">service docker start </span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+<h3 id="安装k8s"><a href="#安装k8s" class="headerlink" title="安装k8s"></a>安装k8s</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install kubernetes -y</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>修改配置 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure the kube-apiserver  </span><br><span class="line">#  </span><br><span class="line">  </span><br><span class="line"># The address on the local server to listen to.  </span><br><span class="line">KUBE_API_ADDRESS=&quot;--insecure-bind-address=0.0.0.0&quot;  </span><br><span class="line">  </span><br><span class="line"># The port on the local server to listen on.  </span><br><span class="line">KUBE_API_PORT=&quot;--port=8080&quot;  </span><br><span class="line">  </span><br><span class="line"># Port minions listen on  </span><br><span class="line"># KUBELET_PORT=&quot;--kubelet-port=10250&quot;  </span><br><span class="line">  </span><br><span class="line"># Comma separated list of nodes in the etcd cluster  </span><br><span class="line">KUBE_ETCD_SERVERS=&quot;--etcd-servers=http://etcd:2379&quot;  </span><br><span class="line">  </span><br><span class="line"># Address range to use for services  </span><br><span class="line">KUBE_SERVICE_ADDRESSES=&quot;--service-cluster-ip-range=10.254.0.0/16&quot;  </span><br><span class="line">  </span><br><span class="line"># default admission control policies  </span><br><span class="line"># KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota&quot;  </span><br><span class="line">KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ResourceQuota&quot;  </span><br><span class="line">  </span><br><span class="line"># Add your own!  </span><br><span class="line">KUBE_API_ARGS=&quot;&quot;  </span><br><span class="line">---</span><br><span class="line">###  </span><br><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure various aspects of all  </span><br><span class="line"># kubernetes services, including  </span><br><span class="line">#  </span><br><span class="line">#   kube-apiserver.service  </span><br><span class="line">#   kube-controller-manager.service  </span><br><span class="line">#   kube-scheduler.service  </span><br><span class="line">#   kubelet.service  </span><br><span class="line">#   kube-proxy.service  </span><br><span class="line"># logging to stderr means we get it in the systemd journal  </span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;  </span><br><span class="line">  </span><br><span class="line"># journal message level, 0 is debug  </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;  </span><br><span class="line">  </span><br><span class="line"># Should this cluster be allowed to run privileged docker containers  </span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;  </span><br><span class="line">  </span><br><span class="line"># How the controller-manager, scheduler, and proxy find the apiserver  </span><br><span class="line">KUBE_MASTER=&quot;--master=http://master1:8080&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动<br>systemctl enable kube-apiserver<br>systemctl start kube-apiserver<br>systemctl enable kube-controller-manager<br>systemctl start kube-controller-manager<br>systemctl enable kube-scheduler<br>systemctl start kube-scheduler  </p>
+</li>
+</ul>
+<ul>
+<li><p>deploy node</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker -y  </span><br><span class="line">chkconfig docker on  </span><br><span class="line">service docker start  </span><br><span class="line">yum install kubernetes -y</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure various aspects of all  </span><br><span class="line"># kubernetes services, including  </span><br><span class="line">#  </span><br><span class="line">#   kube-apiserver.service  </span><br><span class="line">#   kube-controller-manager.service  </span><br><span class="line">#   kube-scheduler.service  </span><br><span class="line">#   kubelet.service  </span><br><span class="line">#   kube-proxy.service  </span><br><span class="line"># logging to stderr means we get it in the systemd journal  </span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;  </span><br><span class="line">  </span><br><span class="line"># journal message level, 0 is debug  </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;  </span><br><span class="line">  </span><br><span class="line"># Should this cluster be allowed to run privileged docker containers  </span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;  </span><br><span class="line">  </span><br><span class="line"># How the controller-manager, scheduler, and proxy find the apiserver  </span><br><span class="line">KUBE_MASTER=&quot;--master=http://etcd:8080&quot;  </span><br><span class="line">###  </span><br><span class="line"># kubernetes kubelet (minion) config  </span><br><span class="line">  </span><br><span class="line"># The address for the info server to serve on (set to 0.0.0.0 or &quot;&quot; for all interfaces)  </span><br><span class="line">KUBELET_ADDRESS=&quot;--address=0.0.0.0&quot;  </span><br><span class="line">  </span><br><span class="line"># The port for the info server to serve on  </span><br><span class="line"># KUBELET_PORT=&quot;--port=10250&quot;  </span><br><span class="line">  </span><br><span class="line"># You may leave this blank to use the actual hostname  </span><br><span class="line">KUBELET_HOSTNAME=&quot;--hostname-override=node1&quot;  </span><br><span class="line">  </span><br><span class="line"># location of the api-server  </span><br><span class="line">KUBELET_API_SERVER=&quot;--api-servers=http://etcd:8080&quot;  </span><br><span class="line">  </span><br><span class="line"># pod infrastructure container  </span><br><span class="line">KUBELET_POD_INFRA_CONTAINER=&quot;--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest&quot;  </span><br><span class="line">  </span><br><span class="line"># Add your own!  </span><br><span class="line">KUBELET_ARGS=&quot;&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable kubelet  </span><br><span class="line">systemctl start kubelet  </span><br><span class="line">systemctl enable kube-proxy  </span><br><span class="line">systemctl start kube-proxy</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建覆盖网络flannel</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install flannel -y  </span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">- 在master、node上均编辑 /etc/sysconfig/flanneld 文件</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="Flanneld-configuration-options"><a href="#Flanneld-configuration-options" class="headerlink" title="Flanneld configuration options"></a>Flanneld configuration options</h1><h1 id="etcd-url-location-Point-this-to-the-server-where-etcd-runs"><a href="#etcd-url-location-Point-this-to-the-server-where-etcd-runs" class="headerlink" title="etcd url location.  Point this to the server where etcd runs"></a>etcd url location.  Point this to the server where etcd runs</h1><p>FLANNEL_ETCD_ENDPOINTS=”<a href="http://etcd:2379&quot;" target="_blank" rel="noopener">http://etcd:2379&quot;</a>  </p>
+<h1 id="etcd-config-key-This-is-the-configuration-key-that-flannel-queries"><a href="#etcd-config-key-This-is-the-configuration-key-that-flannel-queries" class="headerlink" title="etcd config key.  This is the configuration key that flannel queries"></a>etcd config key.  This is the configuration key that flannel queries</h1><h1 id="For-address-range-assignment"><a href="#For-address-range-assignment" class="headerlink" title="For address range assignment"></a>For address range assignment</h1><p>FLANNEL_ETCD_PREFIX=”/atomic.io/network”  </p>
+<h1 id="Any-additional-options-that-you-want-to-pass"><a href="#Any-additional-options-that-you-want-to-pass" class="headerlink" title="Any additional options that you want to pass"></a>Any additional options that you want to pass</h1><p>#FLANNEL_OPTIONS=””<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 配置etcd中关于flannel的key--</span><br></pre></td></tr></table></figure></p>
+<p>etcdctl mk /atomic.io/network/config ‘{ “Network”: “10.0.0.0/16” }’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 重新启动</span><br><span class="line">启动修改后的 flannel</span><br></pre></td></tr></table></figure></p>
+<p>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kube-apiserver<br>systemctl restart kube-controller-manager<br>systemctl restart kube-scheduler  </p>
+<p>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kubelet<br>systemctl restart kube-proxy<br><code>`</code> </p>
 
           
         
@@ -818,6 +671,723 @@
 <li>应用镜像因安全原因等没办法安装或运行的工具，可放到Init Container中运行。另外，Init Container独立于业务服务，与业务无关的工具如sed, awk, python, dig等也可以按需放到Init Container之中。最后，Init Container也可以被授权访问应用Container无权访问的内容。</li>
 </ol>
 
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源等级/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/k8s_资源等级/" class="post-title-link" itemprop="url">Kubernetes之QoS</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="http://dockone.io/article/2592" target="_blank" rel="noopener">Kubernetes之服务质量保证（QoS）</a></p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods</p>
+<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort</p>
+<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。</p>
+<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。</p>
+<p>OOM分数值根据OOM_ADJ参数计算得出，对于Guaranteed级别的pod，OOM_ADJ参数设置成了-998，对于BestEffort级别的pod，OOM_ADJ参数设置成了1000，对于Burstable级别的POD，OOM_ADJ参数取值从2到999。对于kuberntes保留资源，比如kubelet，docker，OOM_ADJ参数设置成了-999，表示不会被OOM kill掉。OOM_ADJ参数设置的越大，通过OOM_ADJ参数计算出来OOM分数越高，表明该pod优先级就越低，当出现资源竞争时会越早被kill掉，对于OOM_ADJ参数是-999的表示kubernetes永远不会因为OOM而被kill掉。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_配置热更新/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/k8s_配置热更新/" class="post-title-link" itemprop="url">Kubernetes ConfigMap热更新</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Kubernetes-ConfigMap热更新"><a href="#Kubernetes-ConfigMap热更新" class="headerlink" title="Kubernetes ConfigMap热更新"></a><a href="https://www.kubernetes.org.cn/3138.html" target="_blank" rel="noopener">Kubernetes ConfigMap热更新</a></h2><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>ConfigMap是用来存储配置文件的kubernetes资源对象，所有的配置内容都存储在etcd中</p>
+<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><ol>
+<li><p>文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: env-config</span><br><span class="line">  namespace: default</span><br><span class="line">data:</span><br><span class="line">  log_level: INFO</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap ...</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ol>
+<li><p>evn挂载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">envFrom:</span><br><span class="line">- configMapRef:</span><br><span class="line">    name: env-config</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>volume挂载：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">volumeMounts:</span><br><span class="line">- name: config-volume</span><br><span class="line">  mountPath: /etc/config</span><br><span class="line">volumes:</span><br><span class="line">  - name: config-volume</span><br><span class="line">    configMap:</span><br><span class="line">      name: special-config</span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>更新 ConfigMap 后：</p>
+<p>使用该 ConfigMap 挂载的 Env 不会同步更新<br>使用该 ConfigMap 挂载的 Volume 中的数据需要一段时间（实测大概10秒）才能同步更新<br>ENV 是在容器启动的时候注入的，启动之后 kubernetes 就不会再改变环境变量的值，且同一个 namespace 中的 pod 的环境变量是不断累加的，参考 <a href="https://jimmysong.io/posts/exploring-kubernetes-env-with-docker/" target="_blank" rel="noopener">Kubernetes中的服务发现与docker容器间的环境变量传递源码探究</a>。为了更新容器中使用 ConfigMap 挂载的配置，可以通过滚动更新 pod 的方式来强制重新挂载 ConfigMap，也可以在更新了 ConfigMap 后，先将副本数设置为 0，然后再扩容。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/block_chain/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/block_chain/" class="post-title-link" itemprop="url">以太坊</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念："><a href="#概念：" class="headerlink" title="概念："></a>概念：</h2><ul>
+<li><p>以太坊：<a href="http://www.ethereum.org" target="_blank" rel="noopener">www.ethereum.org</a> ，是一个区块链系统，相对于比特币网络系统的纯货币功能，以太坊区块链增加了智能合约，大大拓宽了其应用领域。用户基于其上创建区块链应用DAPP。</p>
+</li>
+<li><p>以太币：ETHER，一种类似于比特币的电子货币，以太坊区块链系统上的所有操作都需要消耗以太币；</p>
+</li>
+<li><p>外有账户（EOA），由私人密码控制</p>
+</li>
+<li><p>合同账户，由它们的合同编码控制，只能由外有账户“激活”</p>
+</li>
+<li><p>“智能合约”Smart Contract，用程序代码（Solidity代码）写的合约，使得合约双方不需要信任彼此也可以进行交易；</p>
+</li>
+<li><p>“矿工”以太坊网络中收集、传播、确认和执行交易的节点</p>
+</li>
+</ul>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><blockquote>
+<p>1.<a href="https://www.cnblogs.com/tinyxiong/p/7878468.html" target="_blank" rel="noopener">以太坊</a><br>2.<a href="https://www.btctrade.com/ethcoin/2706.html" target="_blank" rel="noopener">以太坊（ETH）为什么如此火爆 最短的时间内读懂以太坊</a><br>3.<a href="http://www.cocoachina.com/blockchain/20180226/22352.html" target="_blank" rel="noopener">以太坊开发入门，完整入门</a></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/machine_learn_用户画像/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/machine_learn_用户画像/" class="post-title-link" itemprop="url">大数据用户画像</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>极致营销：什么日期，什么时间，什么地点，什么终端，什么入口，向什么客户推荐什么产品，正是当前客户需要的或者刚好激发客户产生了新的消费需求，而金额刚刚好足够用户破产。<br>智能话费冲值与加油用户画像信息提取：主题推荐：话费、流量、油卡、小易</p>
+<ol>
+<li>人口属性，用户自然属性包括性别、年龄、地区</li>
+<li>设备属性，用户设备特征包括系统、机型、运营商</li>
+<li>消费特征，用户消费场景及其他包括地区、地点、渠道（终端渠道、入口页面）、日期、时间、金额大小、频率</li>
+<li>行为数据，用户操作行为系统监控行为数据包括浏览行为、下单支付行为、移动行为、使用行为（如最近频繁电话等），行为包括时间、路径、速度等</li>
+<li>因果数据，影响用户消费行为的数据天气变化、自然灾害、节日、周期行为（月底、工资日）</li>
+<li>关系数据，待探索的可能影响用户行为的数据包括其他平台的消费数据、某物品的消费关联、某行为的波动影响（如社交视频增多）</li>
+<li>内部推导的用户类型：用户年龄层、消费层级、社会身份、当前平台生命周期（新老用户、僵死用户）、有车无车族、家庭信息、关联推导</li>
+</ol>
+<h1 id="技术实现点："><a href="#技术实现点：" class="headerlink" title="技术实现点："></a>技术实现点：</h1><h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><pre><code>标签解决的是描述（或命名）问题，但在实际应用中，还需要解决数据之间的关联，所以通常将标签作为一个体系来设计，以解决数据之间的关联问题。即：树
+
+标签包含：名称、分类、级别、属性、赋值
+</code></pre><ol>
+<li><p>标签命名&amp;赋值<br> 名称和值，如生日 0828</p>
+</li>
+<li><p>标签级别（标签的体系结构）</p>
+<p> 分级有两个层面的含义，其一是：指标到最低层级的涵盖的层级；其二是指：指标的运算层级。其一非常好理解，这里重点说运算层级。</p>
+<pre><code>标签从运算层级角度可以分为三层：事实标签、模型标签、预测标签。
+
+事实标签：是通过对于原始数据库的数据进行统计分析而来的，比如用户投诉次数，是基于用户一段时间内实际投诉的行为做的统计。
+
+模型标签：模型标签是以事实标签为基础，通过构建事实标签与业务问题之间的模型，进行模型分析得到。比如，结合用户实际投诉次数、用户购买品类、用户支付的金额等，进行用户投诉倾向类型的识别，方便客服进行分类处理。
+
+预测标签：则是在模型的基础上做预测，比如针对投诉倾向类型结构的变化，预测平台舆情风险指数。
+</code></pre></li>
+<li><p>标签属性</p>
+<pre><code>标签属性可以理解为针对标签进行的再标注，这一环节的工作主要目的是帮助内部理解标签赋值的来源，进而理解指标的含义。如图所示，可以总结为5种来源：
+
+固有属性：是指这些指标的赋值体现的是用户生而有之或者事实存在的，不以外界条件或者自身认知的改变而改变的属性。比如：性别、年龄、是否生育等。
+</code></pre><p> 推导属性：由其他属性推导而来的属性，比如星座，我们可以通过用户的生日推导，比如用户的品类偏好，则可以通过日常购买来推导。</p>
+<p> 行为属性：产品内外实际发生的行为被记录后形成的赋值，比如用户的登陆时间，页面停留时长等。</p>
+<p> 态度属性：用户自我表达的态度和意愿。比如说我们通过一份问卷向用户询问一些问题，并形成标签，如询问用户：是否愿意结婚，是否喜欢某个品牌等。当然在大数据的需求背景下，利用问卷收集用户标签的方法效率显得过低，更多的是利用产品中相关的模块做了用户态度信息收集。</p>
+<p> 测试属性：测试属性是指来自用户的态度表达，但并不是用户直接表达的内容，而是通过分析用户的表达，结构化处理后，得出的测试结论。比如，用户填答了一系列的态度问卷，推导出用户的价值观类型等。</p>
+</li>
+</ol>
+<h1 id="技术实现流程："><a href="#技术实现流程：" class="headerlink" title="技术实现流程："></a>技术实现流程：</h1><p>原始数据</p>
+<p>加工清洗分类基础数据</p>
+<p>训练数据、测试数据</p>
+<p>分类、预测、聚类发现</p>
+<p>应用：产品创新、优化体验、服务升级、提升效率、防范风险</p>
+<p>（1）原始输入层</p>
+<pre><code>主要指用户的历史数据信息，如会员信息、消费信息、网络行为信息。经过数据的清洗，从而达到用户标签体系的事实层。
+</code></pre><p>（2）事实层</p>
+<pre><code>事实层是用户信息的准确描述层，其最重要的特点是，可以从用户身上得到确定与肯定的验证。如用户的人口属性、性别、年龄、籍贯、会员信息等。
+</code></pre><p>（3）模型预测层</p>
+<pre><code>通过利用统计建模，数据挖掘、机器学习的思想，对事实层的数据进行分析利用，从而得到描述用户更为深刻的信息。如通过建模分析，可以对用户的性别偏好进行预测，从而能对没有收集到性别数据的新用户进行预测。还可以通过建模与数据挖掘，使用聚类、关联思想，发现人群的聚集特征。
+</code></pre><p>（4）营销模型预测</p>
+<pre><code>利用模型预测层结果，对不同用户群体，相同需求的客户，通过打标签，建立营销模型，从而分析用户的活跃度、忠诚度、流失度、影响力等可以用来进行营销的数据。
+</code></pre><p>（5）业务层</p>
+<pre><code>业务层可以是展现层。它是业务逻辑的直接体现，如图中所表示的，有车一族、有房一族等。
+</code></pre>
           
         
       
@@ -1109,6 +1679,183 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/machine_learn_concept/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/machine_learn_concept/" class="post-title-link" itemprop="url">ML机器学习入门</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念备忘："><a href="#概念备忘：" class="headerlink" title="概念备忘："></a>概念备忘：</h2><p>对数，是幂运算的逆运算。2 的三次方为8 。 log8 = 3。3为对数的值。</p>
+<p>大O表示法，操作数。</p>
+<p>数组与链表各自优势不足</p>
+<p>选择排序，O(n^2)</p>
+<p>循环，递归与尾递归</p>
+<p>调用栈</p>
+<p>快速排序</p>
+<p>合并排序</p>
+<p>散列表（字典）</p>
+<p>图模拟</p>
+<p>广度优先，狄克斯特拉算法（广度加权）</p>
+<p>动态规划</p>
+<p>K邻近算法 KNN 特征靠近谁就是谁（ocr） - 创建推荐系统 - 机器学习</p>
+<p>其他：</p>
+<p>树结构（二分法只有在有序时才管用，可提高二分法的插入效率） B树、红黑树</p>
+<p>反向索引（散列-字典技术） - 用户搜索引擎</p>
+<p>傅里叶变换 （分解技术） - 剔除无用的音符，像素点等 MP3技术及jpg图片压缩技术，地震预测，DNA等</p>
+<p>mapreduce hadoop 并行计算</p>
+<p>布隆过滤器 - 概率性数据结构 。 hyperloglog</p>
+<p>SHA （secure hash algorithm）算法. - 可用于比较两个很大的文件是否相同。加密后的结果一样即可。用户存储密码 ， 算法特征：局部不敏感，改一点全不同<br>simhash 局部敏感，改一点细微差别，可用于比较相似度。</p>
+<p>线性规划<br>：用于在给定约束条件下最大限度地改善指定的指标。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/MQ_about_message_queue/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1233,608 +1980,6 @@
 <li><a href="https://blog.csdn.net/lingbo229/article/details/80761778" target="_blank" rel="noopener">Kafka史上最详细原理总结 —-看完绝对不后悔</a></li>
 </ol>
 
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/hadoop_cdh5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/hadoop_cdh5/" class="post-title-link" itemprop="url">hadoop 部署</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>基于cloudera,oracle jdk 1.8.0.111, centos 6.8</p>
-<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a><strong>环境配置</strong></h3><ol start="0">
-<li><p>要求：CENTOS6(el6)，主4C8G，从2C4G 20G</p>
-</li>
-<li><p>关闭selinux</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/selinux/config</span><br><span class="line"></span><br><span class="line">SELINUX=disabled</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">2. 配置hostname, host????????????????????</span><br></pre></td></tr></table></figure>
-<p>vi /etc/sysconfig/network<br>vi /etc/hosts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. ssh打通</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line">ssh-keygen -t rsa  </span><br><span class="line">cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys  </span><br><span class="line">scp ~/.ssh/authorized_keys root@datanode1:~/.ssh/</span><br><span class="line">(ssh-copy-id hosts)  </span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. 主从时间同步ntp</span><br><span class="line">```  </span><br><span class="line"># vim /etc/ntp.conf   </span><br><span class="line">driftfile /var/lib/ntp/drift</span><br><span class="line">restrict 127.0.0.1</span><br><span class="line">restrict -6 ::1</span><br><span class="line">restrict default nomodify notrap </span><br><span class="line">server ntp3.aliyun.com prefer </span><br><span class="line">server ntp7.aliyun.com iburst</span><br><span class="line">includefile /etc/ntp/crypto/pw</span><br><span class="line">keys /etc/ntp/keys</span><br><span class="line"></span><br><span class="line"># 时间同步</span><br><span class="line">service ntpd start</span><br><span class="line">chkconfig ntpd on</span><br><span class="line"></span><br><span class="line"># 查看</span><br><span class="line">ntpstat </span><br><span class="line"></span><br><span class="line">synchronised to NTP server (203.107.6.88) at stratum 3 </span><br><span class="line">   time correct to within 40 ms</span><br><span class="line">   polling server every 1024 s</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">5. 装mysql </span><br><span class="line">```  </span><br><span class="line">yum install -y mysql mysql-server mysql-devel </span><br><span class="line">chkconfig mysqld on  </span><br><span class="line">service mysqld start  </span><br><span class="line">create database hive DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">create database oozie DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">grant all on *.* to root@&quot;%&quot; Identified by &quot;hadoop&quot;;</span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;%&apos; IDENTIFIED BY &apos;hadoop&apos; WITH GRANT OPTION;   </span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">6. 安装java</span><br><span class="line"></span><br><span class="line">注意需要是 oracle java</span><br></pre></td></tr></table></figure></p>
-<p>#openjdk<br>rpm -e –nodeps java-1.6.0-openjdk-1.6.0.0-1.66.1.13.0.el6.x86_64</p>
-<p>#sun jdk<br>yum -y install oracle-j2sdk1.7.x86_64</p>
-<p>vi /etc/profile</p>
-<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><p>export JAVA_HOME=/opt/java<br>export PATH=$JAVA_HOME/bin:$PATH<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[JDBC 参考](http://dev.mysql.com/downloads/connector/j/)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">7. 内核缓存配置</span><br><span class="line"></span><br><span class="line">`vi /etc/sysctl.conf`  </span><br><span class="line">`vm.swappiness=10`</span><br><span class="line">`vi /etc/rc.local` </span><br><span class="line">`echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag`</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">### **部署**</span><br><span class="line"></span><br><span class="line">1. ????CM.??????????5.9??   </span><br><span class="line"></span><br><span class="line">  &gt; Cloudera Manager 5.9??http://archive-primary.cloudera.com/cm5/cm/5/cloudera-manager-el6-cm5.9.0_x86_64.tar.gz  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 ???????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 sha?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1  </span><br><span class="line"></span><br><span class="line">  &gt; manifest ?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/manifest.json  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2. ????????????????  </span><br><span class="line"></span><br><span class="line">  - ??? tar -zxvf cloudera-manager-el6-cm5.9.0_x86_64.tar.gz -P /opt/cloudera/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1 CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha</span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv manifest.json /opt/clourdera/parcel.repo/  </span><br><span class="line"></span><br><span class="line">3. ?????????  </span><br><span class="line">```  </span><br><span class="line">/opt/cloudera/share/cmf/schema/scm_prepare_database.sh mysql cm -hlocalhost -uroot -phdp --scm-host localhost scm scm scm</span><br><span class="line">??????????????/usr/share/cmf</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. ????????????????cloudera-daemon, cloudera-server</span><br></pre></td></tr></table></figure></p>
-<p>sudo yum –nogpgcheck localinstall cloudera-manager-daemons-<em>.rpm<br>sudo yum –nogpgcheck localinstall cloudera-manager-server-</em>.rpm<br><code>`</code></p>
-<ol start="7">
-<li>????localhost:7180???????,????????</li>
-</ol>
-<p>??????jdbc???????????oozie hive??????jdbc????????????</p>
-<h3 id><a href="#" class="headerlink" title="??????"></a>??????</h3><ol>
-<li><p>jdk ??????????????????????????????yum repo?????</p>
-</li>
-<li><p>????????????????  </p>
-</li>
-</ol>
-<h3 id="-1"><a href="#-1" class="headerlink" title="????????"></a>????????</h3><blockquote>
-<p><a href="http://www.aboutyun.com/thread-9086-1-1.html" target="_blank" rel="noopener">Cloudera Manager 5 ?? CDH5 ????????????????</a><br><a href="https://www.cloudera.com/documentation/enterprise/latest/topics/install_cm_server.html" target="_blank" rel="noopener">Install Cloudera </a><br><a href="https://www.jianshu.com/p/57179e03795f" target="_blank" rel="noopener">?????CDH5??????</a><br><a href="https://blog.csdn.net/qq_30004245/article/details/75735275?locationNum=9&amp;fps=1" target="_blank" rel="noopener">Cloudera Hadoop???????????</a><br><a href="https://zhuanlan.zhihu.com/p/25533211" target="_blank" rel="noopener">??CDH5??hadoop???</a><br><a href="https://blog.csdn.net/hliq5399/article/details/78193113#t5" target="_blank" rel="noopener">??????????Hadoop??????</a><br><a href="https://www.jianshu.com/p/72dc1c591647" target="_blank" rel="noopener">CDH5???????????</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/machine_learn_特征工程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/machine_learn_特征工程/" class="post-title-link" itemprop="url">ML机器学习关于特征工程</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>指的是把原始数据转变为模型的训练数据的过程，目的是为了获得更好的训练数据特征，提高机器学习的上限，使得机器学习模型逼近这个上限（附图）。</p>
-<h1 id="数据特征准备"><a href="#数据特征准备" class="headerlink" title="数据特征准备"></a>数据特征准备</h1><ol>
-<li>基于业务需求与理解，要实现目标需求需要哪些数据，确定变量</li>
-<li>可用性评估：获取难度，覆盖率，准确率</li>
-<li>获取方法</li>
-<li>存储方法</li>
-</ol>
-<h1 id="一般步骤流程"><a href="#一般步骤流程" class="headerlink" title="一般步骤流程"></a>一般步骤流程</h1><p>处理流程不分先后，以达到训练模型的最佳期望为目的。</p>
-<ol>
-<li><p>数据预处理（清洗与构建）</p>
-</li>
-<li><p>数据补充</p>
-</li>
-<li><p>数据降维</p>
-</li>
-<li><p>特征监控</p>
-</li>
-</ol>
-<h2 id="数据预处理（清洗与构建）"><a href="#数据预处理（清洗与构建）" class="headerlink" title="数据预处理（清洗与构建）"></a>数据预处理（清洗与构建）</h2><ol>
-<li>数据规整：清洗异常样本，如删除极值</li>
-</ol>
-<ol start="2">
-<li>数据转换：标准化，归一化，离散化（二值化），one-hot(dummy coding)哑编码，其他变换</li>
-</ol>
-<p>2.1 标准化（无量纲化）<br>基于特征矩阵的列，将特征值转换至服从标准正态分布,去除均值和方差缩放，通过(X-X_mean)/std计算每个属性(每列)，进而使所有数据聚集在0附近，方差为1，公式为：x’ = (X-X_mean)/std<br>使用sklearn.preprocessing库的StandardScaler类对数据进行标准化的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import StandardScaler</span><br><span class="line"># 标准化，返回值为标准化后的数据</span><br><span class="line">StandardScaler().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
-<p>2.2 归一化：区间缩放<br>区间缩放法的思路有多种，常见的一种为利用两个最值进行缩放即基于最大最小值，将特征值转换到[0, 1]区间上，公式表达为：x’ = x-min/max-min<br>使用preproccessing库的MinMaxScaler类对数据进行区间缩放的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import MinMaxScaler</span><br><span class="line">#区间缩放，返回值为缩放到[0, 1]区间的数据</span><br><span class="line">MinMaxScaler().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
-<p>2.3 归一化：正则化<br>标准化是依照特征矩阵的列处理数据，其通过求z-score的方法，将样本的特征值转换到同一量纲下。归一化是依照特征矩阵的行处理数据，其目的在于样本向量在点乘运算或其他核函数计算相似性时，拥有统一的标准，也就是说都转化为“单位向量”。规则为l2的归一化公式如下：x’ = x/(Ej-&gt;m x[j]^2)^1/2</p>
-<p>使用preproccessing库的Normalizer类对数据进行归一化的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import Normalizer</span><br><span class="line">#归一化，返回值为归一化后的数据</span><br><span class="line">Normalizer().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
-<p>2.4 二值化<br>定量特征二值化的核心在于设定一个阈值，大于阈值的赋值为1，小于等于阈值的赋值为0，公式表达如下：<br>x’= { 1, x &gt; threshold; 0, x &lt;= threashold</p>
-<p>使用preproccessing库的Binarizer类对数据进行二值化的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import Binarizer</span><br><span class="line">#二值化，阈值设置为3，返回值为二值化后的数据</span><br><span class="line">Binarizer(threshold=3).fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
-<p>2.5 哑编码<br>对定性特征用定量表示，为避免数值大小对模型产生影响所有用dummy coding<br>使用preproccessing库的OneHotEncoder类对数据进行哑编码的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import OneHotEncoder</span><br><span class="line">#哑编码，对IRIS数据集的目标值，返回值为哑编码后的数据</span><br><span class="line">OneHotEncoder().fit_transform(iris.target.reshape((-1,1)))</span><br></pre></td></tr></table></figure></p>
-<p>2.6 数据变换<br>常见的数据变换有基于多项式的、基于指数函数的、基于对数函数的。4个特征，度为2的多项式转换公式如下：</p>
-<p>x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15 = 1,x1,x2,x3,x4,x1^2,x1<em>x2,x1</em>x3,x1<em>x4,x2^2,x2</em>x3,x2<em>x4,x3^2,x3</em>x4,x4^2</p>
-<p>使用preproccessing库的PolynomialFeatures类对数据进行多项式转换的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import PolynomialFeatures</span><br><span class="line">#多项式转换</span><br><span class="line">#参数degree为度，默认值为2</span><br><span class="line">PolynomialFeatures().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
-<p>基于单变元函数的数据变换可以使用一个统一的方式完成，使用preproccessing库的FunctionTransformer对数据进行对数函数转换的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from numpy import log1p</span><br><span class="line">from sklearn.preprocessing import FunctionTransformer</span><br><span class="line">#自定义转换函数为对数函数的数据变换</span><br><span class="line">#第一个参数是单变元函数</span><br><span class="line">FunctionTransformer(log1p).fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
-<ol start="3">
-<li>数据补充<br>3.1 缺失值计算</li>
-</ol>
-<p>特征值为NaN（not a number）,表示数据缺失。<br>使用preproccessing库的Imputer类对数据进行缺失值计算的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from numpy import vstack, array, nan</span><br><span class="line">from sklearn.preprocessing import Imputer</span><br><span class="line">#缺失值计算，返回值为计算缺失值后的数据</span><br><span class="line">#参数missing_value为缺失值的表示形式，默认为NaN</span><br><span class="line">#参数strategy为缺失值填充方式，默认为mean（均值）</span><br><span class="line">Imputer().fit_transform(vstack((array([nan, nan, nan, nan]), iris.data)))</span><br></pre></td></tr></table></figure></p>
-<p>3.2 特征衍生：</p>
-<ul>
-<li>对原始数据加工，生成符合训练需求的变量</li>
-</ul>
-<h2 id="数据选择方法"><a href="#数据选择方法" class="headerlink" title="数据选择方法"></a>数据选择方法</h2><ol>
-<li>filter：方差选择法，相关系数，卡方检验，信息增益、互信息<br>过滤法，按照发散性或者相关性对各个特征进行评分，设定阈值或者待选择阈值的个数，选择特征。</li>
-<li>wrapper： 递归特征消除法<br>包装法，根据目标函数（通常是预测效果评分），每次选择若干特征，或者排除若干特征。</li>
-<li>embedded： 基于惩罚项的特征选择法，基于树形模型的特征选择法<br>嵌入法，先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据系数从大到小选择特征。类似于Filter方法，但是是通过训练来确定特征的优劣。</li>
-</ol>
-<h2 id="数据降维"><a href="#数据降维" class="headerlink" title="数据降维"></a>数据降维</h2><ul>
-<li>PCA主成分分析法 </li>
-<li>LDA线性判别分析法</li>
-</ul>
-<h2 id="数据特征验证与监控"><a href="#数据特征验证与监控" class="headerlink" title="数据特征验证与监控"></a>数据特征验证与监控</h2><ol>
-<li>有效性分析：重要性，权重</li>
-<li>监控重要特征</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/machine_learn_用户画像/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/machine_learn_用户画像/" class="post-title-link" itemprop="url">大数据用户画像</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>极致营销：什么日期，什么时间，什么地点，什么终端，什么入口，向什么客户推荐什么产品，正是当前客户需要的或者刚好激发客户产生了新的消费需求，而金额刚刚好足够用户破产。<br>智能话费冲值与加油用户画像信息提取：主题推荐：话费、流量、油卡、小易</p>
-<ol>
-<li>人口属性，用户自然属性包括性别、年龄、地区</li>
-<li>设备属性，用户设备特征包括系统、机型、运营商</li>
-<li>消费特征，用户消费场景及其他包括地区、地点、渠道（终端渠道、入口页面）、日期、时间、金额大小、频率</li>
-<li>行为数据，用户操作行为系统监控行为数据包括浏览行为、下单支付行为、移动行为、使用行为（如最近频繁电话等），行为包括时间、路径、速度等</li>
-<li>因果数据，影响用户消费行为的数据天气变化、自然灾害、节日、周期行为（月底、工资日）</li>
-<li>关系数据，待探索的可能影响用户行为的数据包括其他平台的消费数据、某物品的消费关联、某行为的波动影响（如社交视频增多）</li>
-<li>内部推导的用户类型：用户年龄层、消费层级、社会身份、当前平台生命周期（新老用户、僵死用户）、有车无车族、家庭信息、关联推导</li>
-</ol>
-<h1 id="技术实现点："><a href="#技术实现点：" class="headerlink" title="技术实现点："></a>技术实现点：</h1><h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><pre><code>标签解决的是描述（或命名）问题，但在实际应用中，还需要解决数据之间的关联，所以通常将标签作为一个体系来设计，以解决数据之间的关联问题。即：树
-
-标签包含：名称、分类、级别、属性、赋值
-</code></pre><ol>
-<li><p>标签命名&amp;赋值<br> 名称和值，如生日 0828</p>
-</li>
-<li><p>标签级别（标签的体系结构）</p>
-<p> 分级有两个层面的含义，其一是：指标到最低层级的涵盖的层级；其二是指：指标的运算层级。其一非常好理解，这里重点说运算层级。</p>
-<pre><code>标签从运算层级角度可以分为三层：事实标签、模型标签、预测标签。
-
-事实标签：是通过对于原始数据库的数据进行统计分析而来的，比如用户投诉次数，是基于用户一段时间内实际投诉的行为做的统计。
-
-模型标签：模型标签是以事实标签为基础，通过构建事实标签与业务问题之间的模型，进行模型分析得到。比如，结合用户实际投诉次数、用户购买品类、用户支付的金额等，进行用户投诉倾向类型的识别，方便客服进行分类处理。
-
-预测标签：则是在模型的基础上做预测，比如针对投诉倾向类型结构的变化，预测平台舆情风险指数。
-</code></pre></li>
-<li><p>标签属性</p>
-<pre><code>标签属性可以理解为针对标签进行的再标注，这一环节的工作主要目的是帮助内部理解标签赋值的来源，进而理解指标的含义。如图所示，可以总结为5种来源：
-
-固有属性：是指这些指标的赋值体现的是用户生而有之或者事实存在的，不以外界条件或者自身认知的改变而改变的属性。比如：性别、年龄、是否生育等。
-</code></pre><p> 推导属性：由其他属性推导而来的属性，比如星座，我们可以通过用户的生日推导，比如用户的品类偏好，则可以通过日常购买来推导。</p>
-<p> 行为属性：产品内外实际发生的行为被记录后形成的赋值，比如用户的登陆时间，页面停留时长等。</p>
-<p> 态度属性：用户自我表达的态度和意愿。比如说我们通过一份问卷向用户询问一些问题，并形成标签，如询问用户：是否愿意结婚，是否喜欢某个品牌等。当然在大数据的需求背景下，利用问卷收集用户标签的方法效率显得过低，更多的是利用产品中相关的模块做了用户态度信息收集。</p>
-<p> 测试属性：测试属性是指来自用户的态度表达，但并不是用户直接表达的内容，而是通过分析用户的表达，结构化处理后，得出的测试结论。比如，用户填答了一系列的态度问卷，推导出用户的价值观类型等。</p>
-</li>
-</ol>
-<h1 id="技术实现流程："><a href="#技术实现流程：" class="headerlink" title="技术实现流程："></a>技术实现流程：</h1><p>原始数据</p>
-<p>加工清洗分类基础数据</p>
-<p>训练数据、测试数据</p>
-<p>分类、预测、聚类发现</p>
-<p>应用：产品创新、优化体验、服务升级、提升效率、防范风险</p>
-<p>（1）原始输入层</p>
-<pre><code>主要指用户的历史数据信息，如会员信息、消费信息、网络行为信息。经过数据的清洗，从而达到用户标签体系的事实层。
-</code></pre><p>（2）事实层</p>
-<pre><code>事实层是用户信息的准确描述层，其最重要的特点是，可以从用户身上得到确定与肯定的验证。如用户的人口属性、性别、年龄、籍贯、会员信息等。
-</code></pre><p>（3）模型预测层</p>
-<pre><code>通过利用统计建模，数据挖掘、机器学习的思想，对事实层的数据进行分析利用，从而得到描述用户更为深刻的信息。如通过建模分析，可以对用户的性别偏好进行预测，从而能对没有收集到性别数据的新用户进行预测。还可以通过建模与数据挖掘，使用聚类、关联思想，发现人群的聚集特征。
-</code></pre><p>（4）营销模型预测</p>
-<pre><code>利用模型预测层结果，对不同用户群体，相同需求的客户，通过打标签，建立营销模型，从而分析用户的活跃度、忠诚度、流失度、影响力等可以用来进行营销的数据。
-</code></pre><p>（5）业务层</p>
-<pre><code>业务层可以是展现层。它是业务逻辑的直接体现，如图中所表示的，有车一族、有房一族等。
-</code></pre>
           
         
       
@@ -2038,198 +2183,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_setup/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/k8s_setup/" class="post-title-link" itemprop="url">kubernetes 部署</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ol>
-<li><p>准备虚拟机，配置环境，关闭防火墙<br>systemctl disable firewalld<br>systemctl stop firewalld </p>
-</li>
-<li><p>安装etcd<br>yum install etcd -y</p>
-</li>
-</ol>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#[member]  </span><br><span class="line">ETCD_NAME=etcd1  </span><br><span class="line">ETCD_DATA_DIR=&quot;/var/lib/etcd/test.etcd&quot;  </span><br><span class="line">#ETCD_WAL_DIR=&quot;&quot;  </span><br><span class="line">#ETCD_SNAPSHOT_COUNT=&quot;10000&quot;  </span><br><span class="line">#ETCD_HEARTBEAT_INTERVAL=&quot;100&quot;  </span><br><span class="line">#ETCD_ELECTION_TIMEOUT=&quot;1000&quot;  </span><br><span class="line">ETCD_LISTEN_PEER_URLS=&quot;http://0.0.0.0:2380&quot;  </span><br><span class="line">ETCD_LISTEN_CLIENT_URLS=&quot;http://0.0.0.0:2379,http://0.0.0.0:4001&quot;  </span><br><span class="line">#ETCD_MAX_SNAPSHOTS=&quot;5&quot;  </span><br><span class="line">#ETCD_MAX_WALS=&quot;5&quot;  </span><br><span class="line">#ETCD_CORS=&quot;&quot;  </span><br><span class="line">#  </span><br><span class="line">#[cluster]  </span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;http://master1:2380&quot;  </span><br><span class="line"># if you use different ETCD_NAME (e.g. test), set ETCD_INITIAL_CLUSTER value for this name, i.e. &quot;test=http://...&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER=&quot;etcd1=http://master1:2380,etcd2=http://master2:2380,etcd3=http://master3:2380&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster-baby&quot;  </span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS=&quot;http://master1:2379,http://master1:4001&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker -y  </span><br><span class="line">chkconfig docker on  </span><br><span class="line">service docker start </span><br><span class="line">`</span><br></pre></td></tr></table></figure>
-<h3 id="安装k8s"><a href="#安装k8s" class="headerlink" title="安装k8s"></a>安装k8s</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install kubernetes -y</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>修改配置 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure the kube-apiserver  </span><br><span class="line">#  </span><br><span class="line">  </span><br><span class="line"># The address on the local server to listen to.  </span><br><span class="line">KUBE_API_ADDRESS=&quot;--insecure-bind-address=0.0.0.0&quot;  </span><br><span class="line">  </span><br><span class="line"># The port on the local server to listen on.  </span><br><span class="line">KUBE_API_PORT=&quot;--port=8080&quot;  </span><br><span class="line">  </span><br><span class="line"># Port minions listen on  </span><br><span class="line"># KUBELET_PORT=&quot;--kubelet-port=10250&quot;  </span><br><span class="line">  </span><br><span class="line"># Comma separated list of nodes in the etcd cluster  </span><br><span class="line">KUBE_ETCD_SERVERS=&quot;--etcd-servers=http://etcd:2379&quot;  </span><br><span class="line">  </span><br><span class="line"># Address range to use for services  </span><br><span class="line">KUBE_SERVICE_ADDRESSES=&quot;--service-cluster-ip-range=10.254.0.0/16&quot;  </span><br><span class="line">  </span><br><span class="line"># default admission control policies  </span><br><span class="line"># KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota&quot;  </span><br><span class="line">KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ResourceQuota&quot;  </span><br><span class="line">  </span><br><span class="line"># Add your own!  </span><br><span class="line">KUBE_API_ARGS=&quot;&quot;  </span><br><span class="line">---</span><br><span class="line">###  </span><br><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure various aspects of all  </span><br><span class="line"># kubernetes services, including  </span><br><span class="line">#  </span><br><span class="line">#   kube-apiserver.service  </span><br><span class="line">#   kube-controller-manager.service  </span><br><span class="line">#   kube-scheduler.service  </span><br><span class="line">#   kubelet.service  </span><br><span class="line">#   kube-proxy.service  </span><br><span class="line"># logging to stderr means we get it in the systemd journal  </span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;  </span><br><span class="line">  </span><br><span class="line"># journal message level, 0 is debug  </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;  </span><br><span class="line">  </span><br><span class="line"># Should this cluster be allowed to run privileged docker containers  </span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;  </span><br><span class="line">  </span><br><span class="line"># How the controller-manager, scheduler, and proxy find the apiserver  </span><br><span class="line">KUBE_MASTER=&quot;--master=http://master1:8080&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动<br>systemctl enable kube-apiserver<br>systemctl start kube-apiserver<br>systemctl enable kube-controller-manager<br>systemctl start kube-controller-manager<br>systemctl enable kube-scheduler<br>systemctl start kube-scheduler  </p>
-</li>
-</ul>
-<ul>
-<li><p>deploy node</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker -y  </span><br><span class="line">chkconfig docker on  </span><br><span class="line">service docker start  </span><br><span class="line">yum install kubernetes -y</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure various aspects of all  </span><br><span class="line"># kubernetes services, including  </span><br><span class="line">#  </span><br><span class="line">#   kube-apiserver.service  </span><br><span class="line">#   kube-controller-manager.service  </span><br><span class="line">#   kube-scheduler.service  </span><br><span class="line">#   kubelet.service  </span><br><span class="line">#   kube-proxy.service  </span><br><span class="line"># logging to stderr means we get it in the systemd journal  </span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;  </span><br><span class="line">  </span><br><span class="line"># journal message level, 0 is debug  </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;  </span><br><span class="line">  </span><br><span class="line"># Should this cluster be allowed to run privileged docker containers  </span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;  </span><br><span class="line">  </span><br><span class="line"># How the controller-manager, scheduler, and proxy find the apiserver  </span><br><span class="line">KUBE_MASTER=&quot;--master=http://etcd:8080&quot;  </span><br><span class="line">###  </span><br><span class="line"># kubernetes kubelet (minion) config  </span><br><span class="line">  </span><br><span class="line"># The address for the info server to serve on (set to 0.0.0.0 or &quot;&quot; for all interfaces)  </span><br><span class="line">KUBELET_ADDRESS=&quot;--address=0.0.0.0&quot;  </span><br><span class="line">  </span><br><span class="line"># The port for the info server to serve on  </span><br><span class="line"># KUBELET_PORT=&quot;--port=10250&quot;  </span><br><span class="line">  </span><br><span class="line"># You may leave this blank to use the actual hostname  </span><br><span class="line">KUBELET_HOSTNAME=&quot;--hostname-override=node1&quot;  </span><br><span class="line">  </span><br><span class="line"># location of the api-server  </span><br><span class="line">KUBELET_API_SERVER=&quot;--api-servers=http://etcd:8080&quot;  </span><br><span class="line">  </span><br><span class="line"># pod infrastructure container  </span><br><span class="line">KUBELET_POD_INFRA_CONTAINER=&quot;--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest&quot;  </span><br><span class="line">  </span><br><span class="line"># Add your own!  </span><br><span class="line">KUBELET_ARGS=&quot;&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable kubelet  </span><br><span class="line">systemctl start kubelet  </span><br><span class="line">systemctl enable kube-proxy  </span><br><span class="line">systemctl start kube-proxy</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建覆盖网络flannel</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install flannel -y  </span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">- 在master、node上均编辑 /etc/sysconfig/flanneld 文件</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h1 id="Flanneld-configuration-options"><a href="#Flanneld-configuration-options" class="headerlink" title="Flanneld configuration options"></a>Flanneld configuration options</h1><h1 id="etcd-url-location-Point-this-to-the-server-where-etcd-runs"><a href="#etcd-url-location-Point-this-to-the-server-where-etcd-runs" class="headerlink" title="etcd url location.  Point this to the server where etcd runs"></a>etcd url location.  Point this to the server where etcd runs</h1><p>FLANNEL_ETCD_ENDPOINTS=”<a href="http://etcd:2379&quot;" target="_blank" rel="noopener">http://etcd:2379&quot;</a>  </p>
-<h1 id="etcd-config-key-This-is-the-configuration-key-that-flannel-queries"><a href="#etcd-config-key-This-is-the-configuration-key-that-flannel-queries" class="headerlink" title="etcd config key.  This is the configuration key that flannel queries"></a>etcd config key.  This is the configuration key that flannel queries</h1><h1 id="For-address-range-assignment"><a href="#For-address-range-assignment" class="headerlink" title="For address range assignment"></a>For address range assignment</h1><p>FLANNEL_ETCD_PREFIX=”/atomic.io/network”  </p>
-<h1 id="Any-additional-options-that-you-want-to-pass"><a href="#Any-additional-options-that-you-want-to-pass" class="headerlink" title="Any additional options that you want to pass"></a>Any additional options that you want to pass</h1><p>#FLANNEL_OPTIONS=””<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 配置etcd中关于flannel的key--</span><br></pre></td></tr></table></figure></p>
-<p>etcdctl mk /atomic.io/network/config ‘{ “Network”: “10.0.0.0/16” }’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 重新启动</span><br><span class="line">启动修改后的 flannel</span><br></pre></td></tr></table></figure></p>
-<p>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kube-apiserver<br>systemctl restart kube-controller-manager<br>systemctl restart kube-scheduler  </p>
-<p>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kubelet<br>systemctl restart kube-proxy<br><code>`</code> </p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2303,9 +2256,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
