@@ -341,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源等级/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_monitor/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -361,7 +361,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/k8s_资源等级/" class="post-title-link" itemprop="url">Kubernetes之QoS</a>
+                <a href="/2018/05/24/k8s_monitor/" class="post-title-link" itemprop="url">Kubernetes监控</a>
               
             
           </h2>
@@ -441,12 +441,34 @@
       
         
           
-            <p><a href="http://dockone.io/article/2592" target="_blank" rel="noopener">Kubernetes之服务质量保证（QoS）</a></p>
-<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods</p>
-<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort</p>
-<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。</p>
-<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。</p>
-<p>OOM分数值根据OOM_ADJ参数计算得出，对于Guaranteed级别的pod，OOM_ADJ参数设置成了-998，对于BestEffort级别的pod，OOM_ADJ参数设置成了1000，对于Burstable级别的POD，OOM_ADJ参数取值从2到999。对于kuberntes保留资源，比如kubelet，docker，OOM_ADJ参数设置成了-999，表示不会被OOM kill掉。OOM_ADJ参数设置的越大，通过OOM_ADJ参数计算出来OOM分数越高，表明该pod优先级就越低，当出现资源竞争时会越早被kill掉，对于OOM_ADJ参数是-999的表示kubernetes永远不会因为OOM而被kill掉。</p>
+            <h2 id="Node节点"><a href="#Node节点" class="headerlink" title="Node节点"></a>Node节点</h2><ul>
+<li><p>基础命令</p>
+<p>  <code>kubectl describe node node3</code></p>
+</li>
+</ul>
+<h2 id="kubelet"><a href="#kubelet" class="headerlink" title="kubelet"></a>kubelet</h2><ul>
+<li>组件</li>
+</ul>
+<ol>
+<li><strong>cAdvisor</strong><br> 描述：收集本机以及容器的监控数据(cpu,memory,filesystem,network,uptime)</li>
+</ol>
+<h2 id="Heapster"><a href="#Heapster" class="headerlink" title="Heapster"></a>Heapster</h2><ul>
+<li><p>描述</p>
+<blockquote>
+<p>Heapster首先从K8S Master获取集群中所有Node的信息，然后通过这些Node上的kubelet获取有用数据，而kubelet本身的数据则是从cAdvisor得到。所有获取到的数据都被推到Heapster配置的后端存储中，并还支持数据的可视化。现在后端存储 + 可视化的方法，如InfluxDB + grafana。</p>
+</blockquote>
+</li>
+<li><p>组件</p>
+</li>
+</ul>
+<ol>
+<li><strong>InfluxDB</strong><br>描述：存储监控数据</li>
+</ol>
+<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><blockquote>
+<ol>
+<li><a href="https://segmentfault.com/a/1190000007708162" target="_blank" rel="noopener">Kubernetes监控之Heapster介绍</a></li>
+</ol>
+</blockquote>
 
           
         
@@ -503,7 +525,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_配置热更新/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/数据结构与算法_常用程序算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -523,7 +545,238 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/k8s_配置热更新/" class="post-title-link" itemprop="url">Kubernetes ConfigMap热更新</a>
+                <a href="/2018/05/24/数据结构与算法_常用程序算法/" class="post-title-link" itemprop="url">Python常用算法</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><p>平均性能为O(n^2)的有：直接插入排序，选择排序，冒泡排序<br>希尔排序对增量的标准没有较为满意的答案，增量对性能会有影响。<br>归并排序效率非常不错，在数据规模较大的情况下，比希尔排序和堆排序要好。<br>多数先进的算法都是因为跳跃式的比较，降低了比较次数，但牺牲了排序的稳定 性。<br>平均性能为O(nlogn)的有：快速排序，归并排序，希尔排序，堆排序。其中，快排是最好的，其次是归并和希尔，堆排序在数据量很大时效果明显（堆排序适合处理大数据）。</p>
+<h3 id="1-冒泡排序-–-重要"><a href="#1-冒泡排序-–-重要" class="headerlink" title="1.冒泡排序 – 重要"></a>1.冒泡排序 – 重要</h3><p>原理：冒泡排序（英语：Bubble Sort）是一种简单的排序算法。它重复地遍历要排序的数列，一次比较两个元素，如果他们的顺序错误就把他们交换过来。遍历数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。这个算法的名字由来是因为越小的元素会经由交换慢慢“浮”到数列的顶端。</p>
+<p>时间复杂度： O(n) - O(n2)</p>
+<p>空间复杂度：n<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def bubble_sort(li):</span><br><span class="line">    for i in range(len(li) - 1):</span><br><span class="line">        for j in range(len(li) - i - 1):</span><br><span class="line">            if li[j] &gt; li[j+1]:</span><br><span class="line">                li[j], li[j+1] = li[j+1], li[j]</span><br><span class="line">    return li</span><br><span class="line"></span><br><span class="line">list1 = [15, 66, 20, 350, 464, 88, 995, 100]</span><br><span class="line">print(bubble_sort(list1))</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-快速排序（二分）-–-重要"><a href="#2-快速排序（二分）-–-重要" class="headerlink" title="2.快速排序（二分） – 重要"></a>2.快速排序（二分） – 重要</h3><p>原理：快速排序（英语：Quicksort），又称划分交换排序（partition-exchange sort），通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。</p>
+<p>实现步骤为：</p>
+<ol>
+<li>从数列中挑出一个元素，称为”基准”（pivot），</li>
+<li>重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区结束之后，该基准就处于数列的中间位置。这个称为分区（partition）操作。</li>
+<li>递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。<br>递归的最底部情形，是数列的大小是零或一，也就是永远都已经被排序好了。虽然一直递归下去，但是这个算法总会结束，因为在每次的迭代（iteration）中，它至少会把一个元素摆到它最后的位置去。</li>
+</ol>
+<p>时间复杂度：O(nlogn) - O(n2)</p>
+<p>空间复杂度：n<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def quick_sort(arr):</span><br><span class="line">    if len(arr) &gt; 1:</span><br><span class="line">        pivot = arr.pop()</span><br><span class="line">    else:</span><br><span class="line">        return arr</span><br><span class="line">    small = []</span><br><span class="line">    big = []</span><br><span class="line">    for i in arr:</span><br><span class="line">        if i &gt; pivot:</span><br><span class="line">            big.append(i)</span><br><span class="line">        else:</span><br><span class="line">            small.append(i)</span><br><span class="line">    return quick_sort(small) + [pivot] + quick_sort(big)</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-归并排序-Merge-Sort（分治）-–-重要"><a href="#3-归并排序-Merge-Sort（分治）-–-重要" class="headerlink" title="3.归并排序 Merge Sort（分治） – 重要"></a>3.归并排序 Merge Sort（分治） – 重要</h3><p>原理：归并排序是采用分治法的一个非常典型的应用。归并排序的思想就是先递归分解数组，再合并数组。<br>将数组分解最小之后，然后合并两个有序数组，基本思路是比较两个数组的最前面的数，谁小就先取谁，取了后相应的指针就往后移一位。然后再比较，直至一个数组为空，最后把另一个数组的剩余部分复制过来即可。</p>
+<p>时间复杂度：O(nlogn) - O(nlogn)</p>
+<p>空间复杂度：n<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">def mergesort(seq):</span><br><span class="line">    &quot;&quot;&quot;归并排序&quot;&quot;&quot;</span><br><span class="line">    if len(seq) &lt;= 1:</span><br><span class="line">        return seq</span><br><span class="line">    mid = len(seq) // 2  # 将列表分成更小的两个列表</span><br><span class="line">    # 分别对左右两个列表进行处理，分别返回两个排序好的列表</span><br><span class="line">    left = mergesort(seq[:mid])</span><br><span class="line">    right = mergesort(seq[mid:])</span><br><span class="line">    # 对排序好的两个列表合并，产生一个新的排序好的列表</span><br><span class="line">    return merge(left, right)</span><br><span class="line"></span><br><span class="line">def merge(left, right):</span><br><span class="line">    &quot;&quot;&quot;合并两个已排序好的列表，产生一个新的已排序好的列表&quot;&quot;&quot;</span><br><span class="line">    result = []  # 新的已排序好的列表</span><br><span class="line">    i = 0  # 下标</span><br><span class="line">    j = 0</span><br><span class="line">    # 对两个列表中的元素 两两对比。</span><br><span class="line">    # 将最小的元素，放到result中，并对当前列表下标加1</span><br><span class="line">    while i &lt; len(left) and j &lt; len(right):</span><br><span class="line">        if left[i] &lt;= right[j]:</span><br><span class="line">            result.append(left[i])</span><br><span class="line">            i += 1</span><br><span class="line">        else:</span><br><span class="line">            result.append(right[j])</span><br><span class="line">            j += 1</span><br><span class="line">    result += left[i:]</span><br><span class="line">    result += right[j:]</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-插入排序"><a href="#4-插入排序" class="headerlink" title="4.插入排序"></a>4.插入排序</h3><p>原理：排扑克，插入排序（英语：Insertion Sort）是一种简单直观的排序算法。它的工作原理是通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。插入排序在实现上，在从后向前扫描过程中，需要反复把已排序元素逐步向后挪位，为最新元素提供插入空间。<br>时间复杂度：O(n) - O(n2)<br>空间复杂度：比冒泡多</p>
+<h3 id="5-希尔排序-–重要"><a href="#5-希尔排序-–重要" class="headerlink" title="5.希尔排序 –重要"></a>5.希尔排序 –重要</h3><h3 id="6-堆排序-–重要"><a href="#6-堆排序-–重要" class="headerlink" title="6.堆排序 –重要"></a>6.堆排序 –重要</h3><h3 id="7-计数排序-–重要"><a href="#7-计数排序-–重要" class="headerlink" title="7.计数排序 –重要"></a>7.计数排序 –重要</h3><hr>
+<h2 id="查找-遍历"><a href="#查找-遍历" class="headerlink" title="查找/遍历"></a>查找/遍历</h2><p>查找是在大量的信息中寻找一个特定的信息元素，在计算机应用中，查找是常用的基本运算，例如编译程序中符号表的查找。本文简单概括性的介绍了常见的七种查找算法，说是七种，其实二分查找、插值查找以及斐波那契查找都可以归为一类——插值查找。插值查找和斐波那契查找是在二分查找的基础上的优化查找算法。树表查找和哈希查找会在后续的博文中进行详细介绍。</p>
+<p>　　查找定义：根据给定的某个值，在查找表中确定一个其关键字等于给定值的数据元素（或记录）。</p>
+<p>　　查找算法分类：<br>　　1）静态查找和动态查找；<br>　　　　注：静态或者动态都是针对查找表而言的。动态表指查找表中有删除和插入操作的表。<br>　　2）无序查找和有序查找。<br>　　　　无序查找：被查找数列有序无序均可；<br>　　　　有序查找：被查找数列必须为有序数列。<br>　　平均查找长度（Average Search Length，ASL）：需和指定key进行比较的关键字的个数的期望值，称为查找算法在查找成功时的平均查找长度。<br>　　对于含有n个数据元素的查找表，查找成功的平均查找长度为：ASL = Pi*Ci的和。<br>　　Pi：查找表中第i个数据元素的概率。<br>　　Ci：找到第i个数据元素时已经比较过的次数</p>
+<p>1.顺序查找</p>
+<p>说明：顺序查找适合于存储结构为顺序存储或链接存储的线性表。<br>　　基本思想：顺序查找也称为线形查找，属于无序查找算法。从数据结构线形表的一端开始，顺序扫描，依次将扫描到的结点关键字与给定值k相比较，若相等则表示查找成功；若扫描结束仍没有找到关键字等于k的结点，表示查找失败。<br>　　复杂度分析：　<br>　　查找成功时的平均查找长度为：（假设每个数据元素的概率相等） ASL = 1/n(1+2+3+…+n) = (n+1)/2 ;<br>　　当查找不成功时，需要n+1次比较，时间复杂度为O(n);<br>　　所以，顺序查找的时间复杂度为O(n)。</p>
+<p>2.哈希查找：速度快，python字典基本能实现常数，最坏的也只是对数O(log(n))</p>
+<p>3.二分查找</p>
+<p>说明：元素必须是有序的，如果是无序的则要先进行排序操作。</p>
+<p>　　基本思想：也称为是折半查找，属于有序查找算法。用给定值k先与中间结点的关键字比较，中间结点把线形表分成两个子表，若相等则查找成功；若不相等，再根据k与该中间结点关键字的比较结果确定下一步查找哪个子表，这样递归进行，直到查找到或查找结束发现表中没有这样的结点。</p>
+<p>　　复杂度分析：最坏情况下，关键词比较次数为log2(n+1)，且期望时间复杂度为O(log2n)；</p>
+<p>　　注：折半查找的前提条件是需要有序表顺序存储，对于静态查找表，一次排序后不再变化，折半查找能得到不错的效率。但对于需要频繁执行插入或删除操作的数据集来说，维护有序的排序会带来不小的工作量，那就不建议使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">def binary_search(list,item):</span><br><span class="line">    low = 0</span><br><span class="line">    high = len(list)-1</span><br><span class="line">    while low&lt;=high:</span><br><span class="line">        mid = (low+high) // 2</span><br><span class="line">        guess = list[mid]</span><br><span class="line">        if guess&gt;item:</span><br><span class="line">            high = mid-1</span><br><span class="line">        elif guess&lt;item:</span><br><span class="line">            low = mid+1</span><br><span class="line">        else:</span><br><span class="line">            return mid</span><br><span class="line">    return None</span><br><span class="line">mylist = [1,3,5,7,9]</span><br><span class="line">print(binary_search(mylist,3))</span><br></pre></td></tr></table></figure>
+<p>4.斐波那契</p>
+<p>斐波那契数列（Fibonacci sequence），又称黄金分割数列，因数学家列昂纳多·斐波那契（Leonardoda Fibonacci）以兔子繁殖为例子而引入，故又称为“兔子数列”。</p>
+<p>二分查找的改进，运用斐波那契数列设置分隔数<br>基本原理：<br>1.黄金分割比1：0.618，斐波那契数列：1，1，2，3，5，8，13……（两数比接近0.618且和为后一个数）<br>2.查询序列有序，且长度为某斐波那契数-1，即len = F[k] -1,（不足可复制最后一个元素）<br>3.分割点F[k-1]，前F{k-1]-1、后F[k-2]-1，共F[k] -1<br>4.确定查询点位置，在前半部分则k=k-1，在后半部分则k=k-2，3中关系仍然成立</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def fib(n):</span><br><span class="line">    if n &lt; 2:</span><br><span class="line">        return n</span><br><span class="line">    else:</span><br><span class="line">        return fib(n-1)+fib(n-2)</span><br><span class="line"></span><br><span class="line">fib(15)</span><br></pre></td></tr></table></figure>
+<p>5.插值查找</p>
+<p>在介绍插值查找之前，首先考虑一个新问题，为什么上述算法一定要是折半，而不是折四分之一或者折更多呢？<br>　　打个比方，在英文字典里面查“apple”，你下意识翻开字典是翻前面的书页还是后面的书页呢？如果再让你查“zoo”，你又怎么查？很显然，这里你绝对不会是从中间开始查起，而是有一定目的的往前或往后翻。<br>　　同样的，比如要在取值范围1 ~ 10000 之间 100 个元素从小到大均匀分布的数组中查找5， 我们自然会考虑从数组下标较小的开始查找。<br>　　经过以上分析，折半查找这种查找方式，不是自适应的（也就是说是傻瓜式的）。二分查找中查找点计算如下：<br>　　mid=(low+high)/2, 即mid=low+1/2<em>(high-low);<br>　　通过类比，我们可以将查找的点改进为如下：<br>　　mid=low+(key-a[low])/(a[high]-a[low])</em>(high-low)，<br>　　也就是将上述的比例参数1/2改进为自适应的，根据关键字在整个有序表中所处的位置，让mid值的变化更靠近关键字key，这样也就间接地减少了比较次数。<br>　　基本思想：基于二分查找算法，将查找点的选择改进为自适应选择，可以提高查找效率。当然，差值查找也属于有序查找。<br>　　注：对于表长较大，而关键字分布又比较均匀的查找表来说，插值查找算法的平均性能比折半查找要好的多。反之，数组中如果分布非常不均匀，那么插值查找未必是很合适的选择。<br>　　复杂度分析：查找成功或者失败的时间复杂度均为O(log2(log2n))。 </p>
+<p>6.分块查找</p>
+<p>7.二叉树遍历<br>前序（先中间，再左边，后右边）<br>中序（先左边，再中间，后右边）<br>后序（先左边，再右边，后中间）</p>
+<p>8.平衡查找树AVL</p>
+<h2 id="递归与分治"><a href="#递归与分治" class="headerlink" title="递归与分治"></a>递归与分治</h2><p>递归算法：直接或者间接不断反复调用自身来达到解决问题的方法。这就要求原始问题可以分解成相同问题的子问题。<br>示例：阶乘、斐波纳契数列、汉诺塔问题</p>
+<p>斐波纳契数列：又称黄金分割数列，指的是这样一个数列：1、1、2、3、5、8、13、21、……在数学上，斐波纳契数列以如下被以递归的方法定义：F1=1,F2=1,Fn=F（n-1）+F（n-2）（n&gt;2,n∈N*））。</p>
+<p>分治算法：待解决复杂的问题能够简化为几个若干个小规模相同的问题，然后逐步划分，达到易于解决的程度。<br>1、将原问题分解为n个规模较小的子问题，各子问题间独立存在，并且与原问题形式相同<br>2、递归的解决各个子问题<br>3、将各个子问题的解合并得到原问题的解</p>
+<p>示例：棋盘覆盖、找出伪币、求最值</p>
+<p>棋盘覆盖：在一个(2^k)*(2^k)个方格组成的棋盘上，有一个特殊方格与其他方格不同，称为特殊方格，称这样的棋盘为一个特殊棋盘。要求对棋盘的其余部分用L型方块填满</p>
+<h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><p>动态规划（Dynamic programming）是一种在数学、计算机科学和经济学中使用的，通过把原问题分解为相对简单的子问题的方式求解复杂问题的方法。 动态规划常常适用于有重叠子问题和最优子结构性质的问题，动态规划方法所耗时间往往远少于朴素解法。<br>动态规划与分治法相似，都是组合子问题的解来解决原问题的解，与分治法的不同在于：分治法的子问题是相互独立存在的，而动态规划应用于子问题重叠的情况。<br>动态规划背后的基本思想非常简单。大致上，若要解一个给定问题，我们需要解其不同部分（即子问题），再合并子问题的解以得出原问题的解。 通常许多子问题非常相似，为此动态规划法试图仅仅解决每个子问题一次，从而减少计算量： 一旦某个给定子问题的解已经算出，则将其记忆化存储，以便下次需要同一个子问题解之时直接查表。 这种做法在重复子问题的数目关于输入的规模呈指数增长时特别有用。动态规划中三个核心概念：最优子结构，边界，状态转移公式。</p>
+<p>算法步骤：</p>
+<ol>
+<li><p>最优子结构性质。如果问题的最优解所包含的子问题的解也是最优的，我们就称该问题具有最优子结构性质（即满足最优化原理）。最优子结构性质为动态规划算法解决问题提供了重要线索。</p>
+</li>
+<li><p>子问题重叠性质。子问题重叠性质是指在用递归算法自顶向下对问题进行求解时，每次产生的子问题并不总是新问题，有些子问题会被重复计算多次。动态规划算法正是利用了这种子问题的重叠性质，对每一个子问题只计算一次，然后将其计算结果保存在一个表格中，当再次需要计算已经计算过的子问题时，只是在表格中简单地查看一下结果，从而获得较高的效率。</p>
+</li>
+</ol>
+<p>优化：</p>
+<ol>
+<li>不要递归(自顶向下），算法复杂度比较大。用迭代（自底向上）算法时间复杂度为常数。</li>
+<li>不要用备忘录算法，存储中间状态，增加空间复杂度。</li>
+</ol>
+<p>例子：</p>
+<ol>
+<li>动态规划,爬台阶问题。10级台阶，每次只能爬1级或2级，10级台阶有多少种爬法?<br>分析问题：下一步方法数总是前两步之和<br>f(n)最优子结构：f(n-1) ,f(n-2)<br>边界：f(1), f(2)<br>状态转移公式：f(n) = f(n-1)+f(n-2)</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">def dynamic_programe(n):</span><br><span class="line">    if n &lt; 1:</span><br><span class="line">        return 0</span><br><span class="line">    if n &lt;= 2:</span><br><span class="line">        return n</span><br><span class="line">    start = 1</span><br><span class="line">    second = 2</span><br><span class="line">    res = start+second</span><br><span class="line">    for i in range(4,n+1):</span><br><span class="line">        second, res = res, res+second</span><br><span class="line">    return res</span><br><span class="line">%time dynamic_programe(10)</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>0/1背包问题：给定种物品和一个容量为300KG的背包，物品的重量是[22,44,65,24,88,99]KG，其价值为[19,39,23,53,43,13]，背包问题是如何使选择装入背包内的物品，使得装入背包中的物品的总价值最大。其中，每种物品只有全部装入背包或不装入背包两种选择。</li>
+</ol>
+<h2 id="贪心算法"><a href="#贪心算法" class="headerlink" title="贪心算法"></a>贪心算法</h2><p>贪心算法是就问题而言，选择当下最好的选择，而不从整体最优考虑，通过局部最优希望导致全局最优。<br>贪心算法的要素<br>1）贪心选择性质：可以通过局部最优选择来构造全局最优解。换言之，直接做出在当前问题中看来最优的选择，而不必考虑子问题的解。<br>2）最优子结构：一个问题的最优解包含其子问题的最优解。<br>贪心算法的设计步骤：<br>1）将最优化问题转换为这样的形式：对其做出一次选择后，只剩下一个子问题需要求解<br>2）证明做出贪心选择后，原问题总是存在最优解，即贪心选择总是安全的<br>3）证明做出贪心选择后，剩余的子问题满足性质：其最优解与贪心选择组合即可得到原问题的最优解，这样就得到了最优子结构。<br>示例：背包问题，均分纸牌，最大整数</p>
+<h2 id="回溯法"><a href="#回溯法" class="headerlink" title="回溯法"></a>回溯法</h2><p>回溯法是一种搜索算法，从根节点出发，按照深度优先搜索的策略进行搜索，到达某一节点后 ，探索该节点是否包含该问题的解，如果包含则进入下一个节点进行搜索，若是不包含则回溯到父节点选择其他支路进行搜索。</p>
+<p>回溯法的设计步骤：<br>1）针对所给的原问题，定义问题的解空间<br>2）确定易于搜索的解空间结构<br>3）以深度优先方式搜索解空间，并在搜索过程中用剪枝函数除去无效搜索。<br>示例：0-背包问题、旅行商问题、八皇后问题</p>
+<h2 id="分支限界法"><a href="#分支限界法" class="headerlink" title="分支限界法"></a>分支限界法</h2><p>和回溯法相似，也是一种搜索算法，但回溯法是找出问题的许多解，而分支限界法是找出原问题的一个解。或是在满足约束条件的解中找出使某一目标函数值达到极大或极小的解，即在某种意义下的最优解<br>在当前节点（扩展节点）处，先生成其所有的儿子节点（分支），然后再从当前的活节点（当前节点的子节点）表中选择下一个扩展节点。为了有效地选择下一个扩展节点，加速搜索的进程，在每一个活节点处，计算一个函数值（限界），并根据函数值，从当前活节点表中选择一个最有利的节点作为扩展节点，使搜索朝着解空间上有最优解的分支推进，以便尽快地找出一个最优解。</p>
+<p>分支限界法：<br>1）FIFO分支限界法<br>3）优先队列分支限界法：按照优先队列中规定的优先级选取优先级最高的节点成为当前扩展节点。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://www.cnblogs.com/bulingpan/p/6416362.html" target="_blank" rel="noopener">五大常用算法的简单介绍</a></li>
+<li><a href="https://www.cnblogs.com/wujingqiao/articles/8961890.html" target="_blank" rel="noopener">十大排序算法和七大查找算法总结（原理讲解和代码实现）——-（一）排序算法篇</a></li>
+<li><a href="[十大排序算法和七大查找算法总结（原理讲解和代码实现）-------（一）排序算法篇](https://www.cnblogs.com/wujingqiao/articles/8961890.html">排序算法原理参考</a>)</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源有效性/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/k8s_资源有效性/" class="post-title-link" itemprop="url">Kubernetes之健康检查与服务依赖处理</a>
               
             
           </h2>
@@ -603,202 +856,43 @@
       
         
           
-            <h2 id="Kubernetes-ConfigMap热更新"><a href="#Kubernetes-ConfigMap热更新" class="headerlink" title="Kubernetes ConfigMap热更新"></a><a href="https://www.kubernetes.org.cn/3138.html" target="_blank" rel="noopener">Kubernetes ConfigMap热更新</a></h2><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>ConfigMap是用来存储配置文件的kubernetes资源对象，所有的配置内容都存储在etcd中</p>
-<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><ol>
-<li><p>文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: env-config</span><br><span class="line">  namespace: default</span><br><span class="line">data:</span><br><span class="line">  log_level: INFO</span><br></pre></td></tr></table></figure>
+            <h1 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h1><h2 id="使用Liveness及Readness探针"><a href="#使用Liveness及Readness探针" class="headerlink" title="使用Liveness及Readness探针"></a>使用Liveness及Readness探针</h2><p>1.Liveness探针：主要用于判断Container是否处于运行状态，比如当服务crash或者死锁等情况发生时，kubelet会kill掉Container, 然后根据其设置的restart policy进行相应操作（可能会在本机重新启动Container，或者因为设置Kubernetes QoS，本机没有资源情况下会被分发的其他机器上重新启动）。<br>2.Readness探针：主要用于进一步判断服务是否已经正常工作，如果服务没有加载完成或工作异常，服务所在的Pod的IP地址会从服务的endpoints中被移除，也就是说，当服务没有ready时，会将其从服务的load balancer中移除，不会再接受或响应任何请求。</p>
+<p>liveness可用不一定readness可用，容器存活期间服务可能卡死状态。因此服务检查周期要短于健康检查周期。</p>
+<hr>
+<h2 id="探针处理Handler类型"><a href="#探针处理Handler类型" class="headerlink" title="探针处理Handler类型"></a>探针处理Handler类型</h2><p>无论对于Readness或Liveness探针，Handler均支持以下3种类型：ExecAction, TCPSocketAction, HTTPGetAction。每种类型说明与举例如下：</p>
+<ol>
+<li><p>ExecAction：Container内部执行某个具体的命令，成功返回：shell命令返回0。<br>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">   exec:</span><br><span class="line">     command:</span><br><span class="line">     - cat</span><br><span class="line">     - /tmp/healthy</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 5</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap ...</span><br></pre></td></tr></table></figure>
+<li><p>TCPSocketAction：通过container的IP、port执行tcp进行检查，确认port是否打开，类似telnet<br>例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">readinessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 10</span><br><span class="line"> livenessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 15</span><br><span class="line">   periodSeconds: 20</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>HTTPGetAction: 通过container的IP、port、path，用HTTP Get请求进行检查，程序自定义返回结果及程序可用标准。<br>例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">  httpGet:</span><br><span class="line">    path: /healthz</span><br><span class="line">    port: 8080</span><br><span class="line">    httpHeaders:</span><br><span class="line">    - name: X-Custom-Header</span><br><span class="line">      value: Awesome</span><br><span class="line">  initialDelaySeconds: 3</span><br><span class="line">  periodSeconds: 3</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ol>
-<li><p>evn挂载：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">envFrom:</span><br><span class="line">- configMapRef:</span><br><span class="line">    name: env-config</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>volume挂载：</p>
-</li>
+<hr>
+<h2 id="服务可用性与自动恢复"><a href="#服务可用性与自动恢复" class="headerlink" title="服务可用性与自动恢复"></a>服务可用性与自动恢复</h2><ol>
+<li>如果服务的健康检查（readiness）失败，故障的服务实例从service endpoint中下线，外部请求将不会再转发到该服务上，一定程度上保证正在提供的服务的正确性，如果服务自我恢复了（比如网络问题），会自动重新加入service endpoint对外提供服务。</li>
+<li>如果设置了Container（liveness）的探针，对故障服务的Container（liveness）的探针同样会失败，container会被kill掉，并根据原设置的container重启策略，系统倾向于在其原所在的机器上重启该container、或其他机器重新创建一个pod。</li>
+<li>由于上面的机制，整个服务实现了自身可用与自动恢复。</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">volumeMounts:</span><br><span class="line">- name: config-volume</span><br><span class="line">  mountPath: /etc/config</span><br><span class="line">volumes:</span><br><span class="line">  - name: config-volume</span><br><span class="line">    configMap:</span><br><span class="line">      name: special-config</span><br></pre></td></tr></table></figure>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>更新 ConfigMap 后：</p>
-<p>使用该 ConfigMap 挂载的 Env 不会同步更新<br>使用该 ConfigMap 挂载的 Volume 中的数据需要一段时间（实测大概10秒）才能同步更新<br>ENV 是在容器启动的时候注入的，启动之后 kubernetes 就不会再改变环境变量的值，且同一个 namespace 中的 pod 的环境变量是不断累加的，参考 <a href="https://jimmysong.io/posts/exploring-kubernetes-env-with-docker/" target="_blank" rel="noopener">Kubernetes中的服务发现与docker容器间的环境变量传递源码探究</a>。为了更新容器中使用 ConfigMap 挂载的配置，可以通过滚动更新 pod 的方式来强制重新挂载 ConfigMap，也可以在更新了 ConfigMap 后，先将副本数设置为 0，然后再扩容。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/machine_learn_concept/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/machine_learn_concept/" class="post-title-link" itemprop="url">ML机器学习入门</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概念备忘："><a href="#概念备忘：" class="headerlink" title="概念备忘："></a>概念备忘：</h2><p>对数，是幂运算的逆运算。2 的三次方为8 。 log8 = 3。3为对数的值。</p>
-<p>大O表示法，操作数。</p>
-<p>数组与链表各自优势不足</p>
-<p>选择排序，O(n^2)</p>
-<p>循环，递归与尾递归</p>
-<p>调用栈</p>
-<p>快速排序</p>
-<p>合并排序</p>
-<p>散列表（字典）</p>
-<p>图模拟</p>
-<p>广度优先，狄克斯特拉算法（广度加权）</p>
-<p>动态规划</p>
-<p>K邻近算法 KNN 特征靠近谁就是谁（ocr） - 创建推荐系统 - 机器学习</p>
-<p>其他：</p>
-<p>树结构（二分法只有在有序时才管用，可提高二分法的插入效率） B树、红黑树</p>
-<p>反向索引（散列-字典技术） - 用户搜索引擎</p>
-<p>傅里叶变换 （分解技术） - 剔除无用的音符，像素点等 MP3技术及jpg图片压缩技术，地震预测，DNA等</p>
-<p>mapreduce hadoop 并行计算</p>
-<p>布隆过滤器 - 概率性数据结构 。 hyperloglog</p>
-<p>SHA （secure hash algorithm）算法. - 可用于比较两个很大的文件是否相同。加密后的结果一样即可。用户存储密码 ， 算法特征：局部不敏感，改一点全不同<br>simhash 局部敏感，改一点细微差别，可用于比较相似度。</p>
-<p>线性规划<br>：用于在给定约束条件下最大限度地改善指定的指标。</p>
+<hr>
+<p>##使用建议：</p>
+<ol>
+<li>建议对全部服务同时设置服务（readiness）和Container（liveness）的健康检查</li>
+<li>通过TCP对端口检查形式（TCPSocketAction），仅适用于端口已关闭或进程停止情况。因为即使服务异常，只要端口是打开状态，健康检查仍然是通过的。</li>
+<li>基于第二点，一般建议用ExecAction自定义健康检查逻辑，或采用HTTP Get请求进行检查（HTTPGetAction）。</li>
+<li>无论采用哪种类型的探针，一般建议设置检查服务（readiness）的时间短于检查Container（liveness）的时间，也可以将检查服务（readiness）的探针与Container（liveness）的探针设置为一致。目的是故障服务先下线，如果过一段时间还无法自动恢复，那么根据重启策略，重启该container、或其他机器重新创建一个pod恢复故障服务。</li>
+</ol>
+<hr>
+<h1 id="服务依赖"><a href="#服务依赖" class="headerlink" title="服务依赖"></a>服务依赖</h1><h2 id="理解Init-Container"><a href="#理解Init-Container" class="headerlink" title="理解Init Container"></a>理解Init Container</h2><p>一个pod中可以有一或多个Init Container。Pod的中多个Init Container启动顺序为yaml文件中的描述顺序，且串行方式启动，下一个Init/app Container必须等待上一个Init Container完成后方可启动</p>
+<p>由于Init Container必须要在pod状态变为Ready之前完成，所以其不需要readiness探针。另外在资源的requests与limits上与普通Container有细微差别，详见 Resources，除以上2点外，Init Container与普通Container并无明显区别</p>
+<p>Init Containers用途</p>
+<ol>
+<li>前文已经提及，由于Init Container必须在app Containers启动之前完成，所以可利用其特性，用作服务依赖处理。比如某一个服务A，需依赖db或memcached，那么可以利用服务A pod的Init Container判断db/memcached是否正常提供服务，如果启动服务失败或工作异常，设置Init Container启动失败，那么pod中的服务A就不会被启动了。</li>
+<li>应用镜像因安全原因等没办法安装或运行的工具，可放到Init Container中运行。另外，Init Container独立于业务服务，与业务无关的工具如sed, awk, python, dig等也可以按需放到Init Container之中。最后，Init Container也可以被授权访问应用Container无权访问的内容。</li>
+</ol>
 
           
         
@@ -1246,213 +1340,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/machine_learn_用户画像/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/machine_learn_用户画像/" class="post-title-link" itemprop="url">大数据用户画像</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>极致营销：什么日期，什么时间，什么地点，什么终端，什么入口，向什么客户推荐什么产品，正是当前客户需要的或者刚好激发客户产生了新的消费需求，而金额刚刚好足够用户破产。<br>智能话费冲值与加油用户画像信息提取：主题推荐：话费、流量、油卡、小易</p>
-<ol>
-<li>人口属性，用户自然属性包括性别、年龄、地区</li>
-<li>设备属性，用户设备特征包括系统、机型、运营商</li>
-<li>消费特征，用户消费场景及其他包括地区、地点、渠道（终端渠道、入口页面）、日期、时间、金额大小、频率</li>
-<li>行为数据，用户操作行为系统监控行为数据包括浏览行为、下单支付行为、移动行为、使用行为（如最近频繁电话等），行为包括时间、路径、速度等</li>
-<li>因果数据，影响用户消费行为的数据天气变化、自然灾害、节日、周期行为（月底、工资日）</li>
-<li>关系数据，待探索的可能影响用户行为的数据包括其他平台的消费数据、某物品的消费关联、某行为的波动影响（如社交视频增多）</li>
-<li>内部推导的用户类型：用户年龄层、消费层级、社会身份、当前平台生命周期（新老用户、僵死用户）、有车无车族、家庭信息、关联推导</li>
-</ol>
-<h1 id="技术实现点："><a href="#技术实现点：" class="headerlink" title="技术实现点："></a>技术实现点：</h1><h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><pre><code>标签解决的是描述（或命名）问题，但在实际应用中，还需要解决数据之间的关联，所以通常将标签作为一个体系来设计，以解决数据之间的关联问题。即：树
-
-标签包含：名称、分类、级别、属性、赋值
-</code></pre><ol>
-<li><p>标签命名&amp;赋值<br> 名称和值，如生日 0828</p>
-</li>
-<li><p>标签级别（标签的体系结构）</p>
-<p> 分级有两个层面的含义，其一是：指标到最低层级的涵盖的层级；其二是指：指标的运算层级。其一非常好理解，这里重点说运算层级。</p>
-<pre><code>标签从运算层级角度可以分为三层：事实标签、模型标签、预测标签。
-
-事实标签：是通过对于原始数据库的数据进行统计分析而来的，比如用户投诉次数，是基于用户一段时间内实际投诉的行为做的统计。
-
-模型标签：模型标签是以事实标签为基础，通过构建事实标签与业务问题之间的模型，进行模型分析得到。比如，结合用户实际投诉次数、用户购买品类、用户支付的金额等，进行用户投诉倾向类型的识别，方便客服进行分类处理。
-
-预测标签：则是在模型的基础上做预测，比如针对投诉倾向类型结构的变化，预测平台舆情风险指数。
-</code></pre></li>
-<li><p>标签属性</p>
-<pre><code>标签属性可以理解为针对标签进行的再标注，这一环节的工作主要目的是帮助内部理解标签赋值的来源，进而理解指标的含义。如图所示，可以总结为5种来源：
-
-固有属性：是指这些指标的赋值体现的是用户生而有之或者事实存在的，不以外界条件或者自身认知的改变而改变的属性。比如：性别、年龄、是否生育等。
-</code></pre><p> 推导属性：由其他属性推导而来的属性，比如星座，我们可以通过用户的生日推导，比如用户的品类偏好，则可以通过日常购买来推导。</p>
-<p> 行为属性：产品内外实际发生的行为被记录后形成的赋值，比如用户的登陆时间，页面停留时长等。</p>
-<p> 态度属性：用户自我表达的态度和意愿。比如说我们通过一份问卷向用户询问一些问题，并形成标签，如询问用户：是否愿意结婚，是否喜欢某个品牌等。当然在大数据的需求背景下，利用问卷收集用户标签的方法效率显得过低，更多的是利用产品中相关的模块做了用户态度信息收集。</p>
-<p> 测试属性：测试属性是指来自用户的态度表达，但并不是用户直接表达的内容，而是通过分析用户的表达，结构化处理后，得出的测试结论。比如，用户填答了一系列的态度问卷，推导出用户的价值观类型等。</p>
-</li>
-</ol>
-<h1 id="技术实现流程："><a href="#技术实现流程：" class="headerlink" title="技术实现流程："></a>技术实现流程：</h1><p>原始数据</p>
-<p>加工清洗分类基础数据</p>
-<p>训练数据、测试数据</p>
-<p>分类、预测、聚类发现</p>
-<p>应用：产品创新、优化体验、服务升级、提升效率、防范风险</p>
-<p>（1）原始输入层</p>
-<pre><code>主要指用户的历史数据信息，如会员信息、消费信息、网络行为信息。经过数据的清洗，从而达到用户标签体系的事实层。
-</code></pre><p>（2）事实层</p>
-<pre><code>事实层是用户信息的准确描述层，其最重要的特点是，可以从用户身上得到确定与肯定的验证。如用户的人口属性、性别、年龄、籍贯、会员信息等。
-</code></pre><p>（3）模型预测层</p>
-<pre><code>通过利用统计建模，数据挖掘、机器学习的思想，对事实层的数据进行分析利用，从而得到描述用户更为深刻的信息。如通过建模分析，可以对用户的性别偏好进行预测，从而能对没有收集到性别数据的新用户进行预测。还可以通过建模与数据挖掘，使用聚类、关联思想，发现人群的聚集特征。
-</code></pre><p>（4）营销模型预测</p>
-<pre><code>利用模型预测层结果，对不同用户群体，相同需求的客户，通过打标签，建立营销模型，从而分析用户的活跃度、忠诚度、流失度、影响力等可以用来进行营销的数据。
-</code></pre><p>（5）业务层</p>
-<pre><code>业务层可以是展现层。它是业务逻辑的直接体现，如图中所表示的，有车一族、有房一族等。
-</code></pre>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_PEP 8风格指南/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1581,6 +1468,168 @@
 <li><u>引入模块的时候，<code>from math import sqrt</code>比<code>import math</code>更好。</u></li>
 <li><u>如果有多个<code>import</code>语句，应该将其分为三部分，从上到下分别是Python标准模块、第三方模块和自定义模块，每个部分内部应该按照模块名称的字母表顺序来排列。</u></li>
 </ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源等级/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/k8s_资源等级/" class="post-title-link" itemprop="url">Kubernetes之QoS</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="http://dockone.io/article/2592" target="_blank" rel="noopener">Kubernetes之服务质量保证（QoS）</a></p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods</p>
+<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort</p>
+<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。</p>
+<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。</p>
+<p>OOM分数值根据OOM_ADJ参数计算得出，对于Guaranteed级别的pod，OOM_ADJ参数设置成了-998，对于BestEffort级别的pod，OOM_ADJ参数设置成了1000，对于Burstable级别的POD，OOM_ADJ参数取值从2到999。对于kuberntes保留资源，比如kubelet，docker，OOM_ADJ参数设置成了-999，表示不会被OOM kill掉。OOM_ADJ参数设置的越大，通过OOM_ADJ参数计算出来OOM分数越高，表明该pod优先级就越低，当出现资源竞争时会越早被kill掉，对于OOM_ADJ参数是-999的表示kubernetes永远不会因为OOM而被kill掉。</p>
 
           
         
@@ -1873,7 +1922,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_about_gunicorn/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/machine_learn_concept/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -1893,7 +1942,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/python_about_gunicorn/" class="post-title-link" itemprop="url">gunicorn工作原理</a>
+                <a href="/2018/05/24/machine_learn_concept/" class="post-title-link" itemprop="url">ML机器学习入门</a>
               
             
           </h2>
@@ -1936,7 +1985,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
 
                 
                 
@@ -1973,13 +2022,27 @@
       
         
           
-            <h2 id="gunicorn工作原理"><a href="#gunicorn工作原理" class="headerlink" title="gunicorn工作原理"></a>gunicorn工作原理</h2><blockquote>
-<p>gunicorn pre-fork worker模型中有一个管理进程以及几个的工作进程。管理进程master，工作进程:worker。<br>gunicorn 会启动一组 worker进程，所有worker进程公用一组listener，在每个worker中为每个listener建立一个wsgi server。每当有HTTP链接到来时，wsgi server创建一个协程来处理该链接，协程处理该链接的时候，先初始化WSGI环境，然后调用用户提供的app对象去处理HTTP请求。</p>
-</blockquote>
-<h2 id="worker-server"><a href="#worker-server" class="headerlink" title="worker server"></a>worker server</h2><p>worker有很多种，包括：ggevent、geventlet、gtornado等等。这里主要分析ggevent。<br>每个ggevent worker启动的时候会启动多个server对象：worker首先为每个listener创建一个server对象（注：为什么是一组listener,因为gunicorn可以绑定一组地址,每个地址对于一个listener），每个server对象都有运行在一个单独的gevent pool对象中。真正等待链接和处理链接的操作是在server对象中进行的。</p>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
-<li><a href="https://blog.csdn.net/jailman/article/details/78496522" target="_blank" rel="noopener">gunicorn工作原理</a></li>
-</ol>
+            <h2 id="概念备忘："><a href="#概念备忘：" class="headerlink" title="概念备忘："></a>概念备忘：</h2><p>对数，是幂运算的逆运算。2 的三次方为8 。 log8 = 3。3为对数的值。</p>
+<p>大O表示法，操作数。</p>
+<p>数组与链表各自优势不足</p>
+<p>选择排序，O(n^2)</p>
+<p>循环，递归与尾递归</p>
+<p>调用栈</p>
+<p>快速排序</p>
+<p>合并排序</p>
+<p>散列表（字典）</p>
+<p>图模拟</p>
+<p>广度优先，狄克斯特拉算法（广度加权）</p>
+<p>动态规划</p>
+<p>K邻近算法 KNN 特征靠近谁就是谁（ocr） - 创建推荐系统 - 机器学习</p>
+<p>其他：</p>
+<p>树结构（二分法只有在有序时才管用，可提高二分法的插入效率） B树、红黑树</p>
+<p>反向索引（散列-字典技术） - 用户搜索引擎</p>
+<p>傅里叶变换 （分解技术） - 剔除无用的音符，像素点等 MP3技术及jpg图片压缩技术，地震预测，DNA等</p>
+<p>mapreduce hadoop 并行计算</p>
+<p>布隆过滤器 - 概率性数据结构 。 hyperloglog</p>
+<p>SHA （secure hash algorithm）算法. - 可用于比较两个很大的文件是否相同。加密后的结果一样即可。用户存储密码 ， 算法特征：局部不敏感，改一点全不同<br>simhash 局部敏感，改一点细微差别，可用于比较相似度。</p>
+<p>线性规划<br>：用于在给定约束条件下最大限度地改善指定的指标。</p>
 
           
         
@@ -2036,7 +2099,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_用函数还是用复杂的表达式/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_惯例/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -2056,7 +2119,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/python_用函数还是用复杂的表达式/" class="post-title-link" itemprop="url">转：python编程思考</a>
+                <a href="/2018/05/24/python_惯例/" class="post-title-link" itemprop="url">转：Python惯例</a>
               
             
           </h2>
@@ -2136,22 +2199,64 @@
       
         
           
-            <h2 id="要不要使用复杂表达式"><a href="#要不要使用复杂表达式" class="headerlink" title="要不要使用复杂表达式"></a>要不要使用复杂表达式</h2><p>Perl语言的原作者Larry Wall曾经说过，伟大的程序员都有三个优点：懒惰、暴躁和自负。乍一看这三个词语没有一个是褒义词，但在程序员的世界里，这三个词有不同的意义。首先，懒惰会促使程序员去写一些省事儿的程序来辅助自己或别人更好的完成工作，这样我们就无需做那些重复和繁琐的劳动；同理能够用3行代码解决的事情，我们也绝不会写出10行代码来。其次，暴躁会让程序员主动的去完成一些你还没有提出的工作，去优化自己的代码让它更有效率，能够3秒钟完成的任务，我们绝不能容忍1分钟的等待。最后，自负会促使程序员写出可靠无误的代码，我们写代码不是为了接受批评和指责，而是为了让其他人来膜拜。</p>
-<p>那么接下来就有一个很有意思的问题值得探讨一下，我们需要一个程序从输入的三个数中找出最大的那个数。这个程序对任何会编程的人来说都是小菜一碟，甚至不会编程的人经过10分钟的学习也能搞定。下面是用来解决这个问题的Python代码。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line"><span class="keyword">if</span> a &gt; b:</span><br><span class="line">	the_max = a</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	the_max = b</span><br><span class="line"><span class="keyword">if</span> c &gt; the_max:</span><br><span class="line">	the_max = c</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
-<p>但是我们刚才说了，程序员都是懒惰的，很多程序员都会使用三元条件运算符来改写上面的代码。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">the_max = a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b</span><br><span class="line">the_max = c <span class="keyword">if</span> c &gt; the_max <span class="keyword">else</span> the_max</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
-<p>需要说明的是，Python在2.5版本以前是没有上面代码第4行和第5行中使用的三元条件运算符的，究其原因是Guido van Rossum（Python之父）认为三元条件运算符并不能帮助 Python变得更加简洁，于是那些习惯了在C/C++或Java中使用三元条件运算符（在这些语言中，三元条件运算符也称为“Elvis运算符”，因为<code>?:</code>放在一起很像著名摇滚歌手猫王Elvis的大背头）的程序员试着用<code>and</code>和<code>or</code>运算符的短路特性来模拟出三元操作符，于是在那个年代，上面的代码是这样写的。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">the_max = a &gt; b <span class="keyword">and</span> a <span class="keyword">or</span> b</span><br><span class="line">the_max = c &gt; the_max <span class="keyword">and</span> c <span class="keyword">or</span> the_max</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
-<p>但是这种做法在某些场景下是不能成立的，且看下面的代码。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">0</span></span><br><span class="line">b = <span class="number">-100</span></span><br><span class="line"><span class="comment"># 下面的代码本来预期输出a的值，结果却得到了b的值</span></span><br><span class="line"><span class="comment"># 因为a的值0在进行逻辑运算时会被视为False来处理</span></span><br><span class="line">print(<span class="literal">True</span> <span class="keyword">and</span> a <span class="keyword">or</span> b)</span><br><span class="line"><span class="comment"># print(a if True else b)</span></span><br></pre></td></tr></table></figure>
-<p>所以在Python 2.5以后引入了三元条件运算符来避免上面的风险（上面代码被注释掉的最后一句话）。那么，问题又来了，上面的代码还可以写得更简短吗？答案是肯定的。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, (a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b) <span class="keyword">if</span> (a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b) &gt; c <span class="keyword">else</span> c)</span><br></pre></td></tr></table></figure>
-<p>但是，这样做真的好吗？如此复杂的表达式是不是让代码变得晦涩了很多呢？我们发现，在实际开发中很多开发者都喜欢过度的使用某种语言的特性或语法糖，于是简单的多行代码变成了复杂的单行表达式，这样做真的好吗？这个问题我也不止一次的问过自己，现在我能给出的答案是下面的代码，使用辅助函数。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">the_max</span><span class="params">(x, y)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> x <span class="keyword">if</span> x &gt; y <span class="keyword">else</span> y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max(the_max(a, b), c))</span><br></pre></td></tr></table></figure>
-<p>上面的代码中，我定义了一个辅助函数<code>the_max</code>用来找出参数传入的两个值中较大的那一个，于是下面的输出语句可以通过两次调用<code>the_max</code>函数来找出三个数中的最大值，现在代码的可读性是不是好了很多。用辅助函数来替代复杂的表达式真的是一个不错的选择，关键是比较大小的逻辑转移到这个辅助函数后不仅可以反复调用它，而且还可以进行级联操作。</p>
-<p>当然，很多语言中比较大小的函数根本没有必要自己来实现（通常都是内置函数），Python也是如此。Python内置的max函数利用了Python对可变参数的支持，允许一次性传入多个值或者一个迭代器并找出那个最大值，所以上面讨论的问题在Python中也就是一句话的事，但是从复杂表达式到使用辅助函数简化复杂表达式这个思想是非常值得玩味的，所以分享出来跟大家做一个交流。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, max(a, b, c))</span><br></pre></td></tr></table></figure>
+            <h2 id="Python惯例"><a href="#Python惯例" class="headerlink" title="Python惯例"></a>Python惯例</h2><p>“惯例”这个词指的是“习惯的做法，常规的办法，一贯的做法”，与这个词对应的英文单词叫“idiom”。由于Python跟其他很多编程语言在语法和使用上还是有比较显著的差别，因此作为一个Python开发者如果不能掌握这些惯例，就无法写出“Pythonic”的代码。下面我们总结了一些在Python开发中的惯用的代码。</p>
+<ol>
+<li><p>让代码既可以被导入又可以被执行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用下面的方式判断逻辑“真”或“假”。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">if</span> x:</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> x:</span><br></pre></td></tr></table></figure>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">name = <span class="string">'jackfrued'</span></span><br><span class="line">fruits = [<span class="string">'apple'</span>, <span class="string">'orange'</span>, <span class="string">'grape'</span>]</span><br><span class="line">owners = &#123;<span class="string">'1001'</span>: <span class="string">'骆昊'</span>, <span class="string">'1002'</span>: <span class="string">'王大锤'</span>&#125;</span><br><span class="line"><span class="keyword">if</span> name <span class="keyword">and</span> fruits <span class="keyword">and</span> owners:</span><br><span class="line">    print(<span class="string">'I love fruits!'</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">name = <span class="string">'jackfrued'</span></span><br><span class="line">fruits = [<span class="string">'apple'</span>, <span class="string">'orange'</span>, <span class="string">'grape'</span>]</span><br><span class="line">owners = &#123;<span class="string">'1001'</span>: <span class="string">'骆昊'</span>, <span class="string">'1002'</span>: <span class="string">'王大锤'</span>&#125;</span><br><span class="line"><span class="keyword">if</span> name != <span class="string">''</span> <span class="keyword">and</span> len(fruits) &gt; <span class="number">0</span> <span class="keyword">and</span> owners != &#123;&#125;:</span><br><span class="line">    print(<span class="string">'I love fruits!'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>善于使用in运算符。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">if</span> x <span class="keyword">in</span> items: <span class="comment"># 包含</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> items: <span class="comment"># 迭代</span></span><br></pre></td></tr></table></figure>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">name = <span class="string">'Hao LUO'</span></span><br><span class="line"><span class="keyword">if</span> <span class="string">'L'</span> <span class="keyword">in</span> name:</span><br><span class="line">    print(<span class="string">'The name has an L in it.'</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">name = <span class="string">'Hao LUO'</span></span><br><span class="line"><span class="keyword">if</span> name.find(<span class="string">'L'</span>) != <span class="number">-1</span>:</span><br><span class="line">    print(<span class="string">'This name has an L in it!'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不使用临时变量交换两个值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">a, b = b, a</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用序列构建字符串。</p>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">chars = [<span class="string">'j'</span>, <span class="string">'a'</span>, <span class="string">'c'</span>, <span class="string">'k'</span>, <span class="string">'f'</span>, <span class="string">'r'</span>, <span class="string">'u'</span>, <span class="string">'e'</span>, <span class="string">'d'</span>]</span><br><span class="line">name = <span class="string">''</span>.join(chars)</span><br><span class="line">print(name)  <span class="comment"># jackfrued</span></span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">chars = [<span class="string">'j'</span>, <span class="string">'a'</span>, <span class="string">'c'</span>, <span class="string">'k'</span>, <span class="string">'f'</span>, <span class="string">'r'</span>, <span class="string">'u'</span>, <span class="string">'e'</span>, <span class="string">'d'</span>]</span><br><span class="line">name = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> char <span class="keyword">in</span> chars:</span><br><span class="line">    name += char</span><br><span class="line">print(name)  <span class="comment"># jackfrued</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>EAFP优于LBYL。</p>
+<p>EAFP - <strong>E</strong>asier to <strong>A</strong>sk <strong>F</strong>orgiveness than <strong>P</strong>ermission.</p>
+<p>LBYL - <strong>L</strong>ook <strong>B</strong>efore <strong>Y</strong>ou <strong>L</strong>eap.</p>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">d = &#123;<span class="string">'x'</span>: <span class="string">'5'</span>&#125;</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    value = int(d[<span class="string">'x'</span>])</span><br><span class="line">    print(value)</span><br><span class="line"><span class="keyword">except</span> (KeyError, TypeError, ValueError):</span><br><span class="line">    value = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">d = &#123;<span class="string">'x'</span>: <span class="string">'5'</span>&#125;</span><br><span class="line"><span class="keyword">if</span> <span class="string">'x'</span> <span class="keyword">in</span> d <span class="keyword">and</span> isinstance(d[<span class="string">'x'</span>], str) \</span><br><span class="line">		<span class="keyword">and</span> d[<span class="string">'x'</span>].isdigit():</span><br><span class="line">    value = int(d[<span class="string">'x'</span>])</span><br><span class="line">    print(value)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    value = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用enumerate进行迭代。</p>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">fruits = [<span class="string">'orange'</span>, <span class="string">'grape'</span>, <span class="string">'pitaya'</span>, <span class="string">'blueberry'</span>]</span><br><span class="line"><span class="keyword">for</span> index, fruit <span class="keyword">in</span> enumerate(fruits):</span><br><span class="line">	print(index, <span class="string">':'</span>, fruit)</span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">fruits = [<span class="string">'orange'</span>, <span class="string">'grape'</span>, <span class="string">'pitaya'</span>, <span class="string">'blueberry'</span>]</span><br><span class="line">index = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> fruit <span class="keyword">in</span> fruits:</span><br><span class="line">    print(index, <span class="string">':'</span>, fruit)</span><br><span class="line">    index += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用生成式生成列表。</p>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">data = [<span class="number">7</span>, <span class="number">20</span>, <span class="number">3</span>, <span class="number">15</span>, <span class="number">11</span>]</span><br><span class="line">result = [num * <span class="number">3</span> <span class="keyword">for</span> num <span class="keyword">in</span> data <span class="keyword">if</span> num &gt; <span class="number">10</span>]</span><br><span class="line">print(result)  <span class="comment"># [60, 45, 33]</span></span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">data = [<span class="number">7</span>, <span class="number">20</span>, <span class="number">3</span>, <span class="number">15</span>, <span class="number">11</span>]</span><br><span class="line">result = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">    <span class="keyword">if</span> i &gt; <span class="number">10</span>:</span><br><span class="line">        result.append(i * <span class="number">3</span>)</span><br><span class="line">print(result)  <span class="comment"># [60, 45, 33]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用zip组合键和值来创建字典。</p>
+<p><strong>好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">keys = [<span class="string">'1001'</span>, <span class="string">'1002'</span>, <span class="string">'1003'</span>]</span><br><span class="line">values = [<span class="string">'骆昊'</span>, <span class="string">'王大锤'</span>, <span class="string">'白元芳'</span>]</span><br><span class="line">d = dict(zip(keys, values))</span><br><span class="line">print(d)</span><br></pre></td></tr></table></figure>
+<p><strong>不好</strong>的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">keys = [<span class="string">'1001'</span>, <span class="string">'1002'</span>, <span class="string">'1003'</span>]</span><br><span class="line">values = [<span class="string">'骆昊'</span>, <span class="string">'王大锤'</span>, <span class="string">'白元芳'</span>]</span><br><span class="line">d = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> i, key <span class="keyword">in</span> enumerate(keys):</span><br><span class="line">    d[key] = values[i]</span><br><span class="line">print(d)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p><strong>说明</strong>：这篇文章的内容来自于网络，有兴趣的读者可以阅读<a href="http://safehammad.com/downloads/python-idioms-2014-01-16.pdf" target="_blank" rel="noopener">原文</a>。</p>
+</blockquote>
 
           
         
