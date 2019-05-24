@@ -341,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/the theory of communication/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/数据结构与算法_常用数据结构/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -361,7 +361,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/the theory of communication/" class="post-title-link" itemprop="url">NLP 信息系统</a>
+                <a href="/2018/05/24/数据结构与算法_常用数据结构/" class="post-title-link" itemprop="url">Python数据结构</a>
               
             
           </h2>
@@ -404,7 +404,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
 
                 
                 
@@ -441,16 +441,30 @@
       
         
           
-            <p>组成：</p>
+            <h2 id="常用数据结构"><a href="#常用数据结构" class="headerlink" title="常用数据结构"></a>常用数据结构</h2><p><a href="http://data.biancheng.net/intro/" target="_blank" rel="noopener">数据结构与算法教程【全】</a></p>
+<h3 id="数据的逻辑结构"><a href="#数据的逻辑结构" class="headerlink" title="数据的逻辑结构"></a>数据的逻辑结构</h3><p>一、集合结构:结构中的数据元素之间除了同属于一个集合的关系外，无任何其他关系。</p>
+<p>二、线性表</p>
 <ol>
-<li>信源：信息的来源或产生待发送的信息的实体</li>
-<li>信宿：信息的归宿或接受者</li>
-<li>信道：传送信息的通道，如电话通信中包括中继器在内的同轴电缆系统，卫星通信中地球站的收发信机、天线和卫星上的转发器等。</li>
-<li>编码器： 在信息论中泛指所有变换信号的设备，实际上就是终端机的发送部分。它包括从心愿到信道的所有设备，如量化器、压缩编码器、调制器等，使信源输出的信号转换成适于信道传送的信号。</li>
-<li>译码器：是编码器的逆变换设备，把信道上送来的信号转换成信宿所能接收信号，可包括解调器、译码器、数模转换器等。</li>
+<li>数组/栈/队列：顺序存储，随机访问</li>
+<li>链表：链表存储，顺序访问</li>
 </ol>
-<p>当信源和信宿已给定、信道也选定后，决定信息系统性能就在于编码器和译码器。设计一个信息系统时，除了选择信道和设计其附属设施外，主要工作也就是设计编译码器。一般情况下，信息系统的主要性能指标是它的有效性和可靠性。有效性就是在系统中传送尽可能多的信息，而可靠性要求信宿收到的信息尽可能地与信源发出的信息一致，或者说失真尽可能小。最佳编译器就是要使系统最有效和最可靠。但是，可靠性和有效性往往是相互矛盾的。越有效常导致不可靠，反之也是如此。从定量意义上说，应使系统在规定的失真或者基本无失真的条件下，传送最大的信息率；或者在规定信息率的条件下，失真最小。计算这最大信息率并证明达到或者接近这一值的编译码器是存在的，就是信息论的基本任务。只讨论这样的问题的理论可称为香农信息论，一般认为信息论的内容应更广泛一些，即包括提取信息和保证信息安全的理论。后者就是估计理论、检测理论和密码学。</p>
-<p>信息论是建立在概率论基础上而形成的，也就是从信源符号和信道噪声的概率特性出发的。这类信息通常称为语法信息。其实，信息系统的基本规律也应包括语义和语用信息。语法信息是信源输出符号的构造或起客观特性所表现与信宿的主观要求无关，而语义则应考虑各符号的意义，同样一种意义，可用不同语言或文字来表示，各种语言所包含的语法信息可以是不同的。一般地说，语义信息率可小于语法信息率。</p>
+<p>三、散列表<br>前面使用的探查技术（probing），如果发生冲突，则将尝试列表中的下一个位置。<br>如果使用二度哈希（rehashing），则将导致所有的哈希被重新计算。<br>而链接技术（chaining）将采用额外的数据结构来处理冲突。Dictionary&lt;K,T&gt; 中的每个位置（slot）都映射到了一个链表。当冲突发生时，冲突的元素将被添加到桶（bucket）列表中。</p>
+<p>四、树与二叉树<br>  1.二叉树<br>  2.堆<br>  3.查找树<br>  4.平衡树<br>  5.线索</p>
+<p>五、图</p>
+<h3 id="数据的存储结构"><a href="#数据的存储结构" class="headerlink" title="数据的存储结构"></a>数据的存储结构</h3><p>存储结构是指数据结构在计算机中的表示（又称映像），也称物理结构。它包括数据元素的表示和关系的表示。<br>数据的存储结构是逻辑结构用计算机语言的实现，它依赖于计算机语言。<br>数据的存储结构主要有：顺序存储、链式存储、索引存储和散列存储。</p>
+<p>1.顺序存储:把逻辑上相邻的元素存储在物理位置上也相邻的存储单元里，元素之间的关系由存储单元的邻接关系来体现。<br>其优点是可以实现随机存取，每个元素占用最少的存储空间；缺点是只能使用相邻的一整块存储单元，因此可能产生较多的外部碎片。<br>通常借助于程序语言的数组实现。</p>
+<p>2.链接存储：不要求逻辑上相邻的元素在物理位置上也相邻，借助指示元素存储地址的指针表示元素之间的逻辑关系。<br>其优点是不会出现碎片现象，充分利用所有存储单元；缺点是每个元素因存储指针而占用额外的存储空间，并且只能实现顺序存取。</p>
+<p>3.索引存储：在存储元素信息的同时，还建立附加的索引表。索引表中的每一项称为索引项，索引项的一般形式是：（关键字，地址）。<br>其优点是检索速度快；缺点是增加了附加的索引表，会占用较多的存储空间。另外，在增加和删除数据时要修改索引表，因而会花费较多的时间。<br>若每个结点在索引表中都有一个索引项，则该索引表称之为稠密索引(Dense Index)。若一组结点在索引表中只对应一个索引项，则该索引表称为稀疏索引(Spare Index)。索引项的一般形式是：<br>关键字是能唯一标识一个结点的那些数据项。稠密索引中索引项的地址指示结点所在的存储位置;稀疏索引中索引项的地址指示一组结点的起始存储位置。</p>
+<p>4.散列存储：该方法的基本思想是：根据结点的关键字直接计算出该结点的存储地址。</p>
+<h3 id="数据运算"><a href="#数据运算" class="headerlink" title="数据运算"></a>数据运算</h3><p>施加在数据上的运算包括运算的定义和实现。运算的定义是针对逻辑结构的，指出运算的功能；运算的实现是针对存储结构的，指出运算的具体操作步骤。</p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><ol>
+<li><a href="https://blog.fundebug.com/2018/08/27/code-interview-data-structure/" target="_blank" rel="noopener">代码面试需要知道的8种数据结构(附面试题及答案链接)</a></li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://www.cnblogs.com/wanghuaijun/p/7302303.html" target="_blank" rel="noopener">常见数据结构与算法整理总结（上）</a></li>
+<li><a href="https://blog.csdn.net/yeyazhishang/article/details/82353846" target="_blank" rel="noopener">数据结构：八大数据结构分类</a></li>
+<li><a href="https://www.cnblogs.com/gaochundong/p/data_structures_and_asymptotic_analysis.html" target="_blank" rel="noopener">数据结构：八大数据结构分类</a></li>
+</ol>
 
           
         
@@ -798,7 +812,7 @@
       
         
           
-            <h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p><img src="/images/tools/git_cheatsheet.png" alt="not photos"></p>
+            <h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p><img src="/images/tools/git_cheatsheet.png" alt="Git命令速查"></p>
 
           
         
