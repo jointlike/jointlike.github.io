@@ -341,400 +341,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/hadoop_guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/hadoop_guide/" class="post-title-link" itemprop="url">hadoop 使用</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="模块与概念解释"><a href="#模块与概念解释" class="headerlink" title="模块与概念解释"></a>模块与概念解释</h2><h3 id="存储组件"><a href="#存储组件" class="headerlink" title="存储组件"></a>存储组件</h3><ul>
-<li>存储方式</li>
-</ul>
-<ul>
-<li><p>列式存储，整个文件被切割为若干列数据，每一列数据一起存储。文件类型有：Parquet , RCFile, ORCFile。面向列的格式使得读取数据时，可以跳过不需要的列，适合于只处于行的一小部分字段的情况。但是这种格式的读写需要更多的内存空间，因为需要缓存行在内存中（为了获取多行中的某一列）。同时不适合流式写入，因为一旦写入失败，当前文件无法恢复，而面向行的数据在写入失败时可以重新同步到最后一个同步点，所以Flume采用的是面向行的存储格式。</p>
-</li>
-<li><p>行式存储，同一行的数据存储在一起，即连续存储。文件类型有：SequenceFile, MapFile, Avro Datafile。采用这种方式，如果只需要访问行的一小部分数据，亦需要将整行读入内存，推迟序列化一定程度上可以缓解这个问题，但是从磁盘读取整行数据的开销却无法避免。面向行的存储适合于整行数据需要同时处理的情况。其中，Avro是一个数据序列化系统。序列化就是将对象转换成二进制流,相应的反序列化就是将二进制流再转换成对应的对象，设计用于支持大批量数据交换的应用。</p>
-</li>
-</ul>
-<ul>
-<li>存储结构<br>HBase是一个针对结构化数据的可伸缩、高可靠、高性能、分布式和面向列的动态模式数据库。和传统关系数据库不同，HBase采用了BigTable的数据模型：增强的稀疏排序映射表（Key/Value），其中，键由行关键字、列关键字和时间戳构成。HBase提供了对大规模数据的随机、实时读写访问，同时，HBase中保存的数据可以使用MapReduce来处理，它将数据存储和并行计算完美地结合在一起。</li>
-</ul>
-<h2 id="hadoop数据存储"><a href="#hadoop数据存储" class="headerlink" title="hadoop数据存储"></a>hadoop数据存储</h2><p> 需要着重考虑以下几个问题：数据存储格式，多租户（支持多个用户、多个组以及多种应用类型），模式设计（输入输出的目录结构等及HBase hive数据结构），元数据管理。存储的选择关系到数据的安全，计算的效率，及存储的效益。</p>
-<ol>
-<li><p>数据存储选择</p>
-<ul>
-<li>文件格式选择（考虑：是否可压缩，是否可分片，序列化方式，列式存储或行式存储格式，SequenceFile、Avro 等容器格式是文本等大部分文件类型的优选格式）</li>
-<li>压缩格式选择（压缩比例，是否支持分片，计算时需要的转换消耗，分记录级压缩、块级压缩）</li>
-<li>数据存储系统选择（HBase, HDFS）</li>
-</ul>
-<p>一般来说，在与容器文件格式（Avro、SequenceFile 等）一起使用时，任何压缩格式都可以是分片式的，因为容器文件格式能够单独压缩记录构成的数据块，也可以进行记录级的压缩。如果在压缩整个文件时没有使用容器文件格式，那么就需要使用本身支持可分片的压缩格式，比如在数据块之间插入同步标记的 bzip2</p>
-</li>
-</ol>
-<h3 id="查询计算组件"><a href="#查询计算组件" class="headerlink" title="查询计算组件"></a>查询计算组件</h3><ul>
-<li>hadoop HSQL、hbaseSQL、impala、pig计算框架<br>分布式离线计算框架主要适用于大批量的集群任务，由于是批量执行，故时效性偏低。</li>
-</ul>
-<ul>
-<li><p>hive<br>A data warehouse infrastructure that provides data summarization and ad hoc querying.<br>Hive定义了一种类似SQL的查询语言(HQL),将SQL转化为MapReduce任务在Hadoop上执行。通常用于离线分析。</p>
-</li>
-<li><p>Impala 相对于hive的实时查询系统，它提供SQL语义抛弃了MapReduce这个不太适合做SQL查询的范式，能查询存储在Hadoop的HDFS和HBase中的PB级大数据。已有的Hive系统虽然也提供了SQL语义，但由于Hive底层执行使用的是MapReduce引擎，仍然是一个批处理过程，难以满足查询的交互性。相比之下，Impala的最大特点也是最大卖点就是它的快速，启动速度和省去磁盘IO。</p>
-</li>
-<li><p>pig<br>A high-level data-flow language and execution framework for parallel computation.<br>定义了一种数据流语言—Pig Latin，将脚本转换为MapReduce任务在Hadoop上执行。通常用于进行离线分析。</p>
-</li>
-<li><p>Mahout<br>Mahout起源于2008年，最初是Apache Lucent的子项目，它在极短的时间内取得了长足的发展，现在是Apache的顶级项目。Mahout的主要目标是创建一些可扩展的机器学习领域经典算法的实现，旨在帮助开发人员更加方便快捷地创建智能应用程序。Mahout现在已经包含了聚类、分类、推荐引擎（协同过滤）和频繁集挖掘等广泛使用的数据挖掘方法。除了算法，Mahout还包含数据的输入/输出工具、与其他存储系统（如数据库、MongoDB 或Cassandra）集成等数据挖掘支持架构。</p>
-</li>
-</ul>
-<ul>
-<li>solr 搜索计算框架</li>
-</ul>
-<ul>
-<li>solr Apache Solr是一个功能强大的搜索服务器，它支持REST风格API。Solr是基于Lucene的，Lucene 支持强大的匹配能力，如短语，通配符，连接，分组和更多不同的数据类型。</li>
-</ul>
-<ul>
-<li>spark 准实时框架<br>Spark 是专为大规模数据处理而设计的快速通用的计算引擎，其是基于内存的迭代式计算。</li>
-</ul>
-<ul>
-<li>Spark Core：包含Spark的基本功能；尤其是定义RDD的API、操作以及这两者上的动作。其他Spark的库都是构建在RDD和Spark Core之上的</li>
-<li>Spark SQL：提供通过Apache Hive的SQL变体Hive查询语言（HiveQL）与Spark进行交互的API。每个数据库表被当做一个RDD，Spark SQL查询被转换为Spark操作。</li>
-<li>Spark Streaming：对实时数据流进行处理和控制。Spark Streaming允许程序能够像普通RDD一样处理实时数据</li>
-<li>MLlib：一个常用机器学习算法库，算法被实现为对RDD的Spark操作。这个库包含可扩展的学习算法，比如分类、回归等需要对大量数据集进行迭代的操作。</li>
-<li>GraphX：控制图、并行图操作和计算的一组算法和工具的集合。GraphX扩展了RDD API，包含控制图、创建子图、访问路径上所有顶点的操作Spark架构的组成图如下</li>
-</ul>
-<ul>
-<li>Storm实时框架<br>Storm是一个分布式的、可靠的、容错的流式计算框架。Storm 一开始就是为实时处理设计，因此在实时分析/性能监测等需要高时效性的领域广泛采用。Storm在理论上支持所有语言，只需要少量代码即可完成适配。</li>
-</ul>
-<h3 id="CDH管理监控组件"><a href="#CDH管理监控组件" class="headerlink" title="CDH管理监控组件"></a>CDH管理监控组件</h3><ul>
-<li>Cloudera Manager. 监控管理组件。</li>
-<li>Navigator是企业版的。CDH 平台的端到端数据管理工具。Cloudera Navigator 使管理员、数据经理和分析师能够了解 Hadoop 中的大量数据。</li>
-</ul>
-<h3 id="通用集群管理组件"><a href="#通用集群管理组件" class="headerlink" title="通用集群管理组件"></a>通用集群管理组件</h3><ul>
-<li><p>Zookeeper<br>分布式协作服务，Zookeeper是google Chubby克隆版,解决分布式环境下的数据管理问题：统一命名，状态同步，集群管理，配置同步等。</p>
-</li>
-<li><p>Sqoop<br>数据同步工具，Sqoop是SQL-to-Hadoop的缩写，主要用于传统数据库和Hadoop之间传输数据， 数据的导入和导出本质上是Mapreduce程序，充分利用了MR的并行化和容错性。</p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/block_chain/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/block_chain/" class="post-title-link" itemprop="url">以太坊</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概念："><a href="#概念：" class="headerlink" title="概念："></a>概念：</h2><ul>
-<li><p>以太坊：<a href="http://www.ethereum.org" target="_blank" rel="noopener">www.ethereum.org</a> ，是一个区块链系统，相对于比特币网络系统的纯货币功能，以太坊区块链增加了智能合约，大大拓宽了其应用领域。用户基于其上创建区块链应用DAPP。</p>
-</li>
-<li><p>以太币：ETHER，一种类似于比特币的电子货币，以太坊区块链系统上的所有操作都需要消耗以太币；</p>
-</li>
-<li><p>外有账户（EOA），由私人密码控制</p>
-</li>
-<li><p>合同账户，由它们的合同编码控制，只能由外有账户“激活”</p>
-</li>
-<li><p>“智能合约”Smart Contract，用程序代码（Solidity代码）写的合约，使得合约双方不需要信任彼此也可以进行交易；</p>
-</li>
-<li><p>“矿工”以太坊网络中收集、传播、确认和执行交易的节点</p>
-</li>
-</ul>
-<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><blockquote>
-<p>1.<a href="https://www.cnblogs.com/tinyxiong/p/7878468.html" target="_blank" rel="noopener">以太坊</a><br>2.<a href="https://www.btctrade.com/ethcoin/2706.html" target="_blank" rel="noopener">以太坊（ETH）为什么如此火爆 最短的时间内读懂以太坊</a><br>3.<a href="http://www.cocoachina.com/blockchain/20180226/22352.html" target="_blank" rel="noopener">以太坊开发入门，完整入门</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/nlp_sentence/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -836,6 +442,427 @@
         
           
             <h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p><img src="./images/ml_nlp/nlu_sentence.png" alt="not photos"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_authorization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/k8s_authorization/" class="post-title-link" itemprop="url">k8s权限管理</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>补充：<br><a href="https://www.cnblogs.com/cf532088799/p/7977083.html" target="_blank" rel="noopener">https://www.cnblogs.com/cf532088799/p/7977083.html</a></p>
+<h2 id="原理概述："><a href="#原理概述：" class="headerlink" title="原理概述："></a>原理概述：</h2><p>K8s授权管理分用户认证和授权两部分，授权根据RBAC角色控制方法为不同用户配置不同角色完成权限管理  </p>
+<h2 id="管理组件"><a href="#管理组件" class="headerlink" title="管理组件"></a>管理组件</h2><p>RBAC 是让用户能够访问 Kubernetes API 资源的授权方式。  </p>
+<h2 id="认证顺序"><a href="#认证顺序" class="headerlink" title="认证顺序"></a>认证顺序</h2><ol>
+<li>用户认证  </li>
+<li>权限认证  </li>
+</ol>
+<h2 id="用户类型"><a href="#用户类型" class="headerlink" title="用户类型"></a>用户类型</h2><p>k8s里面有两种用户，一种是User，一种就是service account，User给人用的，service account给进程用的，让进程有相关的权限。<br>如dasboard就是一个进程，我们就可以创建一个service account给它，让它去访问k8s。</p>
+<h2 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h2><p>角色是一系列的权限的集合，例如一个角色可以包含读取 Pod 的权限和列出 Pod 的权限， ClusterRole 跟 Role 类似，但是可以在集群中到处使用（ Role 是 namespace 一级的）。</p>
+<p>角色绑定 RoleBinding 把角色映射到用户，从而让这些用户继承角色在 namespace 中的权限。ClusterRoleBinding 让用户继承 ClusterRole 在整个集群中的权限。</p>
+<h2 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a>操作流程：</h2><ol>
+<li><p>创建用户，serviceaccount 或 user. user需要自设token。请看下面详细操作  </p>
+</li>
+<li><p>创建角色，分为 ClusterRole, Role. 指定操作资源及操作类型（增删改查等）  </p>
+</li>
+<li><p>绑定用户与角色，kind: ClusterRoleBinding or RoleBinding   </p>
+</li>
+</ol>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true</a><br><a href="https://www.kubernetes.org.cn/3238.html" target="_blank" rel="noopener">https://www.kubernetes.org.cn/3238.html</a><br><a href="https://kubernetes.io/docs/admin/authentication/" target="_blank" rel="noopener">https://kubernetes.io/docs/admin/authentication/</a><br><a href="http://www.infoq.com/cn/articles/Kubernetes-API" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/Kubernetes-API</a><br><a href="https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/" target="_blank" rel="noopener">https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/</a><br><a href="https://blog.csdn.net/qq_34463875/article/details/78728041" target="_blank" rel="noopener">https://blog.csdn.net/qq_34463875/article/details/78728041</a></p>
+</blockquote>
+<h2 id="更多知识点："><a href="#更多知识点：" class="headerlink" title="更多知识点："></a>更多知识点：</h2><ul>
+<li><p>集群用户权限管理： 内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod<br>（如：dashboard）的权限来访问。serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
+</li>
+<li><p>在 pod 创建之初 service account 就必须已经存在，否则创建将被拒绝设置非默认的 service account，<br>只需要在 pod 的spec.serviceAccountName 字段中将name设置为您想要用的 service account 名字即可。<br>不能更新已创建的 pod 的 service account。</p>
+</li>
+<li><p>可以在现有的serviceaccount 中增加imagePullSecrets 使pod构建镜像时在当前命名空间默认引用私有仓库的认证。</p>
+</li>
+<li><p>内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod的权限来访问。<br>serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
+</li>
+<li><p>kubeconfig namespace 设置可以限定角色可访问的命名空间，若角色权限过大，binding中也可以进一步限定。</p>
+</li>
+</ul>
+<h2 id="案例："><a href="#案例：" class="headerlink" title="案例："></a>案例：</h2><ol>
+<li>service account(sc)案例   </li>
+</ol>
+<p>进程用户（service account）权限管理，是专门为进程用户创建，也可以达到权限管理的目的，然而建议是同一个进程多个用户。作为示例我们这里部署一个进程权限管理作为演示。部署流程如下：</p>
+<p>1). 创建sc   </p>
+<pre><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: admin-dashboard
+  name: admin-dashboard
+  namespace: kube-system
+</code></pre><p>2). 创建角色</p>
+<pre><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  #无命名空间，clusterrole用于全集群
+  name: admin-dashboard-minimal
+rules:
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;secrets&quot;]
+  verbs: [&quot;create&quot;]
+- apiGroups: [&quot;&quot;, &quot;extensions&quot;, &quot;apps&quot;]
+  resources: [&quot;deployments&quot;, &quot;pods&quot;, &quot;services&quot;]
+  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;, &quot;delete&quot;]
+</code></pre><p>3). 绑定角色</p>
+<pre><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-dashboard-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin-dashboard-minimal
+subjects:
+- kind: ServiceAccount
+  name: admin-dashboard
+  namespace: kube-system
+</code></pre><p>4). kubernetes dashboard必须以nodeport方式部署。</p>
+<ol start="2">
+<li>普通用户案例</li>
+</ol>
+<p>普通用户权限管理：k8s APIserver不支持普通用户创建，只需生成token（# head -c 16 /dev/urandom | od -An -t x| tr -d ‘ ‘）,<br>将该用户的token追加到kuberentesAPI启动参数中指定的token（通常在/etc/kubernetes/token.csv）文件中即可。设置用户ssh认证，<br>根据绑定的角色权限并追加到kubeconfig文件中，供客户端访问。终端命令行可以通过不同用户用不同上下文达到访问权限管理。<br>这个上下文可以转换成第三方用户管理平台，Header追加。authorization Bearer token 来访问。注意：普通用户需要重启（重新部署）apiserver。</p>
+<p>1). 创建用户token并录入token指定tom用户名。任何Linux终端执行如下（可选）：  </p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">	head -c 16 /dev/urandom | od -An -t x| tr -d &apos; &apos;  </span><br><span class="line">	```  </span><br><span class="line">	生成的token以&apos;token,user,uid,&quot;group1,group2,group3&quot;&apos;格式写入到其中一个master节点`/etc/kubernetes/ssl/token.csv`文件中。uid不重复的编号即可。如：716c8d3cd0e75dc25d1eb758e4635d39, tom, 10002, dev1    </span><br><span class="line">	然后重启apiserver以是当前新加的token生效，然后继续以下操作。</span><br><span class="line">	说明：此步骤可选, 2）中命令可生成用户</span><br><span class="line"></span><br><span class="line">2). SSH认证并绑定tom：  </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	### 生成证书</span><br><span class="line">	openssl genrsa -out employee.key 2048</span><br><span class="line">	openssl req -new -key employee.key -out employee.csr -subj &quot;/CN=tom/O=dev1&quot;  #用户tom，分组dev1</span><br><span class="line">	openssl x509 -req -in employee.csr -CA /etc/kubernetes/ssl/k8s-root-ca.pem -CAkey /etc/kubernetes/ssl/k8s-root-ca-key.pem -CAcreateserial -out employee.crt -days 5000</span><br><span class="line">	</span><br><span class="line">	### 将证书和tom用户绑定</span><br><span class="line">	kubectl config set-credentials tom --client-certificate=employee.crt --client-key=employee.key </span><br><span class="line">	kubectl config set-context employee-context --cluster=kubernetes --namespace=shelve-mgr --user=tom</span><br><span class="line">	</span><br><span class="line">	## 可用kubectl config view 查看添加是否成功。cluster, context, user</span><br><span class="line"></span><br><span class="line">3). 创建角色   </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	kind: Role</span><br><span class="line">	apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">	metadata:</span><br><span class="line">	  namespace: shelve-mgr</span><br><span class="line">	  name: employee</span><br><span class="line">	rules:</span><br><span class="line">	- apiGroups: [&quot;&quot;]</span><br><span class="line">	  resources: [&quot;pods&quot;]</span><br><span class="line">	  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;]</span><br></pre></td></tr></table></figure>
+</code></pre><p>4). 角色绑定   </p>
+<pre><code>```
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: employee-role-binding
+  namespace: shelve-mgr
+subjects:
+- kind: User
+  name: tom
+roleRef:
+  kind: Role
+  name: employee
+  apiGroup: &quot;&quot;
+```  
+</code></pre><p>完成用户配置，现在用户终端受当前角色权限限制。普通用户需要重启apiserver后方可生效。</p>
+<p>1). 配置kubectl默认终端用户  </p>
+<pre><code>```  
+# 验证
+kubectl --config=employee-context get pods
+# 设置默认会话上下文
+kubectl config use-context employee-context
+```  
+</code></pre><p>2). 其他客户端及api请求以header中携带 Authorization: Bearer + token方式访问。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_about_gunicorn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/python_about_gunicorn/" class="post-title-link" itemprop="url">gunicorn工作原理</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="gunicorn工作原理"><a href="#gunicorn工作原理" class="headerlink" title="gunicorn工作原理"></a>gunicorn工作原理</h2><blockquote>
+<p>gunicorn pre-fork worker模型中有一个管理进程以及几个的工作进程。管理进程master，工作进程:worker。<br>gunicorn 会启动一组 worker进程，所有worker进程公用一组listener，在每个worker中为每个listener建立一个wsgi server。每当有HTTP链接到来时，wsgi server创建一个协程来处理该链接，协程处理该链接的时候，先初始化WSGI环境，然后调用用户提供的app对象去处理HTTP请求。</p>
+</blockquote>
+<h2 id="worker-server"><a href="#worker-server" class="headerlink" title="worker server"></a>worker server</h2><p>worker有很多种，包括：ggevent、geventlet、gtornado等等。这里主要分析ggevent。<br>每个ggevent worker启动的时候会启动多个server对象：worker首先为每个listener创建一个server对象（注：为什么是一组listener,因为gunicorn可以绑定一组地址,每个地址对于一个listener），每个server对象都有运行在一个单独的gevent pool对象中。真正等待链接和处理链接的操作是在server对象中进行的。</p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
+<li><a href="https://blog.csdn.net/jailman/article/details/78496522" target="_blank" rel="noopener">gunicorn工作原理</a></li>
+</ol>
 
           
         
@@ -1369,344 +1396,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_用函数还是用复杂的表达式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/python_用函数还是用复杂的表达式/" class="post-title-link" itemprop="url">转：python编程思考</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="要不要使用复杂表达式"><a href="#要不要使用复杂表达式" class="headerlink" title="要不要使用复杂表达式"></a>要不要使用复杂表达式</h2><p>Perl语言的原作者Larry Wall曾经说过，伟大的程序员都有三个优点：懒惰、暴躁和自负。乍一看这三个词语没有一个是褒义词，但在程序员的世界里，这三个词有不同的意义。首先，懒惰会促使程序员去写一些省事儿的程序来辅助自己或别人更好的完成工作，这样我们就无需做那些重复和繁琐的劳动；同理能够用3行代码解决的事情，我们也绝不会写出10行代码来。其次，暴躁会让程序员主动的去完成一些你还没有提出的工作，去优化自己的代码让它更有效率，能够3秒钟完成的任务，我们绝不能容忍1分钟的等待。最后，自负会促使程序员写出可靠无误的代码，我们写代码不是为了接受批评和指责，而是为了让其他人来膜拜。</p>
-<p>那么接下来就有一个很有意思的问题值得探讨一下，我们需要一个程序从输入的三个数中找出最大的那个数。这个程序对任何会编程的人来说都是小菜一碟，甚至不会编程的人经过10分钟的学习也能搞定。下面是用来解决这个问题的Python代码。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line"><span class="keyword">if</span> a &gt; b:</span><br><span class="line">	the_max = a</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	the_max = b</span><br><span class="line"><span class="keyword">if</span> c &gt; the_max:</span><br><span class="line">	the_max = c</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
-<p>但是我们刚才说了，程序员都是懒惰的，很多程序员都会使用三元条件运算符来改写上面的代码。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">the_max = a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b</span><br><span class="line">the_max = c <span class="keyword">if</span> c &gt; the_max <span class="keyword">else</span> the_max</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
-<p>需要说明的是，Python在2.5版本以前是没有上面代码第4行和第5行中使用的三元条件运算符的，究其原因是Guido van Rossum（Python之父）认为三元条件运算符并不能帮助 Python变得更加简洁，于是那些习惯了在C/C++或Java中使用三元条件运算符（在这些语言中，三元条件运算符也称为“Elvis运算符”，因为<code>?:</code>放在一起很像著名摇滚歌手猫王Elvis的大背头）的程序员试着用<code>and</code>和<code>or</code>运算符的短路特性来模拟出三元操作符，于是在那个年代，上面的代码是这样写的。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">the_max = a &gt; b <span class="keyword">and</span> a <span class="keyword">or</span> b</span><br><span class="line">the_max = c &gt; the_max <span class="keyword">and</span> c <span class="keyword">or</span> the_max</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
-<p>但是这种做法在某些场景下是不能成立的，且看下面的代码。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">0</span></span><br><span class="line">b = <span class="number">-100</span></span><br><span class="line"><span class="comment"># 下面的代码本来预期输出a的值，结果却得到了b的值</span></span><br><span class="line"><span class="comment"># 因为a的值0在进行逻辑运算时会被视为False来处理</span></span><br><span class="line">print(<span class="literal">True</span> <span class="keyword">and</span> a <span class="keyword">or</span> b)</span><br><span class="line"><span class="comment"># print(a if True else b)</span></span><br></pre></td></tr></table></figure>
-<p>所以在Python 2.5以后引入了三元条件运算符来避免上面的风险（上面代码被注释掉的最后一句话）。那么，问题又来了，上面的代码还可以写得更简短吗？答案是肯定的。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, (a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b) <span class="keyword">if</span> (a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b) &gt; c <span class="keyword">else</span> c)</span><br></pre></td></tr></table></figure>
-<p>但是，这样做真的好吗？如此复杂的表达式是不是让代码变得晦涩了很多呢？我们发现，在实际开发中很多开发者都喜欢过度的使用某种语言的特性或语法糖，于是简单的多行代码变成了复杂的单行表达式，这样做真的好吗？这个问题我也不止一次的问过自己，现在我能给出的答案是下面的代码，使用辅助函数。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">the_max</span><span class="params">(x, y)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> x <span class="keyword">if</span> x &gt; y <span class="keyword">else</span> y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max(the_max(a, b), c))</span><br></pre></td></tr></table></figure>
-<p>上面的代码中，我定义了一个辅助函数<code>the_max</code>用来找出参数传入的两个值中较大的那一个，于是下面的输出语句可以通过两次调用<code>the_max</code>函数来找出三个数中的最大值，现在代码的可读性是不是好了很多。用辅助函数来替代复杂的表达式真的是一个不错的选择，关键是比较大小的逻辑转移到这个辅助函数后不仅可以反复调用它，而且还可以进行级联操作。</p>
-<p>当然，很多语言中比较大小的函数根本没有必要自己来实现（通常都是内置函数），Python也是如此。Python内置的max函数利用了Python对可变参数的支持，允许一次性传入多个值或者一个迭代器并找出那个最大值，所以上面讨论的问题在Python中也就是一句话的事，但是从复杂表达式到使用辅助函数简化复杂表达式这个思想是非常值得玩味的，所以分享出来跟大家做一个交流。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, max(a, b, c))</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/the theory of communication/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/the theory of communication/" class="post-title-link" itemprop="url">NLP 信息系统</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>组成：</p>
-<ol>
-<li>信源：信息的来源或产生待发送的信息的实体</li>
-<li>信宿：信息的归宿或接受者</li>
-<li>信道：传送信息的通道，如电话通信中包括中继器在内的同轴电缆系统，卫星通信中地球站的收发信机、天线和卫星上的转发器等。</li>
-<li>编码器： 在信息论中泛指所有变换信号的设备，实际上就是终端机的发送部分。它包括从心愿到信道的所有设备，如量化器、压缩编码器、调制器等，使信源输出的信号转换成适于信道传送的信号。</li>
-<li>译码器：是编码器的逆变换设备，把信道上送来的信号转换成信宿所能接收信号，可包括解调器、译码器、数模转换器等。</li>
-</ol>
-<p>当信源和信宿已给定、信道也选定后，决定信息系统性能就在于编码器和译码器。设计一个信息系统时，除了选择信道和设计其附属设施外，主要工作也就是设计编译码器。一般情况下，信息系统的主要性能指标是它的有效性和可靠性。有效性就是在系统中传送尽可能多的信息，而可靠性要求信宿收到的信息尽可能地与信源发出的信息一致，或者说失真尽可能小。最佳编译器就是要使系统最有效和最可靠。但是，可靠性和有效性往往是相互矛盾的。越有效常导致不可靠，反之也是如此。从定量意义上说，应使系统在规定的失真或者基本无失真的条件下，传送最大的信息率；或者在规定信息率的条件下，失真最小。计算这最大信息率并证明达到或者接近这一值的编译码器是存在的，就是信息论的基本任务。只讨论这样的问题的理论可称为香农信息论，一般认为信息论的内容应更广泛一些，即包括提取信息和保证信息安全的理论。后者就是估计理论、检测理论和密码学。</p>
-<p>信息论是建立在概率论基础上而形成的，也就是从信源符号和信道噪声的概率特性出发的。这类信息通常称为语法信息。其实，信息系统的基本规律也应包括语义和语用信息。语法信息是信源输出符号的构造或起客观特性所表现与信宿的主观要求无关，而语义则应考虑各符号的意义，同样一种意义，可用不同语言或文字来表示，各种语言所包含的语法信息可以是不同的。一般地说，语义信息率可小于语法信息率。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/数据结构与算法_常用数据结构/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1831,6 +1520,737 @@
 <li><a href="https://blog.csdn.net/yeyazhishang/article/details/82353846" target="_blank" rel="noopener">数据结构：八大数据结构分类</a></li>
 <li><a href="https://www.cnblogs.com/gaochundong/p/data_structures_and_asymptotic_analysis.html" target="_blank" rel="noopener">数据结构：八大数据结构分类</a></li>
 </ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/ceph_cmd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/ceph_cmd/" class="post-title-link" itemprop="url">ceph 概念命令</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p> 结合网络、官网、手动查询等多方渠道，整理ceph维护管理常用命令，并且梳理常规命令在使用过程中的逻辑顺序。另外整理期间发现ceph 集群的命令体系有点乱，详细情况各自体验。</p>
+<p>一：ceph集群启动、重启、停止</p>
+<p>1：ceph 命令的选项如下：</p>
+<p>选项    简写    描述</p>
+<p>–verbose    -v    详细的日志。</p>
+<p>–valgrind    N/A    （只适合开发者和质检人员）用 Valgrind 调试。</p>
+<p>–allhosts    -a    在 ceph.conf 里配置的所有主机上执行，否 则它只在本机执行。</p>
+<p>–restart    N/A    核心转储后自动重启。</p>
+<p>–norestart    N/A    核心转储后不自动重启。</p>
+<p>–conf    -c    使用另外一个配置文件。</p>
+<p>Ceph 子命令包括：</p>
+<p>命令    描述</p>
+<p>start    启动守护进程。</p>
+<p>stop    停止守护进程。</p>
+<p>forcestop    暴力停止守护进程，等价于 kill -9</p>
+<p>killall    杀死某一类守护进程。</p>
+<p>cleanlogs    清理掉日志目录。</p>
+<p>cleanalllogs    清理掉日志目录内的所有文件。</p>
+<p>2：启动所有守护进程</p>
+<pre><code>要启动、关闭、重启 Ceph 集群，执行 ceph 时加上 相关命令，语法如下：
+</code></pre><p>/etc/init.d/ceph [options] [start|restart|stop] [daemonType|daemonID]</p>
+<p>下面是个典型启动实例：</p>
+<p>sudo /etc/init.d/ceph -a start</p>
+<p>加 -a （即在所有节点上执行）执行完成后Ceph本节点所有进程启动。</p>
+<p>把 CEPH 当服务运行，按此语法：</p>
+<p>service ceph [options] [start|restart] [daemonType|daemonID] </p>
+<p>典型实例：  service ceph -a start</p>
+<p>3:启动单一实例</p>
+<pre><code>要启动、关闭、重启一类守护进程  本例以要启动本节点上某一类的所有 Ceph 守护进程，
+</code></pre><p>/etc/init.d/ceph  [start|restart|stop] [daemonType|daemonID]</p>
+<p>/etc/init.d/ceph start osd.0</p>
+<p> 把ceph当做服务运行，启动一节点上某个 Ceph 守护进程，</p>
+<p>按此语法： service ceph  start {daemon-type}.{instance} </p>
+<p>service ceph  start osd.0</p>
+<p>二：集群维护常用命令概览</p>
+<p>1：检查集群健康状况</p>
+<pre><code>启动集群后、读写数据前，先检查下集群的健康状态。你可以用下面的命令检查：
+</code></pre><p>ceph health   或者 ceph health detail （输出信息更详细）</p>
+<pre><code>要观察集群内正发生的事件，打开一个新终端，然后输入：
+</code></pre><p>ceph -w</p>
+<p>输出信息里包含：</p>
+<p>集群唯一标识符</p>
+<p>集群健康状况</p>
+<p>监视器图元版本和监视器法定人数状态</p>
+<p>OSD 版本和 OSD 状态摘要</p>
+<p>其内存储的数据和对象数量的粗略统计，以及数据总量等。</p>
+<p>新版本新增选项如下：</p>
+<p>  -s, –status          show cluster status</p>
+<p>  -w, –watch           watch live cluster changes</p>
+<p>  –watch-debug         watch debug events</p>
+<p>  –watch-info          watch info events</p>
+<p>  –watch-sec           watch security events</p>
+<p>  –watch-warn          watch warn events</p>
+<p>  –watch-error         watch error events</p>
+<p>  –version, -v         display version</p>
+<p>  –verbose             make verbose</p>
+<p>  –concise             make less verbose</p>
+<p>使用方法演示：</p>
+<p>ceph -w –watch-info</p>
+<p>2：检查集群的使用情况</p>
+<pre><code>检查集群的数据用量及其在存储池内的分布情况，可以用 df 选项，它和 Linux 上的 df 相似。如下：
+</code></pre><p>ceph df</p>
+<p>输出的 GLOBAL 段展示了数据所占用集群存储空间的概要。</p>
+<p>SIZE: 集群的总容量；</p>
+<p>AVAIL: 集群的空闲空间总量；</p>
+<p>RAW USED: 已用存储空间总量；</p>
+<p>% RAW USED: 已用存储空间比率。用此值参照 full ratio 和 near full \ ratio 来确保不会用尽集群空间。</p>
+<p>详情见存储容量。</p>
+<p>输出的 POOLS 段展示了存储池列表及各存储池的大致使用率。没有副本、克隆品和快照占用情况。例如，如果你把 1MB 的数据存储为对象，理论使用率将是 1MB ，但考虑到副本数、克隆数、和快照数，实际使用率可能是 2MB 或更多。</p>
+<p>NAME: 存储池名字；</p>
+<p>ID: 存储池唯一标识符；</p>
+<p>USED: 大概数据量，单位为 KB 、 MB 或 GB ；</p>
+<p>%USED: 各存储池的大概使用率；</p>
+<p>Objects: 各存储池内的大概对象数。</p>
+<p>新版本新增ceph osd df  命令，可以详细列出集群每块磁盘的使用情况，包括大小、权重、使用多少空间、使用率等等</p>
+<p>3：检查集群状态</p>
+<pre><code>要检查集群的状态，执行下面的命令：:
+</code></pre><p>ceph status</p>
+<p>4：检查MONITOR状态</p>
+<pre><code>查看监视器图，执行下面的命令：:
+</code></pre><p>ceph mon stat</p>
+<p>或者：</p>
+<p>ceph mon dump</p>
+<pre><code>要检查监视器的法定人数状态，执行下面的命令：
+</code></pre><p>ceph quorum_status</p>
+<p>5：检查 MDS 状态:</p>
+<pre><code>元数据服务器为 Ceph 文件系统提供元数据服务，元数据服务器有两种状态： up | \ down 和 active | inactive ，执行下面的命令查看元数据服务器状态为 up 且 active ：
+</code></pre><p>ceph mds stat</p>
+<pre><code>要展示元数据集群的详细状态，执行下面的命令：
+</code></pre><p>ceph mds dump</p>
+<p>三：集群命令详解</p>
+<p>######################mon 相关####################</p>
+<p>1：查看mon的状态信息</p>
+<p>[mon@ptmind~]# ceph mon stat</p>
+<p>2：查看mon的选举状态</p>
+<p>[mon@ptmind~]# ceph quorum_status</p>
+<p>3：查看mon的映射信息</p>
+<p>[mon@ptmind~]# ceph mon dump</p>
+<p>4：删除一个mon节点</p>
+<p>[mon@ptmind~]# ceph mon remove cs1</p>
+<p>5：获得一个正在运行的mon map，并保存在1.txt文件中</p>
+<p>[mon@ptmind~]# ceph mon getmap -o 1.txt</p>
+<p>6：读取上面获得的map</p>
+<p>[mon@ptmind~]# monmaptool –print 1.txt </p>
+<p>7：把上面的mon map注入新加入的节点</p>
+<p>[mon@ptmind~]# ceph-mon -i nc3 –inject-monmap 1.txt</p>
+<p>8：查看mon的amin socket</p>
+<p>[mon@ptmind~]# ceph-conf –name mon.nc3 –show-config-value admin_socket</p>
+<p>9：查看ceph mon log日志所在的目录</p>
+<p>[mon@ptmind~]# ceph-conf –name mon.nc1 –show-config-value log_file    </p>
+<p>/var/log/ceph/ceph-mon.nc1.log</p>
+<p>10：查看一个集群ceph-mon.nc3参数的配置、输出信息特别详细，集群所有配置生效可以在此参数下确认</p>
+<p>[mon@ptmind~]# ceph –admin-daemon /var/run/ceph/ceph-mon.nc3.asok config show | less</p>
+<p>######################### msd 相关 ###################</p>
+<p>1：查看msd状态</p>
+<p>[mon@ptmind~]# ceph mds stat</p>
+<p>2：删除一个mds节点</p>
+<p>[mon@ptmind~]# ceph  mds rm 0 mds.nc1</p>
+<p>3：设置mds状态为失败</p>
+<p>[mon@ptmind~]# ceph mds rmfailed &lt;int[0-]&gt;   </p>
+<p>4：新建pool </p>
+<p>[mon@ptmind~]# ceph mds add_data_pool <poolname></poolname></p>
+<p>5：关闭mds集群</p>
+<p>[mon@ptmind~]# mds cluster_down</p>
+<p>6：启动mds集群</p>
+<p>[mon@ptmind~]# mds cluster_up</p>
+<p>7：设置cephfs文件系统存储方式最大单个文件尺寸</p>
+<p>[mon@ptmind~]# ceph mds set max_file_size 1024000000000</p>
+<h3 id="清除cephfs-文件系统步骤"><a href="#清除cephfs-文件系统步骤" class="headerlink" title="清除cephfs 文件系统步骤"></a>清除cephfs 文件系统步骤</h3><p>强制mds状态为featrue</p>
+<p>[mon@ptmind~]# ceph mds fail 0</p>
+<p>删除mds文件系统</p>
+<p>[mon@ptmind~]# ceph fs rm leadorfs –yes-i-really-mean-it</p>
+<p>#删除fs数据文件夹</p>
+<p>[mon@ptmind~]# ceph osd pool delete cephfs_data cephfs_data –yes-i-really-really-mean-it </p>
+<p>#删除元数据文件夹</p>
+<p>[mon@ptmind~]# ceph osd pool delete cephfs_metadata cephfs_metadata –yes-i-really-really-mean-it </p>
+<p>然后再删除 mds key  ，残留文件等</p>
+<p>拆除文件系统前推荐先删除节点，待验证</p>
+<p>[mon@ptmind~]# ceph  mds rm 0 mds.node242</p>
+<p>################################ ceph auth 相关 ################################</p>
+<p>1：查看ceph集群中的认证用户及相关的key</p>
+<p>[mon@ptmind~]# ceph auth list</p>
+<p>2：为ceph创建一个admin用户并为admin用户创建一个密钥，把密钥保存到/etc/ceph目录下：</p>
+<p>[mon@ptmind~]# ceph auth get-or-create client.admin mds ‘allow‘ osd ‘allow <em>‘ mon ‘allow </em>‘ &gt; /etc/ceph/ceph.client.admin.keyring</p>
+<p>或</p>
+<p>[mon@ptmind~]# ceph auth get-or-create client.admin mds ‘allow‘ osd ‘allow <em>‘ mon ‘allow </em>‘ -o /etc/ceph/ceph.client.admin.keyring</p>
+<p>3：为osd.0创建一个用户并创建一个key</p>
+<p>[mon@ptmind~]# ceph auth get-or-create osd.0 mon ‘allow rwx‘ osd ‘allow *‘ -o /var/lib/ceph/osd/ceph-0/keyring</p>
+<p>4：为mds.nc3创建一个用户并创建一个key</p>
+<p>[mon@ptmind~]# ceph auth get-or-create mds.nc3 mon ‘allow rwx‘ osd ‘allow <em>‘ mds ‘allow </em>‘ -o /var/lib/ceph/mds/ceph-cs1/keyring</p>
+<p>5：导入key信息</p>
+<p>[mon@ptmind~]# ceph auth import   /var/lib/ceph/mds/ceph-cs1/keyring</p>
+<p>6：删除集群中的一个认证用户</p>
+<p>[mon@ptmind~]# ceph auth del osd.0</p>
+<p>################################ osd  相关 ################################</p>
+<p>1：查看osd列表</p>
+<p>[mon@ptmind~]# ceph osd tree</p>
+<p>2：查看数据延迟</p>
+<p>[mon@ptmind~]# ceph osd perf </p>
+<p>osd fs_commit_latency(ms) fs_apply_latency(ms) </p>
+<p>  0                     3                    4 </p>
+<p>  1                   333                  871 </p>
+<p>  2                    33                   49 </p>
+<p>  3                     1                    2 </p>
+<p>。。。。。。。。。。。。</p>
+<p>3：详细列出集群每块磁盘的使用情况，包括大小、权重、使用多少空间、使用率等等</p>
+<p>[mon@ptmind~]# ceph osd df </p>
+<p>4：down掉一个osd硬盘</p>
+<p>[mon@ptmind~]# ceph osd down 0   #down掉osd.0节点</p>
+<p>5：在集群中删除一个osd硬盘</p>
+<p>[mon@ptmind~]# ceph osd rm 0</p>
+<p>6：在集群中删除一个osd 硬盘 crush map</p>
+<p>[mon@ptmind~]# ceph osd crush rm osd.0</p>
+<p>7：在集群中删除一个osd的host节点</p>
+<p>[mon@ptmind~]# ceph osd crush rm cs1</p>
+<p>8：查看最大osd的个数 </p>
+<p> [mon@ptmind~]# ceph osd getmaxosd</p>
+<p>max_osd = 90 in epoch 1202     #默认最大是90个osd节点</p>
+<p>9：设置最大的osd的个数（当扩大osd节点的时候必须扩大这个值）</p>
+<p> [mon@ptmind~]# ceph osd setmaxosd 2048</p>
+<p>10：设置osd crush的权重为1.0</p>
+<p>ceph osd crush set {id} {weight} [{loc1} [{loc2} …]]</p>
+<p>例如：</p>
+<p>[mon@ptmind~]# ceph osd crush set osd.1 0.5 host=node241</p>
+<p>11：设置osd的权重</p>
+<p>[mon@ptmind~]# ceph osd reweight 3 0.5</p>
+<p>reweighted osd.3 to 0.5 (8327682)</p>
+<p>或者用下面的方式</p>
+<p>[mon@ptmind~]# ceph osd crush reweight osd.1 1.0</p>
+<p>12：把一个osd节点逐出集群</p>
+<p>[mon@ptmind~]# ceph osd out osd.3:</p>
+<p>3       1    osd.3   up      0      # osd.3的reweight变为0了就不再分配数据，但是设备还是存活的</p>
+<p>13：把逐出的osd加入集群</p>
+<p>[mon@ptmind~]# ceph osd in osd.3</p>
+<p>marked in osd.3. </p>
+<p>14：暂停osd （暂停后整个集群不再接收数据）</p>
+<p>[mon@ptmind~]# ceph osd pause</p>
+<p>15：再次开启osd （开启后再次接收数据） </p>
+<p>[mon@ptmind~]# ceph osd unpause</p>
+<p>16：查看一个集群osd.0参数的配置、输出信息特别详细，集群所有配置生效可以在此参数下确认</p>
+<p>[mon@ptmind~]# ceph –admin-daemon /var/run/ceph/ceph-osd.0.asok config show | less</p>
+<p>17：设置标志 flags ，不允许关闭osd、解决网络不稳定，osd 状态不断切换的问题</p>
+<p>[mon@ptmind~]# ceph osd set nodown</p>
+<p>取消设置</p>
+<p>[mon@ptmind~]# ceph osd unset nodown</p>
+<p>################################pool  相关################################</p>
+<p>1：查看ceph集群中的pool数量</p>
+<p>[mon@ptmind~]# ceph osd lspools   或者 ceph osd pool ls</p>
+<p>2：在ceph集群中创建一个pool</p>
+<p>[mon@ptmind~]# ceph osd pool create rbdtest 100            #这里的100指的是PG组:</p>
+<p>3：查看集群中所有pool的副本尺寸</p>
+<p>[mon@ptmind~]# ceph osd dump | grep ‘replicated size‘</p>
+<p>4：查看pool 最大副本数量</p>
+<p>[mon@ptmind~]# ceph osd pool get rbdpool size</p>
+<p>size: 3</p>
+<p>5：查看pool 最小副本数量</p>
+<p>[root@node241 ~]# ceph osd pool get rbdpool min_size</p>
+<p>min_size: 2</p>
+<p>6：设置一个pool的pg数量</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdtest pg_num 100</p>
+<p>7：设置一个pool的pgp数量</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdtest pgp_num 100</p>
+<p>8: 修改ceph，数据最小副本数、和副本数</p>
+<p>ceph osd pool set $pool_name min_size 1</p>
+<p>ceph osd pool set $pool_name size 2</p>
+<p>示例：</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdpool min_size 1</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdpool size 2</p>
+<p>验证：</p>
+<p>[mon@ptmind~]# ceph osd dump</p>
+<p>pool 3 ‘rbdpool‘ replicated size 2 min_size 1 </p>
+<p>9:设置rbdtest池的最大存储空间为100T（默认是1T)</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdtest target_max_bytes 100000000000000</p>
+<p>10: 为一个ceph pool配置配额、达到配额前集群会告警，达到上限后无法再写入数据</p>
+<p>[mon@ptmind~]# ceph osd pool set-quota rbdtest max_objects 10000</p>
+<p>11: 在集群中删除一个pool,注意删除poolpool 映射的image 会直接被删除，线上操作要谨慎。</p>
+<p>[mon@ptmind~]# ceph osd pool delete rbdtest  rbdtest  –yes-i-really-really-mean-it  #集群名字需要重复两次</p>
+<p>12: 给一个pool创建一个快照</p>
+<p>[mon@ptmind~]# ceph osd pool mksnap rbdtest   rbdtest-snap20150924</p>
+<p>13: 查看快照信息</p>
+<p>[mon@ptmind~]# rados lssnap -p rbdtest</p>
+<p>1       rbdtest-snap20150924    2015.09.24 19:58:55</p>
+<p>2       rbdtest-snap2015092401  2015.09.24 20:31:21</p>
+<p>2 snaps</p>
+<p>14:删除pool的快照</p>
+<p>[mon@ptmind~]# ceph osd pool rmsnap rbdtest  rbdtest-snap20150924</p>
+<p>验证，剩余一个snap</p>
+<p>[mon@ptmind~]# rados lssnap -p rbdtest</p>
+<p>2       rbdtest-snap2015092401  2015.09.24 20:31:21</p>
+<p>1 snaps</p>
+<p>################################rados命令相关##################</p>
+<p>rados 是和Ceph的对象存储集群（RADOS），Ceph的分布式文件系统的一部分进行交互是一种实用工具。</p>
+<p>1：查看ceph集群中有多少个pool （只是查看pool)</p>
+<p>[mon@ptmind~]# rados lspools    同  ceph osd pool ls 输出结果一致</p>
+<p>2：显示整个系统和被池毁掉的使用率统计，包括磁盘使用（字节）和对象计数</p>
+<p>[mon@ptmind~]# rados df </p>
+<p>3：创建一个pool</p>
+<p>[mon@ptmind~]# rados mkpool test</p>
+<p>4：创建一个对象object </p>
+<p>[mon@ptmind~]# rados create test-object -p test</p>
+<p>5：查看对象文件</p>
+<p>[mon@ptmind~]# rados -p test ls</p>
+<p>test-object</p>
+<p>6：删除一个对象</p>
+<p>[mon@ptmind~]# rados rm test-object-1 -p test</p>
+<p>7：删除foo池 (和它所有的数据)</p>
+<p>[mon@ptmind~]# rados rmpool test test –yes-i-really-really-mean-it </p>
+<p>8：查看ceph pool中的ceph object （这里的object是以块形式存储的）</p>
+<p>[mon@ptmind~]# rados ls -p test | more</p>
+<p>9：为test pool创建快照</p>
+<p>[mon@ptmind~]# rados -p test mksnap testsnap</p>
+<p>created pool test snap testsnap</p>
+<p>10：列出给定池的快照</p>
+<p>[mon@ptmind~]# rados -p test lssnap         </p>
+<p>1       testsnap        2015.09.24 21:14:34</p>
+<p>11：删除快照</p>
+<p>[mon@ptmind~]# rados -p test rmsnap testsnap</p>
+<p>removed pool test snap testsnap</p>
+<p>12：上传一个对象到test pool</p>
+<p>[mon@ptmind~]# rados -p test put myobject blah.txt</p>
+<p>################################ PG 相关 ################################</p>
+<p>PG =“放置组”。当集群中的数据，对象映射到编程器，被映射到这些PGS的OSD。</p>
+<p>1：查看pg组的映射信息</p>
+<p>[mon@ptmind~]# ceph pg dump    或者 ceph pg ls</p>
+<p>2：查看一个PG的map</p>
+<p>[mon@ptmind~]# ceph pg map 0.3f</p>
+<p>osdmap e88 pg 0.3f (0.3f) -&gt; up [0,2] acting [0,2]   #其中的[0,2]代表存储在osd.0、osd.2节点，osd.0代表主副本的存储位置</p>
+<p>3：查看PG状态</p>
+<p>[mon@ptmind~]# ceph pg stat</p>
+<p>4：查询一个pg的详细信息</p>
+<p>[mon@ptmind~]# ceph pg  0.26 query</p>
+<p>5：要洗刷一个pg组，执行命令：</p>
+<p>[mon@ptmind~]# ceph pg scrub {pg-id}</p>
+<p>6：查看pg中stuck的状态</p>
+<p>要获取所有卡在某状态的归置组统计信息，执行命令：</p>
+<p>ceph pg dump_stuck inactive|unclean|stale [–format <format>] [-t|–threshold <seconds>]</seconds></format></p>
+<p>[mon@ptmind~]# ceph pg dump_stuck unclean</p>
+<p>[mon@ptmind~]# ceph pg dump_stuck inactive</p>
+<p>[mon@ptmind~]# ceph pg dump_stuck stale</p>
+<p>Inactive （不活跃）归置组不能处理读写，因为它们在等待一个有最新数据的 OSD 复活且进入集群。</p>
+<p>Unclean （不干净）归置组含有复制数未达到期望数量的对象，它们应该在恢复中。</p>
+<p>Stale （不新鲜）归置组处于未知状态：存储它们的 OSD 有段时间没向监视器报告了（由 mon_osd_report_timeout 配置）。</p>
+<p>可用格式有 plain （默认）和 json 。阀值定义的是，归置组被认为卡住前等待的最小时间（默认 300 秒）</p>
+<p>7：显示一个集群中的所有的pg统计</p>
+<p>[mon@ptmind~]# ceph pg dump –format plain</p>
+<p>8：恢复一个丢失的pg</p>
+<p>如果集群丢了一个或多个对象，而且必须放弃搜索这些数据，你就要把未找到的对象标记为丢失（ lost ）。</p>
+<p>如果所有可能的位置都查询过了，而仍找不到这些对象，你也许得放弃它们了。这可能是罕见的失败组合导致的，集群在写入完成前，未能得知写入是否已执行。</p>
+<p>当前只支持 revert 选项，它使得回滚到对象的前一个版本（如果它是新对象）或完全忽略它。要把 unfound 对象标记为 lost ，执行命令：</p>
+<p>ceph pg {pg-id} mark_unfound_lost revert|delete</p>
+<p>9：查看某个PG内分布的数据状态，具体状态可以使用选项过滤输出</p>
+<p>ceph pg ls {<int>} {active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|</int></p>
+<p>backfill_toofull|recovery_wait|undersized [active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|</p>
+<p>deep_scrub|backfill|backfill_toofull|recovery_wait|undersized…]} :  list pg with specific pool, osd, state</p>
+<p>实例如下：</p>
+<pre><code>pg号   过滤输出的状态
+</code></pre><p>[mon@ptmind~]# ceph   pg   ls       1     clean</p>
+<p>10：查询osd 包含pg 的信息，过滤输出pg的状态信息</p>
+<p>pg ls-by-osd <osdname (id|osd.id)>       list pg on osd [osd]</osdname></p>
+<p> {<int>} {active|clean|down|replay|splitting|scrubbing|scrubq|degraded|    </int></p>
+<p> inconsistent|peering|repair|recovering| backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|backfill_toofull|recovery_wait|undersized[active|clean|down|replay|splitting|    </p>
+<p> scrubbing|scrubq|degraded|inconsistent| peering|repair|recovering|backfill_ wait|incomplete|stale|remapped|deep_scrub|backfill|backfill_toofull|recovery_wait|undersized…]} </p>
+<p>实例如下：</p>
+<p>[mon@ptmind~]# ceph pg ls-by-osd osd.5 </p>
+<p>11：查询pool包含pg 的信息，过滤输出pg的状态信息</p>
+<p>ceph pg  ls-by-pool   poolname   选项</p>
+<p>ceph pg ls-by-pool   <poolstr>  {active|clean| down|replay|splitting|scrubbing|scrubq|  degraded|inconsistent|peering|repair| recovering|backfill_wait|incomplete|  stale|remapped|deep_scrub|backfill|     </poolstr></p>
+<p> backfill_toofull|recovery_wait| undersized [active|clean|down|replay|  splitting|scrubbing|scrubq|degraded| inconsistent|peering|repair|recovering| backfill_wait|incomplete|stale| remapped|deep_scrub|backfill|backfill_ </p>
+<p>实例如下：</p>
+<p>[mon@ptmind~]# ceph pg ls-by-pool test  </p>
+<p>12：查询某个osd状态为 primary pg ，可以根据需要过滤状态</p>
+<p>pg ls-by-primary <osdname (id|osd.id)> {<int>} {active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|</int></osdname></p>
+<p>backfill_toofull|recovery_wait|undersized [active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|</p>
+<p>backfill_toofull|recovery_wait|undersized…]} :  list pg with primary = [osd]</p>
+<p> 实例如下：</p>
+<pre><code>osd号   过滤输出的状态
+</code></pre><p>[mon@ptmind~]# ceph pg ls-by-primary    osd.3    clean </p>
+<p>############################### rbd命令相关 #########################3 </p>
+<p>1：在test池中创建一个命名为kjh的10000M的镜像</p>
+<p>[mon@ptmind~]# rbd create -p test –size 10000 kjh</p>
+<p>2：查看ceph中一个pool里的所有镜像</p>
+<p>[mon@ptmind~]# rbd ls test</p>
+<p>kjh</p>
+<p>3：查看新建的镜像的信息</p>
+<p>[mon@ptmind~]# rbd -p test info kjh    </p>
+<p>4：查看ceph pool中一个镜像的信息</p>
+<p>[mon@ptmind~]# rbd info -p test  –image kjh</p>
+<p>rbd image ‘kjh‘:</p>
+<pre><code>size 1000 MB in 250 objects
+
+order 22 (4096 kB objects)
+
+block_name_prefix: rb.0.92bd.74b0dc51
+
+format: 1
+</code></pre><p>5：删除一个镜像</p>
+<p>[mon@ptmind~]# rbd rm  -p test  kjh</p>
+<p>6：调整一个镜像的尺寸</p>
+<p>[mon@ptmind~]# rbd resize -p test –size 20000 kjh</p>
+<p>[mon@ptmind~]# rbd -p test info kjh   #调整后的镜像大小</p>
+<p>rbd image ‘kjh‘:</p>
+<pre><code>size 2000 MB in 500 objects
+
+order 22 (4096 kB objects)
+
+block_name_prefix: rb.0.92c1.74b0dc51
+
+format: 1
+</code></pre><p>#########rbd pool 快照功能测试###########</p>
+<p>1：新建个pool叫’ptmindpool’同时在下面创建一个’kjhimage’</p>
+<p>[mon@ptmind~]# ceph osd pool create ptmindpool 256 256</p>
+<p>pool ‘ptmindpool‘ created</p>
+<p>2:创建镜像</p>
+<p>[mon@ptmind~]# rbd create kjhimage –size 1024 –pool ptmindpool</p>
+<p>3:查看镜像</p>
+<p>[mon@ptmind~]# rbd –pool ptmindpool ls</p>
+<p>kjhimage</p>
+<p>4:创建snap,快照名字叫’snapkjhimage’</p>
+<p>[mon@ptmind~]# rbd snap create ptmindpool/kjhimage@snapkjhimage</p>
+<p>5:查看kjhimage的snap</p>
+<p>[mon@ptmind~]# rbd snap ls ptmindpool/kjhimage</p>
+<p>SNAPID NAME         SIZE</p>
+<pre><code>2 snapkjhimage 1024 MB
+</code></pre><p>6:回滚快照，</p>
+<p>[mon@ptmind~]# rbd snap rollback ptmindpool/kjhimage@snapkjhimage</p>
+<p>7:删除snap 删除snap报（rbd: snapshot ‘snapshot-xxxx‘ is protected from removal.）写保护 ，使用 rbd snap unprotect volumes/snapshot-xxx‘ 解锁，然后再删除</p>
+<p>[mon@ptmind~]# rbd snap rm ptmindpool/kjhimage@snapkjhimage</p>
+<p>8:删除kjhimage的全部snapshot</p>
+<p>[mon@ptmind~]# rbd snap purge ptmindpool/kjhimage</p>
+<p>9: 把ceph pool中的一个镜像导出</p>
+<p>导出镜像</p>
+<p>[mon@ptmind~]# rbd export -p ptmindpool –image kjhimage /tmp/kjhimage.img            </p>
+<p>Exporting image: 100% complete…done.</p>
+<p>验证查看导出文件</p>
+<p>l /tmp/kjhimage.img        </p>
+<p>-rw-r–r– 1 root root 1073741824 Sep 24 23:15 /tmp/kjhimage.img</p>
+<p>10:把一个镜像导入ceph中</p>
+<p>[mon@ptmind~]# rbd import /tmp/kjhimage.img  -p ptmindpool –image importmyimage1</p>
+<p>Importing image: 100% complete…done.</p>
+<p>验证查看导入镜像文件</p>
+<p>rbd -pptmindpool ls</p>
+<p>importmyimage1</p>
+<p>本文出自 “康建华” 博客，转载请与作者联系！</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_用函数还是用复杂的表达式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/python_用函数还是用复杂的表达式/" class="post-title-link" itemprop="url">转：python编程思考</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="要不要使用复杂表达式"><a href="#要不要使用复杂表达式" class="headerlink" title="要不要使用复杂表达式"></a>要不要使用复杂表达式</h2><p>Perl语言的原作者Larry Wall曾经说过，伟大的程序员都有三个优点：懒惰、暴躁和自负。乍一看这三个词语没有一个是褒义词，但在程序员的世界里，这三个词有不同的意义。首先，懒惰会促使程序员去写一些省事儿的程序来辅助自己或别人更好的完成工作，这样我们就无需做那些重复和繁琐的劳动；同理能够用3行代码解决的事情，我们也绝不会写出10行代码来。其次，暴躁会让程序员主动的去完成一些你还没有提出的工作，去优化自己的代码让它更有效率，能够3秒钟完成的任务，我们绝不能容忍1分钟的等待。最后，自负会促使程序员写出可靠无误的代码，我们写代码不是为了接受批评和指责，而是为了让其他人来膜拜。</p>
+<p>那么接下来就有一个很有意思的问题值得探讨一下，我们需要一个程序从输入的三个数中找出最大的那个数。这个程序对任何会编程的人来说都是小菜一碟，甚至不会编程的人经过10分钟的学习也能搞定。下面是用来解决这个问题的Python代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line"><span class="keyword">if</span> a &gt; b:</span><br><span class="line">	the_max = a</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	the_max = b</span><br><span class="line"><span class="keyword">if</span> c &gt; the_max:</span><br><span class="line">	the_max = c</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
+<p>但是我们刚才说了，程序员都是懒惰的，很多程序员都会使用三元条件运算符来改写上面的代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">the_max = a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b</span><br><span class="line">the_max = c <span class="keyword">if</span> c &gt; the_max <span class="keyword">else</span> the_max</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
+<p>需要说明的是，Python在2.5版本以前是没有上面代码第4行和第5行中使用的三元条件运算符的，究其原因是Guido van Rossum（Python之父）认为三元条件运算符并不能帮助 Python变得更加简洁，于是那些习惯了在C/C++或Java中使用三元条件运算符（在这些语言中，三元条件运算符也称为“Elvis运算符”，因为<code>?:</code>放在一起很像著名摇滚歌手猫王Elvis的大背头）的程序员试着用<code>and</code>和<code>or</code>运算符的短路特性来模拟出三元操作符，于是在那个年代，上面的代码是这样写的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">the_max = a &gt; b <span class="keyword">and</span> a <span class="keyword">or</span> b</span><br><span class="line">the_max = c &gt; the_max <span class="keyword">and</span> c <span class="keyword">or</span> the_max</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
+<p>但是这种做法在某些场景下是不能成立的，且看下面的代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">0</span></span><br><span class="line">b = <span class="number">-100</span></span><br><span class="line"><span class="comment"># 下面的代码本来预期输出a的值，结果却得到了b的值</span></span><br><span class="line"><span class="comment"># 因为a的值0在进行逻辑运算时会被视为False来处理</span></span><br><span class="line">print(<span class="literal">True</span> <span class="keyword">and</span> a <span class="keyword">or</span> b)</span><br><span class="line"><span class="comment"># print(a if True else b)</span></span><br></pre></td></tr></table></figure>
+<p>所以在Python 2.5以后引入了三元条件运算符来避免上面的风险（上面代码被注释掉的最后一句话）。那么，问题又来了，上面的代码还可以写得更简短吗？答案是肯定的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, (a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b) <span class="keyword">if</span> (a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b) &gt; c <span class="keyword">else</span> c)</span><br></pre></td></tr></table></figure>
+<p>但是，这样做真的好吗？如此复杂的表达式是不是让代码变得晦涩了很多呢？我们发现，在实际开发中很多开发者都喜欢过度的使用某种语言的特性或语法糖，于是简单的多行代码变成了复杂的单行表达式，这样做真的好吗？这个问题我也不止一次的问过自己，现在我能给出的答案是下面的代码，使用辅助函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">the_max</span><span class="params">(x, y)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> x <span class="keyword">if</span> x &gt; y <span class="keyword">else</span> y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max(the_max(a, b), c))</span><br></pre></td></tr></table></figure>
+<p>上面的代码中，我定义了一个辅助函数<code>the_max</code>用来找出参数传入的两个值中较大的那一个，于是下面的输出语句可以通过两次调用<code>the_max</code>函数来找出三个数中的最大值，现在代码的可读性是不是好了很多。用辅助函数来替代复杂的表达式真的是一个不错的选择，关键是比较大小的逻辑转移到这个辅助函数后不仅可以反复调用它，而且还可以进行级联操作。</p>
+<p>当然，很多语言中比较大小的函数根本没有必要自己来实现（通常都是内置函数），Python也是如此。Python内置的max函数利用了Python对可变参数的支持，允许一次性传入多个值或者一个迭代器并找出那个最大值，所以上面讨论的问题在Python中也就是一句话的事，但是从复杂表达式到使用辅助函数简化复杂表达式这个思想是非常值得玩味的，所以分享出来跟大家做一个交流。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, max(a, b, c))</span><br></pre></td></tr></table></figure>
 
           
         
@@ -2076,7 +2496,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/MQ_about_message_queue/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/the theory of communication/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -2096,7 +2516,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/MQ_about_message_queue/" class="post-title-link" itemprop="url">消息队列中间件基本理解</a>
+                <a href="/2018/05/24/the theory of communication/" class="post-title-link" itemprop="url">NLP 信息系统</a>
               
             
           </h2>
@@ -2139,7 +2559,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
 
                 
                 
@@ -2176,29 +2596,16 @@
       
         
           
-            <h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><p>消息队列中间件是分布式系统中重要的组件，主要解决应用耦合，异步消息，流量削锋等问题<br>实现高性能，高可用，可伸缩和最终一致性架构</p>
-<p>使用较多的消息队列有ActiveMQ，RabbitMQ，ZeroMQ，Kafka，MetaMQ，RocketMQ</p>
-<h2 id="主要用途"><a href="#主要用途" class="headerlink" title="主要用途"></a>主要用途</h2><ol>
-<li>流量削峰</li>
-<li>异步消息</li>
-<li>应用解耦</li>
-<li>日志处理</li>
-<li>消息通讯</li>
+            <p>组成：</p>
+<ol>
+<li>信源：信息的来源或产生待发送的信息的实体</li>
+<li>信宿：信息的归宿或接受者</li>
+<li>信道：传送信息的通道，如电话通信中包括中继器在内的同轴电缆系统，卫星通信中地球站的收发信机、天线和卫星上的转发器等。</li>
+<li>编码器： 在信息论中泛指所有变换信号的设备，实际上就是终端机的发送部分。它包括从心愿到信道的所有设备，如量化器、压缩编码器、调制器等，使信源输出的信号转换成适于信道传送的信号。</li>
+<li>译码器：是编码器的逆变换设备，把信道上送来的信号转换成信宿所能接收信号，可包括解调器、译码器、数模转换器等。</li>
 </ol>
-<h2 id="Python常用消息中间件对比"><a href="#Python常用消息中间件对比" class="headerlink" title="Python常用消息中间件对比"></a>Python常用消息中间件对比</h2><p>RabbitMQ</p>
-<blockquote>
-<p>RabbitMQ是一个AMQP实现，传统的messaging queue系统实现，基于Erlang。老牌MQ产品了。AMQP协议更多用在企业系统内，对数据一致性、稳定性和可靠性要求很高的场景，对性能和吞吐量还在其次。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">消息队列的使用过程，如下：</span><br><span class="line">（1）客户端连接到消息队列服务器，打开一个channel。</span><br><span class="line">（2）客户端声明一个exchange，并设置相关属性。</span><br><span class="line">（3）客户端声明一个queue，并设置相关属性。</span><br><span class="line">（4）客户端使用routing key，在exchange和queue之间建立好绑定关系。</span><br><span class="line">（5）客户端投递消息到exchange。</span><br><span class="line">exchange接收到消息后，就根据消息的key和已经设置的binding，进行消息路由，将消息投递到一个或多个队列里。</span><br><span class="line"></span><br><span class="line">分布式集群:</span><br><span class="line">RabbitMQ可以通过三种方法来部署分布式集群系统，分别是：cluster,federation,shovel</span><br><span class="line">cluster：</span><br><span class="line">不支持跨网段，用于同一个网段内的局域网</span><br><span class="line">可以随意的动态增加或者减少</span><br><span class="line">节点之间需要运行相同版本的RabbitMQ和Erlang</span><br><span class="line"></span><br><span class="line">federation:应用于广域网，允许单台服务器上的交换机或队列接收发布到另一台服务器上交换机或队列的消息，可以是单独机器或集群。federation队列类似于单向点对点连接，消息会在联盟队列之间转发任意次，直到被消费者接受。通常使用federation来连接internet上的中间服务器，用作订阅分发消息或工作队列。</span><br><span class="line"></span><br><span class="line">shovel:连接方式与federation的连接方式类似，但它工作在更低层次。可以应用于广域网。</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>Kafka</p>
-<blockquote>
-<p>Kafka是一种高吞吐量的分布式发布订阅消息系统，它可以处理消费者规模的网站中的所有动作流数据。 这种动作（网页浏览，搜索和其他用户的行动）是在现代网络上的许多社会功能的一个关键因素。 这些数据通常是由于吞吐量的要求而通过处理日志和日志聚合来解决。 对于像Hadoop的一样的日志数据和离线分析系统，但又要求实时处理的限制，这是一个可行的解决方案。Kafka的目的是通过Hadoop的并行加载机制来统一线上和离线的消息处理，也是为了通过集群机来提供实时的消费。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Kafka是一种高吞吐量的分布式发布订阅消息系统，有如下特性：</span><br><span class="line">通过O(1)的磁盘数据结构提供消息的持久化，这种结构对于即使数以TB的消息存储也能够保持长时间的稳定性能。（文件追加的方式写入数据，过期的数据定期删除）</span><br><span class="line">高吞吐量：即使是非常普通的硬件Kafka也可以支持每秒数百万的消息</span><br><span class="line">支持通过Kafka服务器和消费机集群来分区消息</span><br><span class="line">支持Hadoop并行数据加载</span><br><span class="line"></span><br><span class="line">Broker</span><br><span class="line">Kafka集群包含一个或多个服务器，这种服务器被称为broker [5] </span><br><span class="line">Topic</span><br><span class="line">每条发布到Kafka集群的消息都有一个类别，这个类别被称为Topic。（物理上不同Topic的消息分开存储，逻辑上一个Topic的消息虽然保存于一个或多个broker上但用户只需指定消息的Topic即可生产或消费数据而不必关心数据存于何处）</span><br><span class="line">Partition</span><br><span class="line">Partition是物理上的概念，每个Topic包含一个或多个Partition.</span><br><span class="line">Producer</span><br><span class="line">负责发布消息到Kafka broker</span><br><span class="line">Consumer</span><br><span class="line">消息消费者，向Kafka broker读取消息的客户端。</span><br><span class="line">Consumer Group</span><br><span class="line">每个Consumer属于一个特定的Consumer Group（可为每个Consumer指定group name，若不指定group name则属于默认的group）。</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>RocketMQ(java)</p>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
-<li><a href="https://blog.csdn.net/dj2008/article/details/78872889" target="_blank" rel="noopener">消息队列的应用场景和常见的消息队列之间的比较</a></li>
-<li><a href="https://www.cnblogs.com/wangiqngpei557/p/6158094.html" target="_blank" rel="noopener">RabbitMQ 高可用集群搭建及电商平台使用经验总结</a></li>
-<li><a href="https://blog.csdn.net/lingbo229/article/details/80761778" target="_blank" rel="noopener">Kafka史上最详细原理总结 —-看完绝对不后悔</a></li>
-</ol>
+<p>当信源和信宿已给定、信道也选定后，决定信息系统性能就在于编码器和译码器。设计一个信息系统时，除了选择信道和设计其附属设施外，主要工作也就是设计编译码器。一般情况下，信息系统的主要性能指标是它的有效性和可靠性。有效性就是在系统中传送尽可能多的信息，而可靠性要求信宿收到的信息尽可能地与信源发出的信息一致，或者说失真尽可能小。最佳编译器就是要使系统最有效和最可靠。但是，可靠性和有效性往往是相互矛盾的。越有效常导致不可靠，反之也是如此。从定量意义上说，应使系统在规定的失真或者基本无失真的条件下，传送最大的信息率；或者在规定信息率的条件下，失真最小。计算这最大信息率并证明达到或者接近这一值的编译码器是存在的，就是信息论的基本任务。只讨论这样的问题的理论可称为香农信息论，一般认为信息论的内容应更广泛一些，即包括提取信息和保证信息安全的理论。后者就是估计理论、检测理论和密码学。</p>
+<p>信息论是建立在概率论基础上而形成的，也就是从信源符号和信道噪声的概率特性出发的。这类信息通常称为语法信息。其实，信息系统的基本规律也应包括语义和语用信息。语法信息是信源输出符号的构造或起客观特性所表现与信宿的主观要求无关，而语义则应考虑各符号的意义，同样一种意义，可用不同语言或文字来表示，各种语言所包含的语法信息可以是不同的。一般地说，语义信息率可小于语法信息率。</p>
 
           
         
@@ -2286,7 +2693,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">32</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2424,7 +2831,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">46</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">48</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>

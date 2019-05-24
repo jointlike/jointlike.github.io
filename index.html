@@ -341,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/08/31/DB_Mysql数据库索引技术原理/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/08/31/DB_SQL速查与浏览记忆/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -361,7 +361,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/08/31/DB_Mysql数据库索引技术原理/" class="post-title-link" itemprop="url">Mysql数据库索引技术原理</a>
+                <a href="/2018/08/31/DB_SQL速查与浏览记忆/" class="post-title-link" itemprop="url">SQL速查与浏览记忆</a>
               
             
           </h2>
@@ -386,9 +386,13 @@
                 
               
 
-              <time title="Created: 2018-08-31 17:54:54" itemprop="dateCreated datePublished" datetime="2018-08-31T17:54:54+08:00">2018-08-31</time>
+              <time title="Created: 2018-08-31 19:54:55 / Modified: 17:54:54" itemprop="dateCreated datePublished" datetime="2018-08-31T19:54:55+08:00">2018-08-31</time>
             
 
+            
+              
+
+              
             
           </span>
 
@@ -404,7 +408,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/常用工具/" itemprop="url" rel="index"><span itemprop="name">常用工具</span></a></span>
 
                 
                 
@@ -441,42 +445,201 @@
       
         
           
-            <h2 id="mysql索引"><a href="#mysql索引" class="headerlink" title="mysql索引"></a>mysql索引</h2><p>索引是帮助mysql高效获取数据的数据结构，是数据库系统为满足高效的查找算法而维护的一种特殊数据结构，这些数据结构以某种映射关系指向数据。这种数据结构就是索引。</p>
-<h2 id="索引的类型"><a href="#索引的类型" class="headerlink" title="索引的类型"></a>索引的类型</h2><p>根据数据库的功能，可以在数据库设计器中创建四种常用索引：普通索引、唯一索引、主键索引和聚集索引。</p>
-<p>CREATE [UNIQUE] [CLUSTERED| NONCLUSTERED] INDEX &lt;索引名&gt;<br>ON &lt;表名&gt;(&lt;列名&gt;[ASC|DESC] [, &lt;列名&gt;[ASC|DESC]…])</p>
-<h3 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">最基本的索引类型，没有唯一性之类的限制。普通索引可以通过以下几种方式创建：</span><br><span class="line">创建索引，例如CREATE INDEX &lt;索引的名字&gt; ON tablename (列的列表)；</span><br><span class="line">修改表，例如ALTER TABLE tablename ADD INDEX [索引的名字] (列的列表)；</span><br><span class="line">创建表的时候指定索引，例如CREATE TABLE tablename ( [...], INDEX [索引的名字] (列的列表) )；</span><br></pre></td></tr></table></figure>
-<h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">唯一索引是不允许其中任何两行具有相同索引值的索引。</span><br><span class="line">当现有数据中存在重复的键值时，大多数数据库不允许将新创建的唯一索引与表一起保存。数据库还可能防止添加将在表中创建重复键值的新数据。例如，如果在 employee 表中职员的姓 (lname) 上创建了唯一索引，则任何两个员工都不能同姓。</span><br><span class="line">对某个列建立UNIQUE索引后，插入新记录时，数据库管理系统会自动检查新纪录在该列上是否取了重复值，在CREATE TABLE 命令中的UNIQE约束将隐式创建UNIQUE索引。</span><br><span class="line">创建唯一索引的几种方式：</span><br><span class="line">创建索引，例如CREATE UNIQUE INDEX &lt;索引的名字&gt; ON tablename (列的列表)；</span><br><span class="line">修改表，例如ALTER TABLE tablename ADD UNIQUE [索引的名字] (列的列表); ；</span><br><span class="line">创建表的时候指定索引，例如CREATE TABLE tablename ( [...], UNIQUE [索引的名字] (列的列表) )；</span><br></pre></td></tr></table></figure>
-<h3 id="主键索引"><a href="#主键索引" class="headerlink" title="主键索引"></a>主键索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">简称为主索引，数据库表中一列或列组合（字段）的值唯一标识表中的每一行。该列称为表的主键。</span><br><span class="line">在数据库关系图中为表定义主键将自动创建主键索引，主键索引是唯一索引的特定类型。该索引要求主键中的每个值都唯一。当在查询中使用主键索引时，它还允许对数据的快速访问。</span><br><span class="line">提示尽管唯一索引有助于定位信息，但为获得最佳性能结果，建议改用主键索引。</span><br></pre></td></tr></table></figure>
-<h3 id="候选索引"><a href="#候选索引" class="headerlink" title="候选索引"></a>候选索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">与主索引一样要求字段值的唯一性，并决定了处理记录的顺序。在数据库和自由表中，可以为每个表建立多个候选索引。</span><br></pre></td></tr></table></figure>
-<h3 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">也称为聚簇索引，在聚集索引中，表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引， 即如果存在聚集索引，就不能再指定CLUSTERED 关键字。</span><br><span class="line">索引不是聚集索引，则表中行的物理顺序与键值的逻辑顺序不匹配。与非聚集索引相比，聚集索引通常提供更快的数据访问速度。聚集索引更适用于对很少对基表进行增删改操作的情况。</span><br><span class="line">如果在表中创建了主键约束，SQL Server将自动为其产生唯一性约束。在创建主键约束时，指定了CLUSTERED关键字或干脆没有制定该关键字，SQL Sever将会自动为表生成唯一聚集索引。</span><br></pre></td></tr></table></figure>
-<h3 id="非聚集索引"><a href="#非聚集索引" class="headerlink" title="非聚集索引"></a>非聚集索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">也叫非簇索引，在非聚集索引中，数据库表中记录的物理顺序与索引顺序可以不相同。一个表中只能有一个聚集索引，但表中的每一列都可以有自己的非聚集索引。如果在表中创建了主键约束，SQL Server将自动为其产生唯一性约束。在创建主键约束时，如果制定CLUSTERED关键字，则将为表产生唯一聚集索引。</span><br></pre></td></tr></table></figure>
-<h2 id="索引底层数据结构"><a href="#索引底层数据结构" class="headerlink" title="索引底层数据结构"></a>索引底层数据结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">B-Tree B+Tree 相比红黑树的优势：磁盘预读取多余的数据到内存，BTree由于高度较小水平分叉较多，一次读取的数据较快较多，减少磁盘读取，提高效率。</span><br><span class="line">如果按照B-tree索引，可以直接返回，带顺序的数据，但这个数据只是该索引列含有的信息</span><br><span class="line"></span><br><span class="line">InnoDb引擎与MyIsAm区别：InnoDB是索引字段值索引，MyIsAm是字段地址索引。</span><br><span class="line"></span><br><span class="line">了解不同存储引擎的索引实现方式对于正确使用和优化索引都非常有帮助，例如知道了InnoDB的索引实现后，就很容易明白为什么不建议使用过长的字段作为主键，因为所有辅助索引都引用主索引，过长的主索引会令辅助索引变得过大。再例如，用非单调的字段作为主键在InnoDB中不是个好主意，因为InnoDB数据文件本身是一颗B+Tree，非单调的主键会造成在插入新记录时数据文件为了维持B+Tree的特性而频繁的分裂调整，十分低效，而使用自增字段作为主键则是一个很好的选择。</span><br></pre></td></tr></table></figure>
-<h2 id="索引查询算法"><a href="#索引查询算法" class="headerlink" title="索引查询算法"></a>索引查询算法</h2><pre><code>- 顺序查找，无索引情况下
-- 索引查找，目前数据库系统及文件系统都采用B-Tree 或其变种 B+Tree作为索引结构。
-</code></pre><h2 id="索引结构优化"><a href="#索引结构优化" class="headerlink" title="索引结构优化"></a>索引结构优化</h2><ul>
-<li><p>高效使用索引的首要条件是知道什么样的查询会使用到索引，这个问题和B+Tree中的“最左前缀原理”有关。一般在WHERE 和 JOIN子句都是索引可以选择的对象。</p>
+            <h1 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h1><h2 id="CREATE-DATABASE"><a href="#CREATE-DATABASE" class="headerlink" title="CREATE DATABASE"></a>CREATE DATABASE</h2><pre><code>CREATE DATABASE database_name;
+</code></pre><h2 id="DROP-DATABASE"><a href="#DROP-DATABASE" class="headerlink" title="DROP DATABASE"></a>DROP DATABASE</h2><pre><code>DROP DATABASE database_name
+</code></pre><p>=============</p>
+<h1 id="表操作"><a href="#表操作" class="headerlink" title="表操作"></a>表操作</h1><h2 id="CREATE-TABLE"><a href="#CREATE-TABLE" class="headerlink" title="CREATE TABLE"></a>CREATE TABLE</h2><pre><code>CREATE TABLE table_name
+(
+column_name1 data_type,
+column_name2 data_type,
+column_name2 data_type,
+...
+)
+</code></pre><h2 id="DROP-TABLE"><a href="#DROP-TABLE" class="headerlink" title="DROP TABLE"></a>DROP TABLE</h2><pre><code>DROP TABLE table_name
+</code></pre><p>============</p>
+<h1 id="数据操作-增加"><a href="#数据操作-增加" class="headerlink" title="数据操作-增加"></a>数据操作-增加</h1><h2 id="INSERT-INTO"><a href="#INSERT-INTO" class="headerlink" title="INSERT INTO"></a>INSERT INTO</h2><pre><code>INSERT INTO table_name
+VALUES (value1, value2, value3,....)
+or
+
+INSERT INTO table_name
+(column1, column2, column3,...)
+VALUES (value1, value2, value3,....)
+</code></pre><h2 id="SELECT-INTO"><a href="#SELECT-INTO" class="headerlink" title="SELECT INTO"></a>SELECT INTO</h2><pre><code>SELECT *
+INTO new_table_name [IN externaldatabase]
+FROM old_table_name
+or
+
+SELECT column_name(s)
+INTO new_table_name [IN externaldatabase]
+FROM old_table_name
+</code></pre><h2 id="CREATE-INDEX"><a href="#CREATE-INDEX" class="headerlink" title="CREATE INDEX"></a>CREATE INDEX</h2><pre><code>CREATE INDEX index_name
+ON table_name (column_name)
+or
+
+CREATE UNIQUE INDEX index_name
+ON table_name (column_name)
+
+例子：
+CREATE INDEX PIndex
+ON Persons (LastName, FirstName)
+</code></pre><h2 id="DROP-INDEX"><a href="#DROP-INDEX" class="headerlink" title="DROP INDEX"></a>DROP INDEX</h2><pre><code>DROP INDEX table_name.index_name (SQL Server)
+DROP INDEX index_name ON table_name (MS Access)
+DROP INDEX index_name (DB2/Oracle)
+ALTER TABLE table_name DROP INDEX index_name (MySQL)
+</code></pre><h2 id="CREATE-VIEW"><a href="#CREATE-VIEW" class="headerlink" title="CREATE VIEW"></a>CREATE VIEW</h2><pre><code>CREATE VIEW view_name AS
+SELECT column_name(s)
+FROM table_name
+WHERE condition
+</code></pre><h2 id="CHECK"><a href="#CHECK" class="headerlink" title="CHECK"></a>CHECK</h2><pre><code>SQL 在 &quot;Persons&quot; 表创建时在 &quot;P_Id&quot; 列上创建 CHECK 约束。CHECK 约束规定 &quot;P_Id&quot; 列必须只包含大于 0 的整数。
+
+CREATE TABLE Persons
+(
+P_Id int NOT NULL,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255),
+CHECK (P_Id&gt;0)
+)
+</code></pre><p>//!<img src="http://www.nowamagic.net/librarys/veda/detail/878" alt="视图的作用"></p>
+<p>==========</p>
+<h1 id="数据操作-删除"><a href="#数据操作-删除" class="headerlink" title="数据操作-删除"></a>数据操作-删除</h1><h2 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h2><pre><code>DELETE FROM table_name
+WHERE some_column=some_value
+or
+
+DELETE FROM table_name 
+(Note: Deletes the entire table!!)
+
+DELETE * FROM table_name 
+(Note: Deletes the entire table!!)
+</code></pre><ul>
+<li><p>delete是DML，执行delete操作时，每次从表中删除一行，并且同时将该行的的删除操作记录在redo和undo表空间中以便进行回滚（rollback）和重做操作，但要注意表空间要足够大，需要手动提交（commit）操作才能生效，可以通过rollback撤消操作。</p>
 </li>
-<li><p>范围查询（in, &gt; ,&lt; ) 后面的数据会用不上索引。</p>
+<li><p>delete可根据条件删除表中满足条件的数据，如果不指定where子句，那么删除表中所有记录。</p>
 </li>
-<li><p>查询条件中含有函数或表达式会用不上索引。</p>
-</li>
-<li><p>索引选择性与前缀索引：只在查询频繁的字段增加索引，联合索引不必要全字段，用列的前缀代替整个列作为索引key，短索引速度更快。</p>
-</li>
-<li><p>考虑已在表上创建的索引数量。最好避免在单个表上有很多索引。</p>
-</li>
-<li><p>对新索引进行试验以检查它对运行查询性能的影响。</p>
-</li>
-<li><p>检查已在表上创建的索引的定义。最好避免包含共享列的重叠索引。</p>
-</li>
-<li><p>检查某列中唯一数据值的数量，并将该数量与表中的行数进行比较。比较的结果就是该列的可选择性，这有助于确定该列是否适合建立索引，如果适合，确定索引的类型。</p>
-</li>
-<li><p>InnoDB的主键选择与插入优化：自增主键索引会按顺序插入最后，非自增主键索引会导致乱序插入的开销</p>
+<li><p>delete语句不影响表所占用的extent，高水线(high watermark)保持原位置不变。</p>
 </li>
 </ul>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
-<li><a href="https://blog.csdn.net/gitchat/article/details/78787837" target="_blank" rel="noopener">深入理解 MySQL 底层实现</a></li>
-<li><a href="https://www.cnblogs.com/sanwenyu/p/6129082.html" target="_blank" rel="noopener">MySQL索引背后的数据结构及算法原理</a></li>
-</ol>
+<h2 id="TRUNCATE-TABLE"><a href="#TRUNCATE-TABLE" class="headerlink" title="TRUNCATE TABLE"></a>TRUNCATE TABLE</h2><pre><code>TRUNCATE TABLE table_name
+</code></pre><ul>
+<li>在速度上，一般来说truncate &gt; delete。 </li>
+<li>如果想保留表而将所有数据删除，如果和事务无关，用truncate就好。</li>
+<li><p>如果和事务有关，或者想触发trigger，还是用delete。</p>
+</li>
+<li><p>truncate是DDL，会隐式提交，所以，不能回滚，不会触发触发器。</p>
+</li>
+<li>truncate会删除表中所有记录，并且将重新设置高水线和所有的索引，缺省情况下将空间释放到minextents个extent，除非使用reuse storage，。不会记录日志，所以执行速度很快，但不能通过rollback撤消操作（如果一不小心把一个表truncate掉，也是可以恢复的，只是不能通过rollback来恢复）。</li>
+<li>对于外键（foreignkey ）约束引用的表，不能使用 truncate table，而应使用不带 where 子句的 delete 语句。</li>
+<li>truncatetable不能用于参与了索引视图的表。</li>
+</ul>
+<p>==========</p>
+<h1 id="数据操作-修改"><a href="#数据操作-修改" class="headerlink" title="数据操作-修改"></a>数据操作-修改</h1><h2 id="UPDATE"><a href="#UPDATE" class="headerlink" title="UPDATE"></a>UPDATE</h2><pre><code>UPDATE table_name
+SET column1=value, column2=value,...
+WHERE some_column=some_value
+</code></pre><h2 id="ALTER-TABLE"><a href="#ALTER-TABLE" class="headerlink" title="ALTER TABLE"></a>ALTER TABLE</h2><pre><code>ALTER TABLE table_name 
+ADD column_name datatype
+or
+
+ALTER TABLE table_name 
+DROP COLUMN column_name
+</code></pre><p>===========</p>
+<h1 id="数据操作-查询"><a href="#数据操作-查询" class="headerlink" title="数据操作-查询"></a>数据操作-查询</h1><h2 id="AND-OR"><a href="#AND-OR" class="headerlink" title="AND / OR"></a>AND / OR</h2><pre><code>SELECT column_name(s)
+FROM table_name
+WHERE condition
+AND|OR condition
+</code></pre><p>===========</p>
+<h1 id="数据操作-其他查询"><a href="#数据操作-其他查询" class="headerlink" title="数据操作-其他查询"></a>数据操作-其他查询</h1><h2 id="AS-alias"><a href="#AS-alias" class="headerlink" title="AS (alias)"></a>AS (alias)</h2><pre><code>SELECT column_name AS column_alias
+FROM table_name
+
+or
+
+SELECT column_name
+FROM table_name AS table_alias
+</code></pre><h2 id="BETWEEN"><a href="#BETWEEN" class="headerlink" title="BETWEEN"></a>BETWEEN</h2><pre><code>BETWEEN 操作符用于选取介于两个值之间的数据范围内的值。
+
+SELECT column_name(s)
+FROM table_name
+WHERE column_name
+BETWEEN value1 AND value2
+</code></pre><h2 id="GROUP-BY"><a href="#GROUP-BY" class="headerlink" title="GROUP BY"></a>GROUP BY</h2><pre><code>SELECT column_name, aggregate_function(column_name)
+FROM table_name
+WHERE column_name operator value
+GROUP BY column_name
+
+例子：
+SELECT site_id, SUM(access_log.count) AS nums
+FROM access_log GROUP BY site_id;
+</code></pre><h2 id="HAVING"><a href="#HAVING" class="headerlink" title="HAVING"></a>HAVING</h2><pre><code>在 SQL 中增加 HAVING 子句原因是，WHERE 关键字无法与聚合函数一起使用。
+SELECT column_name, aggregate_function(column_name)
+FROM table_name
+WHERE column_name operator value
+GROUP BY column_name
+HAVING aggregate_function(column_name) operator value
+
+例子：
+SELECT Websites.name, Websites.url, SUM(access_log.count) AS nums FROM (access_log
+INNER JOIN Websites
+ON access_log.site_id=Websites.id)
+GROUP BY Websites.name
+HAVING SUM(access_log.count) &gt; 200;
+</code></pre><h2 id="IN"><a href="#IN" class="headerlink" title="IN"></a>IN</h2><pre><code>SELECT column_name(s)
+FROM table_name
+WHERE column_name
+IN (value1,value2,..)
+</code></pre><h2 id="INNER-JOIN"><a href="#INNER-JOIN" class="headerlink" title="INNER JOIN"></a>INNER JOIN</h2><pre><code>SELECT column_name(s)
+FROM table_name1
+INNER JOIN table_name2 
+ON table_name1.column_name=table_name2.column_name
+</code></pre><p><a href="http://www.runoob.com/sql/sql-join.html" target="_blank" rel="noopener">SQL join 用于把来自两个或多个表的行结合起来。</a></p>
+<h2 id="LEFT-JOIN"><a href="#LEFT-JOIN" class="headerlink" title="LEFT JOIN"></a>LEFT JOIN</h2><pre><code>SELECT column_name(s)
+FROM table_name1
+LEFT JOIN table_name2 
+ON table_name1.column_name=table_name2.column_name
+</code></pre><h2 id="RIGHT-JOIN"><a href="#RIGHT-JOIN" class="headerlink" title="RIGHT JOIN"></a>RIGHT JOIN</h2><pre><code>SELECT column_name(s)
+FROM table_name1
+RIGHT JOIN table_name2 
+ON table_name1.column_name=table_name2.column_name
+</code></pre><h2 id="FULL-JOIN"><a href="#FULL-JOIN" class="headerlink" title="FULL JOIN"></a>FULL JOIN</h2><pre><code>SELECT column_name(s)
+FROM table_name1
+FULL JOIN table_name2 
+ON table_name1.column_name=table_name2.column_name
+</code></pre><h2 id="LIKE"><a href="#LIKE" class="headerlink" title="LIKE"></a>LIKE</h2><pre><code>SELECT column_name(s)
+FROM table_name
+WHERE column_name LIKE pattern
+</code></pre><h2 id="ORDER-BY"><a href="#ORDER-BY" class="headerlink" title="ORDER BY"></a>ORDER BY</h2><pre><code>SELECT column_name(s)
+FROM table_name
+ORDER BY column_name [ASC|DESC]
+</code></pre><h2 id="SELECT-DISTINCT"><a href="#SELECT-DISTINCT" class="headerlink" title="SELECT DISTINCT"></a>SELECT DISTINCT</h2><pre><code>SELECT DISTINCT 语句用于返回column_name所有不同值。
+
+SELECT DISTINCT column_name(s)
+FROM table_name
+</code></pre><h2 id="SELECT-TOP"><a href="#SELECT-TOP" class="headerlink" title="SELECT TOP"></a>SELECT TOP</h2><pre><code>SELECT TOP 子句用于规定要返回的记录的数目。SQL server,Mysql Limit
+
+SELECT TOP number|percent column_name(s)
+FROM table_name
+</code></pre><h2 id="UNION"><a href="#UNION" class="headerlink" title="UNION"></a>UNION</h2><pre><code>SQL UNION 操作符合并两个或多个 SELECT 语句的结果。
+请注意，UNION 内部的每个 SELECT 语句必须拥有相同数量的列。列也必须拥有相似的数据类型。同时，每个 SELECT 语句中的列的顺序必须相同。
+
+SELECT column_name(s) FROM table_name1
+UNION
+SELECT column_name(s) FROM table_name2
+</code></pre><h2 id="UNION-ALL"><a href="#UNION-ALL" class="headerlink" title="UNION ALL"></a>UNION ALL</h2><pre><code>SELECT column_name(s) FROM table_name1
+UNION ALL
+SELECT column_name(s) FROM table_name2
+</code></pre><h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><p>AVG() 函数返回数值列的平均值。<br>SELECT AVG(count) AS CountAverage FROM access_log;</p>
+<p>COUNT() 函数返回匹配指定条件的行数。<br>SELECT COUNT(count) AS nums FROM access_log<br>WHERE site_id=3;</p>
+<p>FIRST() 函数返回指定的列中第一个记录的值<br>SELECT column_name FROM table_name<br>ORDER BY column_name ASC<br>LIMIT 1;</p>
+<p>LAST() 函数返回指定的列中最后一个记录的值。<br>SELECT column_name FROM table_name<br>ORDER BY column_name DESC<br>LIMIT 1;</p>
+<p>MAX() 函数返回指定列的最大值。<br>SELECT MAX(alexa) AS max_alexa FROM Websites;</p>
+<p>MIN() 函数返回指定列的最小值。<br>SELECT MIN(column_name) FROM table_name;</p>
+<p>SUM() 函数返回数值列的总数。<br>SELECT SUM(column_name) FROM table_name;</p>
+<p>GROUP BY 语句可结合一些聚合函数来使用<br>SELECT column_name, aggregate_function(column_name)<br>FROM table_name<br>WHERE column_name operator value<br>GROUP BY column_name;<br>例子：<br>SELECT site_id, SUM(access_log.count) AS nums<br>FROM access_log GROUP BY site_id;</p>
+<p>MID() 函数用于从文本字段中提取字符。<br>SELECT MID(column_name,start[,length]) FROM table_name;</p>
+<p>LEN() 函数返回文本字段中值的长度。<br>SELECT LEN(column_name) FROM table_name;</p>
+<p>ROUND() 函数用于把数值字段舍入为指定的小数位数<br>SELECT ROUND(column_name,decimals) FROM table_name;<br>select ROUND(1.298, 1); -&gt;1.3</p>
+<p>NOW() 函数返回当前系统的日期和时间。<br>SELECT NOW() FROM table_name;</p>
+<p>FORMAT() 函数用于对字段的显示进行格式化。<br>SELECT FORMAT(column_name,format) FROM table_name;<br>SELECT name, url, DATE_FORMAT(Now(),’%Y-%m-%d’) AS date<br>FROM Websites;</p>
+<p><code>`</code></p>
 
           
         
@@ -730,6 +893,198 @@
 <h2 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h2><p>CPU计算性能优化<br>IO高性能硬盘优化<br>网络优化</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
 <li><a href="https://www.cnblogs.com/excellencesy/p/9770619.html" target="_blank" rel="noopener">史上最全的 MySQL 高性能优化实战总结！</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/08/31/DB_Mysql数据库索引技术原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/08/31/DB_Mysql数据库索引技术原理/" class="post-title-link" itemprop="url">Mysql数据库索引技术原理</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-08-31 17:54:54" itemprop="dateCreated datePublished" datetime="2018-08-31T17:54:54+08:00">2018-08-31</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="mysql索引"><a href="#mysql索引" class="headerlink" title="mysql索引"></a>mysql索引</h2><p>索引是帮助mysql高效获取数据的数据结构，是数据库系统为满足高效的查找算法而维护的一种特殊数据结构，这些数据结构以某种映射关系指向数据。这种数据结构就是索引。</p>
+<h2 id="索引的类型"><a href="#索引的类型" class="headerlink" title="索引的类型"></a>索引的类型</h2><p>根据数据库的功能，可以在数据库设计器中创建四种常用索引：普通索引、唯一索引、主键索引和聚集索引。</p>
+<p>CREATE [UNIQUE] [CLUSTERED| NONCLUSTERED] INDEX &lt;索引名&gt;<br>ON &lt;表名&gt;(&lt;列名&gt;[ASC|DESC] [, &lt;列名&gt;[ASC|DESC]…])</p>
+<h3 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">最基本的索引类型，没有唯一性之类的限制。普通索引可以通过以下几种方式创建：</span><br><span class="line">创建索引，例如CREATE INDEX &lt;索引的名字&gt; ON tablename (列的列表)；</span><br><span class="line">修改表，例如ALTER TABLE tablename ADD INDEX [索引的名字] (列的列表)；</span><br><span class="line">创建表的时候指定索引，例如CREATE TABLE tablename ( [...], INDEX [索引的名字] (列的列表) )；</span><br></pre></td></tr></table></figure>
+<h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">唯一索引是不允许其中任何两行具有相同索引值的索引。</span><br><span class="line">当现有数据中存在重复的键值时，大多数数据库不允许将新创建的唯一索引与表一起保存。数据库还可能防止添加将在表中创建重复键值的新数据。例如，如果在 employee 表中职员的姓 (lname) 上创建了唯一索引，则任何两个员工都不能同姓。</span><br><span class="line">对某个列建立UNIQUE索引后，插入新记录时，数据库管理系统会自动检查新纪录在该列上是否取了重复值，在CREATE TABLE 命令中的UNIQE约束将隐式创建UNIQUE索引。</span><br><span class="line">创建唯一索引的几种方式：</span><br><span class="line">创建索引，例如CREATE UNIQUE INDEX &lt;索引的名字&gt; ON tablename (列的列表)；</span><br><span class="line">修改表，例如ALTER TABLE tablename ADD UNIQUE [索引的名字] (列的列表); ；</span><br><span class="line">创建表的时候指定索引，例如CREATE TABLE tablename ( [...], UNIQUE [索引的名字] (列的列表) )；</span><br></pre></td></tr></table></figure>
+<h3 id="主键索引"><a href="#主键索引" class="headerlink" title="主键索引"></a>主键索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">简称为主索引，数据库表中一列或列组合（字段）的值唯一标识表中的每一行。该列称为表的主键。</span><br><span class="line">在数据库关系图中为表定义主键将自动创建主键索引，主键索引是唯一索引的特定类型。该索引要求主键中的每个值都唯一。当在查询中使用主键索引时，它还允许对数据的快速访问。</span><br><span class="line">提示尽管唯一索引有助于定位信息，但为获得最佳性能结果，建议改用主键索引。</span><br></pre></td></tr></table></figure>
+<h3 id="候选索引"><a href="#候选索引" class="headerlink" title="候选索引"></a>候选索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">与主索引一样要求字段值的唯一性，并决定了处理记录的顺序。在数据库和自由表中，可以为每个表建立多个候选索引。</span><br></pre></td></tr></table></figure>
+<h3 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">也称为聚簇索引，在聚集索引中，表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引， 即如果存在聚集索引，就不能再指定CLUSTERED 关键字。</span><br><span class="line">索引不是聚集索引，则表中行的物理顺序与键值的逻辑顺序不匹配。与非聚集索引相比，聚集索引通常提供更快的数据访问速度。聚集索引更适用于对很少对基表进行增删改操作的情况。</span><br><span class="line">如果在表中创建了主键约束，SQL Server将自动为其产生唯一性约束。在创建主键约束时，指定了CLUSTERED关键字或干脆没有制定该关键字，SQL Sever将会自动为表生成唯一聚集索引。</span><br></pre></td></tr></table></figure>
+<h3 id="非聚集索引"><a href="#非聚集索引" class="headerlink" title="非聚集索引"></a>非聚集索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">也叫非簇索引，在非聚集索引中，数据库表中记录的物理顺序与索引顺序可以不相同。一个表中只能有一个聚集索引，但表中的每一列都可以有自己的非聚集索引。如果在表中创建了主键约束，SQL Server将自动为其产生唯一性约束。在创建主键约束时，如果制定CLUSTERED关键字，则将为表产生唯一聚集索引。</span><br></pre></td></tr></table></figure>
+<h2 id="索引底层数据结构"><a href="#索引底层数据结构" class="headerlink" title="索引底层数据结构"></a>索引底层数据结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">B-Tree B+Tree 相比红黑树的优势：磁盘预读取多余的数据到内存，BTree由于高度较小水平分叉较多，一次读取的数据较快较多，减少磁盘读取，提高效率。</span><br><span class="line">如果按照B-tree索引，可以直接返回，带顺序的数据，但这个数据只是该索引列含有的信息</span><br><span class="line"></span><br><span class="line">InnoDb引擎与MyIsAm区别：InnoDB是索引字段值索引，MyIsAm是字段地址索引。</span><br><span class="line"></span><br><span class="line">了解不同存储引擎的索引实现方式对于正确使用和优化索引都非常有帮助，例如知道了InnoDB的索引实现后，就很容易明白为什么不建议使用过长的字段作为主键，因为所有辅助索引都引用主索引，过长的主索引会令辅助索引变得过大。再例如，用非单调的字段作为主键在InnoDB中不是个好主意，因为InnoDB数据文件本身是一颗B+Tree，非单调的主键会造成在插入新记录时数据文件为了维持B+Tree的特性而频繁的分裂调整，十分低效，而使用自增字段作为主键则是一个很好的选择。</span><br></pre></td></tr></table></figure>
+<h2 id="索引查询算法"><a href="#索引查询算法" class="headerlink" title="索引查询算法"></a>索引查询算法</h2><pre><code>- 顺序查找，无索引情况下
+- 索引查找，目前数据库系统及文件系统都采用B-Tree 或其变种 B+Tree作为索引结构。
+</code></pre><h2 id="索引结构优化"><a href="#索引结构优化" class="headerlink" title="索引结构优化"></a>索引结构优化</h2><ul>
+<li><p>高效使用索引的首要条件是知道什么样的查询会使用到索引，这个问题和B+Tree中的“最左前缀原理”有关。一般在WHERE 和 JOIN子句都是索引可以选择的对象。</p>
+</li>
+<li><p>范围查询（in, &gt; ,&lt; ) 后面的数据会用不上索引。</p>
+</li>
+<li><p>查询条件中含有函数或表达式会用不上索引。</p>
+</li>
+<li><p>索引选择性与前缀索引：只在查询频繁的字段增加索引，联合索引不必要全字段，用列的前缀代替整个列作为索引key，短索引速度更快。</p>
+</li>
+<li><p>考虑已在表上创建的索引数量。最好避免在单个表上有很多索引。</p>
+</li>
+<li><p>对新索引进行试验以检查它对运行查询性能的影响。</p>
+</li>
+<li><p>检查已在表上创建的索引的定义。最好避免包含共享列的重叠索引。</p>
+</li>
+<li><p>检查某列中唯一数据值的数量，并将该数量与表中的行数进行比较。比较的结果就是该列的可选择性，这有助于确定该列是否适合建立索引，如果适合，确定索引的类型。</p>
+</li>
+<li><p>InnoDB的主键选择与插入优化：自增主键索引会按顺序插入最后，非自增主键索引会导致乱序插入的开销</p>
+</li>
+</ul>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
+<li><a href="https://blog.csdn.net/gitchat/article/details/78787837" target="_blank" rel="noopener">深入理解 MySQL 底层实现</a></li>
+<li><a href="https://www.cnblogs.com/sanwenyu/p/6129082.html" target="_blank" rel="noopener">MySQL索引背后的数据结构及算法原理</a></li>
 </ol>
 
           
@@ -2012,7 +2367,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_about_gunicorn/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_PEP 8风格指南/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -2032,7 +2387,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/python_about_gunicorn/" class="post-title-link" itemprop="url">gunicorn工作原理</a>
+                <a href="/2018/05/24/python_PEP 8风格指南/" class="post-title-link" itemprop="url">转：PEP 8风格指南</a>
               
             
           </h2>
@@ -2075,7 +2430,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
 
                 
                 
@@ -2112,188 +2467,34 @@
       
         
           
-            <h2 id="gunicorn工作原理"><a href="#gunicorn工作原理" class="headerlink" title="gunicorn工作原理"></a>gunicorn工作原理</h2><blockquote>
-<p>gunicorn pre-fork worker模型中有一个管理进程以及几个的工作进程。管理进程master，工作进程:worker。<br>gunicorn 会启动一组 worker进程，所有worker进程公用一组listener，在每个worker中为每个listener建立一个wsgi server。每当有HTTP链接到来时，wsgi server创建一个协程来处理该链接，协程处理该链接的时候，先初始化WSGI环境，然后调用用户提供的app对象去处理HTTP请求。</p>
-</blockquote>
-<h2 id="worker-server"><a href="#worker-server" class="headerlink" title="worker server"></a>worker server</h2><p>worker有很多种，包括：ggevent、geventlet、gtornado等等。这里主要分析ggevent。<br>每个ggevent worker启动的时候会启动多个server对象：worker首先为每个listener创建一个server对象（注：为什么是一组listener,因为gunicorn可以绑定一组地址,每个地址对于一个listener），每个server对象都有运行在一个单独的gevent pool对象中。真正等待链接和处理链接的操作是在server对象中进行的。</p>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
-<li><a href="https://blog.csdn.net/jailman/article/details/78496522" target="_blank" rel="noopener">gunicorn工作原理</a></li>
+            <h2 id="PEP-8风格指南"><a href="#PEP-8风格指南" class="headerlink" title="PEP 8风格指南"></a>PEP 8风格指南</h2><p>PEP是Python Enhancement Proposal的缩写，通常翻译为“Python增强提案”。每个PEP都是一份为Python社区提供的指导Python往更好的方向发展的技术文档，其中的第8号增强提案（PEP 8）是针对Python语言编订的代码风格指南。尽管我们可以在保证语法没有问题的前提下随意书写Python代码，但是在实际开发中，采用一致的风格书写出可读性强的代码是每个专业的程序员应该做到的事情，也是每个公司的编程规范中会提出的要求，这些在多人协作开发一个项目（团队开发）的时候显得尤为重要。我们可以从Python官方网站的<a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="noopener">PEP 8链接</a>中找到该文档，下面我们对该文档的关键部分做一个简单的总结。</p>
+<h3 id="空格的使用"><a href="#空格的使用" class="headerlink" title="空格的使用"></a>空格的使用</h3><ol>
+<li><u>使用空格来表示缩进而不要用制表符（Tab）。</u>这一点对习惯了其他编程语言的人来说简直觉得不可理喻，因为绝大多数的程序员都会用Tab来表示缩进，但是要知道Python并没有像C/C++或Java那样的用花括号来构造一个代码块的语法，在Python中分支和循环结构都使用缩进来表示哪些代码属于同一个级别，鉴于此Python代码对缩进以及缩进宽度的依赖比其他很多语言都强得多。在不同的编辑器中，Tab的宽度可能是2、4或8个字符，甚至是其他更离谱的值，用Tab来表示缩进对Python代码来说可能是一场灾难。</li>
+<li><u>和语法相关的每一层缩进都用4个空格来表示。</u></li>
+<li><u>每行的字符数不要超过79个字符，如果表达式因太长而占据了多行，除了首行之外的其余各行都应该在正常的缩进宽度上再加上4个空格。</u></li>
+<li><u>函数和类的定义，代码前后都要用两个空行进行分隔。</u></li>
+<li><u>在同一个类中，各个方法之间应该用一个空行进行分隔。</u></li>
+<li><u>二元运算符的左右两侧应该保留一个空格，而且只要一个空格就好。</u></li>
 </ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_配置热更新/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/k8s_配置热更新/" class="post-title-link" itemprop="url">Kubernetes ConfigMap热更新</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Kubernetes-ConfigMap热更新"><a href="#Kubernetes-ConfigMap热更新" class="headerlink" title="Kubernetes ConfigMap热更新"></a><a href="https://www.kubernetes.org.cn/3138.html" target="_blank" rel="noopener">Kubernetes ConfigMap热更新</a></h2><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>ConfigMap是用来存储配置文件的kubernetes资源对象，所有的配置内容都存储在etcd中</p>
-<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><ol>
-<li><p>文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: env-config</span><br><span class="line">  namespace: default</span><br><span class="line">data:</span><br><span class="line">  log_level: INFO</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap ...</span><br></pre></td></tr></table></figure>
-</li>
+<h3 id="标识符命名"><a href="#标识符命名" class="headerlink" title="标识符命名"></a>标识符命名</h3><p>PEP 8倡导用不同的命名风格来命名Python中不同的标识符，以便在阅读代码时能够通过标识符的名称来确定该标识符在Python中扮演了怎样的角色（在这一点上，Python自己的内置模块以及某些第三方模块都做得并不是很好）。</p>
+<ol>
+<li><u>变量、函数和属性应该使用小写字母来拼写，如果有多个单词就使用下划线进行连接。</u></li>
+<li><u>类中受保护的实例属性，应该以一个下划线开头。</u></li>
+<li><u>类中私有的实例属性，应该以两个下划线开头。</u></li>
+<li><u>类和异常的命名，应该每个单词首字母大写。</u></li>
+<li><u>模块级别的常量，应该采用全大写字母，如果有多个单词就用下划线进行连接。</u></li>
+<li><u>类的实例方法，应该把第一个参数命名为<code>self</code>以表示对象自身。</u></li>
+<li><u>类的类方法，应该把第一个参数命名为<code>cls</code>以表示该类自身。</u></li>
 </ol>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ol>
-<li><p>evn挂载：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">envFrom:</span><br><span class="line">- configMapRef:</span><br><span class="line">    name: env-config</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>volume挂载：</p>
-</li>
+<h3 id="表达式和语句"><a href="#表达式和语句" class="headerlink" title="表达式和语句"></a>表达式和语句</h3><p>在Python之禅（可以使用<code>import this</code>查看）中有这么一句名言：“There should be one– and preferably only one –obvious way to do it.”，翻译成中文是“做一件事应该有而且最好只有一种确切的做法”，这句话传达的思想在PEP 8中也是无处不在的。</p>
+<ol>
+<li><u>采用内联形式的否定词，而不要把否定词放在整个表达式的前面。</u>例如<code>if a is not b</code>就比<code>if not a is b</code>更容易让人理解。</li>
+<li>不要用检查长度的方式来判断字符串、列表等是否为<code>None</code>或者没有元素，应该用<code>if not x</code>这样的写法来检查它。</li>
+<li><u>就算<code>if</code>分支、<code>for</code>循环、<code>except</code>异常捕获等中只有一行代码，也不要将代码和<code>if</code>、<code>for</code>、<code>except</code>等写在一起，分开写才会让代码更清晰。</u></li>
+<li><u><code>import</code>语句总是放在文件开头的地方。</u></li>
+<li><u>引入模块的时候，<code>from math import sqrt</code>比<code>import math</code>更好。</u></li>
+<li><u>如果有多个<code>import</code>语句，应该将其分为三部分，从上到下分别是Python标准模块、第三方模块和自定义模块，每个部分内部应该按照模块名称的字母表顺序来排列。</u></li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">volumeMounts:</span><br><span class="line">- name: config-volume</span><br><span class="line">  mountPath: /etc/config</span><br><span class="line">volumes:</span><br><span class="line">  - name: config-volume</span><br><span class="line">    configMap:</span><br><span class="line">      name: special-config</span><br></pre></td></tr></table></figure>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>更新 ConfigMap 后：</p>
-<p>使用该 ConfigMap 挂载的 Env 不会同步更新<br>使用该 ConfigMap 挂载的 Volume 中的数据需要一段时间（实测大概10秒）才能同步更新<br>ENV 是在容器启动的时候注入的，启动之后 kubernetes 就不会再改变环境变量的值，且同一个 namespace 中的 pod 的环境变量是不断累加的，参考 <a href="https://jimmysong.io/posts/exploring-kubernetes-env-with-docker/" target="_blank" rel="noopener">Kubernetes中的服务发现与docker容器间的环境变量传递源码探究</a>。为了更新容器中使用 ConfigMap 挂载的配置，可以通过滚动更新 pod 的方式来强制重新挂载 ConfigMap，也可以在更新了 ConfigMap 后，先将副本数设置为 0，然后再扩容。</p>
 
           
         
@@ -2381,7 +2582,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">32</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2519,7 +2720,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">46</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">48</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
