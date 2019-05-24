@@ -341,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/10/01/python_高并发/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/08/31/DB_Mysql数据库索引技术原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -361,7 +361,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/10/01/python_高并发/" class="post-title-link" itemprop="url">python高并发的详解</a>
+                <a href="/2018/08/31/DB_Mysql数据库索引技术原理/" class="post-title-link" itemprop="url">Mysql数据库索引技术原理</a>
               
             
           </h2>
@@ -386,25 +386,9 @@
                 
               
 
-              <time title="Created: 2018-10-01 19:54:55" itemprop="dateCreated datePublished" datetime="2018-10-01T19:54:55+08:00">2018-10-01</time>
+              <time title="Created: 2018-08-31 17:54:54" itemprop="dateCreated datePublished" datetime="2018-08-31T17:54:54+08:00">2018-08-31</time>
             
 
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-10-24 14:50:25" itemprop="dateModified" datetime="2018-10-24T14:50:25+08:00">2018-10-24</time>
-              
             
           </span>
 
@@ -457,432 +441,42 @@
       
         
           
-            <h1 id="python高并发的详解"><a href="#python高并发的详解" class="headerlink" title="python高并发的详解"></a>python高并发的详解</h1><h2 id="一、什么是高并发"><a href="#一、什么是高并发" class="headerlink" title="一、什么是高并发"></a>一、什么是高并发</h2><p>高并发（High Concurrency）是互联网分布式系统架构设计中必须考虑的因素之一，它通常是指，通过设计保证系统能够同时并行处理很多请求。</p>
-<p>高并发相关常用的一些指标有响应时间（Response Time），吞吐量（Throughput），每秒查询率QPS（Query Per Second），并发用户数等。</p>
-<p>响应时间：系统对请求做出响应的时间。例如系统处理一个HTTP请求需要200ms，这个200ms就是系统的响应时间。</p>
-<p>吞吐量：单位时间内处理的请求数量。</p>
-<p>QPS：每秒响应请求数。在互联网领域，这个指标和吞吐量区分的没有这么明显。</p>
-<p>并发用户数：同时承载正常使用系统功能的用户数量。例如一个即时通讯系统，同时在线量一定程度上代表了系统的并发用户数。</p>
-<h2 id="二、如何提升系统的并发能力"><a href="#二、如何提升系统的并发能力" class="headerlink" title="二、如何提升系统的并发能力"></a>二、如何提升系统的并发能力</h2><p>互联网分布式架构设计，提高系统并发能力的方式，方法论上主要有两种：垂直扩展（Scale Up）与水平扩展（Scale Out）。</p>
-<p>垂直扩展：提升单机处理能力。垂直扩展的方式又有两种：</p>
-<p>（1）增强单机硬件性能，例如：增加CPU核数如32核，升级更好的网卡如万兆，升级更好的硬盘如SSD，扩充硬盘容量如2T，扩充系统内存如128G；</p>
-<p>（2）提升单机架构性能，例如：使用Cache来减少IO次数，使用异步来增加单服务吞吐量，使用无锁数据结构来减少响应时间； </p>
-<p>在互联网业务发展非常迅猛的早期，如果预算不是问题，强烈建议使用“增强单机硬件性能”的方式提升系统并发能力，因为这个阶段，公司的战略往往是发展业务抢时间，而“增强单机硬件性能”往往是最快的方法。</p>
-<p>不管是提升单机硬件性能，还是提升单机架构性能，都有一个致命的不足：单机性能总是有极限的。所以互联网分布式架构设计高并发终极解决方案还是水平扩展。</p>
-<p>水平扩展：只要增加服务器数量，就能线性扩充系统性能。水平扩展对系统架构设计是有要求的，如何在架构各层进行可水平扩展的设计，以及互联网公司架构各层常见的水平扩展实践，是本文重点讨论的内容。</p>
-<p>python解决高并发的几种方式<br>1.HTML页面静态化<br>2.图片服务器分离（我使用的是fastdfs轻量级的分布式文件存储系统）<br>3.使用缓存（缓存存在于内存中读取快我的项目中使用redis作为缓存的数据库，redis是内存型数据作为存储缓存的数据库挺适合）<br>4.数据库集群、库表散列<br>5.使用负载均衡的方法（简单的配置可以用nginx来配置负载均衡，只需要设置 如下代码，即可实现简单的负载均衡<br> upstream djangoserver {<br>             server 192.168.72.49:8080;<br>             server 192.168.72.49:8081;<br>          }<br>6.镜像<br>镜像是大型网站常采用的提高性能和数据安全性的方式，镜像的技术可以解决不同网络接入商和地域带来的用户访问速度差异，比如ChinaNet和EduNet之间的差异就促使了很多网站在教育网内搭建镜像站点，数据进行定时更新或者实时更新。在镜像的细节技术方面，这里不阐述太深，有很多专业的现成的解决架构和产品可选。也有廉价的通过软件实现的思路，比如Linux上的rsync等工具。<br>7.最新：CDN加速技术（此技术还在了解阶段，可自行去网上查找相关的资料）</p>
-<h2 id="三、常见的互联网分层架构"><a href="#三、常见的互联网分层架构" class="headerlink" title="三、常见的互联网分层架构"></a>三、常见的互联网分层架构</h2><p>常见互联网分布式架构如上，分为：</p>
-<p>（1）客户端层：典型调用方是浏览器browser或者手机应用APP</p>
-<p>（2）反向代理层：系统入口，反向代理</p>
-<p>（3）站点应用层：实现核心应用逻辑，返回html或者json</p>
-<p>（4）服务层：如果实现了服务化，就有这一层</p>
-<p>（5）数据-缓存层：缓存加速访问存储</p>
-<p>（6）数据-数据库层：数据库固化数据存储</p>
-<p>整个系统各层次的水平扩展，又分别是如何实施的呢？</p>
-<h2 id="四、分层水平扩展架构实践"><a href="#四、分层水平扩展架构实践" class="headerlink" title="四、分层水平扩展架构实践"></a>四、分层水平扩展架构实践</h2><p>反向代理层的水平扩展<br>反向代理层的水平扩展，是通过“DNS轮询”实现的：dns-server对于一个域名配置了多个解析ip，每次DNS解析请求来访问dns-server，会轮询返回这些ip。</p>
-<p>当nginx成为瓶颈的时候，只要增加服务器数量，新增nginx服务的部署，增加一个外网ip，就能扩展反向代理层的性能，做到理论上的无限高并发。</p>
-<p>站点层的水平扩展<br>站点层的水平扩展，是通过“nginx”实现的。通过修改nginx.conf，可以设置多个web后端。</p>
-<p>当web后端成为瓶颈的时候，只要增加服务器数量，新增web服务的部署，在nginx配置中配置上新的web后端，就能扩展站点层的性能，做到理论上的无限高并发。</p>
-<p>服务层的水平扩展<br>服务层的水平扩展，是通过“服务连接池”实现的。</p>
-<p>站点层通过RPC-client调用下游的服务层RPC-server时，RPC-client中的连接池会建立与下游服务多个连接，当服务成为瓶颈的时候，只要增加服务器数量，新增服务部署，在RPC-client处建立新的下游服务连接，就能扩展服务层性能，做到理论上的无限高并发。如果需要优雅的进行服务层自动扩容，这里可能需要配置中心里服务自动发现功能的支持。</p>
-<p>数据层的水平扩展<br>在数据量很大的情况下，数据层（缓存，数据库）涉及数据的水平扩展，将原本存储在一台服务器上的数据（缓存，数据库）水平拆分到不同服务器上去，以达到扩充系统性能的目的。</p>
-<p>互联网数据层常见的水平拆分方式有这么几种，以数据库为例：</p>
-<p>按照范围水平拆分<br>每一个数据服务，存储一定范围的数据，上图为例：</p>
-<p>user0库，存储uid范围1-1kw</p>
-<p>user1库，存储uid范围1kw-2kw</p>
-<p>这个方案的好处是：</p>
-<p>（1）规则简单，service只需判断一下uid范围就能路由到对应的存储服务；</p>
-<p>（2）数据均衡性较好；</p>
-<p>（3）比较容易扩展，可以随时加一个uid[2kw,3kw]的数据服务；</p>
-<p>不足是：</p>
-<p>　　请求的负载不一定均衡，一般来说，新注册的用户会比老用户更活跃，大range的服务请求压力会更大；</p>
-<p>按照哈希水平拆分<br>每一个数据库，存储某个key值hash后的部分数据，上图为例：</p>
-<p>user0库，存储偶数uid数据</p>
-<p>user1库，存储奇数uid数据</p>
-<p>这个方案的好处是：</p>
-<p>（1）规则简单，service只需对uid进行hash能路由到对应的存储服务；</p>
-<p>（2）数据均衡性较好；</p>
-<p>（3）请求均匀性较好；</p>
-<p>不足是：</p>
-<p>　　不容易扩展，扩展一个数据服务，hash方法改变时候，可能需要进行数据迁移；</p>
-<p>这里需要注意的是，通过水平拆分来扩充系统性能，与主从同步读写分离来扩充数据库性能的方式有本质的不同。</p>
-<p>通过水平拆分扩展数据库性能：<br>（1）每个服务器上存储的数据量是总量的1/n，所以单机的性能也会有提升；</p>
-<p>（2）n个服务器上的数据没有交集，那个服务器上数据的并集是数据的全集；</p>
-<p>（3）数据水平拆分到了n个服务器上，理论上读性能扩充了n倍，写性能也扩充了n倍（其实远不止n倍，因为单机的数据量变为了原来的1/n）；</p>
-<p>通过主从同步读写分离扩展数据库性能：<br>（1）每个服务器上存储的数据量是和总量相同；</p>
-<p>（2）n个服务器上的数据都一样，都是全集；</p>
-<p>（3）理论上读性能扩充了n倍，写仍然是单点，写性能不变；</p>
-<p>缓存层的水平拆分和数据库层的水平拆分类似，也是以范围拆分和哈希拆分的方式居多，就不再展开。</p>
-<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><p>高并发（High Concurrency）是互联网分布式系统架构设计中必须考虑的因素之一，它通常是指，通过设计保证系统能够同时并行处理很多请求。</p>
-<p>提高系统并发能力的方式，方法论上主要有两种：垂直扩展（Scale Up）与水平扩展（Scale Out）。前者垂直扩展可以通过提升单机硬件性能，或者提升单机架构性能，来提高并发性，但单机性能总是有极限的，互联网分布式架构设计高并发终极解决方案还是后者：水平扩展。</p>
-<p>互联网分层架构中，各层次水平扩展的实践又有所不同：</p>
-<p>（1）反向代理层可以通过“DNS轮询”的方式来进行水平扩展；</p>
-<p>（2）站点层可以通过nginx来进行水平扩展；</p>
-<p>（3）服务层可以通过服务连接池来进行水平扩展；</p>
-<p>（4）数据库可以按照数据范围，或者数据哈希的方式来进行水平扩展；</p>
-<p>各层实施水平扩展后，能够通过增加服务器数量的方式来提升系统的性能，做到理论上的性能无限。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/08/31/DB_SQL速查与浏览记忆/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/08/31/DB_SQL速查与浏览记忆/" class="post-title-link" itemprop="url">SQL速查与浏览记忆</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-08-31 19:54:55 / Modified: 17:54:54" itemprop="dateCreated datePublished" datetime="2018-08-31T19:54:55+08:00">2018-08-31</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/常用工具/" itemprop="url" rel="index"><span itemprop="name">常用工具</span></a></span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/常用工具/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h1><h2 id="CREATE-DATABASE"><a href="#CREATE-DATABASE" class="headerlink" title="CREATE DATABASE"></a>CREATE DATABASE</h2><pre><code>CREATE DATABASE database_name;
-</code></pre><h2 id="DROP-DATABASE"><a href="#DROP-DATABASE" class="headerlink" title="DROP DATABASE"></a>DROP DATABASE</h2><pre><code>DROP DATABASE database_name
-</code></pre><p>=============</p>
-<h1 id="表操作"><a href="#表操作" class="headerlink" title="表操作"></a>表操作</h1><h2 id="CREATE-TABLE"><a href="#CREATE-TABLE" class="headerlink" title="CREATE TABLE"></a>CREATE TABLE</h2><pre><code>CREATE TABLE table_name
-(
-column_name1 data_type,
-column_name2 data_type,
-column_name2 data_type,
-...
-)
-</code></pre><h2 id="DROP-TABLE"><a href="#DROP-TABLE" class="headerlink" title="DROP TABLE"></a>DROP TABLE</h2><pre><code>DROP TABLE table_name
-</code></pre><p>============</p>
-<h1 id="数据操作-增加"><a href="#数据操作-增加" class="headerlink" title="数据操作-增加"></a>数据操作-增加</h1><h2 id="INSERT-INTO"><a href="#INSERT-INTO" class="headerlink" title="INSERT INTO"></a>INSERT INTO</h2><pre><code>INSERT INTO table_name
-VALUES (value1, value2, value3,....)
-or
-
-INSERT INTO table_name
-(column1, column2, column3,...)
-VALUES (value1, value2, value3,....)
-</code></pre><h2 id="SELECT-INTO"><a href="#SELECT-INTO" class="headerlink" title="SELECT INTO"></a>SELECT INTO</h2><pre><code>SELECT *
-INTO new_table_name [IN externaldatabase]
-FROM old_table_name
-or
-
-SELECT column_name(s)
-INTO new_table_name [IN externaldatabase]
-FROM old_table_name
-</code></pre><h2 id="CREATE-INDEX"><a href="#CREATE-INDEX" class="headerlink" title="CREATE INDEX"></a>CREATE INDEX</h2><pre><code>CREATE INDEX index_name
-ON table_name (column_name)
-or
-
-CREATE UNIQUE INDEX index_name
-ON table_name (column_name)
-
-例子：
-CREATE INDEX PIndex
-ON Persons (LastName, FirstName)
-</code></pre><h2 id="DROP-INDEX"><a href="#DROP-INDEX" class="headerlink" title="DROP INDEX"></a>DROP INDEX</h2><pre><code>DROP INDEX table_name.index_name (SQL Server)
-DROP INDEX index_name ON table_name (MS Access)
-DROP INDEX index_name (DB2/Oracle)
-ALTER TABLE table_name DROP INDEX index_name (MySQL)
-</code></pre><h2 id="CREATE-VIEW"><a href="#CREATE-VIEW" class="headerlink" title="CREATE VIEW"></a>CREATE VIEW</h2><pre><code>CREATE VIEW view_name AS
-SELECT column_name(s)
-FROM table_name
-WHERE condition
-</code></pre><h2 id="CHECK"><a href="#CHECK" class="headerlink" title="CHECK"></a>CHECK</h2><pre><code>SQL 在 &quot;Persons&quot; 表创建时在 &quot;P_Id&quot; 列上创建 CHECK 约束。CHECK 约束规定 &quot;P_Id&quot; 列必须只包含大于 0 的整数。
-
-CREATE TABLE Persons
-(
-P_Id int NOT NULL,
-LastName varchar(255) NOT NULL,
-FirstName varchar(255),
-Address varchar(255),
-City varchar(255),
-CHECK (P_Id&gt;0)
-)
-</code></pre><p>//!<img src="http://www.nowamagic.net/librarys/veda/detail/878" alt="视图的作用"></p>
-<p>==========</p>
-<h1 id="数据操作-删除"><a href="#数据操作-删除" class="headerlink" title="数据操作-删除"></a>数据操作-删除</h1><h2 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h2><pre><code>DELETE FROM table_name
-WHERE some_column=some_value
-or
-
-DELETE FROM table_name 
-(Note: Deletes the entire table!!)
-
-DELETE * FROM table_name 
-(Note: Deletes the entire table!!)
-</code></pre><ul>
-<li><p>delete是DML，执行delete操作时，每次从表中删除一行，并且同时将该行的的删除操作记录在redo和undo表空间中以便进行回滚（rollback）和重做操作，但要注意表空间要足够大，需要手动提交（commit）操作才能生效，可以通过rollback撤消操作。</p>
+            <h2 id="mysql索引"><a href="#mysql索引" class="headerlink" title="mysql索引"></a>mysql索引</h2><p>索引是帮助mysql高效获取数据的数据结构，是数据库系统为满足高效的查找算法而维护的一种特殊数据结构，这些数据结构以某种映射关系指向数据。这种数据结构就是索引。</p>
+<h2 id="索引的类型"><a href="#索引的类型" class="headerlink" title="索引的类型"></a>索引的类型</h2><p>根据数据库的功能，可以在数据库设计器中创建四种常用索引：普通索引、唯一索引、主键索引和聚集索引。</p>
+<p>CREATE [UNIQUE] [CLUSTERED| NONCLUSTERED] INDEX &lt;索引名&gt;<br>ON &lt;表名&gt;(&lt;列名&gt;[ASC|DESC] [, &lt;列名&gt;[ASC|DESC]…])</p>
+<h3 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">最基本的索引类型，没有唯一性之类的限制。普通索引可以通过以下几种方式创建：</span><br><span class="line">创建索引，例如CREATE INDEX &lt;索引的名字&gt; ON tablename (列的列表)；</span><br><span class="line">修改表，例如ALTER TABLE tablename ADD INDEX [索引的名字] (列的列表)；</span><br><span class="line">创建表的时候指定索引，例如CREATE TABLE tablename ( [...], INDEX [索引的名字] (列的列表) )；</span><br></pre></td></tr></table></figure>
+<h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">唯一索引是不允许其中任何两行具有相同索引值的索引。</span><br><span class="line">当现有数据中存在重复的键值时，大多数数据库不允许将新创建的唯一索引与表一起保存。数据库还可能防止添加将在表中创建重复键值的新数据。例如，如果在 employee 表中职员的姓 (lname) 上创建了唯一索引，则任何两个员工都不能同姓。</span><br><span class="line">对某个列建立UNIQUE索引后，插入新记录时，数据库管理系统会自动检查新纪录在该列上是否取了重复值，在CREATE TABLE 命令中的UNIQE约束将隐式创建UNIQUE索引。</span><br><span class="line">创建唯一索引的几种方式：</span><br><span class="line">创建索引，例如CREATE UNIQUE INDEX &lt;索引的名字&gt; ON tablename (列的列表)；</span><br><span class="line">修改表，例如ALTER TABLE tablename ADD UNIQUE [索引的名字] (列的列表); ；</span><br><span class="line">创建表的时候指定索引，例如CREATE TABLE tablename ( [...], UNIQUE [索引的名字] (列的列表) )；</span><br></pre></td></tr></table></figure>
+<h3 id="主键索引"><a href="#主键索引" class="headerlink" title="主键索引"></a>主键索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">简称为主索引，数据库表中一列或列组合（字段）的值唯一标识表中的每一行。该列称为表的主键。</span><br><span class="line">在数据库关系图中为表定义主键将自动创建主键索引，主键索引是唯一索引的特定类型。该索引要求主键中的每个值都唯一。当在查询中使用主键索引时，它还允许对数据的快速访问。</span><br><span class="line">提示尽管唯一索引有助于定位信息，但为获得最佳性能结果，建议改用主键索引。</span><br></pre></td></tr></table></figure>
+<h3 id="候选索引"><a href="#候选索引" class="headerlink" title="候选索引"></a>候选索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">与主索引一样要求字段值的唯一性，并决定了处理记录的顺序。在数据库和自由表中，可以为每个表建立多个候选索引。</span><br></pre></td></tr></table></figure>
+<h3 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">也称为聚簇索引，在聚集索引中，表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引， 即如果存在聚集索引，就不能再指定CLUSTERED 关键字。</span><br><span class="line">索引不是聚集索引，则表中行的物理顺序与键值的逻辑顺序不匹配。与非聚集索引相比，聚集索引通常提供更快的数据访问速度。聚集索引更适用于对很少对基表进行增删改操作的情况。</span><br><span class="line">如果在表中创建了主键约束，SQL Server将自动为其产生唯一性约束。在创建主键约束时，指定了CLUSTERED关键字或干脆没有制定该关键字，SQL Sever将会自动为表生成唯一聚集索引。</span><br></pre></td></tr></table></figure>
+<h3 id="非聚集索引"><a href="#非聚集索引" class="headerlink" title="非聚集索引"></a>非聚集索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">也叫非簇索引，在非聚集索引中，数据库表中记录的物理顺序与索引顺序可以不相同。一个表中只能有一个聚集索引，但表中的每一列都可以有自己的非聚集索引。如果在表中创建了主键约束，SQL Server将自动为其产生唯一性约束。在创建主键约束时，如果制定CLUSTERED关键字，则将为表产生唯一聚集索引。</span><br></pre></td></tr></table></figure>
+<h2 id="索引底层数据结构"><a href="#索引底层数据结构" class="headerlink" title="索引底层数据结构"></a>索引底层数据结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">B-Tree B+Tree 相比红黑树的优势：磁盘预读取多余的数据到内存，BTree由于高度较小水平分叉较多，一次读取的数据较快较多，减少磁盘读取，提高效率。</span><br><span class="line">如果按照B-tree索引，可以直接返回，带顺序的数据，但这个数据只是该索引列含有的信息</span><br><span class="line"></span><br><span class="line">InnoDb引擎与MyIsAm区别：InnoDB是索引字段值索引，MyIsAm是字段地址索引。</span><br><span class="line"></span><br><span class="line">了解不同存储引擎的索引实现方式对于正确使用和优化索引都非常有帮助，例如知道了InnoDB的索引实现后，就很容易明白为什么不建议使用过长的字段作为主键，因为所有辅助索引都引用主索引，过长的主索引会令辅助索引变得过大。再例如，用非单调的字段作为主键在InnoDB中不是个好主意，因为InnoDB数据文件本身是一颗B+Tree，非单调的主键会造成在插入新记录时数据文件为了维持B+Tree的特性而频繁的分裂调整，十分低效，而使用自增字段作为主键则是一个很好的选择。</span><br></pre></td></tr></table></figure>
+<h2 id="索引查询算法"><a href="#索引查询算法" class="headerlink" title="索引查询算法"></a>索引查询算法</h2><pre><code>- 顺序查找，无索引情况下
+- 索引查找，目前数据库系统及文件系统都采用B-Tree 或其变种 B+Tree作为索引结构。
+</code></pre><h2 id="索引结构优化"><a href="#索引结构优化" class="headerlink" title="索引结构优化"></a>索引结构优化</h2><ul>
+<li><p>高效使用索引的首要条件是知道什么样的查询会使用到索引，这个问题和B+Tree中的“最左前缀原理”有关。一般在WHERE 和 JOIN子句都是索引可以选择的对象。</p>
 </li>
-<li><p>delete可根据条件删除表中满足条件的数据，如果不指定where子句，那么删除表中所有记录。</p>
+<li><p>范围查询（in, &gt; ,&lt; ) 后面的数据会用不上索引。</p>
 </li>
-<li><p>delete语句不影响表所占用的extent，高水线(high watermark)保持原位置不变。</p>
+<li><p>查询条件中含有函数或表达式会用不上索引。</p>
+</li>
+<li><p>索引选择性与前缀索引：只在查询频繁的字段增加索引，联合索引不必要全字段，用列的前缀代替整个列作为索引key，短索引速度更快。</p>
+</li>
+<li><p>考虑已在表上创建的索引数量。最好避免在单个表上有很多索引。</p>
+</li>
+<li><p>对新索引进行试验以检查它对运行查询性能的影响。</p>
+</li>
+<li><p>检查已在表上创建的索引的定义。最好避免包含共享列的重叠索引。</p>
+</li>
+<li><p>检查某列中唯一数据值的数量，并将该数量与表中的行数进行比较。比较的结果就是该列的可选择性，这有助于确定该列是否适合建立索引，如果适合，确定索引的类型。</p>
+</li>
+<li><p>InnoDB的主键选择与插入优化：自增主键索引会按顺序插入最后，非自增主键索引会导致乱序插入的开销</p>
 </li>
 </ul>
-<h2 id="TRUNCATE-TABLE"><a href="#TRUNCATE-TABLE" class="headerlink" title="TRUNCATE TABLE"></a>TRUNCATE TABLE</h2><pre><code>TRUNCATE TABLE table_name
-</code></pre><ul>
-<li>在速度上，一般来说truncate &gt; delete。 </li>
-<li>如果想保留表而将所有数据删除，如果和事务无关，用truncate就好。</li>
-<li><p>如果和事务有关，或者想触发trigger，还是用delete。</p>
-</li>
-<li><p>truncate是DDL，会隐式提交，所以，不能回滚，不会触发触发器。</p>
-</li>
-<li>truncate会删除表中所有记录，并且将重新设置高水线和所有的索引，缺省情况下将空间释放到minextents个extent，除非使用reuse storage，。不会记录日志，所以执行速度很快，但不能通过rollback撤消操作（如果一不小心把一个表truncate掉，也是可以恢复的，只是不能通过rollback来恢复）。</li>
-<li>对于外键（foreignkey ）约束引用的表，不能使用 truncate table，而应使用不带 where 子句的 delete 语句。</li>
-<li>truncatetable不能用于参与了索引视图的表。</li>
-</ul>
-<p>==========</p>
-<h1 id="数据操作-修改"><a href="#数据操作-修改" class="headerlink" title="数据操作-修改"></a>数据操作-修改</h1><h2 id="UPDATE"><a href="#UPDATE" class="headerlink" title="UPDATE"></a>UPDATE</h2><pre><code>UPDATE table_name
-SET column1=value, column2=value,...
-WHERE some_column=some_value
-</code></pre><h2 id="ALTER-TABLE"><a href="#ALTER-TABLE" class="headerlink" title="ALTER TABLE"></a>ALTER TABLE</h2><pre><code>ALTER TABLE table_name 
-ADD column_name datatype
-or
-
-ALTER TABLE table_name 
-DROP COLUMN column_name
-</code></pre><p>===========</p>
-<h1 id="数据操作-查询"><a href="#数据操作-查询" class="headerlink" title="数据操作-查询"></a>数据操作-查询</h1><h2 id="AND-OR"><a href="#AND-OR" class="headerlink" title="AND / OR"></a>AND / OR</h2><pre><code>SELECT column_name(s)
-FROM table_name
-WHERE condition
-AND|OR condition
-</code></pre><p>===========</p>
-<h1 id="数据操作-其他查询"><a href="#数据操作-其他查询" class="headerlink" title="数据操作-其他查询"></a>数据操作-其他查询</h1><h2 id="AS-alias"><a href="#AS-alias" class="headerlink" title="AS (alias)"></a>AS (alias)</h2><pre><code>SELECT column_name AS column_alias
-FROM table_name
-
-or
-
-SELECT column_name
-FROM table_name AS table_alias
-</code></pre><h2 id="BETWEEN"><a href="#BETWEEN" class="headerlink" title="BETWEEN"></a>BETWEEN</h2><pre><code>BETWEEN 操作符用于选取介于两个值之间的数据范围内的值。
-
-SELECT column_name(s)
-FROM table_name
-WHERE column_name
-BETWEEN value1 AND value2
-</code></pre><h2 id="GROUP-BY"><a href="#GROUP-BY" class="headerlink" title="GROUP BY"></a>GROUP BY</h2><pre><code>SELECT column_name, aggregate_function(column_name)
-FROM table_name
-WHERE column_name operator value
-GROUP BY column_name
-
-例子：
-SELECT site_id, SUM(access_log.count) AS nums
-FROM access_log GROUP BY site_id;
-</code></pre><h2 id="HAVING"><a href="#HAVING" class="headerlink" title="HAVING"></a>HAVING</h2><pre><code>在 SQL 中增加 HAVING 子句原因是，WHERE 关键字无法与聚合函数一起使用。
-SELECT column_name, aggregate_function(column_name)
-FROM table_name
-WHERE column_name operator value
-GROUP BY column_name
-HAVING aggregate_function(column_name) operator value
-
-例子：
-SELECT Websites.name, Websites.url, SUM(access_log.count) AS nums FROM (access_log
-INNER JOIN Websites
-ON access_log.site_id=Websites.id)
-GROUP BY Websites.name
-HAVING SUM(access_log.count) &gt; 200;
-</code></pre><h2 id="IN"><a href="#IN" class="headerlink" title="IN"></a>IN</h2><pre><code>SELECT column_name(s)
-FROM table_name
-WHERE column_name
-IN (value1,value2,..)
-</code></pre><h2 id="INNER-JOIN"><a href="#INNER-JOIN" class="headerlink" title="INNER JOIN"></a>INNER JOIN</h2><pre><code>SELECT column_name(s)
-FROM table_name1
-INNER JOIN table_name2 
-ON table_name1.column_name=table_name2.column_name
-</code></pre><p><a href="http://www.runoob.com/sql/sql-join.html" target="_blank" rel="noopener">SQL join 用于把来自两个或多个表的行结合起来。</a></p>
-<h2 id="LEFT-JOIN"><a href="#LEFT-JOIN" class="headerlink" title="LEFT JOIN"></a>LEFT JOIN</h2><pre><code>SELECT column_name(s)
-FROM table_name1
-LEFT JOIN table_name2 
-ON table_name1.column_name=table_name2.column_name
-</code></pre><h2 id="RIGHT-JOIN"><a href="#RIGHT-JOIN" class="headerlink" title="RIGHT JOIN"></a>RIGHT JOIN</h2><pre><code>SELECT column_name(s)
-FROM table_name1
-RIGHT JOIN table_name2 
-ON table_name1.column_name=table_name2.column_name
-</code></pre><h2 id="FULL-JOIN"><a href="#FULL-JOIN" class="headerlink" title="FULL JOIN"></a>FULL JOIN</h2><pre><code>SELECT column_name(s)
-FROM table_name1
-FULL JOIN table_name2 
-ON table_name1.column_name=table_name2.column_name
-</code></pre><h2 id="LIKE"><a href="#LIKE" class="headerlink" title="LIKE"></a>LIKE</h2><pre><code>SELECT column_name(s)
-FROM table_name
-WHERE column_name LIKE pattern
-</code></pre><h2 id="ORDER-BY"><a href="#ORDER-BY" class="headerlink" title="ORDER BY"></a>ORDER BY</h2><pre><code>SELECT column_name(s)
-FROM table_name
-ORDER BY column_name [ASC|DESC]
-</code></pre><h2 id="SELECT-DISTINCT"><a href="#SELECT-DISTINCT" class="headerlink" title="SELECT DISTINCT"></a>SELECT DISTINCT</h2><pre><code>SELECT DISTINCT 语句用于返回column_name所有不同值。
-
-SELECT DISTINCT column_name(s)
-FROM table_name
-</code></pre><h2 id="SELECT-TOP"><a href="#SELECT-TOP" class="headerlink" title="SELECT TOP"></a>SELECT TOP</h2><pre><code>SELECT TOP 子句用于规定要返回的记录的数目。SQL server,Mysql Limit
-
-SELECT TOP number|percent column_name(s)
-FROM table_name
-</code></pre><h2 id="UNION"><a href="#UNION" class="headerlink" title="UNION"></a>UNION</h2><pre><code>SQL UNION 操作符合并两个或多个 SELECT 语句的结果。
-请注意，UNION 内部的每个 SELECT 语句必须拥有相同数量的列。列也必须拥有相似的数据类型。同时，每个 SELECT 语句中的列的顺序必须相同。
-
-SELECT column_name(s) FROM table_name1
-UNION
-SELECT column_name(s) FROM table_name2
-</code></pre><h2 id="UNION-ALL"><a href="#UNION-ALL" class="headerlink" title="UNION ALL"></a>UNION ALL</h2><pre><code>SELECT column_name(s) FROM table_name1
-UNION ALL
-SELECT column_name(s) FROM table_name2
-</code></pre><h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><p>AVG() 函数返回数值列的平均值。<br>SELECT AVG(count) AS CountAverage FROM access_log;</p>
-<p>COUNT() 函数返回匹配指定条件的行数。<br>SELECT COUNT(count) AS nums FROM access_log<br>WHERE site_id=3;</p>
-<p>FIRST() 函数返回指定的列中第一个记录的值<br>SELECT column_name FROM table_name<br>ORDER BY column_name ASC<br>LIMIT 1;</p>
-<p>LAST() 函数返回指定的列中最后一个记录的值。<br>SELECT column_name FROM table_name<br>ORDER BY column_name DESC<br>LIMIT 1;</p>
-<p>MAX() 函数返回指定列的最大值。<br>SELECT MAX(alexa) AS max_alexa FROM Websites;</p>
-<p>MIN() 函数返回指定列的最小值。<br>SELECT MIN(column_name) FROM table_name;</p>
-<p>SUM() 函数返回数值列的总数。<br>SELECT SUM(column_name) FROM table_name;</p>
-<p>GROUP BY 语句可结合一些聚合函数来使用<br>SELECT column_name, aggregate_function(column_name)<br>FROM table_name<br>WHERE column_name operator value<br>GROUP BY column_name;<br>例子：<br>SELECT site_id, SUM(access_log.count) AS nums<br>FROM access_log GROUP BY site_id;</p>
-<p>MID() 函数用于从文本字段中提取字符。<br>SELECT MID(column_name,start[,length]) FROM table_name;</p>
-<p>LEN() 函数返回文本字段中值的长度。<br>SELECT LEN(column_name) FROM table_name;</p>
-<p>ROUND() 函数用于把数值字段舍入为指定的小数位数<br>SELECT ROUND(column_name,decimals) FROM table_name;<br>select ROUND(1.298, 1); -&gt;1.3</p>
-<p>NOW() 函数返回当前系统的日期和时间。<br>SELECT NOW() FROM table_name;</p>
-<p>FORMAT() 函数用于对字段的显示进行格式化。<br>SELECT FORMAT(column_name,format) FROM table_name;<br>SELECT name, url, DATE_FORMAT(Now(),’%Y-%m-%d’) AS date<br>FROM Websites;</p>
-<p><code>`</code></p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
+<li><a href="https://blog.csdn.net/gitchat/article/details/78787837" target="_blank" rel="noopener">深入理解 MySQL 底层实现</a></li>
+<li><a href="https://www.cnblogs.com/sanwenyu/p/6129082.html" target="_blank" rel="noopener">MySQL索引背后的数据结构及算法原理</a></li>
+</ol>
 
           
         
@@ -1193,7 +787,7 @@ SELECT column_name(s) FROM table_name2
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/08/31/DB_Mysql数据库索引技术原理/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/07/27/machine_learn_nlp_tools/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -1213,7 +807,7 @@ SELECT column_name(s) FROM table_name2
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/08/31/DB_Mysql数据库索引技术原理/" class="post-title-link" itemprop="url">Mysql数据库索引技术原理</a>
+                <a href="/2018/07/27/machine_learn_nlp_tools/" class="post-title-link" itemprop="url">ML机器学习速查</a>
               
             
           </h2>
@@ -1238,7 +832,1232 @@ SELECT column_name(s) FROM table_name2
                 
               
 
-              <time title="Created: 2018-08-31 17:54:54" itemprop="dateCreated datePublished" datetime="2018-08-31T17:54:54+08:00">2018-08-31</time>
+              <time title="Created: 2018-07-27 14:50:25" itemprop="dateCreated datePublished" datetime="2018-07-27T14:50:25+08:00">2018-07-27</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p><img src="./images/ml_nlp/models_choice.jpg" alt="not photos"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/07/26/machine_learn_start/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/07/26/machine_learn_start/" class="post-title-link" itemprop="url">ML机器学习概念理解</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-26 14:50:25" itemprop="dateCreated datePublished" datetime="2018-07-26T14:50:25+08:00">2018-07-26</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念理解："><a href="#概念理解：" class="headerlink" title="概念理解："></a>概念理解：</h2><p>机器学习是对依据经验提升自身性能或丰富自身知识的各种算法和系统的系统性研究。<br>机器学习所关注的问题是使用正确的特征来构建正确的模型，以完成既定的任务。（任务，模型，特征）<br>模型赋予机器学习领域以多样性，而特征和任务则为其带来某种程度的一致性。</p>
+<p>常见的分类模型有逻辑回归（LR）、朴素贝叶斯、SVM、GBDT和随机森林（RandomForest）、FFM 等</p>
+<p>LR(Logistic Regression)</p>
+<p>SVM(Support Vector Machine)</p>
+<p>GBDT(Gradient Boosting Decision Tree)</p>
+<p>FM（Factorization Machine） </p>
+<p>FFM（Field-aware Factorization Machine）</p>
+<p>标称型数据（类别）：一般在有限的数据中取，而且只存在‘是’和‘否’两种不同的结果（一般用于分类）<br>数值型数据：可以在无限的数据中取，而且数值比较具体化，例如4.02,6.23这种值（一般用于回归分析）</p>
+<p>系统性能体现在是否能真正达到目标期望，但存在过拟合问题，可能在某一方面相同问题上表现优异而相似问题上则表现糟糕，因此要考虑系统的推广性，适应性，个性化。</p>
+<h2 id="机器学习分类："><a href="#机器学习分类：" class="headerlink" title="机器学习分类："></a>机器学习分类：</h2><ul>
+<li><ol>
+<li>监督学习</li>
+</ol>
+</li>
+</ul>
+<p>有目标期望的学习</p>
+<ul>
+<li><p>1) 分类<br>目标变量是离散型，如是/否、1/2/3、A/B/C或者红/黄/黑等<br>常用分类器算法：<br>k-近邻算法、朴素贝叶斯算法、支持向量机、决策树</p>
+</li>
+<li><p>2) 回归<br>目标变量是连续型的数值，如0.0～100.00、999～999或者+∞～∞等<br>常用回归算法：<br>线性回归、局部加权线性回归、Ridge 回归、Lasso 最小回归系数估计</p>
+</li>
+</ul>
+<ul>
+<li><ol start="2">
+<li>无监督学习</li>
+</ol>
+</li>
+</ul>
+<p>无目标期望的学习</p>
+<ul>
+<li><p>1）聚类<br>自分类<br>常用算法：<br>K-均值（K-mean）、DBSCAN </p>
+</li>
+<li><p>2）密度估计<br>估计数据与每个分组的相似程度<br>常用算法：<br>最大期望算法、Parzen窗设计</p>
+</li>
+</ul>
+<p>另外，还可以根据模型的输出是否含有目标变量来划分模型，如果有则称其为预测性模型，否则称其为描述性模型。</p>
+<h2 id="机器学习方法论："><a href="#机器学习方法论：" class="headerlink" title="机器学习方法论："></a>机器学习方法论：</h2><ul>
+<li><ol>
+<li>理解数据</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li>数据类型，离散型或连续型</li>
+<li>数据缺陷，是否缺失等</li>
+<li>数据噪声，是否存在干扰数据</li>
+</ul>
+<ul>
+<li><ol start="2">
+<li>一般从训练集中拿出一定比例数据做测试，避免真实数据过拟合影响准确率。抽取的方法为了避免运气不好，常使用交叉验证（cross validation）。交叉验证：对数据集中的数据分块，对训练集数据和测试集数据轮流交互验证，让每一部分数据都可以作为测试数据，最后对测试集性能取平均值。交叉验证主要用于有监督数据。</li>
+</ol>
+</li>
+</ul>
+<h2 id="机器学习的步骤："><a href="#机器学习的步骤：" class="headerlink" title="机器学习的步骤："></a>机器学习的步骤：</h2><ul>
+<li><ol>
+<li>收集数据</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>存储数据</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>分析数据（人工和自动化）</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>训练算法–模型（无监督学习不需要训练）</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>测试算法</li>
+</ol>
+</li>
+<li><ol start="6">
+<li>使用算法</li>
+</ol>
+</li>
+</ul>
+<h2 id="术语："><a href="#术语：" class="headerlink" title="术语："></a>术语：</h2><p>损失函数或代价函数：用来验证并作为回归函数的目标函数，越逼近拟合效果越好。即代价函数值越小越好。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/07/24/machine_learn_concept/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/07/24/machine_learn_concept/" class="post-title-link" itemprop="url">ML机器学习入门</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-07-24T14:50:25+08:00">2018-07-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念备忘："><a href="#概念备忘：" class="headerlink" title="概念备忘："></a>概念备忘：</h2><p>对数，是幂运算的逆运算。2 的三次方为8 。 log8 = 3。3为对数的值。</p>
+<p>大O表示法，操作数。</p>
+<p>数组与链表各自优势不足</p>
+<p>选择排序，O(n^2)</p>
+<p>循环，递归与尾递归</p>
+<p>调用栈</p>
+<p>快速排序</p>
+<p>合并排序</p>
+<p>散列表（字典）</p>
+<p>图模拟</p>
+<p>广度优先，狄克斯特拉算法（广度加权）</p>
+<p>动态规划</p>
+<p>K邻近算法 KNN 特征靠近谁就是谁（ocr） - 创建推荐系统 - 机器学习</p>
+<p>其他：</p>
+<p>树结构（二分法只有在有序时才管用，可提高二分法的插入效率） B树、红黑树</p>
+<p>反向索引（散列-字典技术） - 用户搜索引擎</p>
+<p>傅里叶变换 （分解技术） - 剔除无用的音符，像素点等 MP3技术及jpg图片压缩技术，地震预测，DNA等</p>
+<p>mapreduce hadoop 并行计算</p>
+<p>布隆过滤器 - 概率性数据结构 。 hyperloglog</p>
+<p>SHA （secure hash algorithm）算法. - 可用于比较两个很大的文件是否相同。加密后的结果一样即可。用户存储密码 ， 算法特征：局部不敏感，改一点全不同<br>simhash 局部敏感，改一点细微差别，可用于比较相似度。</p>
+<p>线性规划<br>：用于在给定约束条件下最大限度地改善指定的指标。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/07/01/python_高并发/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/07/01/python_高并发/" class="post-title-link" itemprop="url">python高并发的详解</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-01 19:54:55" itemprop="dateCreated datePublished" datetime="2018-07-01T19:54:55+08:00">2018-07-01</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-07-24 14:50:25" itemprop="dateModified" datetime="2018-07-24T14:50:25+08:00">2018-07-24</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="转：python高并发的详解"><a href="#转：python高并发的详解" class="headerlink" title="转：python高并发的详解"></a>转：python高并发的详解</h1><h2 id="一、什么是高并发"><a href="#一、什么是高并发" class="headerlink" title="一、什么是高并发"></a>一、什么是高并发</h2><p>高并发（High Concurrency）是互联网分布式系统架构设计中必须考虑的因素之一，它通常是指，通过设计保证系统能够同时并行处理很多请求。</p>
+<p>高并发相关常用的一些指标有响应时间（Response Time），吞吐量（Throughput），每秒查询率QPS（Query Per Second），并发用户数等。</p>
+<p>响应时间：系统对请求做出响应的时间。例如系统处理一个HTTP请求需要200ms，这个200ms就是系统的响应时间。</p>
+<p>吞吐量：单位时间内处理的请求数量。</p>
+<p>QPS：每秒响应请求数。在互联网领域，这个指标和吞吐量区分的没有这么明显。</p>
+<p>并发用户数：同时承载正常使用系统功能的用户数量。例如一个即时通讯系统，同时在线量一定程度上代表了系统的并发用户数。</p>
+<h2 id="二、如何提升系统的并发能力"><a href="#二、如何提升系统的并发能力" class="headerlink" title="二、如何提升系统的并发能力"></a>二、如何提升系统的并发能力</h2><p>互联网分布式架构设计，提高系统并发能力的方式，方法论上主要有两种：垂直扩展（Scale Up）与水平扩展（Scale Out）。</p>
+<p>垂直扩展：提升单机处理能力。垂直扩展的方式又有两种：</p>
+<p>（1）增强单机硬件性能，例如：增加CPU核数如32核，升级更好的网卡如万兆，升级更好的硬盘如SSD，扩充硬盘容量如2T，扩充系统内存如128G；</p>
+<p>（2）提升单机架构性能，例如：使用Cache来减少IO次数，使用异步来增加单服务吞吐量，使用无锁数据结构来减少响应时间； </p>
+<p>在互联网业务发展非常迅猛的早期，如果预算不是问题，强烈建议使用“增强单机硬件性能”的方式提升系统并发能力，因为这个阶段，公司的战略往往是发展业务抢时间，而“增强单机硬件性能”往往是最快的方法。</p>
+<p>不管是提升单机硬件性能，还是提升单机架构性能，都有一个致命的不足：单机性能总是有极限的。所以互联网分布式架构设计高并发终极解决方案还是水平扩展。</p>
+<p>水平扩展：只要增加服务器数量，就能线性扩充系统性能。水平扩展对系统架构设计是有要求的，如何在架构各层进行可水平扩展的设计，以及互联网公司架构各层常见的水平扩展实践，是本文重点讨论的内容。</p>
+<p>python解决高并发的几种方式<br>1.HTML页面静态化<br>2.图片服务器分离（我使用的是fastdfs轻量级的分布式文件存储系统）<br>3.使用缓存（缓存存在于内存中读取快我的项目中使用redis作为缓存的数据库，redis是内存型数据作为存储缓存的数据库挺适合）<br>4.数据库集群、库表散列<br>5.使用负载均衡的方法（简单的配置可以用nginx来配置负载均衡，只需要设置 如下代码，即可实现简单的负载均衡<br> upstream djangoserver {<br>             server 192.168.72.49:8080;<br>             server 192.168.72.49:8081;<br>          }<br>6.镜像<br>镜像是大型网站常采用的提高性能和数据安全性的方式，镜像的技术可以解决不同网络接入商和地域带来的用户访问速度差异，比如ChinaNet和EduNet之间的差异就促使了很多网站在教育网内搭建镜像站点，数据进行定时更新或者实时更新。在镜像的细节技术方面，这里不阐述太深，有很多专业的现成的解决架构和产品可选。也有廉价的通过软件实现的思路，比如Linux上的rsync等工具。<br>7.最新：CDN加速技术（此技术还在了解阶段，可自行去网上查找相关的资料）</p>
+<h2 id="三、常见的互联网分层架构"><a href="#三、常见的互联网分层架构" class="headerlink" title="三、常见的互联网分层架构"></a>三、常见的互联网分层架构</h2><p>常见互联网分布式架构如上，分为：</p>
+<p>（1）客户端层：典型调用方是浏览器browser或者手机应用APP</p>
+<p>（2）反向代理层：系统入口，反向代理</p>
+<p>（3）站点应用层：实现核心应用逻辑，返回html或者json</p>
+<p>（4）服务层：如果实现了服务化，就有这一层</p>
+<p>（5）数据-缓存层：缓存加速访问存储</p>
+<p>（6）数据-数据库层：数据库固化数据存储</p>
+<p>整个系统各层次的水平扩展，又分别是如何实施的呢？</p>
+<h2 id="四、分层水平扩展架构实践"><a href="#四、分层水平扩展架构实践" class="headerlink" title="四、分层水平扩展架构实践"></a>四、分层水平扩展架构实践</h2><p>反向代理层的水平扩展<br>反向代理层的水平扩展，是通过“DNS轮询”实现的：dns-server对于一个域名配置了多个解析ip，每次DNS解析请求来访问dns-server，会轮询返回这些ip。</p>
+<p>当nginx成为瓶颈的时候，只要增加服务器数量，新增nginx服务的部署，增加一个外网ip，就能扩展反向代理层的性能，做到理论上的无限高并发。</p>
+<p>站点层的水平扩展<br>站点层的水平扩展，是通过“nginx”实现的。通过修改nginx.conf，可以设置多个web后端。</p>
+<p>当web后端成为瓶颈的时候，只要增加服务器数量，新增web服务的部署，在nginx配置中配置上新的web后端，就能扩展站点层的性能，做到理论上的无限高并发。</p>
+<p>服务层的水平扩展<br>服务层的水平扩展，是通过“服务连接池”实现的。</p>
+<p>站点层通过RPC-client调用下游的服务层RPC-server时，RPC-client中的连接池会建立与下游服务多个连接，当服务成为瓶颈的时候，只要增加服务器数量，新增服务部署，在RPC-client处建立新的下游服务连接，就能扩展服务层性能，做到理论上的无限高并发。如果需要优雅的进行服务层自动扩容，这里可能需要配置中心里服务自动发现功能的支持。</p>
+<p>数据层的水平扩展<br>在数据量很大的情况下，数据层（缓存，数据库）涉及数据的水平扩展，将原本存储在一台服务器上的数据（缓存，数据库）水平拆分到不同服务器上去，以达到扩充系统性能的目的。</p>
+<p>互联网数据层常见的水平拆分方式有这么几种，以数据库为例：</p>
+<p>按照范围水平拆分<br>每一个数据服务，存储一定范围的数据，上图为例：</p>
+<p>user0库，存储uid范围1-1kw</p>
+<p>user1库，存储uid范围1kw-2kw</p>
+<p>这个方案的好处是：</p>
+<p>（1）规则简单，service只需判断一下uid范围就能路由到对应的存储服务；</p>
+<p>（2）数据均衡性较好；</p>
+<p>（3）比较容易扩展，可以随时加一个uid[2kw,3kw]的数据服务；</p>
+<p>不足是：</p>
+<p>　　请求的负载不一定均衡，一般来说，新注册的用户会比老用户更活跃，大range的服务请求压力会更大；</p>
+<p>按照哈希水平拆分<br>每一个数据库，存储某个key值hash后的部分数据，上图为例：</p>
+<p>user0库，存储偶数uid数据</p>
+<p>user1库，存储奇数uid数据</p>
+<p>这个方案的好处是：</p>
+<p>（1）规则简单，service只需对uid进行hash能路由到对应的存储服务；</p>
+<p>（2）数据均衡性较好；</p>
+<p>（3）请求均匀性较好；</p>
+<p>不足是：</p>
+<p>　　不容易扩展，扩展一个数据服务，hash方法改变时候，可能需要进行数据迁移；</p>
+<p>这里需要注意的是，通过水平拆分来扩充系统性能，与主从同步读写分离来扩充数据库性能的方式有本质的不同。</p>
+<p>通过水平拆分扩展数据库性能：<br>（1）每个服务器上存储的数据量是总量的1/n，所以单机的性能也会有提升；</p>
+<p>（2）n个服务器上的数据没有交集，那个服务器上数据的并集是数据的全集；</p>
+<p>（3）数据水平拆分到了n个服务器上，理论上读性能扩充了n倍，写性能也扩充了n倍（其实远不止n倍，因为单机的数据量变为了原来的1/n）；</p>
+<p>通过主从同步读写分离扩展数据库性能：<br>（1）每个服务器上存储的数据量是和总量相同；</p>
+<p>（2）n个服务器上的数据都一样，都是全集；</p>
+<p>（3）理论上读性能扩充了n倍，写仍然是单点，写性能不变；</p>
+<p>缓存层的水平拆分和数据库层的水平拆分类似，也是以范围拆分和哈希拆分的方式居多，就不再展开。</p>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><p>高并发（High Concurrency）是互联网分布式系统架构设计中必须考虑的因素之一，它通常是指，通过设计保证系统能够同时并行处理很多请求。</p>
+<p>提高系统并发能力的方式，方法论上主要有两种：垂直扩展（Scale Up）与水平扩展（Scale Out）。前者垂直扩展可以通过提升单机硬件性能，或者提升单机架构性能，来提高并发性，但单机性能总是有极限的，互联网分布式架构设计高并发终极解决方案还是后者：水平扩展。</p>
+<p>互联网分层架构中，各层次水平扩展的实践又有所不同：</p>
+<p>（1）反向代理层可以通过“DNS轮询”的方式来进行水平扩展；</p>
+<p>（2）站点层可以通过nginx来进行水平扩展；</p>
+<p>（3）服务层可以通过服务连接池来进行水平扩展；</p>
+<p>（4）数据库可以按照数据范围，或者数据哈希的方式来进行水平扩展；</p>
+<p>各层实施水平扩展后，能够通过增加服务器数量的方式来提升系统的性能，做到理论上的性能无限。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/06/24/machine_learn_用户画像/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/06/24/machine_learn_用户画像/" class="post-title-link" itemprop="url">大数据用户画像</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-06-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-06-24T14:50:25+08:00">2018-06-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>极致营销：什么日期，什么时间，什么地点，什么终端，什么入口，向什么客户推荐什么产品，正是当前客户需要的或者刚好激发客户产生了新的消费需求，而金额刚刚好足够用户破产。<br>智能话费冲值与加油用户画像信息提取：主题推荐：话费、流量、油卡、小易</p>
+<ol>
+<li>人口属性，用户自然属性包括性别、年龄、地区</li>
+<li>设备属性，用户设备特征包括系统、机型、运营商</li>
+<li>消费特征，用户消费场景及其他包括地区、地点、渠道（终端渠道、入口页面）、日期、时间、金额大小、频率</li>
+<li>行为数据，用户操作行为系统监控行为数据包括浏览行为、下单支付行为、移动行为、使用行为（如最近频繁电话等），行为包括时间、路径、速度等</li>
+<li>因果数据，影响用户消费行为的数据天气变化、自然灾害、节日、周期行为（月底、工资日）</li>
+<li>关系数据，待探索的可能影响用户行为的数据包括其他平台的消费数据、某物品的消费关联、某行为的波动影响（如社交视频增多）</li>
+<li>内部推导的用户类型：用户年龄层、消费层级、社会身份、当前平台生命周期（新老用户、僵死用户）、有车无车族、家庭信息、关联推导</li>
+</ol>
+<h1 id="技术实现点："><a href="#技术实现点：" class="headerlink" title="技术实现点："></a>技术实现点：</h1><h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><pre><code>标签解决的是描述（或命名）问题，但在实际应用中，还需要解决数据之间的关联，所以通常将标签作为一个体系来设计，以解决数据之间的关联问题。即：树
+
+标签包含：名称、分类、级别、属性、赋值
+</code></pre><ol>
+<li><p>标签命名&amp;赋值<br> 名称和值，如生日 0828</p>
+</li>
+<li><p>标签级别（标签的体系结构）</p>
+<p> 分级有两个层面的含义，其一是：指标到最低层级的涵盖的层级；其二是指：指标的运算层级。其一非常好理解，这里重点说运算层级。</p>
+<pre><code>标签从运算层级角度可以分为三层：事实标签、模型标签、预测标签。
+
+事实标签：是通过对于原始数据库的数据进行统计分析而来的，比如用户投诉次数，是基于用户一段时间内实际投诉的行为做的统计。
+
+模型标签：模型标签是以事实标签为基础，通过构建事实标签与业务问题之间的模型，进行模型分析得到。比如，结合用户实际投诉次数、用户购买品类、用户支付的金额等，进行用户投诉倾向类型的识别，方便客服进行分类处理。
+
+预测标签：则是在模型的基础上做预测，比如针对投诉倾向类型结构的变化，预测平台舆情风险指数。
+</code></pre></li>
+<li><p>标签属性</p>
+<pre><code>标签属性可以理解为针对标签进行的再标注，这一环节的工作主要目的是帮助内部理解标签赋值的来源，进而理解指标的含义。如图所示，可以总结为5种来源：
+
+固有属性：是指这些指标的赋值体现的是用户生而有之或者事实存在的，不以外界条件或者自身认知的改变而改变的属性。比如：性别、年龄、是否生育等。
+</code></pre><p> 推导属性：由其他属性推导而来的属性，比如星座，我们可以通过用户的生日推导，比如用户的品类偏好，则可以通过日常购买来推导。</p>
+<p> 行为属性：产品内外实际发生的行为被记录后形成的赋值，比如用户的登陆时间，页面停留时长等。</p>
+<p> 态度属性：用户自我表达的态度和意愿。比如说我们通过一份问卷向用户询问一些问题，并形成标签，如询问用户：是否愿意结婚，是否喜欢某个品牌等。当然在大数据的需求背景下，利用问卷收集用户标签的方法效率显得过低，更多的是利用产品中相关的模块做了用户态度信息收集。</p>
+<p> 测试属性：测试属性是指来自用户的态度表达，但并不是用户直接表达的内容，而是通过分析用户的表达，结构化处理后，得出的测试结论。比如，用户填答了一系列的态度问卷，推导出用户的价值观类型等。</p>
+</li>
+</ol>
+<h1 id="技术实现流程："><a href="#技术实现流程：" class="headerlink" title="技术实现流程："></a>技术实现流程：</h1><p>原始数据</p>
+<p>加工清洗分类基础数据</p>
+<p>训练数据、测试数据</p>
+<p>分类、预测、聚类发现</p>
+<p>应用：产品创新、优化体验、服务升级、提升效率、防范风险</p>
+<p>（1）原始输入层</p>
+<pre><code>主要指用户的历史数据信息，如会员信息、消费信息、网络行为信息。经过数据的清洗，从而达到用户标签体系的事实层。
+</code></pre><p>（2）事实层</p>
+<pre><code>事实层是用户信息的准确描述层，其最重要的特点是，可以从用户身上得到确定与肯定的验证。如用户的人口属性、性别、年龄、籍贯、会员信息等。
+</code></pre><p>（3）模型预测层</p>
+<pre><code>通过利用统计建模，数据挖掘、机器学习的思想，对事实层的数据进行分析利用，从而得到描述用户更为深刻的信息。如通过建模分析，可以对用户的性别偏好进行预测，从而能对没有收集到性别数据的新用户进行预测。还可以通过建模与数据挖掘，使用聚类、关联思想，发现人群的聚集特征。
+</code></pre><p>（4）营销模型预测</p>
+<pre><code>利用模型预测层结果，对不同用户群体，相同需求的客户，通过打标签，建立营销模型，从而分析用户的活跃度、忠诚度、流失度、影响力等可以用来进行营销的数据。
+</code></pre><p>（5）业务层</p>
+<pre><code>业务层可以是展现层。它是业务逻辑的直接体现，如图中所表示的，有车一族、有房一族等。
+</code></pre>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/27/machine_learn_特征工程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/27/machine_learn_特征工程/" class="post-title-link" itemprop="url">ML机器学习关于特征工程</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-27 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-27T14:50:25+08:00">2018-05-27</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>指的是把原始数据转变为模型的训练数据的过程，目的是为了获得更好的训练数据特征，提高机器学习的上限，使得机器学习模型逼近这个上限（附图）。</p>
+<h1 id="数据特征准备"><a href="#数据特征准备" class="headerlink" title="数据特征准备"></a>数据特征准备</h1><ol>
+<li>基于业务需求与理解，要实现目标需求需要哪些数据，确定变量</li>
+<li>可用性评估：获取难度，覆盖率，准确率</li>
+<li>获取方法</li>
+<li>存储方法</li>
+</ol>
+<h1 id="一般步骤流程"><a href="#一般步骤流程" class="headerlink" title="一般步骤流程"></a>一般步骤流程</h1><p>处理流程不分先后，以达到训练模型的最佳期望为目的。</p>
+<ol>
+<li><p>数据预处理（清洗与构建）</p>
+</li>
+<li><p>数据补充</p>
+</li>
+<li><p>数据降维</p>
+</li>
+<li><p>特征监控</p>
+</li>
+</ol>
+<h2 id="数据预处理（清洗与构建）"><a href="#数据预处理（清洗与构建）" class="headerlink" title="数据预处理（清洗与构建）"></a>数据预处理（清洗与构建）</h2><ol>
+<li>数据规整：清洗异常样本，如删除极值</li>
+</ol>
+<ol start="2">
+<li>数据转换：标准化，归一化，离散化（二值化），one-hot(dummy coding)哑编码，其他变换</li>
+</ol>
+<p>2.1 标准化（无量纲化）<br>基于特征矩阵的列，将特征值转换至服从标准正态分布,去除均值和方差缩放，通过(X-X_mean)/std计算每个属性(每列)，进而使所有数据聚集在0附近，方差为1，公式为：x’ = (X-X_mean)/std<br>使用sklearn.preprocessing库的StandardScaler类对数据进行标准化的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import StandardScaler</span><br><span class="line"># 标准化，返回值为标准化后的数据</span><br><span class="line">StandardScaler().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
+<p>2.2 归一化：区间缩放<br>区间缩放法的思路有多种，常见的一种为利用两个最值进行缩放即基于最大最小值，将特征值转换到[0, 1]区间上，公式表达为：x’ = x-min/max-min<br>使用preproccessing库的MinMaxScaler类对数据进行区间缩放的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import MinMaxScaler</span><br><span class="line">#区间缩放，返回值为缩放到[0, 1]区间的数据</span><br><span class="line">MinMaxScaler().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
+<p>2.3 归一化：正则化<br>标准化是依照特征矩阵的列处理数据，其通过求z-score的方法，将样本的特征值转换到同一量纲下。归一化是依照特征矩阵的行处理数据，其目的在于样本向量在点乘运算或其他核函数计算相似性时，拥有统一的标准，也就是说都转化为“单位向量”。规则为l2的归一化公式如下：x’ = x/(Ej-&gt;m x[j]^2)^1/2</p>
+<p>使用preproccessing库的Normalizer类对数据进行归一化的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import Normalizer</span><br><span class="line">#归一化，返回值为归一化后的数据</span><br><span class="line">Normalizer().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
+<p>2.4 二值化<br>定量特征二值化的核心在于设定一个阈值，大于阈值的赋值为1，小于等于阈值的赋值为0，公式表达如下：<br>x’= { 1, x &gt; threshold; 0, x &lt;= threashold</p>
+<p>使用preproccessing库的Binarizer类对数据进行二值化的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import Binarizer</span><br><span class="line">#二值化，阈值设置为3，返回值为二值化后的数据</span><br><span class="line">Binarizer(threshold=3).fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
+<p>2.5 哑编码<br>对定性特征用定量表示，为避免数值大小对模型产生影响所有用dummy coding<br>使用preproccessing库的OneHotEncoder类对数据进行哑编码的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import OneHotEncoder</span><br><span class="line">#哑编码，对IRIS数据集的目标值，返回值为哑编码后的数据</span><br><span class="line">OneHotEncoder().fit_transform(iris.target.reshape((-1,1)))</span><br></pre></td></tr></table></figure></p>
+<p>2.6 数据变换<br>常见的数据变换有基于多项式的、基于指数函数的、基于对数函数的。4个特征，度为2的多项式转换公式如下：</p>
+<p>x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15 = 1,x1,x2,x3,x4,x1^2,x1<em>x2,x1</em>x3,x1<em>x4,x2^2,x2</em>x3,x2<em>x4,x3^2,x3</em>x4,x4^2</p>
+<p>使用preproccessing库的PolynomialFeatures类对数据进行多项式转换的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import PolynomialFeatures</span><br><span class="line">#多项式转换</span><br><span class="line">#参数degree为度，默认值为2</span><br><span class="line">PolynomialFeatures().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
+<p>基于单变元函数的数据变换可以使用一个统一的方式完成，使用preproccessing库的FunctionTransformer对数据进行对数函数转换的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from numpy import log1p</span><br><span class="line">from sklearn.preprocessing import FunctionTransformer</span><br><span class="line">#自定义转换函数为对数函数的数据变换</span><br><span class="line">#第一个参数是单变元函数</span><br><span class="line">FunctionTransformer(log1p).fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
+<ol start="3">
+<li>数据补充<br>3.1 缺失值计算</li>
+</ol>
+<p>特征值为NaN（not a number）,表示数据缺失。<br>使用preproccessing库的Imputer类对数据进行缺失值计算的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from numpy import vstack, array, nan</span><br><span class="line">from sklearn.preprocessing import Imputer</span><br><span class="line">#缺失值计算，返回值为计算缺失值后的数据</span><br><span class="line">#参数missing_value为缺失值的表示形式，默认为NaN</span><br><span class="line">#参数strategy为缺失值填充方式，默认为mean（均值）</span><br><span class="line">Imputer().fit_transform(vstack((array([nan, nan, nan, nan]), iris.data)))</span><br></pre></td></tr></table></figure></p>
+<p>3.2 特征衍生：</p>
+<ul>
+<li>对原始数据加工，生成符合训练需求的变量</li>
+</ul>
+<h2 id="数据选择方法"><a href="#数据选择方法" class="headerlink" title="数据选择方法"></a>数据选择方法</h2><ol>
+<li>filter：方差选择法，相关系数，卡方检验，信息增益、互信息<br>过滤法，按照发散性或者相关性对各个特征进行评分，设定阈值或者待选择阈值的个数，选择特征。</li>
+<li>wrapper： 递归特征消除法<br>包装法，根据目标函数（通常是预测效果评分），每次选择若干特征，或者排除若干特征。</li>
+<li>embedded： 基于惩罚项的特征选择法，基于树形模型的特征选择法<br>嵌入法，先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据系数从大到小选择特征。类似于Filter方法，但是是通过训练来确定特征的优劣。</li>
+</ol>
+<h2 id="数据降维"><a href="#数据降维" class="headerlink" title="数据降维"></a>数据降维</h2><ul>
+<li>PCA主成分分析法 </li>
+<li>LDA线性判别分析法</li>
+</ul>
+<h2 id="数据特征验证与监控"><a href="#数据特征验证与监控" class="headerlink" title="数据特征验证与监控"></a>数据特征验证与监控</h2><ol>
+<li>有效性分析：重要性，权重</li>
+<li>监控重要特征</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_about_gunicorn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/python_about_gunicorn/" class="post-title-link" itemprop="url">gunicorn工作原理</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
             
 
             
@@ -1293,41 +2112,12 @@ SELECT column_name(s) FROM table_name2
       
         
           
-            <h2 id="mysql索引"><a href="#mysql索引" class="headerlink" title="mysql索引"></a>mysql索引</h2><p>索引是帮助mysql高效获取数据的数据结构，是数据库系统为满足高效的查找算法而维护的一种特殊数据结构，这些数据结构以某种映射关系指向数据。这种数据结构就是索引。</p>
-<h2 id="索引的类型"><a href="#索引的类型" class="headerlink" title="索引的类型"></a>索引的类型</h2><p>根据数据库的功能，可以在数据库设计器中创建四种常用索引：普通索引、唯一索引、主键索引和聚集索引。</p>
-<p>CREATE [UNIQUE] [CLUSTERED| NONCLUSTERED] INDEX &lt;索引名&gt;<br>ON &lt;表名&gt;(&lt;列名&gt;[ASC|DESC] [, &lt;列名&gt;[ASC|DESC]…])</p>
-<h3 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">最基本的索引类型，没有唯一性之类的限制。普通索引可以通过以下几种方式创建：</span><br><span class="line">创建索引，例如CREATE INDEX &lt;索引的名字&gt; ON tablename (列的列表)；</span><br><span class="line">修改表，例如ALTER TABLE tablename ADD INDEX [索引的名字] (列的列表)；</span><br><span class="line">创建表的时候指定索引，例如CREATE TABLE tablename ( [...], INDEX [索引的名字] (列的列表) )；</span><br></pre></td></tr></table></figure>
-<h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">唯一索引是不允许其中任何两行具有相同索引值的索引。</span><br><span class="line">当现有数据中存在重复的键值时，大多数数据库不允许将新创建的唯一索引与表一起保存。数据库还可能防止添加将在表中创建重复键值的新数据。例如，如果在 employee 表中职员的姓 (lname) 上创建了唯一索引，则任何两个员工都不能同姓。</span><br><span class="line">对某个列建立UNIQUE索引后，插入新记录时，数据库管理系统会自动检查新纪录在该列上是否取了重复值，在CREATE TABLE 命令中的UNIQE约束将隐式创建UNIQUE索引。</span><br><span class="line">创建唯一索引的几种方式：</span><br><span class="line">创建索引，例如CREATE UNIQUE INDEX &lt;索引的名字&gt; ON tablename (列的列表)；</span><br><span class="line">修改表，例如ALTER TABLE tablename ADD UNIQUE [索引的名字] (列的列表); ；</span><br><span class="line">创建表的时候指定索引，例如CREATE TABLE tablename ( [...], UNIQUE [索引的名字] (列的列表) )；</span><br></pre></td></tr></table></figure>
-<h3 id="主键索引"><a href="#主键索引" class="headerlink" title="主键索引"></a>主键索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">简称为主索引，数据库表中一列或列组合（字段）的值唯一标识表中的每一行。该列称为表的主键。</span><br><span class="line">在数据库关系图中为表定义主键将自动创建主键索引，主键索引是唯一索引的特定类型。该索引要求主键中的每个值都唯一。当在查询中使用主键索引时，它还允许对数据的快速访问。</span><br><span class="line">提示尽管唯一索引有助于定位信息，但为获得最佳性能结果，建议改用主键索引。</span><br></pre></td></tr></table></figure>
-<h3 id="候选索引"><a href="#候选索引" class="headerlink" title="候选索引"></a>候选索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">与主索引一样要求字段值的唯一性，并决定了处理记录的顺序。在数据库和自由表中，可以为每个表建立多个候选索引。</span><br></pre></td></tr></table></figure>
-<h3 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">也称为聚簇索引，在聚集索引中，表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引， 即如果存在聚集索引，就不能再指定CLUSTERED 关键字。</span><br><span class="line">索引不是聚集索引，则表中行的物理顺序与键值的逻辑顺序不匹配。与非聚集索引相比，聚集索引通常提供更快的数据访问速度。聚集索引更适用于对很少对基表进行增删改操作的情况。</span><br><span class="line">如果在表中创建了主键约束，SQL Server将自动为其产生唯一性约束。在创建主键约束时，指定了CLUSTERED关键字或干脆没有制定该关键字，SQL Sever将会自动为表生成唯一聚集索引。</span><br></pre></td></tr></table></figure>
-<h3 id="非聚集索引"><a href="#非聚集索引" class="headerlink" title="非聚集索引"></a>非聚集索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">也叫非簇索引，在非聚集索引中，数据库表中记录的物理顺序与索引顺序可以不相同。一个表中只能有一个聚集索引，但表中的每一列都可以有自己的非聚集索引。如果在表中创建了主键约束，SQL Server将自动为其产生唯一性约束。在创建主键约束时，如果制定CLUSTERED关键字，则将为表产生唯一聚集索引。</span><br></pre></td></tr></table></figure>
-<h2 id="索引底层数据结构"><a href="#索引底层数据结构" class="headerlink" title="索引底层数据结构"></a>索引底层数据结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">B-Tree B+Tree 相比红黑树的优势：磁盘预读取多余的数据到内存，BTree由于高度较小水平分叉较多，一次读取的数据较快较多，减少磁盘读取，提高效率。</span><br><span class="line">如果按照B-tree索引，可以直接返回，带顺序的数据，但这个数据只是该索引列含有的信息</span><br><span class="line"></span><br><span class="line">InnoDb引擎与MyIsAm区别：InnoDB是索引字段值索引，MyIsAm是字段地址索引。</span><br><span class="line"></span><br><span class="line">了解不同存储引擎的索引实现方式对于正确使用和优化索引都非常有帮助，例如知道了InnoDB的索引实现后，就很容易明白为什么不建议使用过长的字段作为主键，因为所有辅助索引都引用主索引，过长的主索引会令辅助索引变得过大。再例如，用非单调的字段作为主键在InnoDB中不是个好主意，因为InnoDB数据文件本身是一颗B+Tree，非单调的主键会造成在插入新记录时数据文件为了维持B+Tree的特性而频繁的分裂调整，十分低效，而使用自增字段作为主键则是一个很好的选择。</span><br></pre></td></tr></table></figure>
-<h2 id="索引查询算法"><a href="#索引查询算法" class="headerlink" title="索引查询算法"></a>索引查询算法</h2><pre><code>- 顺序查找，无索引情况下
-- 索引查找，目前数据库系统及文件系统都采用B-Tree 或其变种 B+Tree作为索引结构。
-</code></pre><h2 id="索引结构优化"><a href="#索引结构优化" class="headerlink" title="索引结构优化"></a>索引结构优化</h2><ul>
-<li><p>高效使用索引的首要条件是知道什么样的查询会使用到索引，这个问题和B+Tree中的“最左前缀原理”有关。一般在WHERE 和 JOIN子句都是索引可以选择的对象。</p>
-</li>
-<li><p>范围查询（in, &gt; ,&lt; ) 后面的数据会用不上索引。</p>
-</li>
-<li><p>查询条件中含有函数或表达式会用不上索引。</p>
-</li>
-<li><p>索引选择性与前缀索引：只在查询频繁的字段增加索引，联合索引不必要全字段，用列的前缀代替整个列作为索引key，短索引速度更快。</p>
-</li>
-<li><p>考虑已在表上创建的索引数量。最好避免在单个表上有很多索引。</p>
-</li>
-<li><p>对新索引进行试验以检查它对运行查询性能的影响。</p>
-</li>
-<li><p>检查已在表上创建的索引的定义。最好避免包含共享列的重叠索引。</p>
-</li>
-<li><p>检查某列中唯一数据值的数量，并将该数量与表中的行数进行比较。比较的结果就是该列的可选择性，这有助于确定该列是否适合建立索引，如果适合，确定索引的类型。</p>
-</li>
-<li><p>InnoDB的主键选择与插入优化：自增主键索引会按顺序插入最后，非自增主键索引会导致乱序插入的开销</p>
-</li>
-</ul>
+            <h2 id="gunicorn工作原理"><a href="#gunicorn工作原理" class="headerlink" title="gunicorn工作原理"></a>gunicorn工作原理</h2><blockquote>
+<p>gunicorn pre-fork worker模型中有一个管理进程以及几个的工作进程。管理进程master，工作进程:worker。<br>gunicorn 会启动一组 worker进程，所有worker进程公用一组listener，在每个worker中为每个listener建立一个wsgi server。每当有HTTP链接到来时，wsgi server创建一个协程来处理该链接，协程处理该链接的时候，先初始化WSGI环境，然后调用用户提供的app对象去处理HTTP请求。</p>
+</blockquote>
+<h2 id="worker-server"><a href="#worker-server" class="headerlink" title="worker server"></a>worker server</h2><p>worker有很多种，包括：ggevent、geventlet、gtornado等等。这里主要分析ggevent。<br>每个ggevent worker启动的时候会启动多个server对象：worker首先为每个listener创建一个server对象（注：为什么是一组listener,因为gunicorn可以绑定一组地址,每个地址对于一个listener），每个server对象都有运行在一个单独的gevent pool对象中。真正等待链接和处理链接的操作是在server对象中进行的。</p>
 <h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
-<li><a href="https://blog.csdn.net/gitchat/article/details/78787837" target="_blank" rel="noopener">深入理解 MySQL 底层实现</a></li>
-<li><a href="https://www.cnblogs.com/sanwenyu/p/6129082.html" target="_blank" rel="noopener">MySQL索引背后的数据结构及算法原理</a></li>
+<li><a href="https://blog.csdn.net/jailman/article/details/78496522" target="_blank" rel="noopener">gunicorn工作原理</a></li>
 </ol>
 
           
@@ -1385,7 +2175,7 @@ SELECT column_name(s) FROM table_name2
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/block_chain/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_配置热更新/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -1405,1154 +2195,7 @@ SELECT column_name(s) FROM table_name2
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/block_chain/" class="post-title-link" itemprop="url">以太坊</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概念："><a href="#概念：" class="headerlink" title="概念："></a>概念：</h2><ul>
-<li><p>以太坊：<a href="http://www.ethereum.org" target="_blank" rel="noopener">www.ethereum.org</a> ，是一个区块链系统，相对于比特币网络系统的纯货币功能，以太坊区块链增加了智能合约，大大拓宽了其应用领域。用户基于其上创建区块链应用DAPP。</p>
-</li>
-<li><p>以太币：ETHER，一种类似于比特币的电子货币，以太坊区块链系统上的所有操作都需要消耗以太币；</p>
-</li>
-<li><p>外有账户（EOA），由私人密码控制</p>
-</li>
-<li><p>合同账户，由它们的合同编码控制，只能由外有账户“激活”</p>
-</li>
-<li><p>“智能合约”Smart Contract，用程序代码（Solidity代码）写的合约，使得合约双方不需要信任彼此也可以进行交易；</p>
-</li>
-<li><p>“矿工”以太坊网络中收集、传播、确认和执行交易的节点</p>
-</li>
-</ul>
-<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><blockquote>
-<p>1.<a href="https://www.cnblogs.com/tinyxiong/p/7878468.html" target="_blank" rel="noopener">以太坊</a><br>2.<a href="https://www.btctrade.com/ethcoin/2706.html" target="_blank" rel="noopener">以太坊（ETH）为什么如此火爆 最短的时间内读懂以太坊</a><br>3.<a href="http://www.cocoachina.com/blockchain/20180226/22352.html" target="_blank" rel="noopener">以太坊开发入门，完整入门</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/ceph_deploy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/ceph_deploy/" class="post-title-link" itemprop="url">ceph 部署与概念</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>-存储类型：<br>1.NAS - Network Attached Storage<br>2.SAN - storage area network<br>3.DAS - Direct Attached Storage</p>
-<p>-存储协议：<br>1.NFS –linux<br>2.SMB –windows</p>
-<p>-存储方案：<br>1.PV:persistant volume (node)<br>2.PVC: persistant volume claim (pod)</p>
-<p>理论：best 官网文档。 kuberneters 英文官网文档。<br><a href="https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html</a></p>
-<p>kubernetes持久化存储：<br><a href="https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc</a></p>
-<p>ceph/daemon 部署：<br><a href="https://hub.docker.com/r/ceph/daemon/" target="_blank" rel="noopener">https://hub.docker.com/r/ceph/daemon/</a><br><a href="https://www.jianshu.com/p/f08ed7287416" target="_blank" rel="noopener">https://www.jianshu.com/p/f08ed7287416</a><br><a href="https://www.linuxidc.com/Linux/2017-10/148041.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/148041.htm</a><br><a href="https://www.kubernetes.org.cn/ingress" target="_blank" rel="noopener">https://www.kubernetes.org.cn/ingress</a></p>
-<p>——实践步骤——-<br>体系结构<br>配置文件<br>部署环境配置<br>部署：</p>
-<ol>
-<li>部署 CEPH 的用户<br>ssh user@ceph-server<br>sudo useradd -d /home/{username} -m {username}<br>sudo passwd {username}</li>
-</ol>
-<p>授权<br>echo “{username} ALL = (root) NOPASSWD:ALL” | sudo tee /etc/sudoers.d/{username}<br>sudo chmod 0440 /etc/sudoers.d/{username}</p>
-<ol start="2">
-<li><p>无密码 SSH 登录<br>ssh-keygen<br>ssh-copy-id {username}@node1<br>ssh-copy-id {username}@node2<br>ssh-copy-id {username}@node3</p>
-</li>
-<li><p>deploy mon<br>docker run -it –net=host \<br>–hostname=cephmonhost \<br>–name=cephtimon \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-e MON_IP=172.20.36.231 \<br>-e CEPH_PUBLIC_NETWORK=172.20.36.0/24 \<br>ceph/daemon mon</p>
-</li>
-</ol>
-<p>ctrl+P+Q</p>
-<ol start="4">
-<li>deploy mgr<br>docker run -d –net=host \<br>–hostname=cephmgrhost \<br>–name=cephtimmgr \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>ceph/daemon mgr</li>
-</ol>
-<ol start="5">
-<li>distribut keyring<h1 id="ssh-root-node2-mkdir-p-var-lib-ceph"><a href="#ssh-root-node2-mkdir-p-var-lib-ceph" class="headerlink" title="ssh root@node2 mkdir -p /var/lib/ceph"></a>ssh root@node2 mkdir -p /var/lib/ceph</h1><h1 id="scp-r-etc-ceph-root-node2-etc"><a href="#scp-r-etc-ceph-root-node2-etc" class="headerlink" title="scp -r /etc/ceph root@node2:/etc"></a>scp -r /etc/ceph root@node2:/etc</h1><h1 id="scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph"><a href="#scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph" class="headerlink" title="scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph"></a>scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph</h1></li>
-</ol>
-<ol start="6">
-<li>zap disk<br>docker run -d –privileged=true \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon zap_device</li>
-</ol>
-<ol start="7">
-<li><p>deploy osd<br>docker run -it –net=host \<br>–hostname=cephosdhost \<br>–name=cephtimosd \<br>–pid=host \<br>–privileged=true \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon osd</p>
-</li>
-<li><p>deploy mds</p>
-</li>
-</ol>
-<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>-e CEPHFS_CREATE=1 \<br>ceph/daemon mds</p>
-<ol start="9">
-<li>deploy rgw</li>
-</ol>
-<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>ceph/daemon rgw</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/hadoop_guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/hadoop_guide/" class="post-title-link" itemprop="url">hadoop 使用</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="模块与概念解释"><a href="#模块与概念解释" class="headerlink" title="模块与概念解释"></a>模块与概念解释</h2><h3 id="存储组件"><a href="#存储组件" class="headerlink" title="存储组件"></a>存储组件</h3><ul>
-<li>存储方式</li>
-</ul>
-<ul>
-<li><p>列式存储，整个文件被切割为若干列数据，每一列数据一起存储。文件类型有：Parquet , RCFile, ORCFile。面向列的格式使得读取数据时，可以跳过不需要的列，适合于只处于行的一小部分字段的情况。但是这种格式的读写需要更多的内存空间，因为需要缓存行在内存中（为了获取多行中的某一列）。同时不适合流式写入，因为一旦写入失败，当前文件无法恢复，而面向行的数据在写入失败时可以重新同步到最后一个同步点，所以Flume采用的是面向行的存储格式。</p>
-</li>
-<li><p>行式存储，同一行的数据存储在一起，即连续存储。文件类型有：SequenceFile, MapFile, Avro Datafile。采用这种方式，如果只需要访问行的一小部分数据，亦需要将整行读入内存，推迟序列化一定程度上可以缓解这个问题，但是从磁盘读取整行数据的开销却无法避免。面向行的存储适合于整行数据需要同时处理的情况。其中，Avro是一个数据序列化系统。序列化就是将对象转换成二进制流,相应的反序列化就是将二进制流再转换成对应的对象，设计用于支持大批量数据交换的应用。</p>
-</li>
-</ul>
-<ul>
-<li>存储结构<br>HBase是一个针对结构化数据的可伸缩、高可靠、高性能、分布式和面向列的动态模式数据库。和传统关系数据库不同，HBase采用了BigTable的数据模型：增强的稀疏排序映射表（Key/Value），其中，键由行关键字、列关键字和时间戳构成。HBase提供了对大规模数据的随机、实时读写访问，同时，HBase中保存的数据可以使用MapReduce来处理，它将数据存储和并行计算完美地结合在一起。</li>
-</ul>
-<h2 id="hadoop数据存储"><a href="#hadoop数据存储" class="headerlink" title="hadoop数据存储"></a>hadoop数据存储</h2><p> 需要着重考虑以下几个问题：数据存储格式，多租户（支持多个用户、多个组以及多种应用类型），模式设计（输入输出的目录结构等及HBase hive数据结构），元数据管理。存储的选择关系到数据的安全，计算的效率，及存储的效益。</p>
-<ol>
-<li><p>数据存储选择</p>
-<ul>
-<li>文件格式选择（考虑：是否可压缩，是否可分片，序列化方式，列式存储或行式存储格式，SequenceFile、Avro 等容器格式是文本等大部分文件类型的优选格式）</li>
-<li>压缩格式选择（压缩比例，是否支持分片，计算时需要的转换消耗，分记录级压缩、块级压缩）</li>
-<li>数据存储系统选择（HBase, HDFS）</li>
-</ul>
-<p>一般来说，在与容器文件格式（Avro、SequenceFile 等）一起使用时，任何压缩格式都可以是分片式的，因为容器文件格式能够单独压缩记录构成的数据块，也可以进行记录级的压缩。如果在压缩整个文件时没有使用容器文件格式，那么就需要使用本身支持可分片的压缩格式，比如在数据块之间插入同步标记的 bzip2</p>
-</li>
-</ol>
-<h3 id="查询计算组件"><a href="#查询计算组件" class="headerlink" title="查询计算组件"></a>查询计算组件</h3><ul>
-<li>hadoop HSQL、hbaseSQL、impala、pig计算框架<br>分布式离线计算框架主要适用于大批量的集群任务，由于是批量执行，故时效性偏低。</li>
-</ul>
-<ul>
-<li><p>hive<br>A data warehouse infrastructure that provides data summarization and ad hoc querying.<br>Hive定义了一种类似SQL的查询语言(HQL),将SQL转化为MapReduce任务在Hadoop上执行。通常用于离线分析。</p>
-</li>
-<li><p>Impala 相对于hive的实时查询系统，它提供SQL语义抛弃了MapReduce这个不太适合做SQL查询的范式，能查询存储在Hadoop的HDFS和HBase中的PB级大数据。已有的Hive系统虽然也提供了SQL语义，但由于Hive底层执行使用的是MapReduce引擎，仍然是一个批处理过程，难以满足查询的交互性。相比之下，Impala的最大特点也是最大卖点就是它的快速，启动速度和省去磁盘IO。</p>
-</li>
-<li><p>pig<br>A high-level data-flow language and execution framework for parallel computation.<br>定义了一种数据流语言—Pig Latin，将脚本转换为MapReduce任务在Hadoop上执行。通常用于进行离线分析。</p>
-</li>
-<li><p>Mahout<br>Mahout起源于2008年，最初是Apache Lucent的子项目，它在极短的时间内取得了长足的发展，现在是Apache的顶级项目。Mahout的主要目标是创建一些可扩展的机器学习领域经典算法的实现，旨在帮助开发人员更加方便快捷地创建智能应用程序。Mahout现在已经包含了聚类、分类、推荐引擎（协同过滤）和频繁集挖掘等广泛使用的数据挖掘方法。除了算法，Mahout还包含数据的输入/输出工具、与其他存储系统（如数据库、MongoDB 或Cassandra）集成等数据挖掘支持架构。</p>
-</li>
-</ul>
-<ul>
-<li>solr 搜索计算框架</li>
-</ul>
-<ul>
-<li>solr Apache Solr是一个功能强大的搜索服务器，它支持REST风格API。Solr是基于Lucene的，Lucene 支持强大的匹配能力，如短语，通配符，连接，分组和更多不同的数据类型。</li>
-</ul>
-<ul>
-<li>spark 准实时框架<br>Spark 是专为大规模数据处理而设计的快速通用的计算引擎，其是基于内存的迭代式计算。</li>
-</ul>
-<ul>
-<li>Spark Core：包含Spark的基本功能；尤其是定义RDD的API、操作以及这两者上的动作。其他Spark的库都是构建在RDD和Spark Core之上的</li>
-<li>Spark SQL：提供通过Apache Hive的SQL变体Hive查询语言（HiveQL）与Spark进行交互的API。每个数据库表被当做一个RDD，Spark SQL查询被转换为Spark操作。</li>
-<li>Spark Streaming：对实时数据流进行处理和控制。Spark Streaming允许程序能够像普通RDD一样处理实时数据</li>
-<li>MLlib：一个常用机器学习算法库，算法被实现为对RDD的Spark操作。这个库包含可扩展的学习算法，比如分类、回归等需要对大量数据集进行迭代的操作。</li>
-<li>GraphX：控制图、并行图操作和计算的一组算法和工具的集合。GraphX扩展了RDD API，包含控制图、创建子图、访问路径上所有顶点的操作Spark架构的组成图如下</li>
-</ul>
-<ul>
-<li>Storm实时框架<br>Storm是一个分布式的、可靠的、容错的流式计算框架。Storm 一开始就是为实时处理设计，因此在实时分析/性能监测等需要高时效性的领域广泛采用。Storm在理论上支持所有语言，只需要少量代码即可完成适配。</li>
-</ul>
-<h3 id="CDH管理监控组件"><a href="#CDH管理监控组件" class="headerlink" title="CDH管理监控组件"></a>CDH管理监控组件</h3><ul>
-<li>Cloudera Manager. 监控管理组件。</li>
-<li>Navigator是企业版的。CDH 平台的端到端数据管理工具。Cloudera Navigator 使管理员、数据经理和分析师能够了解 Hadoop 中的大量数据。</li>
-</ul>
-<h3 id="通用集群管理组件"><a href="#通用集群管理组件" class="headerlink" title="通用集群管理组件"></a>通用集群管理组件</h3><ul>
-<li><p>Zookeeper<br>分布式协作服务，Zookeeper是google Chubby克隆版,解决分布式环境下的数据管理问题：统一命名，状态同步，集群管理，配置同步等。</p>
-</li>
-<li><p>Sqoop<br>数据同步工具，Sqoop是SQL-to-Hadoop的缩写，主要用于传统数据库和Hadoop之间传输数据， 数据的导入和导出本质上是Mapreduce程序，充分利用了MR的并行化和容错性。</p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/ceph_cmd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/ceph_cmd/" class="post-title-link" itemprop="url">ceph 概念命令</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p> 结合网络、官网、手动查询等多方渠道，整理ceph维护管理常用命令，并且梳理常规命令在使用过程中的逻辑顺序。另外整理期间发现ceph 集群的命令体系有点乱，详细情况各自体验。</p>
-<p>一：ceph集群启动、重启、停止</p>
-<p>1：ceph 命令的选项如下：</p>
-<p>选项    简写    描述</p>
-<p>–verbose    -v    详细的日志。</p>
-<p>–valgrind    N/A    （只适合开发者和质检人员）用 Valgrind 调试。</p>
-<p>–allhosts    -a    在 ceph.conf 里配置的所有主机上执行，否 则它只在本机执行。</p>
-<p>–restart    N/A    核心转储后自动重启。</p>
-<p>–norestart    N/A    核心转储后不自动重启。</p>
-<p>–conf    -c    使用另外一个配置文件。</p>
-<p>Ceph 子命令包括：</p>
-<p>命令    描述</p>
-<p>start    启动守护进程。</p>
-<p>stop    停止守护进程。</p>
-<p>forcestop    暴力停止守护进程，等价于 kill -9</p>
-<p>killall    杀死某一类守护进程。</p>
-<p>cleanlogs    清理掉日志目录。</p>
-<p>cleanalllogs    清理掉日志目录内的所有文件。</p>
-<p>2：启动所有守护进程</p>
-<pre><code>要启动、关闭、重启 Ceph 集群，执行 ceph 时加上 相关命令，语法如下：
-</code></pre><p>/etc/init.d/ceph [options] [start|restart|stop] [daemonType|daemonID]</p>
-<p>下面是个典型启动实例：</p>
-<p>sudo /etc/init.d/ceph -a start</p>
-<p>加 -a （即在所有节点上执行）执行完成后Ceph本节点所有进程启动。</p>
-<p>把 CEPH 当服务运行，按此语法：</p>
-<p>service ceph [options] [start|restart] [daemonType|daemonID] </p>
-<p>典型实例：  service ceph -a start</p>
-<p>3:启动单一实例</p>
-<pre><code>要启动、关闭、重启一类守护进程  本例以要启动本节点上某一类的所有 Ceph 守护进程，
-</code></pre><p>/etc/init.d/ceph  [start|restart|stop] [daemonType|daemonID]</p>
-<p>/etc/init.d/ceph start osd.0</p>
-<p> 把ceph当做服务运行，启动一节点上某个 Ceph 守护进程，</p>
-<p>按此语法： service ceph  start {daemon-type}.{instance} </p>
-<p>service ceph  start osd.0</p>
-<p>二：集群维护常用命令概览</p>
-<p>1：检查集群健康状况</p>
-<pre><code>启动集群后、读写数据前，先检查下集群的健康状态。你可以用下面的命令检查：
-</code></pre><p>ceph health   或者 ceph health detail （输出信息更详细）</p>
-<pre><code>要观察集群内正发生的事件，打开一个新终端，然后输入：
-</code></pre><p>ceph -w</p>
-<p>输出信息里包含：</p>
-<p>集群唯一标识符</p>
-<p>集群健康状况</p>
-<p>监视器图元版本和监视器法定人数状态</p>
-<p>OSD 版本和 OSD 状态摘要</p>
-<p>其内存储的数据和对象数量的粗略统计，以及数据总量等。</p>
-<p>新版本新增选项如下：</p>
-<p>  -s, –status          show cluster status</p>
-<p>  -w, –watch           watch live cluster changes</p>
-<p>  –watch-debug         watch debug events</p>
-<p>  –watch-info          watch info events</p>
-<p>  –watch-sec           watch security events</p>
-<p>  –watch-warn          watch warn events</p>
-<p>  –watch-error         watch error events</p>
-<p>  –version, -v         display version</p>
-<p>  –verbose             make verbose</p>
-<p>  –concise             make less verbose</p>
-<p>使用方法演示：</p>
-<p>ceph -w –watch-info</p>
-<p>2：检查集群的使用情况</p>
-<pre><code>检查集群的数据用量及其在存储池内的分布情况，可以用 df 选项，它和 Linux 上的 df 相似。如下：
-</code></pre><p>ceph df</p>
-<p>输出的 GLOBAL 段展示了数据所占用集群存储空间的概要。</p>
-<p>SIZE: 集群的总容量；</p>
-<p>AVAIL: 集群的空闲空间总量；</p>
-<p>RAW USED: 已用存储空间总量；</p>
-<p>% RAW USED: 已用存储空间比率。用此值参照 full ratio 和 near full \ ratio 来确保不会用尽集群空间。</p>
-<p>详情见存储容量。</p>
-<p>输出的 POOLS 段展示了存储池列表及各存储池的大致使用率。没有副本、克隆品和快照占用情况。例如，如果你把 1MB 的数据存储为对象，理论使用率将是 1MB ，但考虑到副本数、克隆数、和快照数，实际使用率可能是 2MB 或更多。</p>
-<p>NAME: 存储池名字；</p>
-<p>ID: 存储池唯一标识符；</p>
-<p>USED: 大概数据量，单位为 KB 、 MB 或 GB ；</p>
-<p>%USED: 各存储池的大概使用率；</p>
-<p>Objects: 各存储池内的大概对象数。</p>
-<p>新版本新增ceph osd df  命令，可以详细列出集群每块磁盘的使用情况，包括大小、权重、使用多少空间、使用率等等</p>
-<p>3：检查集群状态</p>
-<pre><code>要检查集群的状态，执行下面的命令：:
-</code></pre><p>ceph status</p>
-<p>4：检查MONITOR状态</p>
-<pre><code>查看监视器图，执行下面的命令：:
-</code></pre><p>ceph mon stat</p>
-<p>或者：</p>
-<p>ceph mon dump</p>
-<pre><code>要检查监视器的法定人数状态，执行下面的命令：
-</code></pre><p>ceph quorum_status</p>
-<p>5：检查 MDS 状态:</p>
-<pre><code>元数据服务器为 Ceph 文件系统提供元数据服务，元数据服务器有两种状态： up | \ down 和 active | inactive ，执行下面的命令查看元数据服务器状态为 up 且 active ：
-</code></pre><p>ceph mds stat</p>
-<pre><code>要展示元数据集群的详细状态，执行下面的命令：
-</code></pre><p>ceph mds dump</p>
-<p>三：集群命令详解</p>
-<p>######################mon 相关####################</p>
-<p>1：查看mon的状态信息</p>
-<p>[mon@ptmind~]# ceph mon stat</p>
-<p>2：查看mon的选举状态</p>
-<p>[mon@ptmind~]# ceph quorum_status</p>
-<p>3：查看mon的映射信息</p>
-<p>[mon@ptmind~]# ceph mon dump</p>
-<p>4：删除一个mon节点</p>
-<p>[mon@ptmind~]# ceph mon remove cs1</p>
-<p>5：获得一个正在运行的mon map，并保存在1.txt文件中</p>
-<p>[mon@ptmind~]# ceph mon getmap -o 1.txt</p>
-<p>6：读取上面获得的map</p>
-<p>[mon@ptmind~]# monmaptool –print 1.txt </p>
-<p>7：把上面的mon map注入新加入的节点</p>
-<p>[mon@ptmind~]# ceph-mon -i nc3 –inject-monmap 1.txt</p>
-<p>8：查看mon的amin socket</p>
-<p>[mon@ptmind~]# ceph-conf –name mon.nc3 –show-config-value admin_socket</p>
-<p>9：查看ceph mon log日志所在的目录</p>
-<p>[mon@ptmind~]# ceph-conf –name mon.nc1 –show-config-value log_file    </p>
-<p>/var/log/ceph/ceph-mon.nc1.log</p>
-<p>10：查看一个集群ceph-mon.nc3参数的配置、输出信息特别详细，集群所有配置生效可以在此参数下确认</p>
-<p>[mon@ptmind~]# ceph –admin-daemon /var/run/ceph/ceph-mon.nc3.asok config show | less</p>
-<p>######################### msd 相关 ###################</p>
-<p>1：查看msd状态</p>
-<p>[mon@ptmind~]# ceph mds stat</p>
-<p>2：删除一个mds节点</p>
-<p>[mon@ptmind~]# ceph  mds rm 0 mds.nc1</p>
-<p>3：设置mds状态为失败</p>
-<p>[mon@ptmind~]# ceph mds rmfailed &lt;int[0-]&gt;   </p>
-<p>4：新建pool </p>
-<p>[mon@ptmind~]# ceph mds add_data_pool <poolname></poolname></p>
-<p>5：关闭mds集群</p>
-<p>[mon@ptmind~]# mds cluster_down</p>
-<p>6：启动mds集群</p>
-<p>[mon@ptmind~]# mds cluster_up</p>
-<p>7：设置cephfs文件系统存储方式最大单个文件尺寸</p>
-<p>[mon@ptmind~]# ceph mds set max_file_size 1024000000000</p>
-<h3 id="清除cephfs-文件系统步骤"><a href="#清除cephfs-文件系统步骤" class="headerlink" title="清除cephfs 文件系统步骤"></a>清除cephfs 文件系统步骤</h3><p>强制mds状态为featrue</p>
-<p>[mon@ptmind~]# ceph mds fail 0</p>
-<p>删除mds文件系统</p>
-<p>[mon@ptmind~]# ceph fs rm leadorfs –yes-i-really-mean-it</p>
-<p>#删除fs数据文件夹</p>
-<p>[mon@ptmind~]# ceph osd pool delete cephfs_data cephfs_data –yes-i-really-really-mean-it </p>
-<p>#删除元数据文件夹</p>
-<p>[mon@ptmind~]# ceph osd pool delete cephfs_metadata cephfs_metadata –yes-i-really-really-mean-it </p>
-<p>然后再删除 mds key  ，残留文件等</p>
-<p>拆除文件系统前推荐先删除节点，待验证</p>
-<p>[mon@ptmind~]# ceph  mds rm 0 mds.node242</p>
-<p>################################ ceph auth 相关 ################################</p>
-<p>1：查看ceph集群中的认证用户及相关的key</p>
-<p>[mon@ptmind~]# ceph auth list</p>
-<p>2：为ceph创建一个admin用户并为admin用户创建一个密钥，把密钥保存到/etc/ceph目录下：</p>
-<p>[mon@ptmind~]# ceph auth get-or-create client.admin mds ‘allow‘ osd ‘allow <em>‘ mon ‘allow </em>‘ &gt; /etc/ceph/ceph.client.admin.keyring</p>
-<p>或</p>
-<p>[mon@ptmind~]# ceph auth get-or-create client.admin mds ‘allow‘ osd ‘allow <em>‘ mon ‘allow </em>‘ -o /etc/ceph/ceph.client.admin.keyring</p>
-<p>3：为osd.0创建一个用户并创建一个key</p>
-<p>[mon@ptmind~]# ceph auth get-or-create osd.0 mon ‘allow rwx‘ osd ‘allow *‘ -o /var/lib/ceph/osd/ceph-0/keyring</p>
-<p>4：为mds.nc3创建一个用户并创建一个key</p>
-<p>[mon@ptmind~]# ceph auth get-or-create mds.nc3 mon ‘allow rwx‘ osd ‘allow <em>‘ mds ‘allow </em>‘ -o /var/lib/ceph/mds/ceph-cs1/keyring</p>
-<p>5：导入key信息</p>
-<p>[mon@ptmind~]# ceph auth import   /var/lib/ceph/mds/ceph-cs1/keyring</p>
-<p>6：删除集群中的一个认证用户</p>
-<p>[mon@ptmind~]# ceph auth del osd.0</p>
-<p>################################ osd  相关 ################################</p>
-<p>1：查看osd列表</p>
-<p>[mon@ptmind~]# ceph osd tree</p>
-<p>2：查看数据延迟</p>
-<p>[mon@ptmind~]# ceph osd perf </p>
-<p>osd fs_commit_latency(ms) fs_apply_latency(ms) </p>
-<p>  0                     3                    4 </p>
-<p>  1                   333                  871 </p>
-<p>  2                    33                   49 </p>
-<p>  3                     1                    2 </p>
-<p>。。。。。。。。。。。。</p>
-<p>3：详细列出集群每块磁盘的使用情况，包括大小、权重、使用多少空间、使用率等等</p>
-<p>[mon@ptmind~]# ceph osd df </p>
-<p>4：down掉一个osd硬盘</p>
-<p>[mon@ptmind~]# ceph osd down 0   #down掉osd.0节点</p>
-<p>5：在集群中删除一个osd硬盘</p>
-<p>[mon@ptmind~]# ceph osd rm 0</p>
-<p>6：在集群中删除一个osd 硬盘 crush map</p>
-<p>[mon@ptmind~]# ceph osd crush rm osd.0</p>
-<p>7：在集群中删除一个osd的host节点</p>
-<p>[mon@ptmind~]# ceph osd crush rm cs1</p>
-<p>8：查看最大osd的个数 </p>
-<p> [mon@ptmind~]# ceph osd getmaxosd</p>
-<p>max_osd = 90 in epoch 1202     #默认最大是90个osd节点</p>
-<p>9：设置最大的osd的个数（当扩大osd节点的时候必须扩大这个值）</p>
-<p> [mon@ptmind~]# ceph osd setmaxosd 2048</p>
-<p>10：设置osd crush的权重为1.0</p>
-<p>ceph osd crush set {id} {weight} [{loc1} [{loc2} …]]</p>
-<p>例如：</p>
-<p>[mon@ptmind~]# ceph osd crush set osd.1 0.5 host=node241</p>
-<p>11：设置osd的权重</p>
-<p>[mon@ptmind~]# ceph osd reweight 3 0.5</p>
-<p>reweighted osd.3 to 0.5 (8327682)</p>
-<p>或者用下面的方式</p>
-<p>[mon@ptmind~]# ceph osd crush reweight osd.1 1.0</p>
-<p>12：把一个osd节点逐出集群</p>
-<p>[mon@ptmind~]# ceph osd out osd.3:</p>
-<p>3       1    osd.3   up      0      # osd.3的reweight变为0了就不再分配数据，但是设备还是存活的</p>
-<p>13：把逐出的osd加入集群</p>
-<p>[mon@ptmind~]# ceph osd in osd.3</p>
-<p>marked in osd.3. </p>
-<p>14：暂停osd （暂停后整个集群不再接收数据）</p>
-<p>[mon@ptmind~]# ceph osd pause</p>
-<p>15：再次开启osd （开启后再次接收数据） </p>
-<p>[mon@ptmind~]# ceph osd unpause</p>
-<p>16：查看一个集群osd.0参数的配置、输出信息特别详细，集群所有配置生效可以在此参数下确认</p>
-<p>[mon@ptmind~]# ceph –admin-daemon /var/run/ceph/ceph-osd.0.asok config show | less</p>
-<p>17：设置标志 flags ，不允许关闭osd、解决网络不稳定，osd 状态不断切换的问题</p>
-<p>[mon@ptmind~]# ceph osd set nodown</p>
-<p>取消设置</p>
-<p>[mon@ptmind~]# ceph osd unset nodown</p>
-<p>################################pool  相关################################</p>
-<p>1：查看ceph集群中的pool数量</p>
-<p>[mon@ptmind~]# ceph osd lspools   或者 ceph osd pool ls</p>
-<p>2：在ceph集群中创建一个pool</p>
-<p>[mon@ptmind~]# ceph osd pool create rbdtest 100            #这里的100指的是PG组:</p>
-<p>3：查看集群中所有pool的副本尺寸</p>
-<p>[mon@ptmind~]# ceph osd dump | grep ‘replicated size‘</p>
-<p>4：查看pool 最大副本数量</p>
-<p>[mon@ptmind~]# ceph osd pool get rbdpool size</p>
-<p>size: 3</p>
-<p>5：查看pool 最小副本数量</p>
-<p>[root@node241 ~]# ceph osd pool get rbdpool min_size</p>
-<p>min_size: 2</p>
-<p>6：设置一个pool的pg数量</p>
-<p>[mon@ptmind~]# ceph osd pool set rbdtest pg_num 100</p>
-<p>7：设置一个pool的pgp数量</p>
-<p>[mon@ptmind~]# ceph osd pool set rbdtest pgp_num 100</p>
-<p>8: 修改ceph，数据最小副本数、和副本数</p>
-<p>ceph osd pool set $pool_name min_size 1</p>
-<p>ceph osd pool set $pool_name size 2</p>
-<p>示例：</p>
-<p>[mon@ptmind~]# ceph osd pool set rbdpool min_size 1</p>
-<p>[mon@ptmind~]# ceph osd pool set rbdpool size 2</p>
-<p>验证：</p>
-<p>[mon@ptmind~]# ceph osd dump</p>
-<p>pool 3 ‘rbdpool‘ replicated size 2 min_size 1 </p>
-<p>9:设置rbdtest池的最大存储空间为100T（默认是1T)</p>
-<p>[mon@ptmind~]# ceph osd pool set rbdtest target_max_bytes 100000000000000</p>
-<p>10: 为一个ceph pool配置配额、达到配额前集群会告警，达到上限后无法再写入数据</p>
-<p>[mon@ptmind~]# ceph osd pool set-quota rbdtest max_objects 10000</p>
-<p>11: 在集群中删除一个pool,注意删除poolpool 映射的image 会直接被删除，线上操作要谨慎。</p>
-<p>[mon@ptmind~]# ceph osd pool delete rbdtest  rbdtest  –yes-i-really-really-mean-it  #集群名字需要重复两次</p>
-<p>12: 给一个pool创建一个快照</p>
-<p>[mon@ptmind~]# ceph osd pool mksnap rbdtest   rbdtest-snap20150924</p>
-<p>13: 查看快照信息</p>
-<p>[mon@ptmind~]# rados lssnap -p rbdtest</p>
-<p>1       rbdtest-snap20150924    2015.09.24 19:58:55</p>
-<p>2       rbdtest-snap2015092401  2015.09.24 20:31:21</p>
-<p>2 snaps</p>
-<p>14:删除pool的快照</p>
-<p>[mon@ptmind~]# ceph osd pool rmsnap rbdtest  rbdtest-snap20150924</p>
-<p>验证，剩余一个snap</p>
-<p>[mon@ptmind~]# rados lssnap -p rbdtest</p>
-<p>2       rbdtest-snap2015092401  2015.09.24 20:31:21</p>
-<p>1 snaps</p>
-<p>################################rados命令相关##################</p>
-<p>rados 是和Ceph的对象存储集群（RADOS），Ceph的分布式文件系统的一部分进行交互是一种实用工具。</p>
-<p>1：查看ceph集群中有多少个pool （只是查看pool)</p>
-<p>[mon@ptmind~]# rados lspools    同  ceph osd pool ls 输出结果一致</p>
-<p>2：显示整个系统和被池毁掉的使用率统计，包括磁盘使用（字节）和对象计数</p>
-<p>[mon@ptmind~]# rados df </p>
-<p>3：创建一个pool</p>
-<p>[mon@ptmind~]# rados mkpool test</p>
-<p>4：创建一个对象object </p>
-<p>[mon@ptmind~]# rados create test-object -p test</p>
-<p>5：查看对象文件</p>
-<p>[mon@ptmind~]# rados -p test ls</p>
-<p>test-object</p>
-<p>6：删除一个对象</p>
-<p>[mon@ptmind~]# rados rm test-object-1 -p test</p>
-<p>7：删除foo池 (和它所有的数据)</p>
-<p>[mon@ptmind~]# rados rmpool test test –yes-i-really-really-mean-it </p>
-<p>8：查看ceph pool中的ceph object （这里的object是以块形式存储的）</p>
-<p>[mon@ptmind~]# rados ls -p test | more</p>
-<p>9：为test pool创建快照</p>
-<p>[mon@ptmind~]# rados -p test mksnap testsnap</p>
-<p>created pool test snap testsnap</p>
-<p>10：列出给定池的快照</p>
-<p>[mon@ptmind~]# rados -p test lssnap         </p>
-<p>1       testsnap        2015.09.24 21:14:34</p>
-<p>11：删除快照</p>
-<p>[mon@ptmind~]# rados -p test rmsnap testsnap</p>
-<p>removed pool test snap testsnap</p>
-<p>12：上传一个对象到test pool</p>
-<p>[mon@ptmind~]# rados -p test put myobject blah.txt</p>
-<p>################################ PG 相关 ################################</p>
-<p>PG =“放置组”。当集群中的数据，对象映射到编程器，被映射到这些PGS的OSD。</p>
-<p>1：查看pg组的映射信息</p>
-<p>[mon@ptmind~]# ceph pg dump    或者 ceph pg ls</p>
-<p>2：查看一个PG的map</p>
-<p>[mon@ptmind~]# ceph pg map 0.3f</p>
-<p>osdmap e88 pg 0.3f (0.3f) -&gt; up [0,2] acting [0,2]   #其中的[0,2]代表存储在osd.0、osd.2节点，osd.0代表主副本的存储位置</p>
-<p>3：查看PG状态</p>
-<p>[mon@ptmind~]# ceph pg stat</p>
-<p>4：查询一个pg的详细信息</p>
-<p>[mon@ptmind~]# ceph pg  0.26 query</p>
-<p>5：要洗刷一个pg组，执行命令：</p>
-<p>[mon@ptmind~]# ceph pg scrub {pg-id}</p>
-<p>6：查看pg中stuck的状态</p>
-<p>要获取所有卡在某状态的归置组统计信息，执行命令：</p>
-<p>ceph pg dump_stuck inactive|unclean|stale [–format <format>] [-t|–threshold <seconds>]</seconds></format></p>
-<p>[mon@ptmind~]# ceph pg dump_stuck unclean</p>
-<p>[mon@ptmind~]# ceph pg dump_stuck inactive</p>
-<p>[mon@ptmind~]# ceph pg dump_stuck stale</p>
-<p>Inactive （不活跃）归置组不能处理读写，因为它们在等待一个有最新数据的 OSD 复活且进入集群。</p>
-<p>Unclean （不干净）归置组含有复制数未达到期望数量的对象，它们应该在恢复中。</p>
-<p>Stale （不新鲜）归置组处于未知状态：存储它们的 OSD 有段时间没向监视器报告了（由 mon_osd_report_timeout 配置）。</p>
-<p>可用格式有 plain （默认）和 json 。阀值定义的是，归置组被认为卡住前等待的最小时间（默认 300 秒）</p>
-<p>7：显示一个集群中的所有的pg统计</p>
-<p>[mon@ptmind~]# ceph pg dump –format plain</p>
-<p>8：恢复一个丢失的pg</p>
-<p>如果集群丢了一个或多个对象，而且必须放弃搜索这些数据，你就要把未找到的对象标记为丢失（ lost ）。</p>
-<p>如果所有可能的位置都查询过了，而仍找不到这些对象，你也许得放弃它们了。这可能是罕见的失败组合导致的，集群在写入完成前，未能得知写入是否已执行。</p>
-<p>当前只支持 revert 选项，它使得回滚到对象的前一个版本（如果它是新对象）或完全忽略它。要把 unfound 对象标记为 lost ，执行命令：</p>
-<p>ceph pg {pg-id} mark_unfound_lost revert|delete</p>
-<p>9：查看某个PG内分布的数据状态，具体状态可以使用选项过滤输出</p>
-<p>ceph pg ls {<int>} {active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|</int></p>
-<p>backfill_toofull|recovery_wait|undersized [active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|</p>
-<p>deep_scrub|backfill|backfill_toofull|recovery_wait|undersized…]} :  list pg with specific pool, osd, state</p>
-<p>实例如下：</p>
-<pre><code>pg号   过滤输出的状态
-</code></pre><p>[mon@ptmind~]# ceph   pg   ls       1     clean</p>
-<p>10：查询osd 包含pg 的信息，过滤输出pg的状态信息</p>
-<p>pg ls-by-osd <osdname (id|osd.id)>       list pg on osd [osd]</osdname></p>
-<p> {<int>} {active|clean|down|replay|splitting|scrubbing|scrubq|degraded|    </int></p>
-<p> inconsistent|peering|repair|recovering| backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|backfill_toofull|recovery_wait|undersized[active|clean|down|replay|splitting|    </p>
-<p> scrubbing|scrubq|degraded|inconsistent| peering|repair|recovering|backfill_ wait|incomplete|stale|remapped|deep_scrub|backfill|backfill_toofull|recovery_wait|undersized…]} </p>
-<p>实例如下：</p>
-<p>[mon@ptmind~]# ceph pg ls-by-osd osd.5 </p>
-<p>11：查询pool包含pg 的信息，过滤输出pg的状态信息</p>
-<p>ceph pg  ls-by-pool   poolname   选项</p>
-<p>ceph pg ls-by-pool   <poolstr>  {active|clean| down|replay|splitting|scrubbing|scrubq|  degraded|inconsistent|peering|repair| recovering|backfill_wait|incomplete|  stale|remapped|deep_scrub|backfill|     </poolstr></p>
-<p> backfill_toofull|recovery_wait| undersized [active|clean|down|replay|  splitting|scrubbing|scrubq|degraded| inconsistent|peering|repair|recovering| backfill_wait|incomplete|stale| remapped|deep_scrub|backfill|backfill_ </p>
-<p>实例如下：</p>
-<p>[mon@ptmind~]# ceph pg ls-by-pool test  </p>
-<p>12：查询某个osd状态为 primary pg ，可以根据需要过滤状态</p>
-<p>pg ls-by-primary <osdname (id|osd.id)> {<int>} {active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|</int></osdname></p>
-<p>backfill_toofull|recovery_wait|undersized [active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|</p>
-<p>backfill_toofull|recovery_wait|undersized…]} :  list pg with primary = [osd]</p>
-<p> 实例如下：</p>
-<pre><code>osd号   过滤输出的状态
-</code></pre><p>[mon@ptmind~]# ceph pg ls-by-primary    osd.3    clean </p>
-<p>############################### rbd命令相关 #########################3 </p>
-<p>1：在test池中创建一个命名为kjh的10000M的镜像</p>
-<p>[mon@ptmind~]# rbd create -p test –size 10000 kjh</p>
-<p>2：查看ceph中一个pool里的所有镜像</p>
-<p>[mon@ptmind~]# rbd ls test</p>
-<p>kjh</p>
-<p>3：查看新建的镜像的信息</p>
-<p>[mon@ptmind~]# rbd -p test info kjh    </p>
-<p>4：查看ceph pool中一个镜像的信息</p>
-<p>[mon@ptmind~]# rbd info -p test  –image kjh</p>
-<p>rbd image ‘kjh‘:</p>
-<pre><code>size 1000 MB in 250 objects
-
-order 22 (4096 kB objects)
-
-block_name_prefix: rb.0.92bd.74b0dc51
-
-format: 1
-</code></pre><p>5：删除一个镜像</p>
-<p>[mon@ptmind~]# rbd rm  -p test  kjh</p>
-<p>6：调整一个镜像的尺寸</p>
-<p>[mon@ptmind~]# rbd resize -p test –size 20000 kjh</p>
-<p>[mon@ptmind~]# rbd -p test info kjh   #调整后的镜像大小</p>
-<p>rbd image ‘kjh‘:</p>
-<pre><code>size 2000 MB in 500 objects
-
-order 22 (4096 kB objects)
-
-block_name_prefix: rb.0.92c1.74b0dc51
-
-format: 1
-</code></pre><p>#########rbd pool 快照功能测试###########</p>
-<p>1：新建个pool叫’ptmindpool’同时在下面创建一个’kjhimage’</p>
-<p>[mon@ptmind~]# ceph osd pool create ptmindpool 256 256</p>
-<p>pool ‘ptmindpool‘ created</p>
-<p>2:创建镜像</p>
-<p>[mon@ptmind~]# rbd create kjhimage –size 1024 –pool ptmindpool</p>
-<p>3:查看镜像</p>
-<p>[mon@ptmind~]# rbd –pool ptmindpool ls</p>
-<p>kjhimage</p>
-<p>4:创建snap,快照名字叫’snapkjhimage’</p>
-<p>[mon@ptmind~]# rbd snap create ptmindpool/kjhimage@snapkjhimage</p>
-<p>5:查看kjhimage的snap</p>
-<p>[mon@ptmind~]# rbd snap ls ptmindpool/kjhimage</p>
-<p>SNAPID NAME         SIZE</p>
-<pre><code>2 snapkjhimage 1024 MB
-</code></pre><p>6:回滚快照，</p>
-<p>[mon@ptmind~]# rbd snap rollback ptmindpool/kjhimage@snapkjhimage</p>
-<p>7:删除snap 删除snap报（rbd: snapshot ‘snapshot-xxxx‘ is protected from removal.）写保护 ，使用 rbd snap unprotect volumes/snapshot-xxx‘ 解锁，然后再删除</p>
-<p>[mon@ptmind~]# rbd snap rm ptmindpool/kjhimage@snapkjhimage</p>
-<p>8:删除kjhimage的全部snapshot</p>
-<p>[mon@ptmind~]# rbd snap purge ptmindpool/kjhimage</p>
-<p>9: 把ceph pool中的一个镜像导出</p>
-<p>导出镜像</p>
-<p>[mon@ptmind~]# rbd export -p ptmindpool –image kjhimage /tmp/kjhimage.img            </p>
-<p>Exporting image: 100% complete…done.</p>
-<p>验证查看导出文件</p>
-<p>l /tmp/kjhimage.img        </p>
-<p>-rw-r–r– 1 root root 1073741824 Sep 24 23:15 /tmp/kjhimage.img</p>
-<p>10:把一个镜像导入ceph中</p>
-<p>[mon@ptmind~]# rbd import /tmp/kjhimage.img  -p ptmindpool –image importmyimage1</p>
-<p>Importing image: 100% complete…done.</p>
-<p>验证查看导入镜像文件</p>
-<p>rbd -pptmindpool ls</p>
-<p>importmyimage1</p>
-<p>本文出自 “康建华” 博客，转载请与作者联系！</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_setup/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/k8s_setup/" class="post-title-link" itemprop="url">kubernetes 部署</a>
+                <a href="/2018/05/24/k8s_配置热更新/" class="post-title-link" itemprop="url">Kubernetes ConfigMap热更新</a>
               
             
           </h2>
@@ -2632,300 +2275,25 @@ format: 1
       
         
           
-            <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ol>
-<li><p>准备虚拟机，配置环境，关闭防火墙<br>systemctl disable firewalld<br>systemctl stop firewalld </p>
+            <h2 id="Kubernetes-ConfigMap热更新"><a href="#Kubernetes-ConfigMap热更新" class="headerlink" title="Kubernetes ConfigMap热更新"></a><a href="https://www.kubernetes.org.cn/3138.html" target="_blank" rel="noopener">Kubernetes ConfigMap热更新</a></h2><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>ConfigMap是用来存储配置文件的kubernetes资源对象，所有的配置内容都存储在etcd中</p>
+<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><ol>
+<li><p>文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: env-config</span><br><span class="line">  namespace: default</span><br><span class="line">data:</span><br><span class="line">  log_level: INFO</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>安装etcd<br>yum install etcd -y</p>
-</li>
-</ol>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#[member]  </span><br><span class="line">ETCD_NAME=etcd1  </span><br><span class="line">ETCD_DATA_DIR=&quot;/var/lib/etcd/test.etcd&quot;  </span><br><span class="line">#ETCD_WAL_DIR=&quot;&quot;  </span><br><span class="line">#ETCD_SNAPSHOT_COUNT=&quot;10000&quot;  </span><br><span class="line">#ETCD_HEARTBEAT_INTERVAL=&quot;100&quot;  </span><br><span class="line">#ETCD_ELECTION_TIMEOUT=&quot;1000&quot;  </span><br><span class="line">ETCD_LISTEN_PEER_URLS=&quot;http://0.0.0.0:2380&quot;  </span><br><span class="line">ETCD_LISTEN_CLIENT_URLS=&quot;http://0.0.0.0:2379,http://0.0.0.0:4001&quot;  </span><br><span class="line">#ETCD_MAX_SNAPSHOTS=&quot;5&quot;  </span><br><span class="line">#ETCD_MAX_WALS=&quot;5&quot;  </span><br><span class="line">#ETCD_CORS=&quot;&quot;  </span><br><span class="line">#  </span><br><span class="line">#[cluster]  </span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;http://master1:2380&quot;  </span><br><span class="line"># if you use different ETCD_NAME (e.g. test), set ETCD_INITIAL_CLUSTER value for this name, i.e. &quot;test=http://...&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER=&quot;etcd1=http://master1:2380,etcd2=http://master2:2380,etcd3=http://master3:2380&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster-baby&quot;  </span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS=&quot;http://master1:2379,http://master1:4001&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker -y  </span><br><span class="line">chkconfig docker on  </span><br><span class="line">service docker start </span><br><span class="line">`</span><br></pre></td></tr></table></figure>
-<h3 id="安装k8s"><a href="#安装k8s" class="headerlink" title="安装k8s"></a>安装k8s</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install kubernetes -y</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>修改配置 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure the kube-apiserver  </span><br><span class="line">#  </span><br><span class="line">  </span><br><span class="line"># The address on the local server to listen to.  </span><br><span class="line">KUBE_API_ADDRESS=&quot;--insecure-bind-address=0.0.0.0&quot;  </span><br><span class="line">  </span><br><span class="line"># The port on the local server to listen on.  </span><br><span class="line">KUBE_API_PORT=&quot;--port=8080&quot;  </span><br><span class="line">  </span><br><span class="line"># Port minions listen on  </span><br><span class="line"># KUBELET_PORT=&quot;--kubelet-port=10250&quot;  </span><br><span class="line">  </span><br><span class="line"># Comma separated list of nodes in the etcd cluster  </span><br><span class="line">KUBE_ETCD_SERVERS=&quot;--etcd-servers=http://etcd:2379&quot;  </span><br><span class="line">  </span><br><span class="line"># Address range to use for services  </span><br><span class="line">KUBE_SERVICE_ADDRESSES=&quot;--service-cluster-ip-range=10.254.0.0/16&quot;  </span><br><span class="line">  </span><br><span class="line"># default admission control policies  </span><br><span class="line"># KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota&quot;  </span><br><span class="line">KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ResourceQuota&quot;  </span><br><span class="line">  </span><br><span class="line"># Add your own!  </span><br><span class="line">KUBE_API_ARGS=&quot;&quot;  </span><br><span class="line">---</span><br><span class="line">###  </span><br><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure various aspects of all  </span><br><span class="line"># kubernetes services, including  </span><br><span class="line">#  </span><br><span class="line">#   kube-apiserver.service  </span><br><span class="line">#   kube-controller-manager.service  </span><br><span class="line">#   kube-scheduler.service  </span><br><span class="line">#   kubelet.service  </span><br><span class="line">#   kube-proxy.service  </span><br><span class="line"># logging to stderr means we get it in the systemd journal  </span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;  </span><br><span class="line">  </span><br><span class="line"># journal message level, 0 is debug  </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;  </span><br><span class="line">  </span><br><span class="line"># Should this cluster be allowed to run privileged docker containers  </span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;  </span><br><span class="line">  </span><br><span class="line"># How the controller-manager, scheduler, and proxy find the apiserver  </span><br><span class="line">KUBE_MASTER=&quot;--master=http://master1:8080&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动<br>systemctl enable kube-apiserver<br>systemctl start kube-apiserver<br>systemctl enable kube-controller-manager<br>systemctl start kube-controller-manager<br>systemctl enable kube-scheduler<br>systemctl start kube-scheduler  </p>
-</li>
-</ul>
-<ul>
-<li><p>deploy node</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker -y  </span><br><span class="line">chkconfig docker on  </span><br><span class="line">service docker start  </span><br><span class="line">yum install kubernetes -y</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure various aspects of all  </span><br><span class="line"># kubernetes services, including  </span><br><span class="line">#  </span><br><span class="line">#   kube-apiserver.service  </span><br><span class="line">#   kube-controller-manager.service  </span><br><span class="line">#   kube-scheduler.service  </span><br><span class="line">#   kubelet.service  </span><br><span class="line">#   kube-proxy.service  </span><br><span class="line"># logging to stderr means we get it in the systemd journal  </span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;  </span><br><span class="line">  </span><br><span class="line"># journal message level, 0 is debug  </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;  </span><br><span class="line">  </span><br><span class="line"># Should this cluster be allowed to run privileged docker containers  </span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;  </span><br><span class="line">  </span><br><span class="line"># How the controller-manager, scheduler, and proxy find the apiserver  </span><br><span class="line">KUBE_MASTER=&quot;--master=http://etcd:8080&quot;  </span><br><span class="line">###  </span><br><span class="line"># kubernetes kubelet (minion) config  </span><br><span class="line">  </span><br><span class="line"># The address for the info server to serve on (set to 0.0.0.0 or &quot;&quot; for all interfaces)  </span><br><span class="line">KUBELET_ADDRESS=&quot;--address=0.0.0.0&quot;  </span><br><span class="line">  </span><br><span class="line"># The port for the info server to serve on  </span><br><span class="line"># KUBELET_PORT=&quot;--port=10250&quot;  </span><br><span class="line">  </span><br><span class="line"># You may leave this blank to use the actual hostname  </span><br><span class="line">KUBELET_HOSTNAME=&quot;--hostname-override=node1&quot;  </span><br><span class="line">  </span><br><span class="line"># location of the api-server  </span><br><span class="line">KUBELET_API_SERVER=&quot;--api-servers=http://etcd:8080&quot;  </span><br><span class="line">  </span><br><span class="line"># pod infrastructure container  </span><br><span class="line">KUBELET_POD_INFRA_CONTAINER=&quot;--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest&quot;  </span><br><span class="line">  </span><br><span class="line"># Add your own!  </span><br><span class="line">KUBELET_ARGS=&quot;&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable kubelet  </span><br><span class="line">systemctl start kubelet  </span><br><span class="line">systemctl enable kube-proxy  </span><br><span class="line">systemctl start kube-proxy</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建覆盖网络flannel</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install flannel -y  </span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">- 在master、node上均编辑 /etc/sysconfig/flanneld 文件</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h1 id="Flanneld-configuration-options"><a href="#Flanneld-configuration-options" class="headerlink" title="Flanneld configuration options"></a>Flanneld configuration options</h1><h1 id="etcd-url-location-Point-this-to-the-server-where-etcd-runs"><a href="#etcd-url-location-Point-this-to-the-server-where-etcd-runs" class="headerlink" title="etcd url location.  Point this to the server where etcd runs"></a>etcd url location.  Point this to the server where etcd runs</h1><p>FLANNEL_ETCD_ENDPOINTS=”<a href="http://etcd:2379&quot;" target="_blank" rel="noopener">http://etcd:2379&quot;</a>  </p>
-<h1 id="etcd-config-key-This-is-the-configuration-key-that-flannel-queries"><a href="#etcd-config-key-This-is-the-configuration-key-that-flannel-queries" class="headerlink" title="etcd config key.  This is the configuration key that flannel queries"></a>etcd config key.  This is the configuration key that flannel queries</h1><h1 id="For-address-range-assignment"><a href="#For-address-range-assignment" class="headerlink" title="For address range assignment"></a>For address range assignment</h1><p>FLANNEL_ETCD_PREFIX=”/atomic.io/network”  </p>
-<h1 id="Any-additional-options-that-you-want-to-pass"><a href="#Any-additional-options-that-you-want-to-pass" class="headerlink" title="Any additional options that you want to pass"></a>Any additional options that you want to pass</h1><p>#FLANNEL_OPTIONS=””<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 配置etcd中关于flannel的key--</span><br></pre></td></tr></table></figure></p>
-<p>etcdctl mk /atomic.io/network/config ‘{ “Network”: “10.0.0.0/16” }’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 重新启动</span><br><span class="line">启动修改后的 flannel</span><br></pre></td></tr></table></figure></p>
-<p>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kube-apiserver<br>systemctl restart kube-controller-manager<br>systemctl restart kube-scheduler  </p>
-<p>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kubelet<br>systemctl restart kube-proxy<br><code>`</code> </p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_authorization/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/k8s_authorization/" class="post-title-link" itemprop="url">k8s权限管理</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>补充：<br><a href="https://www.cnblogs.com/cf532088799/p/7977083.html" target="_blank" rel="noopener">https://www.cnblogs.com/cf532088799/p/7977083.html</a></p>
-<h2 id="原理概述："><a href="#原理概述：" class="headerlink" title="原理概述："></a>原理概述：</h2><p>K8s授权管理分用户认证和授权两部分，授权根据RBAC角色控制方法为不同用户配置不同角色完成权限管理  </p>
-<h2 id="管理组件"><a href="#管理组件" class="headerlink" title="管理组件"></a>管理组件</h2><p>RBAC 是让用户能够访问 Kubernetes API 资源的授权方式。  </p>
-<h2 id="认证顺序"><a href="#认证顺序" class="headerlink" title="认证顺序"></a>认证顺序</h2><ol>
-<li>用户认证  </li>
-<li>权限认证  </li>
-</ol>
-<h2 id="用户类型"><a href="#用户类型" class="headerlink" title="用户类型"></a>用户类型</h2><p>k8s里面有两种用户，一种是User，一种就是service account，User给人用的，service account给进程用的，让进程有相关的权限。<br>如dasboard就是一个进程，我们就可以创建一个service account给它，让它去访问k8s。</p>
-<h2 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h2><p>角色是一系列的权限的集合，例如一个角色可以包含读取 Pod 的权限和列出 Pod 的权限， ClusterRole 跟 Role 类似，但是可以在集群中到处使用（ Role 是 namespace 一级的）。</p>
-<p>角色绑定 RoleBinding 把角色映射到用户，从而让这些用户继承角色在 namespace 中的权限。ClusterRoleBinding 让用户继承 ClusterRole 在整个集群中的权限。</p>
-<h2 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a>操作流程：</h2><ol>
-<li><p>创建用户，serviceaccount 或 user. user需要自设token。请看下面详细操作  </p>
-</li>
-<li><p>创建角色，分为 ClusterRole, Role. 指定操作资源及操作类型（增删改查等）  </p>
-</li>
-<li><p>绑定用户与角色，kind: ClusterRoleBinding or RoleBinding   </p>
+<li><p>命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap ...</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><blockquote>
-<p><a href="https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true</a><br><a href="https://www.kubernetes.org.cn/3238.html" target="_blank" rel="noopener">https://www.kubernetes.org.cn/3238.html</a><br><a href="https://kubernetes.io/docs/admin/authentication/" target="_blank" rel="noopener">https://kubernetes.io/docs/admin/authentication/</a><br><a href="http://www.infoq.com/cn/articles/Kubernetes-API" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/Kubernetes-API</a><br><a href="https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/" target="_blank" rel="noopener">https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/</a><br><a href="https://blog.csdn.net/qq_34463875/article/details/78728041" target="_blank" rel="noopener">https://blog.csdn.net/qq_34463875/article/details/78728041</a></p>
-</blockquote>
-<h2 id="更多知识点："><a href="#更多知识点：" class="headerlink" title="更多知识点："></a>更多知识点：</h2><ul>
-<li><p>集群用户权限管理： 内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod<br>（如：dashboard）的权限来访问。serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ol>
+<li><p>evn挂载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">envFrom:</span><br><span class="line">- configMapRef:</span><br><span class="line">    name: env-config</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>在 pod 创建之初 service account 就必须已经存在，否则创建将被拒绝设置非默认的 service account，<br>只需要在 pod 的spec.serviceAccountName 字段中将name设置为您想要用的 service account 名字即可。<br>不能更新已创建的 pod 的 service account。</p>
+<li><p>volume挂载：</p>
 </li>
-<li><p>可以在现有的serviceaccount 中增加imagePullSecrets 使pod构建镜像时在当前命名空间默认引用私有仓库的认证。</p>
-</li>
-<li><p>内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod的权限来访问。<br>serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
-</li>
-<li><p>kubeconfig namespace 设置可以限定角色可访问的命名空间，若角色权限过大，binding中也可以进一步限定。</p>
-</li>
-</ul>
-<h2 id="案例："><a href="#案例：" class="headerlink" title="案例："></a>案例：</h2><ol>
-<li>service account(sc)案例   </li>
 </ol>
-<p>进程用户（service account）权限管理，是专门为进程用户创建，也可以达到权限管理的目的，然而建议是同一个进程多个用户。作为示例我们这里部署一个进程权限管理作为演示。部署流程如下：</p>
-<p>1). 创建sc   </p>
-<pre><code>apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    k8s-app: admin-dashboard
-  name: admin-dashboard
-  namespace: kube-system
-</code></pre><p>2). 创建角色</p>
-<pre><code>apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  #无命名空间，clusterrole用于全集群
-  name: admin-dashboard-minimal
-rules:
-- apiGroups: [&quot;&quot;]
-  resources: [&quot;secrets&quot;]
-  verbs: [&quot;create&quot;]
-- apiGroups: [&quot;&quot;, &quot;extensions&quot;, &quot;apps&quot;]
-  resources: [&quot;deployments&quot;, &quot;pods&quot;, &quot;services&quot;]
-  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;, &quot;delete&quot;]
-</code></pre><p>3). 绑定角色</p>
-<pre><code>apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: admin-dashboard-rolebinding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: admin-dashboard-minimal
-subjects:
-- kind: ServiceAccount
-  name: admin-dashboard
-  namespace: kube-system
-</code></pre><p>4). kubernetes dashboard必须以nodeport方式部署。</p>
-<ol start="2">
-<li>普通用户案例</li>
-</ol>
-<p>普通用户权限管理：k8s APIserver不支持普通用户创建，只需生成token（# head -c 16 /dev/urandom | od -An -t x| tr -d ‘ ‘）,<br>将该用户的token追加到kuberentesAPI启动参数中指定的token（通常在/etc/kubernetes/token.csv）文件中即可。设置用户ssh认证，<br>根据绑定的角色权限并追加到kubeconfig文件中，供客户端访问。终端命令行可以通过不同用户用不同上下文达到访问权限管理。<br>这个上下文可以转换成第三方用户管理平台，Header追加。authorization Bearer token 来访问。注意：普通用户需要重启（重新部署）apiserver。</p>
-<p>1). 创建用户token并录入token指定tom用户名。任何Linux终端执行如下（可选）：  </p>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">	head -c 16 /dev/urandom | od -An -t x| tr -d &apos; &apos;  </span><br><span class="line">	```  </span><br><span class="line">	生成的token以&apos;token,user,uid,&quot;group1,group2,group3&quot;&apos;格式写入到其中一个master节点`/etc/kubernetes/ssl/token.csv`文件中。uid不重复的编号即可。如：716c8d3cd0e75dc25d1eb758e4635d39, tom, 10002, dev1    </span><br><span class="line">	然后重启apiserver以是当前新加的token生效，然后继续以下操作。</span><br><span class="line">	说明：此步骤可选, 2）中命令可生成用户</span><br><span class="line"></span><br><span class="line">2). SSH认证并绑定tom：  </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	### 生成证书</span><br><span class="line">	openssl genrsa -out employee.key 2048</span><br><span class="line">	openssl req -new -key employee.key -out employee.csr -subj &quot;/CN=tom/O=dev1&quot;  #用户tom，分组dev1</span><br><span class="line">	openssl x509 -req -in employee.csr -CA /etc/kubernetes/ssl/k8s-root-ca.pem -CAkey /etc/kubernetes/ssl/k8s-root-ca-key.pem -CAcreateserial -out employee.crt -days 5000</span><br><span class="line">	</span><br><span class="line">	### 将证书和tom用户绑定</span><br><span class="line">	kubectl config set-credentials tom --client-certificate=employee.crt --client-key=employee.key </span><br><span class="line">	kubectl config set-context employee-context --cluster=kubernetes --namespace=shelve-mgr --user=tom</span><br><span class="line">	</span><br><span class="line">	## 可用kubectl config view 查看添加是否成功。cluster, context, user</span><br><span class="line"></span><br><span class="line">3). 创建角色   </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	kind: Role</span><br><span class="line">	apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">	metadata:</span><br><span class="line">	  namespace: shelve-mgr</span><br><span class="line">	  name: employee</span><br><span class="line">	rules:</span><br><span class="line">	- apiGroups: [&quot;&quot;]</span><br><span class="line">	  resources: [&quot;pods&quot;]</span><br><span class="line">	  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;]</span><br></pre></td></tr></table></figure>
-</code></pre><p>4). 角色绑定   </p>
-<pre><code>```
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: employee-role-binding
-  namespace: shelve-mgr
-subjects:
-- kind: User
-  name: tom
-roleRef:
-  kind: Role
-  name: employee
-  apiGroup: &quot;&quot;
-```  
-</code></pre><p>完成用户配置，现在用户终端受当前角色权限限制。普通用户需要重启apiserver后方可生效。</p>
-<p>1). 配置kubectl默认终端用户  </p>
-<pre><code>```  
-# 验证
-kubectl --config=employee-context get pods
-# 设置默认会话上下文
-kubectl config use-context employee-context
-```  
-</code></pre><p>2). 其他客户端及api请求以header中携带 Authorization: Bearer + token方式访问。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">volumeMounts:</span><br><span class="line">- name: config-volume</span><br><span class="line">  mountPath: /etc/config</span><br><span class="line">volumes:</span><br><span class="line">  - name: config-volume</span><br><span class="line">    configMap:</span><br><span class="line">      name: special-config</span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>更新 ConfigMap 后：</p>
+<p>使用该 ConfigMap 挂载的 Env 不会同步更新<br>使用该 ConfigMap 挂载的 Volume 中的数据需要一段时间（实测大概10秒）才能同步更新<br>ENV 是在容器启动的时候注入的，启动之后 kubernetes 就不会再改变环境变量的值，且同一个 namespace 中的 pod 的环境变量是不断累加的，参考 <a href="https://jimmysong.io/posts/exploring-kubernetes-env-with-docker/" target="_blank" rel="noopener">Kubernetes中的服务发现与docker容器间的环境变量传递源码探究</a>。为了更新容器中使用 ConfigMap 挂载的配置，可以通过滚动更新 pod 的方式来强制重新挂载 ConfigMap，也可以在更新了 ConfigMap 后，先将副本数设置为 0，然后再扩容。</p>
 
           
         
@@ -2971,7 +2339,7 @@ kubectl config use-context employee-context
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -3013,7 +2381,7 @@ kubectl config use-context employee-context
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-count">32</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -3042,9 +2410,7 @@ kubectl config use-context employee-context
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -3147,7 +2513,13 @@ kubectl config use-context employee-context
                     
                       
                     
-                    <span class="site-state-item-count">43</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">46</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>

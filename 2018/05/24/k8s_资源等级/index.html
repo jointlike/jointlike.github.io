@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="Kubernetes之服务质量保证（QoS） 知识点QoS优先级3种QoS优先级从有低到高（从左向右）：Best-Effort pods -&amp;gt; Burstable pods -&amp;gt; Guaranteed pods Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort Burstable: pod中只">
+  <meta name="description" content="Kubernetes之服务质量保证（QoS） 知识点在kubernetes中，每个POD都有个QoS标记，通过这个Qos标记来对POD进行服务质量管理。QoS的英文全称为”Quality of Service”,中文名为”服务质量”，它取决于用户对服务质量的预期，也就是期望的服务质量。对于POD来说，服务质量体现在两个指标上，一个指标是CPU，另一个指标是内存。在实际运行过程中，当NODE节点上内">
 <meta name="keywords" content="Devops,Kubernetes,k8s,运维开发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kubernetes之QoS">
 <meta property="og:url" content="https://jointlike.github.io/2018/05/24/k8s_资源等级/index.html">
 <meta property="og:site_name" content="jointlike by TimWells">
-<meta property="og:description" content="Kubernetes之服务质量保证（QoS） 知识点QoS优先级3种QoS优先级从有低到高（从左向右）：Best-Effort pods -&amp;gt; Burstable pods -&amp;gt; Guaranteed pods Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort Burstable: pod中只">
+<meta property="og:description" content="Kubernetes之服务质量保证（QoS） 知识点在kubernetes中，每个POD都有个QoS标记，通过这个Qos标记来对POD进行服务质量管理。QoS的英文全称为”Quality of Service”,中文名为”服务质量”，它取决于用户对服务质量的预期，也就是期望的服务质量。对于POD来说，服务质量体现在两个指标上，一个指标是CPU，另一个指标是内存。在实际运行过程中，当NODE节点上内">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-24T06:50:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kubernetes之QoS">
-<meta name="twitter:description" content="Kubernetes之服务质量保证（QoS） 知识点QoS优先级3种QoS优先级从有低到高（从左向右）：Best-Effort pods -&amp;gt; Burstable pods -&amp;gt; Guaranteed pods Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort Burstable: pod中只">
+<meta name="twitter:description" content="Kubernetes之服务质量保证（QoS） 知识点在kubernetes中，每个POD都有个QoS标记，通过这个Qos标记来对POD进行服务质量管理。QoS的英文全称为”Quality of Service”,中文名为”服务质量”，它取决于用户对服务质量的预期，也就是期望的服务质量。对于POD来说，服务质量体现在两个指标上，一个指标是CPU，另一个指标是内存。在实际运行过程中，当NODE节点上内">
 
 
 
@@ -438,10 +438,11 @@
 
       
         <p><a href="http://dockone.io/article/2592" target="_blank" rel="noopener">Kubernetes之服务质量保证（QoS）</a></p>
-<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods</p>
-<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort</p>
-<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。</p>
-<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。</p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>在kubernetes中，每个POD都有个QoS标记，通过这个Qos标记来对POD进行服务质量管理。QoS的英文全称为”Quality of Service”,中文名为”服务质量”，它取决于用户对服务质量的预期，也就是期望的服务质量。对于POD来说，服务质量体现在两个指标上，一个指标是CPU，另一个指标是内存。在实际运行过程中，当NODE节点上内存资源紧张的时候，kubernetes根据POD具有的不同QoS标记，采取不同的处理策略。</p>
+<p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods （服务优先级最高，优先保障服务可用）</p>
+<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">    name: bar</span><br><span class="line"></span><br><span class="line">        resources:</span><br></pre></td></tr></table></figure></p>
+<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"># 一：</span><br><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line">            requests:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">    name: bar</span><br><span class="line"></span><br><span class="line"># 二：</span><br><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            requests:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">    name: bar</span><br></pre></td></tr></table></figure></p>
+<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line">    name: bar</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 100m</span><br><span class="line"></span><br><span class="line">                memory: 100Mi</span><br><span class="line"></span><br><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line">            requests:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br></pre></td></tr></table></figure></p>
 <p>OOM分数值根据OOM_ADJ参数计算得出，对于Guaranteed级别的pod，OOM_ADJ参数设置成了-998，对于BestEffort级别的pod，OOM_ADJ参数设置成了1000，对于Burstable级别的POD，OOM_ADJ参数取值从2到999。对于kuberntes保留资源，比如kubelet，docker，OOM_ADJ参数设置成了-999，表示不会被OOM kill掉。OOM_ADJ参数设置的越大，通过OOM_ADJ参数计算出来OOM分数越高，表明该pod优先级就越低，当出现资源竞争时会越早被kill掉，对于OOM_ADJ参数是-999的表示kubernetes永远不会因为OOM而被kill掉。</p>
 
       
@@ -485,8 +486,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/24/machine_learn_start/" rel="next" title="ML机器学习概念理解">
-                <i class="fa fa-chevron-left"></i> ML机器学习概念理解
+              <a href="/2018/05/24/hadoop_cdh5/" rel="next" title="hadoop 部署">
+                <i class="fa fa-chevron-left"></i> hadoop 部署
               </a>
             
           </div>
@@ -495,8 +496,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/24/python_PEP 8风格指南/" rel="prev" title="转：PEP 8风格指南">
-                转：PEP 8风格指南 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/24/k8s_setup/" rel="prev" title="kubernetes 部署">
+                kubernetes 部署 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -566,7 +567,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-count">32</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -595,9 +596,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -700,7 +699,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">43</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">46</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
