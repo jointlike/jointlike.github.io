@@ -341,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/cache_about_redis/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_authorization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -361,7 +361,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/cache_about_redis/" class="post-title-link" itemprop="url">redis 理解</a>
+                <a href="/2018/05/24/k8s_authorization/" class="post-title-link" itemprop="url">k8s权限管理</a>
               
             
           </h2>
@@ -390,22 +390,6 @@
             
 
             
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-06-24 14:50:25" itemprop="dateModified" datetime="2018-06-24T14:50:25+08:00">2018-06-24</time>
-              
-            
           </span>
 
           
@@ -420,7 +404,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
 
                 
                 
@@ -457,71 +441,108 @@
       
         
           
-            <p>Redis是典型的Key-Value类型数据库，Key为字符类型，Value的类型常用的为五种类型：String、Hash 、List 、 Set 、 Ordered Set</p>
-<ul>
-<li>Redis 内部使用一个 redisObject 对象来表示所有的 key 和 value。对象包含如下字段：<ul>
-<li>type ：代表一个 value 对象具体是何种数据类型。</li>
-<li>encoding ：是不同数据类型在 redis 内部的存储方式，比如：type=string 代表 value 存储的是一个普通字符串，那么对应的 encoding 可以是 raw 或者是 int，如果是 int 则代表实际 redis 内部是按数值型类存储和表示这个字符串的，当然前提是这个字符串本身可以用数值表示，比如：”123” “456”这样的字符串。</li>
-<li>ptr：数据指针</li>
-<li>vm 字段：只有打开了 Redis 的虚拟内存功能，此字段才会真正的分配内存，该功能默认是关闭状态的。 Redis 使用 redisObject 来表示所有的 key/value 数据是比较浪费内存的，当然这些内存管理成本的付出主要也是为了给 Redis 不同数据类型提供一个统一的管理接口，实际作者也提供了多种方法帮助我们尽量节省内存使用。</li>
-</ul>
+            <p>补充：<br><a href="https://www.cnblogs.com/cf532088799/p/7977083.html" target="_blank" rel="noopener">https://www.cnblogs.com/cf532088799/p/7977083.html</a></p>
+<h2 id="原理概述："><a href="#原理概述：" class="headerlink" title="原理概述："></a>原理概述：</h2><p>K8s授权管理分用户认证和授权两部分，授权根据RBAC角色控制方法为不同用户配置不同角色完成权限管理  </p>
+<h2 id="管理组件"><a href="#管理组件" class="headerlink" title="管理组件"></a>管理组件</h2><p>RBAC 是让用户能够访问 Kubernetes API 资源的授权方式。  </p>
+<h2 id="认证顺序"><a href="#认证顺序" class="headerlink" title="认证顺序"></a>认证顺序</h2><ol>
+<li>用户认证  </li>
+<li>权限认证  </li>
+</ol>
+<h2 id="用户类型"><a href="#用户类型" class="headerlink" title="用户类型"></a>用户类型</h2><p>k8s里面有两种用户，一种是User，一种就是service account，User给人用的，service account给进程用的，让进程有相关的权限。<br>如dasboard就是一个进程，我们就可以创建一个service account给它，让它去访问k8s。</p>
+<h2 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h2><p>角色是一系列的权限的集合，例如一个角色可以包含读取 Pod 的权限和列出 Pod 的权限， ClusterRole 跟 Role 类似，但是可以在集群中到处使用（ Role 是 namespace 一级的）。</p>
+<p>角色绑定 RoleBinding 把角色映射到用户，从而让这些用户继承角色在 namespace 中的权限。ClusterRoleBinding 让用户继承 ClusterRole 在整个集群中的权限。</p>
+<h2 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a>操作流程：</h2><ol>
+<li><p>创建用户，serviceaccount 或 user. user需要自设token。请看下面详细操作  </p>
+</li>
+<li><p>创建角色，分为 ClusterRole, Role. 指定操作资源及操作类型（增删改查等）  </p>
+</li>
+<li><p>绑定用户与角色，kind: ClusterRoleBinding or RoleBinding   </p>
+</li>
+</ol>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true</a><br><a href="https://www.kubernetes.org.cn/3238.html" target="_blank" rel="noopener">https://www.kubernetes.org.cn/3238.html</a><br><a href="https://kubernetes.io/docs/admin/authentication/" target="_blank" rel="noopener">https://kubernetes.io/docs/admin/authentication/</a><br><a href="http://www.infoq.com/cn/articles/Kubernetes-API" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/Kubernetes-API</a><br><a href="https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/" target="_blank" rel="noopener">https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/</a><br><a href="https://blog.csdn.net/qq_34463875/article/details/78728041" target="_blank" rel="noopener">https://blog.csdn.net/qq_34463875/article/details/78728041</a></p>
+</blockquote>
+<h2 id="更多知识点："><a href="#更多知识点：" class="headerlink" title="更多知识点："></a>更多知识点：</h2><ul>
+<li><p>集群用户权限管理： 内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod<br>（如：dashboard）的权限来访问。serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
+</li>
+<li><p>在 pod 创建之初 service account 就必须已经存在，否则创建将被拒绝设置非默认的 service account，<br>只需要在 pod 的spec.serviceAccountName 字段中将name设置为您想要用的 service account 名字即可。<br>不能更新已创建的 pod 的 service account。</p>
+</li>
+<li><p>可以在现有的serviceaccount 中增加imagePullSecrets 使pod构建镜像时在当前命名空间默认引用私有仓库的认证。</p>
+</li>
+<li><p>内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod的权限来访问。<br>serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
+</li>
+<li><p>kubeconfig namespace 设置可以限定角色可访问的命名空间，若角色权限过大，binding中也可以进一步限定。</p>
 </li>
 </ul>
-<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ol>
-<li>Redis不仅仅支持简单的k/v类型的数据，同时还提供list，set，zset，hash等数据结构的存储。</li>
-<li>Redis支持数据的备份，即master-slave模式的数据备份。</li>
-<li>Redis支持数据的持久化，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用。</li>
-<li>Redis可以实现主从复制，实现故障恢复。</li>
-<li>Redis的Sharding技术： 很容易将数据分布到多个Redis实例中</li>
-<li>Redis是线程安全的</li>
+<h2 id="案例："><a href="#案例：" class="headerlink" title="案例："></a>案例：</h2><ol>
+<li>service account(sc)案例   </li>
 </ol>
-<h2 id="支持的数据结构"><a href="#支持的数据结构" class="headerlink" title="支持的数据结构"></a>支持的数据结构</h2><p>字符串，双向链表，集合，有序集合，哈希结构</p>
-<blockquote>
-<p><strong>底层数据结构：int\embstr\str , linkedlist\ziplist\skiplist, hashmap, set</strong></p>
-</blockquote>
-<p>string:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">字符串对象的编码可以是int、raw或者embstr。</span><br><span class="line">如果一个字符串的内容可以转换为long，那么该字符串就会被转换成为long类型，对象的ptr就会指向该long，并且对象类型也用int类型表示。</span><br><span class="line">普通的字符串有两种，embstr和raw。embstr应该是Redis 3.0新增的数据结构,在2.8中是没有的。如果字符串对象的长度小于39字节，就用embstr对象。否则用传统的raw对象。</span><br><span class="line">可以是String，也可是是任意的byte[]类型的数组，如图片等。String 在 redis 内部存储默认就是一个字符串，被 redisObject 所引用，当遇到 incr,decr 等操作时会转成数值型进行计算，此时 redisObject 的 encoding 字段为int。</span><br></pre></td></tr></table></figure></p>
-<p>list:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">列表对象的编码可以是ziplist或者linkedlist。</span><br><span class="line">ziplist是一种压缩链表，它的好处是更能节省内存空间，因为它所存储的内容都是在连续的内存区域当中的。当列表对象元素不大，每个元素也不大的时候，就采用ziplist存储。但当数据量过大时就ziplist就不是那么好用了。因为为了保证他存储内容在内存中的连续性，插入的复杂度是O(N)，即每次插入都会重新进行realloc。</span><br><span class="line">&gt; Redis list 的应用场景非常多，也是 Redis 最重要的数据结构之一，比如 twitter 的关注列表，粉丝列表等都可以用 Redis 的 list 结构来实现，还提供了生产者消费者阻塞模式（B开头的命令），常用于任务队列，消息队列等。</span><br><span class="line">以双端链表实现，可以生成压缩列表，以节省空间</span><br><span class="line">如果消费者把job给Pop走了又没处理完就死机了怎么办？</span><br><span class="line">&gt; **生产者处理**</span><br><span class="line">加多一个sorted set，分发的时候同时发到list与sorted set，以分发时间为score，用户把job做完了之后要用ZREM消掉sorted set里的job，并且定时从sorted set中取出超时没有完成的任务，重新放回list。 如果发生重复可以在sorted set中在查询确认一遍，或者将消息的消费接口设计成幂等性。</span><br><span class="line">&gt; **消费者处理**</span><br><span class="line">为每个worker多加一个的list，弹出任务时改用RPopLPush，将job同时放到worker自己的list中，完成时用LREM消掉。如果集群管理(如zookeeper)发现worker已经挂掉，就将worker的list内容重新放回主list</span><br></pre></td></tr></table></figure></p>
-<p>Hash:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">哈希对象的底层实现可以是ziplist或者hashtable。</span><br><span class="line">Redis 的 Hash 实际是内部存储的 Value 为一个 HashMap，并提供了直接存取这个 Map 成员的接口。Hash将对象的各个属性存入Map里，可以只读取/更新对象的某些属性。另外不同的模块可以只更新自己关心的属性而不会互相并发覆盖冲突。</span><br><span class="line">Redis Hash 对应 Value 内部实际就是一个 HashMap，实际这里会有2种不同实现，** 这个 Hash 的成员比较少时 Redis 为了节省内存会采用类似一维数组的方式来紧凑存储，而不会采用真正的 HashMap 结构，对应的 value redisObject 的 encoding 为 zipmap，当成员数量增大时会自动转成真正的 HashMap，此时 encoding 为 ht**。一般操作复杂度是O(1)，要同时操作多个field时就是O(N)，N是field的数量。</span><br></pre></td></tr></table></figure></p>
-<p>集合：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">集合对象的编码可以是intset或者hashtable。intset是一个整数集合，里面存的为某种同一类型的整数</span><br><span class="line">Set就是HashSet，可以将重复的元素随便放入而Set会自动去重，底层实现也是HashMap，并且 set 提供了判断某个成员是否在一个 set 集合内的重要接口，这个也是 list 所不能提供的</span><br></pre></td></tr></table></figure></p>
-<p>有序集合：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">有序集合的编码可能两种，一种是ziplist，另一种是skiplist与dict的结合。</span><br><span class="line">ziplist作为集合和作为哈希对象是一样的，member和score顺序存放。按照score从小到大顺序排列。它的结构不再复述。</span><br><span class="line">skiplist是一种跳跃表，它实现了有序集合中的快速查找，在大多数情况下它的速度都可以和平衡树差不多。但它的实现比较简单，可以作为平衡树的替代品。它的结构比较特殊。</span><br><span class="line">set 不是自动有序的，而** sorted set 可以通过用户额外提供一个优先级（score）的参数来为成员排序，并且是插入有序的，即自动排序**。当你需要一个有序的并且不重复的集合列表，那么可以选择 sorted set 数据结构，比如 twitter 的 public timeline 可以以发表时间作为 score 来存储，这样获取时就是自动按时间排好序的.内部使用 HashMap 和跳跃表（SkipList）来保证数据的存储和有序</span><br></pre></td></tr></table></figure></p>
-<h2 id="内存管理优化"><a href="#内存管理优化" class="headerlink" title="内存管理优化"></a>内存管理优化</h2><blockquote>
-<p>上面的一些实现上的分析可以看出 redis 实际上的内存管理成本非常高，即占用了过多的内存，属于用空间换时间。作者对这点也非常清楚，所以提供了一系列的参数和手段来控制和节省内存</p>
-</blockquote>
-<blockquote>
-<p><strong>建议不要开启VM（虚拟内存）选项</strong><br>VM 选项是作为 Redis 存储超出物理内存数据的一种数据在内存与磁盘换入换出的一个持久化策略，将严重地拖垮系统的运行速度，所以要关闭 VM 功能，请检查你的 redis.conf 文件中 vm-enabled 为 no。</p>
-</blockquote>
-<blockquote>
-<p><strong>设置最大内存选项</strong><br>最好设置下 redis.conf 中的 maxmemory 选项，该选项是告诉 Redis 当使用了多少物理内存后就开始拒绝后续的写入请求，该参数能很好的保护好你的 Redis 不会因为使用了过多的物理内存而导致 swap，最终严重影响性能甚至崩溃。</p>
-</blockquote>
-<blockquote>
-<p><strong>通过不同数据类型控制内存使用设置</strong></p>
-<pre><code>- Hash
-    hash-max-zipmap-entries 64
-    hash-max-zipmap-value 512
-- List
-    list-max-ziplist-entries 512
-    list 数据类型多少节点以下会采用去指针的紧凑存储格式ziplist
-    list-max-ziplist-value 64
-    list 数据类型节点值大小小于多少字节会采用紧凑存储格式ziplist。
-- Set
-    set-max-intset-entries 512
-    set 数据类型内部数据如果全部是数值型，且包含多少节点以下会采用紧凑格式存储
-</code></pre></blockquote>
-<h2 id="时效性"><a href="#时效性" class="headerlink" title="时效性"></a>时效性</h2><p>Redis使用了一种相对务实的做法： 当client主动访问key会先对key进行超时判断，过时的key会立刻删除。 如果clien永远都不再get那条key呢？ 它会在Master的后台，每秒10次的执行如下操作： 随机选取100个key校验是否过期，如果有25个以上的key过期了，立刻额外随机选取下100个key(不计算在10次之内)</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><pre><code>1. 根据业务需要选择合适的数据类型，并为不同的应用场景设置相应的紧凑存储参数。
-
-2. 当业务场景不需要数据持久化时，关闭所有的持久化方式可以获得最佳的性能以及最大的内存使用量。
-
-3. 如果需要使用持久化，根据是否可以容忍重启丢失部分数据在快照方式与语句追加方式之间选择其一，不要使用虚拟内存以及 diskstore 方式。
-
-4. 不要让你的 Redis 所在机器物理内存使用超过实际内存总量的3/5。
-</code></pre><blockquote>
-<p>Redis 的持久化使用了 Buffer IO ，所谓 Buffer IO 是指 Redis 对持久化文件的写入和读取操作都会使用物理内存的 Page Cache，而当 Redis 的持久化文件过大操作系统会进行Swap，这时你的系统就会有内存还有余量但是系统不稳定或者崩溃的风险。</p>
-</blockquote>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
-<li><a href="https://blog.csdn.net/wcf373722432/article/details/78678504" target="_blank" rel="noopener">redis底层原理</a></li>
-<li><a href="https://www.cnblogs.com/guanghe/p/9122684.html" target="_blank" rel="noopener">Redis之数据存储结构</a></li>
+<p>进程用户（service account）权限管理，是专门为进程用户创建，也可以达到权限管理的目的，然而建议是同一个进程多个用户。作为示例我们这里部署一个进程权限管理作为演示。部署流程如下：</p>
+<p>1). 创建sc   </p>
+<pre><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: admin-dashboard
+  name: admin-dashboard
+  namespace: kube-system
+</code></pre><p>2). 创建角色</p>
+<pre><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  #无命名空间，clusterrole用于全集群
+  name: admin-dashboard-minimal
+rules:
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;secrets&quot;]
+  verbs: [&quot;create&quot;]
+- apiGroups: [&quot;&quot;, &quot;extensions&quot;, &quot;apps&quot;]
+  resources: [&quot;deployments&quot;, &quot;pods&quot;, &quot;services&quot;]
+  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;, &quot;delete&quot;]
+</code></pre><p>3). 绑定角色</p>
+<pre><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-dashboard-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin-dashboard-minimal
+subjects:
+- kind: ServiceAccount
+  name: admin-dashboard
+  namespace: kube-system
+</code></pre><p>4). kubernetes dashboard必须以nodeport方式部署。</p>
+<ol start="2">
+<li>普通用户案例</li>
 </ol>
+<p>普通用户权限管理：k8s APIserver不支持普通用户创建，只需生成token（# head -c 16 /dev/urandom | od -An -t x| tr -d ‘ ‘）,<br>将该用户的token追加到kuberentesAPI启动参数中指定的token（通常在/etc/kubernetes/token.csv）文件中即可。设置用户ssh认证，<br>根据绑定的角色权限并追加到kubeconfig文件中，供客户端访问。终端命令行可以通过不同用户用不同上下文达到访问权限管理。<br>这个上下文可以转换成第三方用户管理平台，Header追加。authorization Bearer token 来访问。注意：普通用户需要重启（重新部署）apiserver。</p>
+<p>1). 创建用户token并录入token指定tom用户名。任何Linux终端执行如下（可选）：  </p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">	head -c 16 /dev/urandom | od -An -t x| tr -d &apos; &apos;  </span><br><span class="line">	```  </span><br><span class="line">	生成的token以&apos;token,user,uid,&quot;group1,group2,group3&quot;&apos;格式写入到其中一个master节点`/etc/kubernetes/ssl/token.csv`文件中。uid不重复的编号即可。如：716c8d3cd0e75dc25d1eb758e4635d39, tom, 10002, dev1    </span><br><span class="line">	然后重启apiserver以是当前新加的token生效，然后继续以下操作。</span><br><span class="line">	说明：此步骤可选, 2）中命令可生成用户</span><br><span class="line"></span><br><span class="line">2). SSH认证并绑定tom：  </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	### 生成证书</span><br><span class="line">	openssl genrsa -out employee.key 2048</span><br><span class="line">	openssl req -new -key employee.key -out employee.csr -subj &quot;/CN=tom/O=dev1&quot;  #用户tom，分组dev1</span><br><span class="line">	openssl x509 -req -in employee.csr -CA /etc/kubernetes/ssl/k8s-root-ca.pem -CAkey /etc/kubernetes/ssl/k8s-root-ca-key.pem -CAcreateserial -out employee.crt -days 5000</span><br><span class="line">	</span><br><span class="line">	### 将证书和tom用户绑定</span><br><span class="line">	kubectl config set-credentials tom --client-certificate=employee.crt --client-key=employee.key </span><br><span class="line">	kubectl config set-context employee-context --cluster=kubernetes --namespace=shelve-mgr --user=tom</span><br><span class="line">	</span><br><span class="line">	## 可用kubectl config view 查看添加是否成功。cluster, context, user</span><br><span class="line"></span><br><span class="line">3). 创建角色   </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	kind: Role</span><br><span class="line">	apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">	metadata:</span><br><span class="line">	  namespace: shelve-mgr</span><br><span class="line">	  name: employee</span><br><span class="line">	rules:</span><br><span class="line">	- apiGroups: [&quot;&quot;]</span><br><span class="line">	  resources: [&quot;pods&quot;]</span><br><span class="line">	  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;]</span><br></pre></td></tr></table></figure>
+</code></pre><p>4). 角色绑定   </p>
+<pre><code>```
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: employee-role-binding
+  namespace: shelve-mgr
+subjects:
+- kind: User
+  name: tom
+roleRef:
+  kind: Role
+  name: employee
+  apiGroup: &quot;&quot;
+```  
+</code></pre><p>完成用户配置，现在用户终端受当前角色权限限制。普通用户需要重启apiserver后方可生效。</p>
+<p>1). 配置kubectl默认终端用户  </p>
+<pre><code>```  
+# 验证
+kubectl --config=employee-context get pods
+# 设置默认会话上下文
+kubectl config use-context employee-context
+```  
+</code></pre><p>2). 其他客户端及api请求以header中携带 Authorization: Bearer + token方式访问。</p>
 
           
         
@@ -762,7 +783,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_authorization/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/hadoop_guide/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -782,7 +803,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/k8s_authorization/" class="post-title-link" itemprop="url">k8s权限管理</a>
+                <a href="/2018/05/24/hadoop_guide/" class="post-title-link" itemprop="url">hadoop 使用</a>
               
             
           </h2>
@@ -825,7 +846,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
 
                 
                 
@@ -862,108 +883,71 @@
       
         
           
-            <p>补充：<br><a href="https://www.cnblogs.com/cf532088799/p/7977083.html" target="_blank" rel="noopener">https://www.cnblogs.com/cf532088799/p/7977083.html</a></p>
-<h2 id="原理概述："><a href="#原理概述：" class="headerlink" title="原理概述："></a>原理概述：</h2><p>K8s授权管理分用户认证和授权两部分，授权根据RBAC角色控制方法为不同用户配置不同角色完成权限管理  </p>
-<h2 id="管理组件"><a href="#管理组件" class="headerlink" title="管理组件"></a>管理组件</h2><p>RBAC 是让用户能够访问 Kubernetes API 资源的授权方式。  </p>
-<h2 id="认证顺序"><a href="#认证顺序" class="headerlink" title="认证顺序"></a>认证顺序</h2><ol>
-<li>用户认证  </li>
-<li>权限认证  </li>
-</ol>
-<h2 id="用户类型"><a href="#用户类型" class="headerlink" title="用户类型"></a>用户类型</h2><p>k8s里面有两种用户，一种是User，一种就是service account，User给人用的，service account给进程用的，让进程有相关的权限。<br>如dasboard就是一个进程，我们就可以创建一个service account给它，让它去访问k8s。</p>
-<h2 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h2><p>角色是一系列的权限的集合，例如一个角色可以包含读取 Pod 的权限和列出 Pod 的权限， ClusterRole 跟 Role 类似，但是可以在集群中到处使用（ Role 是 namespace 一级的）。</p>
-<p>角色绑定 RoleBinding 把角色映射到用户，从而让这些用户继承角色在 namespace 中的权限。ClusterRoleBinding 让用户继承 ClusterRole 在整个集群中的权限。</p>
-<h2 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a>操作流程：</h2><ol>
-<li><p>创建用户，serviceaccount 或 user. user需要自设token。请看下面详细操作  </p>
+            <h2 id="模块与概念解释"><a href="#模块与概念解释" class="headerlink" title="模块与概念解释"></a>模块与概念解释</h2><h3 id="存储组件"><a href="#存储组件" class="headerlink" title="存储组件"></a>存储组件</h3><ul>
+<li>存储方式</li>
+</ul>
+<ul>
+<li><p>列式存储，整个文件被切割为若干列数据，每一列数据一起存储。文件类型有：Parquet , RCFile, ORCFile。面向列的格式使得读取数据时，可以跳过不需要的列，适合于只处于行的一小部分字段的情况。但是这种格式的读写需要更多的内存空间，因为需要缓存行在内存中（为了获取多行中的某一列）。同时不适合流式写入，因为一旦写入失败，当前文件无法恢复，而面向行的数据在写入失败时可以重新同步到最后一个同步点，所以Flume采用的是面向行的存储格式。</p>
 </li>
-<li><p>创建角色，分为 ClusterRole, Role. 指定操作资源及操作类型（增删改查等）  </p>
-</li>
-<li><p>绑定用户与角色，kind: ClusterRoleBinding or RoleBinding   </p>
-</li>
-</ol>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><blockquote>
-<p><a href="https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true</a><br><a href="https://www.kubernetes.org.cn/3238.html" target="_blank" rel="noopener">https://www.kubernetes.org.cn/3238.html</a><br><a href="https://kubernetes.io/docs/admin/authentication/" target="_blank" rel="noopener">https://kubernetes.io/docs/admin/authentication/</a><br><a href="http://www.infoq.com/cn/articles/Kubernetes-API" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/Kubernetes-API</a><br><a href="https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/" target="_blank" rel="noopener">https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/</a><br><a href="https://blog.csdn.net/qq_34463875/article/details/78728041" target="_blank" rel="noopener">https://blog.csdn.net/qq_34463875/article/details/78728041</a></p>
-</blockquote>
-<h2 id="更多知识点："><a href="#更多知识点：" class="headerlink" title="更多知识点："></a>更多知识点：</h2><ul>
-<li><p>集群用户权限管理： 内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod<br>（如：dashboard）的权限来访问。serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
-</li>
-<li><p>在 pod 创建之初 service account 就必须已经存在，否则创建将被拒绝设置非默认的 service account，<br>只需要在 pod 的spec.serviceAccountName 字段中将name设置为您想要用的 service account 名字即可。<br>不能更新已创建的 pod 的 service account。</p>
-</li>
-<li><p>可以在现有的serviceaccount 中增加imagePullSecrets 使pod构建镜像时在当前命名空间默认引用私有仓库的认证。</p>
-</li>
-<li><p>内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod的权限来访问。<br>serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
-</li>
-<li><p>kubeconfig namespace 设置可以限定角色可访问的命名空间，若角色权限过大，binding中也可以进一步限定。</p>
+<li><p>行式存储，同一行的数据存储在一起，即连续存储。文件类型有：SequenceFile, MapFile, Avro Datafile。采用这种方式，如果只需要访问行的一小部分数据，亦需要将整行读入内存，推迟序列化一定程度上可以缓解这个问题，但是从磁盘读取整行数据的开销却无法避免。面向行的存储适合于整行数据需要同时处理的情况。其中，Avro是一个数据序列化系统。序列化就是将对象转换成二进制流,相应的反序列化就是将二进制流再转换成对应的对象，设计用于支持大批量数据交换的应用。</p>
 </li>
 </ul>
-<h2 id="案例："><a href="#案例：" class="headerlink" title="案例："></a>案例：</h2><ol>
-<li>service account(sc)案例   </li>
+<ul>
+<li>存储结构<br>HBase是一个针对结构化数据的可伸缩、高可靠、高性能、分布式和面向列的动态模式数据库。和传统关系数据库不同，HBase采用了BigTable的数据模型：增强的稀疏排序映射表（Key/Value），其中，键由行关键字、列关键字和时间戳构成。HBase提供了对大规模数据的随机、实时读写访问，同时，HBase中保存的数据可以使用MapReduce来处理，它将数据存储和并行计算完美地结合在一起。</li>
+</ul>
+<h2 id="hadoop数据存储"><a href="#hadoop数据存储" class="headerlink" title="hadoop数据存储"></a>hadoop数据存储</h2><p> 需要着重考虑以下几个问题：数据存储格式，多租户（支持多个用户、多个组以及多种应用类型），模式设计（输入输出的目录结构等及HBase hive数据结构），元数据管理。存储的选择关系到数据的安全，计算的效率，及存储的效益。</p>
+<ol>
+<li><p>数据存储选择</p>
+<ul>
+<li>文件格式选择（考虑：是否可压缩，是否可分片，序列化方式，列式存储或行式存储格式，SequenceFile、Avro 等容器格式是文本等大部分文件类型的优选格式）</li>
+<li>压缩格式选择（压缩比例，是否支持分片，计算时需要的转换消耗，分记录级压缩、块级压缩）</li>
+<li>数据存储系统选择（HBase, HDFS）</li>
+</ul>
+<p>一般来说，在与容器文件格式（Avro、SequenceFile 等）一起使用时，任何压缩格式都可以是分片式的，因为容器文件格式能够单独压缩记录构成的数据块，也可以进行记录级的压缩。如果在压缩整个文件时没有使用容器文件格式，那么就需要使用本身支持可分片的压缩格式，比如在数据块之间插入同步标记的 bzip2</p>
+</li>
 </ol>
-<p>进程用户（service account）权限管理，是专门为进程用户创建，也可以达到权限管理的目的，然而建议是同一个进程多个用户。作为示例我们这里部署一个进程权限管理作为演示。部署流程如下：</p>
-<p>1). 创建sc   </p>
-<pre><code>apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    k8s-app: admin-dashboard
-  name: admin-dashboard
-  namespace: kube-system
-</code></pre><p>2). 创建角色</p>
-<pre><code>apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  #无命名空间，clusterrole用于全集群
-  name: admin-dashboard-minimal
-rules:
-- apiGroups: [&quot;&quot;]
-  resources: [&quot;secrets&quot;]
-  verbs: [&quot;create&quot;]
-- apiGroups: [&quot;&quot;, &quot;extensions&quot;, &quot;apps&quot;]
-  resources: [&quot;deployments&quot;, &quot;pods&quot;, &quot;services&quot;]
-  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;, &quot;delete&quot;]
-</code></pre><p>3). 绑定角色</p>
-<pre><code>apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: admin-dashboard-rolebinding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: admin-dashboard-minimal
-subjects:
-- kind: ServiceAccount
-  name: admin-dashboard
-  namespace: kube-system
-</code></pre><p>4). kubernetes dashboard必须以nodeport方式部署。</p>
-<ol start="2">
-<li>普通用户案例</li>
-</ol>
-<p>普通用户权限管理：k8s APIserver不支持普通用户创建，只需生成token（# head -c 16 /dev/urandom | od -An -t x| tr -d ‘ ‘）,<br>将该用户的token追加到kuberentesAPI启动参数中指定的token（通常在/etc/kubernetes/token.csv）文件中即可。设置用户ssh认证，<br>根据绑定的角色权限并追加到kubeconfig文件中，供客户端访问。终端命令行可以通过不同用户用不同上下文达到访问权限管理。<br>这个上下文可以转换成第三方用户管理平台，Header追加。authorization Bearer token 来访问。注意：普通用户需要重启（重新部署）apiserver。</p>
-<p>1). 创建用户token并录入token指定tom用户名。任何Linux终端执行如下（可选）：  </p>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">	head -c 16 /dev/urandom | od -An -t x| tr -d &apos; &apos;  </span><br><span class="line">	```  </span><br><span class="line">	生成的token以&apos;token,user,uid,&quot;group1,group2,group3&quot;&apos;格式写入到其中一个master节点`/etc/kubernetes/ssl/token.csv`文件中。uid不重复的编号即可。如：716c8d3cd0e75dc25d1eb758e4635d39, tom, 10002, dev1    </span><br><span class="line">	然后重启apiserver以是当前新加的token生效，然后继续以下操作。</span><br><span class="line">	说明：此步骤可选, 2）中命令可生成用户</span><br><span class="line"></span><br><span class="line">2). SSH认证并绑定tom：  </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	### 生成证书</span><br><span class="line">	openssl genrsa -out employee.key 2048</span><br><span class="line">	openssl req -new -key employee.key -out employee.csr -subj &quot;/CN=tom/O=dev1&quot;  #用户tom，分组dev1</span><br><span class="line">	openssl x509 -req -in employee.csr -CA /etc/kubernetes/ssl/k8s-root-ca.pem -CAkey /etc/kubernetes/ssl/k8s-root-ca-key.pem -CAcreateserial -out employee.crt -days 5000</span><br><span class="line">	</span><br><span class="line">	### 将证书和tom用户绑定</span><br><span class="line">	kubectl config set-credentials tom --client-certificate=employee.crt --client-key=employee.key </span><br><span class="line">	kubectl config set-context employee-context --cluster=kubernetes --namespace=shelve-mgr --user=tom</span><br><span class="line">	</span><br><span class="line">	## 可用kubectl config view 查看添加是否成功。cluster, context, user</span><br><span class="line"></span><br><span class="line">3). 创建角色   </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	kind: Role</span><br><span class="line">	apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">	metadata:</span><br><span class="line">	  namespace: shelve-mgr</span><br><span class="line">	  name: employee</span><br><span class="line">	rules:</span><br><span class="line">	- apiGroups: [&quot;&quot;]</span><br><span class="line">	  resources: [&quot;pods&quot;]</span><br><span class="line">	  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;]</span><br></pre></td></tr></table></figure>
-</code></pre><p>4). 角色绑定   </p>
-<pre><code>```
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: employee-role-binding
-  namespace: shelve-mgr
-subjects:
-- kind: User
-  name: tom
-roleRef:
-  kind: Role
-  name: employee
-  apiGroup: &quot;&quot;
-```  
-</code></pre><p>完成用户配置，现在用户终端受当前角色权限限制。普通用户需要重启apiserver后方可生效。</p>
-<p>1). 配置kubectl默认终端用户  </p>
-<pre><code>```  
-# 验证
-kubectl --config=employee-context get pods
-# 设置默认会话上下文
-kubectl config use-context employee-context
-```  
-</code></pre><p>2). 其他客户端及api请求以header中携带 Authorization: Bearer + token方式访问。</p>
+<h3 id="查询计算组件"><a href="#查询计算组件" class="headerlink" title="查询计算组件"></a>查询计算组件</h3><ul>
+<li>hadoop HSQL、hbaseSQL、impala、pig计算框架<br>分布式离线计算框架主要适用于大批量的集群任务，由于是批量执行，故时效性偏低。</li>
+</ul>
+<ul>
+<li><p>hive<br>A data warehouse infrastructure that provides data summarization and ad hoc querying.<br>Hive定义了一种类似SQL的查询语言(HQL),将SQL转化为MapReduce任务在Hadoop上执行。通常用于离线分析。</p>
+</li>
+<li><p>Impala 相对于hive的实时查询系统，它提供SQL语义抛弃了MapReduce这个不太适合做SQL查询的范式，能查询存储在Hadoop的HDFS和HBase中的PB级大数据。已有的Hive系统虽然也提供了SQL语义，但由于Hive底层执行使用的是MapReduce引擎，仍然是一个批处理过程，难以满足查询的交互性。相比之下，Impala的最大特点也是最大卖点就是它的快速，启动速度和省去磁盘IO。</p>
+</li>
+<li><p>pig<br>A high-level data-flow language and execution framework for parallel computation.<br>定义了一种数据流语言—Pig Latin，将脚本转换为MapReduce任务在Hadoop上执行。通常用于进行离线分析。</p>
+</li>
+<li><p>Mahout<br>Mahout起源于2008年，最初是Apache Lucent的子项目，它在极短的时间内取得了长足的发展，现在是Apache的顶级项目。Mahout的主要目标是创建一些可扩展的机器学习领域经典算法的实现，旨在帮助开发人员更加方便快捷地创建智能应用程序。Mahout现在已经包含了聚类、分类、推荐引擎（协同过滤）和频繁集挖掘等广泛使用的数据挖掘方法。除了算法，Mahout还包含数据的输入/输出工具、与其他存储系统（如数据库、MongoDB 或Cassandra）集成等数据挖掘支持架构。</p>
+</li>
+</ul>
+<ul>
+<li>solr 搜索计算框架</li>
+</ul>
+<ul>
+<li>solr Apache Solr是一个功能强大的搜索服务器，它支持REST风格API。Solr是基于Lucene的，Lucene 支持强大的匹配能力，如短语，通配符，连接，分组和更多不同的数据类型。</li>
+</ul>
+<ul>
+<li>spark 准实时框架<br>Spark 是专为大规模数据处理而设计的快速通用的计算引擎，其是基于内存的迭代式计算。</li>
+</ul>
+<ul>
+<li>Spark Core：包含Spark的基本功能；尤其是定义RDD的API、操作以及这两者上的动作。其他Spark的库都是构建在RDD和Spark Core之上的</li>
+<li>Spark SQL：提供通过Apache Hive的SQL变体Hive查询语言（HiveQL）与Spark进行交互的API。每个数据库表被当做一个RDD，Spark SQL查询被转换为Spark操作。</li>
+<li>Spark Streaming：对实时数据流进行处理和控制。Spark Streaming允许程序能够像普通RDD一样处理实时数据</li>
+<li>MLlib：一个常用机器学习算法库，算法被实现为对RDD的Spark操作。这个库包含可扩展的学习算法，比如分类、回归等需要对大量数据集进行迭代的操作。</li>
+<li>GraphX：控制图、并行图操作和计算的一组算法和工具的集合。GraphX扩展了RDD API，包含控制图、创建子图、访问路径上所有顶点的操作Spark架构的组成图如下</li>
+</ul>
+<ul>
+<li>Storm实时框架<br>Storm是一个分布式的、可靠的、容错的流式计算框架。Storm 一开始就是为实时处理设计，因此在实时分析/性能监测等需要高时效性的领域广泛采用。Storm在理论上支持所有语言，只需要少量代码即可完成适配。</li>
+</ul>
+<h3 id="CDH管理监控组件"><a href="#CDH管理监控组件" class="headerlink" title="CDH管理监控组件"></a>CDH管理监控组件</h3><ul>
+<li>Cloudera Manager. 监控管理组件。</li>
+<li>Navigator是企业版的。CDH 平台的端到端数据管理工具。Cloudera Navigator 使管理员、数据经理和分析师能够了解 Hadoop 中的大量数据。</li>
+</ul>
+<h3 id="通用集群管理组件"><a href="#通用集群管理组件" class="headerlink" title="通用集群管理组件"></a>通用集群管理组件</h3><ul>
+<li><p>Zookeeper<br>分布式协作服务，Zookeeper是google Chubby克隆版,解决分布式环境下的数据管理问题：统一命名，状态同步，集群管理，配置同步等。</p>
+</li>
+<li><p>Sqoop<br>数据同步工具，Sqoop是SQL-to-Hadoop的缩写，主要用于传统数据库和Hadoop之间传输数据， 数据的导入和导出本质上是Mapreduce程序，充分利用了MR的并行化和容错性。</p>
+</li>
+</ul>
 
           
         
@@ -1405,6 +1389,169 @@ kubectl config use-context employee-context
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源等级/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/k8s_资源等级/" class="post-title-link" itemprop="url">Kubernetes之QoS</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="http://dockone.io/article/2592" target="_blank" rel="noopener">Kubernetes之服务质量保证（QoS）</a></p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>在kubernetes中，每个POD都有个QoS标记，通过这个Qos标记来对POD进行服务质量管理。QoS的英文全称为”Quality of Service”,中文名为”服务质量”，它取决于用户对服务质量的预期，也就是期望的服务质量。对于POD来说，服务质量体现在两个指标上，一个指标是CPU，另一个指标是内存。在实际运行过程中，当NODE节点上内存资源紧张的时候，kubernetes根据POD具有的不同QoS标记，采取不同的处理策略。</p>
+<p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods （服务优先级最高，优先保障服务可用）</p>
+<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">    name: bar</span><br><span class="line"></span><br><span class="line">        resources:</span><br></pre></td></tr></table></figure></p>
+<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"># 一：</span><br><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line">            requests:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">    name: bar</span><br><span class="line"></span><br><span class="line"># 二：</span><br><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            requests:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">    name: bar</span><br></pre></td></tr></table></figure></p>
+<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line">    name: bar</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 100m</span><br><span class="line"></span><br><span class="line">                memory: 100Mi</span><br><span class="line"></span><br><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line">            requests:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br></pre></td></tr></table></figure></p>
+<p>OOM分数值根据OOM_ADJ参数计算得出，对于Guaranteed级别的pod，OOM_ADJ参数设置成了-998，对于BestEffort级别的pod，OOM_ADJ参数设置成了1000，对于Burstable级别的POD，OOM_ADJ参数取值从2到999。对于kuberntes保留资源，比如kubelet，docker，OOM_ADJ参数设置成了-999，表示不会被OOM kill掉。OOM_ADJ参数设置的越大，通过OOM_ADJ参数计算出来OOM分数越高，表明该pod优先级就越低，当出现资源竞争时会越早被kill掉，对于OOM_ADJ参数是-999的表示kubernetes永远不会因为OOM而被kill掉。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/MQ_about_message_queue/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1528,169 +1675,6 @@ kubectl config use-context employee-context
 <li><a href="https://www.cnblogs.com/wangiqngpei557/p/6158094.html" target="_blank" rel="noopener">RabbitMQ 高可用集群搭建及电商平台使用经验总结</a></li>
 <li><a href="https://blog.csdn.net/lingbo229/article/details/80761778" target="_blank" rel="noopener">Kafka史上最详细原理总结 —-看完绝对不后悔</a></li>
 </ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源等级/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/k8s_资源等级/" class="post-title-link" itemprop="url">Kubernetes之QoS</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="http://dockone.io/article/2592" target="_blank" rel="noopener">Kubernetes之服务质量保证（QoS）</a></p>
-<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>在kubernetes中，每个POD都有个QoS标记，通过这个Qos标记来对POD进行服务质量管理。QoS的英文全称为”Quality of Service”,中文名为”服务质量”，它取决于用户对服务质量的预期，也就是期望的服务质量。对于POD来说，服务质量体现在两个指标上，一个指标是CPU，另一个指标是内存。在实际运行过程中，当NODE节点上内存资源紧张的时候，kubernetes根据POD具有的不同QoS标记，采取不同的处理策略。</p>
-<p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods （服务优先级最高，优先保障服务可用）</p>
-<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">    name: bar</span><br><span class="line"></span><br><span class="line">        resources:</span><br></pre></td></tr></table></figure></p>
-<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"># 一：</span><br><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line">            requests:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">    name: bar</span><br><span class="line"></span><br><span class="line"># 二：</span><br><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            requests:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">    name: bar</span><br></pre></td></tr></table></figure></p>
-<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line">    name: bar</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 100m</span><br><span class="line"></span><br><span class="line">                memory: 100Mi</span><br><span class="line"></span><br><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line">            requests:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br></pre></td></tr></table></figure></p>
-<p>OOM分数值根据OOM_ADJ参数计算得出，对于Guaranteed级别的pod，OOM_ADJ参数设置成了-998，对于BestEffort级别的pod，OOM_ADJ参数设置成了1000，对于Burstable级别的POD，OOM_ADJ参数取值从2到999。对于kuberntes保留资源，比如kubelet，docker，OOM_ADJ参数设置成了-999，表示不会被OOM kill掉。OOM_ADJ参数设置的越大，通过OOM_ADJ参数计算出来OOM分数越高，表明该pod优先级就越低，当出现资源竞争时会越早被kill掉，对于OOM_ADJ参数是-999的表示kubernetes永远不会因为OOM而被kill掉。</p>
 
           
         
@@ -1920,7 +1904,7 @@ kubectl config use-context employee-context
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/ceph_deploy/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/数据结构与算法_常用数据结构/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -1940,7 +1924,7 @@ kubectl config use-context employee-context
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/ceph_deploy/" class="post-title-link" itemprop="url">ceph 部署与概念</a>
+                <a href="/2018/05/24/数据结构与算法_常用数据结构/" class="post-title-link" itemprop="url">Python数据结构</a>
               
             
           </h2>
@@ -1983,7 +1967,7 @@ kubectl config use-context employee-context
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
 
                 
                 
@@ -2020,44 +2004,30 @@ kubectl config use-context employee-context
       
         
           
-            <p>-存储类型：<br>1.NAS - Network Attached Storage<br>2.SAN - storage area network<br>3.DAS - Direct Attached Storage</p>
-<p>-存储协议：<br>1.NFS –linux<br>2.SMB –windows</p>
-<p>-存储方案：<br>1.PV:persistant volume (node)<br>2.PVC: persistant volume claim (pod)</p>
-<p>理论：best 官网文档。 kuberneters 英文官网文档。<br><a href="https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html</a></p>
-<p>kubernetes持久化存储：<br><a href="https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc</a></p>
-<p>ceph/daemon 部署：<br><a href="https://hub.docker.com/r/ceph/daemon/" target="_blank" rel="noopener">https://hub.docker.com/r/ceph/daemon/</a><br><a href="https://www.jianshu.com/p/f08ed7287416" target="_blank" rel="noopener">https://www.jianshu.com/p/f08ed7287416</a><br><a href="https://www.linuxidc.com/Linux/2017-10/148041.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/148041.htm</a><br><a href="https://www.kubernetes.org.cn/ingress" target="_blank" rel="noopener">https://www.kubernetes.org.cn/ingress</a></p>
-<p>——实践步骤——-<br>体系结构<br>配置文件<br>部署环境配置<br>部署：</p>
+            <h2 id="常用数据结构"><a href="#常用数据结构" class="headerlink" title="常用数据结构"></a>常用数据结构</h2><p><a href="http://data.biancheng.net/intro/" target="_blank" rel="noopener">数据结构与算法教程【全】</a></p>
+<h3 id="数据的逻辑结构"><a href="#数据的逻辑结构" class="headerlink" title="数据的逻辑结构"></a>数据的逻辑结构</h3><p>一、集合结构:结构中的数据元素之间除了同属于一个集合的关系外，无任何其他关系。</p>
+<p>二、线性表</p>
 <ol>
-<li>部署 CEPH 的用户<br>ssh user@ceph-server<br>sudo useradd -d /home/{username} -m {username}<br>sudo passwd {username}</li>
+<li>数组/栈/队列：顺序存储，随机访问</li>
+<li>链表：链表存储，顺序访问</li>
 </ol>
-<p>授权<br>echo “{username} ALL = (root) NOPASSWD:ALL” | sudo tee /etc/sudoers.d/{username}<br>sudo chmod 0440 /etc/sudoers.d/{username}</p>
-<ol start="2">
-<li><p>无密码 SSH 登录<br>ssh-keygen<br>ssh-copy-id {username}@node1<br>ssh-copy-id {username}@node2<br>ssh-copy-id {username}@node3</p>
-</li>
-<li><p>deploy mon<br>docker run -it –net=host \<br>–hostname=cephmonhost \<br>–name=cephtimon \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-e MON_IP=172.20.36.231 \<br>-e CEPH_PUBLIC_NETWORK=172.20.36.0/24 \<br>ceph/daemon mon</p>
-</li>
+<p>三、散列表<br>前面使用的探查技术（probing），如果发生冲突，则将尝试列表中的下一个位置。<br>如果使用二度哈希（rehashing），则将导致所有的哈希被重新计算。<br>而链接技术（chaining）将采用额外的数据结构来处理冲突。Dictionary&lt;K,T&gt; 中的每个位置（slot）都映射到了一个链表。当冲突发生时，冲突的元素将被添加到桶（bucket）列表中。</p>
+<p>四、树与二叉树<br>  1.二叉树<br>  2.堆<br>  3.查找树<br>  4.平衡树<br>  5.线索</p>
+<p>五、图</p>
+<h3 id="数据的存储结构"><a href="#数据的存储结构" class="headerlink" title="数据的存储结构"></a>数据的存储结构</h3><p>存储结构是指数据结构在计算机中的表示（又称映像），也称物理结构。它包括数据元素的表示和关系的表示。<br>数据的存储结构是逻辑结构用计算机语言的实现，它依赖于计算机语言。<br>数据的存储结构主要有：顺序存储、链式存储、索引存储和散列存储。</p>
+<p>1.顺序存储:把逻辑上相邻的元素存储在物理位置上也相邻的存储单元里，元素之间的关系由存储单元的邻接关系来体现。<br>其优点是可以实现随机存取，每个元素占用最少的存储空间；缺点是只能使用相邻的一整块存储单元，因此可能产生较多的外部碎片。<br>通常借助于程序语言的数组实现。</p>
+<p>2.链接存储：不要求逻辑上相邻的元素在物理位置上也相邻，借助指示元素存储地址的指针表示元素之间的逻辑关系。<br>其优点是不会出现碎片现象，充分利用所有存储单元；缺点是每个元素因存储指针而占用额外的存储空间，并且只能实现顺序存取。</p>
+<p>3.索引存储：在存储元素信息的同时，还建立附加的索引表。索引表中的每一项称为索引项，索引项的一般形式是：（关键字，地址）。<br>其优点是检索速度快；缺点是增加了附加的索引表，会占用较多的存储空间。另外，在增加和删除数据时要修改索引表，因而会花费较多的时间。<br>若每个结点在索引表中都有一个索引项，则该索引表称之为稠密索引(Dense Index)。若一组结点在索引表中只对应一个索引项，则该索引表称为稀疏索引(Spare Index)。索引项的一般形式是：<br>关键字是能唯一标识一个结点的那些数据项。稠密索引中索引项的地址指示结点所在的存储位置;稀疏索引中索引项的地址指示一组结点的起始存储位置。</p>
+<p>4.散列存储：该方法的基本思想是：根据结点的关键字直接计算出该结点的存储地址。</p>
+<h3 id="数据运算"><a href="#数据运算" class="headerlink" title="数据运算"></a>数据运算</h3><p>施加在数据上的运算包括运算的定义和实现。运算的定义是针对逻辑结构的，指出运算的功能；运算的实现是针对存储结构的，指出运算的具体操作步骤。</p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><ol>
+<li><a href="https://blog.fundebug.com/2018/08/27/code-interview-data-structure/" target="_blank" rel="noopener">代码面试需要知道的8种数据结构(附面试题及答案链接)</a></li>
 </ol>
-<p>ctrl+P+Q</p>
-<ol start="4">
-<li>deploy mgr<br>docker run -d –net=host \<br>–hostname=cephmgrhost \<br>–name=cephtimmgr \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>ceph/daemon mgr</li>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://www.cnblogs.com/wanghuaijun/p/7302303.html" target="_blank" rel="noopener">常见数据结构与算法整理总结（上）</a></li>
+<li><a href="https://blog.csdn.net/yeyazhishang/article/details/82353846" target="_blank" rel="noopener">数据结构：八大数据结构分类</a></li>
+<li><a href="https://www.cnblogs.com/gaochundong/p/data_structures_and_asymptotic_analysis.html" target="_blank" rel="noopener">数据结构：八大数据结构分类</a></li>
 </ol>
-<ol start="5">
-<li>distribut keyring<h1 id="ssh-root-node2-mkdir-p-var-lib-ceph"><a href="#ssh-root-node2-mkdir-p-var-lib-ceph" class="headerlink" title="ssh root@node2 mkdir -p /var/lib/ceph"></a>ssh root@node2 mkdir -p /var/lib/ceph</h1><h1 id="scp-r-etc-ceph-root-node2-etc"><a href="#scp-r-etc-ceph-root-node2-etc" class="headerlink" title="scp -r /etc/ceph root@node2:/etc"></a>scp -r /etc/ceph root@node2:/etc</h1><h1 id="scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph"><a href="#scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph" class="headerlink" title="scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph"></a>scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph</h1></li>
-</ol>
-<ol start="6">
-<li>zap disk<br>docker run -d –privileged=true \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon zap_device</li>
-</ol>
-<ol start="7">
-<li><p>deploy osd<br>docker run -it –net=host \<br>–hostname=cephosdhost \<br>–name=cephtimosd \<br>–pid=host \<br>–privileged=true \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon osd</p>
-</li>
-<li><p>deploy mds</p>
-</li>
-</ol>
-<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>-e CEPHFS_CREATE=1 \<br>ceph/daemon mds</p>
-<ol start="9">
-<li>deploy rgw</li>
-</ol>
-<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>ceph/daemon rgw</p>
 
           
         
@@ -2114,7 +2084,7 @@ kubectl config use-context employee-context
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/nlp_sentence/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/cache_about_redis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -2134,7 +2104,7 @@ kubectl config use-context employee-context
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/nlp_sentence/" class="post-title-link" itemprop="url">NLP句法表述</a>
+                <a href="/2018/05/24/cache_about_redis/" class="post-title-link" itemprop="url">redis 理解</a>
               
             
           </h2>
@@ -2163,6 +2133,22 @@ kubectl config use-context employee-context
             
 
             
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-06-24 14:50:25" itemprop="dateModified" datetime="2018-06-24T14:50:25+08:00">2018-06-24</time>
+              
+            
           </span>
 
           
@@ -2177,7 +2163,7 @@ kubectl config use-context employee-context
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
 
                 
                 
@@ -2214,7 +2200,71 @@ kubectl config use-context employee-context
       
         
           
-            <h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p><img src="/images/ml_nlp/nlu_sentence.png" alt="NLP句法表述"></p>
+            <p>Redis是典型的Key-Value类型数据库，Key为字符类型，Value的类型常用的为五种类型：String、Hash 、List 、 Set 、 Ordered Set</p>
+<ul>
+<li>Redis 内部使用一个 redisObject 对象来表示所有的 key 和 value。对象包含如下字段：<ul>
+<li>type ：代表一个 value 对象具体是何种数据类型。</li>
+<li>encoding ：是不同数据类型在 redis 内部的存储方式，比如：type=string 代表 value 存储的是一个普通字符串，那么对应的 encoding 可以是 raw 或者是 int，如果是 int 则代表实际 redis 内部是按数值型类存储和表示这个字符串的，当然前提是这个字符串本身可以用数值表示，比如：”123” “456”这样的字符串。</li>
+<li>ptr：数据指针</li>
+<li>vm 字段：只有打开了 Redis 的虚拟内存功能，此字段才会真正的分配内存，该功能默认是关闭状态的。 Redis 使用 redisObject 来表示所有的 key/value 数据是比较浪费内存的，当然这些内存管理成本的付出主要也是为了给 Redis 不同数据类型提供一个统一的管理接口，实际作者也提供了多种方法帮助我们尽量节省内存使用。</li>
+</ul>
+</li>
+</ul>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ol>
+<li>Redis不仅仅支持简单的k/v类型的数据，同时还提供list，set，zset，hash等数据结构的存储。</li>
+<li>Redis支持数据的备份，即master-slave模式的数据备份。</li>
+<li>Redis支持数据的持久化，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用。</li>
+<li>Redis可以实现主从复制，实现故障恢复。</li>
+<li>Redis的Sharding技术： 很容易将数据分布到多个Redis实例中</li>
+<li>Redis是线程安全的</li>
+</ol>
+<h2 id="支持的数据结构"><a href="#支持的数据结构" class="headerlink" title="支持的数据结构"></a>支持的数据结构</h2><p>字符串，双向链表，集合，有序集合，哈希结构</p>
+<blockquote>
+<p><strong>底层数据结构：int\embstr\str , linkedlist\ziplist\skiplist, hashmap, set</strong></p>
+</blockquote>
+<p>string:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">字符串对象的编码可以是int、raw或者embstr。</span><br><span class="line">如果一个字符串的内容可以转换为long，那么该字符串就会被转换成为long类型，对象的ptr就会指向该long，并且对象类型也用int类型表示。</span><br><span class="line">普通的字符串有两种，embstr和raw。embstr应该是Redis 3.0新增的数据结构,在2.8中是没有的。如果字符串对象的长度小于39字节，就用embstr对象。否则用传统的raw对象。</span><br><span class="line">可以是String，也可是是任意的byte[]类型的数组，如图片等。String 在 redis 内部存储默认就是一个字符串，被 redisObject 所引用，当遇到 incr,decr 等操作时会转成数值型进行计算，此时 redisObject 的 encoding 字段为int。</span><br></pre></td></tr></table></figure></p>
+<p>list:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">列表对象的编码可以是ziplist或者linkedlist。</span><br><span class="line">ziplist是一种压缩链表，它的好处是更能节省内存空间，因为它所存储的内容都是在连续的内存区域当中的。当列表对象元素不大，每个元素也不大的时候，就采用ziplist存储。但当数据量过大时就ziplist就不是那么好用了。因为为了保证他存储内容在内存中的连续性，插入的复杂度是O(N)，即每次插入都会重新进行realloc。</span><br><span class="line">&gt; Redis list 的应用场景非常多，也是 Redis 最重要的数据结构之一，比如 twitter 的关注列表，粉丝列表等都可以用 Redis 的 list 结构来实现，还提供了生产者消费者阻塞模式（B开头的命令），常用于任务队列，消息队列等。</span><br><span class="line">以双端链表实现，可以生成压缩列表，以节省空间</span><br><span class="line">如果消费者把job给Pop走了又没处理完就死机了怎么办？</span><br><span class="line">&gt; **生产者处理**</span><br><span class="line">加多一个sorted set，分发的时候同时发到list与sorted set，以分发时间为score，用户把job做完了之后要用ZREM消掉sorted set里的job，并且定时从sorted set中取出超时没有完成的任务，重新放回list。 如果发生重复可以在sorted set中在查询确认一遍，或者将消息的消费接口设计成幂等性。</span><br><span class="line">&gt; **消费者处理**</span><br><span class="line">为每个worker多加一个的list，弹出任务时改用RPopLPush，将job同时放到worker自己的list中，完成时用LREM消掉。如果集群管理(如zookeeper)发现worker已经挂掉，就将worker的list内容重新放回主list</span><br></pre></td></tr></table></figure></p>
+<p>Hash:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">哈希对象的底层实现可以是ziplist或者hashtable。</span><br><span class="line">Redis 的 Hash 实际是内部存储的 Value 为一个 HashMap，并提供了直接存取这个 Map 成员的接口。Hash将对象的各个属性存入Map里，可以只读取/更新对象的某些属性。另外不同的模块可以只更新自己关心的属性而不会互相并发覆盖冲突。</span><br><span class="line">Redis Hash 对应 Value 内部实际就是一个 HashMap，实际这里会有2种不同实现，** 这个 Hash 的成员比较少时 Redis 为了节省内存会采用类似一维数组的方式来紧凑存储，而不会采用真正的 HashMap 结构，对应的 value redisObject 的 encoding 为 zipmap，当成员数量增大时会自动转成真正的 HashMap，此时 encoding 为 ht**。一般操作复杂度是O(1)，要同时操作多个field时就是O(N)，N是field的数量。</span><br></pre></td></tr></table></figure></p>
+<p>集合：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">集合对象的编码可以是intset或者hashtable。intset是一个整数集合，里面存的为某种同一类型的整数</span><br><span class="line">Set就是HashSet，可以将重复的元素随便放入而Set会自动去重，底层实现也是HashMap，并且 set 提供了判断某个成员是否在一个 set 集合内的重要接口，这个也是 list 所不能提供的</span><br></pre></td></tr></table></figure></p>
+<p>有序集合：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">有序集合的编码可能两种，一种是ziplist，另一种是skiplist与dict的结合。</span><br><span class="line">ziplist作为集合和作为哈希对象是一样的，member和score顺序存放。按照score从小到大顺序排列。它的结构不再复述。</span><br><span class="line">skiplist是一种跳跃表，它实现了有序集合中的快速查找，在大多数情况下它的速度都可以和平衡树差不多。但它的实现比较简单，可以作为平衡树的替代品。它的结构比较特殊。</span><br><span class="line">set 不是自动有序的，而** sorted set 可以通过用户额外提供一个优先级（score）的参数来为成员排序，并且是插入有序的，即自动排序**。当你需要一个有序的并且不重复的集合列表，那么可以选择 sorted set 数据结构，比如 twitter 的 public timeline 可以以发表时间作为 score 来存储，这样获取时就是自动按时间排好序的.内部使用 HashMap 和跳跃表（SkipList）来保证数据的存储和有序</span><br></pre></td></tr></table></figure></p>
+<h2 id="内存管理优化"><a href="#内存管理优化" class="headerlink" title="内存管理优化"></a>内存管理优化</h2><blockquote>
+<p>上面的一些实现上的分析可以看出 redis 实际上的内存管理成本非常高，即占用了过多的内存，属于用空间换时间。作者对这点也非常清楚，所以提供了一系列的参数和手段来控制和节省内存</p>
+</blockquote>
+<blockquote>
+<p><strong>建议不要开启VM（虚拟内存）选项</strong><br>VM 选项是作为 Redis 存储超出物理内存数据的一种数据在内存与磁盘换入换出的一个持久化策略，将严重地拖垮系统的运行速度，所以要关闭 VM 功能，请检查你的 redis.conf 文件中 vm-enabled 为 no。</p>
+</blockquote>
+<blockquote>
+<p><strong>设置最大内存选项</strong><br>最好设置下 redis.conf 中的 maxmemory 选项，该选项是告诉 Redis 当使用了多少物理内存后就开始拒绝后续的写入请求，该参数能很好的保护好你的 Redis 不会因为使用了过多的物理内存而导致 swap，最终严重影响性能甚至崩溃。</p>
+</blockquote>
+<blockquote>
+<p><strong>通过不同数据类型控制内存使用设置</strong></p>
+<pre><code>- Hash
+    hash-max-zipmap-entries 64
+    hash-max-zipmap-value 512
+- List
+    list-max-ziplist-entries 512
+    list 数据类型多少节点以下会采用去指针的紧凑存储格式ziplist
+    list-max-ziplist-value 64
+    list 数据类型节点值大小小于多少字节会采用紧凑存储格式ziplist。
+- Set
+    set-max-intset-entries 512
+    set 数据类型内部数据如果全部是数值型，且包含多少节点以下会采用紧凑格式存储
+</code></pre></blockquote>
+<h2 id="时效性"><a href="#时效性" class="headerlink" title="时效性"></a>时效性</h2><p>Redis使用了一种相对务实的做法： 当client主动访问key会先对key进行超时判断，过时的key会立刻删除。 如果clien永远都不再get那条key呢？ 它会在Master的后台，每秒10次的执行如下操作： 随机选取100个key校验是否过期，如果有25个以上的key过期了，立刻额外随机选取下100个key(不计算在10次之内)</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><pre><code>1. 根据业务需要选择合适的数据类型，并为不同的应用场景设置相应的紧凑存储参数。
+
+2. 当业务场景不需要数据持久化时，关闭所有的持久化方式可以获得最佳的性能以及最大的内存使用量。
+
+3. 如果需要使用持久化，根据是否可以容忍重启丢失部分数据在快照方式与语句追加方式之间选择其一，不要使用虚拟内存以及 diskstore 方式。
+
+4. 不要让你的 Redis 所在机器物理内存使用超过实际内存总量的3/5。
+</code></pre><blockquote>
+<p>Redis 的持久化使用了 Buffer IO ，所谓 Buffer IO 是指 Redis 对持久化文件的写入和读取操作都会使用物理内存的 Page Cache，而当 Redis 的持久化文件过大操作系统会进行Swap，这时你的系统就会有内存还有余量但是系统不稳定或者崩溃的风险。</p>
+</blockquote>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
+<li><a href="https://blog.csdn.net/wcf373722432/article/details/78678504" target="_blank" rel="noopener">redis底层原理</a></li>
+<li><a href="https://www.cnblogs.com/guanghe/p/9122684.html" target="_blank" rel="noopener">Redis之数据存储结构</a></li>
+</ol>
 
           
         
