@@ -341,6 +341,618 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/04/27/常用机器学习算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/04/27/常用机器学习算法/" class="post-title-link" itemprop="url">常用机器学习算法原理及相关知识理解</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-04-27 14:50:25" itemprop="dateCreated datePublished" datetime="2019-04-27T14:50:25+08:00">2019-04-27</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="常用机器学习算法原理及相关知识理解"><a href="#常用机器学习算法原理及相关知识理解" class="headerlink" title="常用机器学习算法原理及相关知识理解"></a>常用机器学习算法原理及相关知识理解</h2><p><a href="https://blog.csdn.net/abc200941410128/article/details/79269386" target="_blank" rel="noopener">深度学习常见算法的介绍和比较</a></p>
+<h3 id="降维算法"><a href="#降维算法" class="headerlink" title="降维算法"></a>降维算法</h3><p>在存储和分析大量数据时，识别多个模式和变量是具有挑战性的。维数简化算法，如决策树、因子分析、缺失值比、随机森林等，有助于寻找相关数据。</p>
+<h3 id="梯度提高Gradient-Boosting-和演算法-AdaBoost"><a href="#梯度提高Gradient-Boosting-和演算法-AdaBoost" class="headerlink" title="梯度提高Gradient Boosting 和演算法 AdaBoost"></a>梯度提高Gradient Boosting 和演算法 AdaBoost</h3><p>这些算法是在处理大量数据，以作出准确和快速的预测时使用的boosting算法。boosting是一种组合学习算法，它结合了几种基本估计量的预测能力，以提高效力和功率。</p>
+<p>综上所述，它将所有弱或平均预测因子组合成一个强预测器。</p>
+<h3 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h3><p>工作原理：该算法可以按其权重可视化。但问题是，当你无法真正衡量它时，必须通过观察其高度和宽度来做一些猜测。通过这种可视化的分析，可以获取一个结果。</p>
+<p>回归模型：Y = a * X + b （Y =因变量；a=斜率；X =独立变量；b=截距。）</p>
+<p>通过减少数据点和回归线间距离的平方差的总和，可以导出系数a和b。</p>
+<h3 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h3><p>原理：线性回归的模型是求出输出特征向量Y和输入样本矩阵X之间的线性关系系数θ，满足Y=Xθ。此时我们的Y是连续的，所以是回归模型。如果我们想要Y是离散的话，怎么办呢？一个可以想到的办法是，我们对于这个Y再做一次函数转换，变为g(Y)。如果我们令g(Y)的值在某个实数区间的时候是类别A，在另一个实数区间的时候是类别B，此阶跃函数将Y映射为{0,1}，就得到了一个分类模型。如果结果的类别只有两种，那么就是一个二元分类模型了。逻辑回归的出发点就是从这来的。</p>
+<p>sigmoid函数模型：g(y) = 1/ (1+e ^-z)</p>
+<p>应用：<br>Logistic回归理论之前，我们先从LR分类器说起。LR分类器，即Logistic Regression Classifier。<br>根据一组独立变量，估计离散值。它通过将数据匹配到logit函数来帮助预测事件。</p>
+<p>添加交互项。</p>
+<p>消除功能。</p>
+<p>正则化技术。</p>
+<p>使用非线性模型。</p>
+<p>问题：</p>
+<ol>
+<li>LR与SVM的区别</li>
+</ol>
+<h3 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h3><p>原理：利用监督学习算法对问题进行分类。决策树是一种支持工具，它使用树状图来决定决策或可能的后果、机会事件结果、资源成本和实用程序。根据独立变量，将其划分为两个或多个同构集。</p>
+<p>优点：与回归一样，决策树组合在实践中表现也很好。由于它们的分层结构，它们对离群值、可伸缩性和自然模型的非线性决策边界具有鲁棒性。</p>
+<p>弱点：无约束，单个树容易过度拟合，但这可以通过集成方法来缓解。</p>
+<p>问题：</p>
+<ol>
+<li>决策树节点分裂时如何选择特征，写出Gini index和Information Gain的公式并举例说明</li>
+<li>训练决策树时，其参数是什么？</li>
+<li>在决策树的某个节点处进行分割，其分割标准是什么？</li>
+<li>决策树如何决定在哪个特征处必须进行分割？</li>
+</ol>
+<h3 id="支持向量机（SVM）"><a href="#支持向量机（SVM）" class="headerlink" title="支持向量机（SVM）"></a>支持向量机（SVM）</h3><p>原理：如果训练数据是分布在二维平面上的点，它们按照其分类聚集在不同的区域。基于分类边界的分类算法的目标是，通过训练，找到这些分类之间的边界（直线的――称为线性划分，曲线的――称为非线性划分）。对于多维数据（如N维），可以将它们视为N维空间中的点，而分类边界就是N维空间中的面，称为超面（超面比N维空间少一维）。线性分类器使用超平面类型的边界，非线性分类器使用超曲面。</p>
+<p>优点：SVM可以模拟非线性决策边界，并且有很多内核可供选择。它可用于防止过度拟合，特别是在高维空间中。</p>
+<p>缺点：SVM的内存密集，调优的难度很大，并且不能很好地扩展到更大的数据集。目前在行业中，随机森林通常优于SVM。</p>
+<p>应用：</p>
+<p>显示广告。</p>
+<p>人类剪切位点识别（human splice site recognition）。</p>
+<p>基于图像的性别检测。</p>
+<p>大规模图像分类等。</p>
+<p>问题：</p>
+<ol>
+<li>SVM引入核函数本质？提高维度，增加模型复杂度</li>
+</ol>
+<h3 id="朴素贝叶斯"><a href="#朴素贝叶斯" class="headerlink" title="朴素贝叶斯"></a>朴素贝叶斯</h3><p>原理：朴素贝叶斯认为每个特征都是独立于另一个特征的。即使在计算结果的概率时，它也会考虑每一个单独的关系。</p>
+<p>优点： 尽管条件独立性假设很少成立，但朴素贝叶斯模型在实践中表现出色，特别是它们的简单性。它们易于实现，可以与更多的数据集进行扩展。</p>
+<p>弱点： 由于简单性，朴素贝叶斯模型经常在正确训练和调整之前被以前的算法击败。</p>
+<p>应用:</p>
+<p>它不仅易于使用，而且能有效地使用大量的数据集，甚至超过了高度复杂的分类系统。</p>
+<p>判断垃圾邮件。</p>
+<p>对新闻的类别进行分类，如科技、政治、运动。</p>
+<p>判断文本表达的感情是积极的还是消极的。</p>
+<p>人脸识别。</p>
+<p>问题：<br>为什么朴素？</p>
+<h3 id="KNN-K-最近邻"><a href="#KNN-K-最近邻" class="headerlink" title="KNN(K -最近邻)"></a>KNN(K -最近邻)</h3><p>该算法适用于分类和回归问题。在数据科学行业中，它更常用来解决分类问题。</p>
+<p>这个简单的算法能够存储所有可用的案例，并通过对其k近邻的多数投票来对任何新事件进行分类。然后将事件分配给与之匹配最多的类。一个距离函数执行这个测量过程。</p>
+<p>优点：该算法适用于对样本容量比较大的类域进行自动分类。</p>
+<p>缺点：</p>
+<p>在计算上是昂贵的（计算量比较大）。</p>
+<p>变量应规范化。</p>
+<p>数据需要预处理。</p>
+<h3 id="k-means-K均值"><a href="#k-means-K均值" class="headerlink" title="k-means K均值"></a>k-means K均值</h3><p>这种无监督算法用于解决聚类问题。数据集以这样一种方式列在一个特定数量的集群中：所有数据点都是同质的，并且与其他集群中的数据是异构的。</p>
+<p>优点：算法速度很快。</p>
+<p>缺点：分组的数目k是一个输入参数，不合适的k可能返回较差的结果。</p>
+<p>集群是如何形成的:</p>
+<p>该算法为每个集群选择称为centroid的点。</p>
+<p>数据在最接近的centroid中形成集群。</p>
+<p>新的centroid是基于现有的集群数据点创建的。</p>
+<p>每个数据点之间的距离是确定的。这个过程会重复，直到中心不改变。</p>
+<p>问题：</p>
+<ol>
+<li>列举至少3中定义K-Means聚类算法中K的方法。</li>
+</ol>
+<h3 id="随机森林"><a href="#随机森林" class="headerlink" title="随机森林"></a>随机森林</h3><p>利用多棵决策树对样本进行训练并预测的一种分类器被称为随机森林。为了根据其特性来分类一个新对象，每棵决策树都被排序和分类，然后决策树投票给一个特定的类，那些拥有最多选票的被森林所选择。</p>
+<p>以下是每棵树种植和生长的方式:</p>
+<p>如果在案例中有N个训练集，那么就会随机选择N个案例。</p>
+<p>输入变量是M。</p>
+<p>树会生长到最大水平，不经剪切和修剪。</p>
+<p>问题：</p>
+<ol>
+<li>如何理解“随机”, 随机森林的优势？</li>
+<li>与Random Forest作比较，并以此介绍什么是模型的Bias和Variance</li>
+</ol>
+<h3 id="GB（gradient-boosting），GBDT的原理-XGBoost原理-（理论基础）"><a href="#GB（gradient-boosting），GBDT的原理-XGBoost原理-（理论基础）" class="headerlink" title="GB（gradient boosting），GBDT的原理, XGBoost原理 （理论基础）"></a>GB（gradient boosting），GBDT的原理, XGBoost原理 （理论基础）</h3><p>问题：</p>
+<ol>
+<li>RF,GBDT与XGBoost的区别？</li>
+<li>XGBoost的参数如何调优？其正则化是如何实现的？并行化部分是如何实现的？</li>
+<li>分类树和回归树的区别是什么？</li>
+<li>基尼系数的计算公式是什么？</li>
+</ol>
+<h3 id="adaboost原理"><a href="#adaboost原理" class="headerlink" title="adaboost原理"></a>adaboost原理</h3><p>问题：</p>
+<ol>
+<li>决策树与adaboost的区别？</li>
+</ol>
+<h3 id="条件随机场原理"><a href="#条件随机场原理" class="headerlink" title="条件随机场原理"></a>条件随机场原理</h3><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://blog.csdn.net/jrunw/article/details/79205322" target="_blank" rel="noopener">图解十大经典机器学习算法入门</a></li>
+<li><a href="https://baijiahao.baidu.com/s?id=1576208678687678181&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">机器学习三大类别中常用的10大算法</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/04/24/NLP自然语言理解入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/04/24/NLP自然语言理解入门/" class="post-title-link" itemprop="url">自然语言处理入门</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-04-24 14:50:25" itemprop="dateCreated datePublished" datetime="2019-04-24T14:50:25+08:00">2019-04-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="自然语言处理一般流程"><a href="#自然语言处理一般流程" class="headerlink" title="自然语言处理一般流程"></a>自然语言处理一般流程</h2><ol>
+<li>中文分词，工具包jieba,nltk,stanfordnlp,hanlp</li>
+<li>词性识别</li>
+<li>命名实体识别，包括人名，地名，机构等关键命名实体识别等</li>
+<li>关键词提取，自动摘要，短语块。工具包有jieba的textRank</li>
+<li>句法依存，语义依存</li>
+<li>词向量，语言模型</li>
+</ol>
+<h2 id="公司要求与技能目标"><a href="#公司要求与技能目标" class="headerlink" title="公司要求与技能目标"></a>公司要求与技能目标</h2><p>一、自然语言处理面试技能要求：</p>
+<p>1.熟练掌握自然语言处理NLP相关理论与技术方法</p>
+<p>文本分类、中文分词、词性分类、命名实体识别、词义消歧、共指处理、句法分析、<br>情感分析、信息抽取（实体、关系、事件抽取）、知识库构建、自动摘要、智能问答、<br>等自然语言处理技术，熟悉语义分析方法和技术（相似度计算、本体理论、语义推理等）</p>
+<p>2.熟悉常见的机器学习算法（逻辑回归、SVM、决策树、贝叶斯以及各种深度学习网络包括CNN、RNN、LSTM等）</p>
+<p>3.熟练使用TensorFlow, Theano, Torch, Caffe, MXNet等深度学习框架</p>
+<p>4.<a href="https://blog.csdn.net/xwd18280820053/article/details/76026523" target="_blank" rel="noopener">面试常问的深度学习(DNN、CNN、RNN)的相关问题</a></p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p>1.<a href="http://www.sohu.com/a/224284175_629694" target="_blank" rel="noopener">为何自然语言处理领域难以出现“独角兽”？</a><br>2.<a href="https://www.sohu.com/a/197318926_206784" target="_blank" rel="noopener">NLP中自动生产文摘（auto text summarization）</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/04/24/知识图谱KG入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/04/24/知识图谱KG入门/" class="post-title-link" itemprop="url">知识图谱入门</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-04-24 14:50:25" itemprop="dateCreated datePublished" datetime="2019-04-24T14:50:25+08:00">2019-04-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>百度百科定义：知识图谱又称为科学知识图谱，在图书情报界称为知识域可视化，或知识领域映射地图，用来显示知识发展进程与结构关​​系的一系列各种不同的图形，用可视化技术描述知识资源及载体，挖掘，分析，构建，绘制和显示知识及他们互相之间的关系。</p>
+</blockquote>
+<h2 id="为什么需要知识图谱"><a href="#为什么需要知识图谱" class="headerlink" title="为什么需要知识图谱"></a>为什么需要知识图谱</h2><p>1、知识图谱把复杂的知识领域及知识体系通过数据挖掘，信息处理，知识计量和图形绘制显示出来，表示该领域的发展动态及规律，为该领域的研究提供全方位，整体性，关系链的参考。</p>
+<p>2、知识图谱是智能社会的重要生产资料，如果把人工智能比作一个“大脑”，那么深度学习是“大脑”的运转方式，知识图谱则是“大脑”的知识库，而大数据，GPU并行计算和高性能计算等支撑技术就是“大脑”思维运转的支撑。</p>
+<ul>
+<li>深度学习是大脑运转方式？知识图谱是知识库？大数据不是知识库？</li>
+<li>硬件、GPU是大脑的血肉,大数据是大脑的信息神经元，知识图谱、深度学习是大脑的运转方式</li>
+</ul>
+<p>3、 知识图谱是真实世界的语义表示，其中每一个节点代表实体连接节点的边则对应实体之间的关系异构数据通过整合表达为知识，图的表达映射了人类对世界的认知方式，知识图谱非常适合整合非结构化数据从零散数据中发现知识，从而帮助组织机构实现业务智能化。</p>
+<h2 id="知识图谱的产生"><a href="#知识图谱的产生" class="headerlink" title="知识图谱的产生"></a>知识图谱的产生</h2><p>当你对陌生领域进行学习时，无法把握要点及整体框架，以至于检索效率低，入门无道时，知识图谱应运而生。</p>
+<p>自2012年5月，谷歌将知识图谱应用到其搜索引擎，以提升其搜索服务能力，将各种渠道收集而来的相关信息展示在搜索结果旁的信息框中，以结构化模块形式提供给用户。</p>
+<p>主要从三个方面提升了其搜索效果：</p>
+<p>1、语言的多义性，展示差异化结果，缩小搜索范围。</p>
+<p>2、信息的关联性，理解总结信息间的关联，理解事物的相关性。</p>
+<p>3、体系的广泛性，构建完整的知识体系，发现新的事实或新的联系，促进一系列全新的搜索查询。</p>
+<h2 id="知识图谱的原理"><a href="#知识图谱的原理" class="headerlink" title="知识图谱的原理"></a>知识图谱的原理</h2><p>知识图谱以结构化数据处理，运用三元体，点、线、面的方式表示本体之间的关系，利用关系来组织所有的对象(实体)，形成有向图结构。所谓知识，指的是点或边对应的信息。</p>
+<p>知识图谱以语义分析技术为基础，以模型为核心，基于数据，利用深度神经网络、NLP框架语义理解等智能处理技术对输入的字、词、篇章进行多层次、多维度的信息分析，提供可远程调用的实体抽取、关系抽取和属性抽取等算法服务接口能力。达到构建多领域知识图谱平台，服务不同行业和应用场景。</p>
+<h2 id="知识图谱的构建"><a href="#知识图谱的构建" class="headerlink" title="知识图谱的构建"></a>知识图谱的构建</h2><p>构建知识图谱是一个迭代更新的过程，根据知识获取的逻辑，每一轮迭代可分为三个阶段：</p>
+<p>1、知识标注/表示/转化，知识建模（数据清洗，格式化）</p>
+<p>2、知识抽取（数据挖掘）：从各种类型的数据源中提取出实体、属性以及实体间的相互关系，在此基础上形成本体化的知识表达；</p>
+<ul>
+<li>命名实体识别</li>
+<li>句法分析</li>
+<li>共指分析和歧义消解</li>
+<li>实体关系识别</li>
+<li>事件识别：识别多个实体之间的存在关系，包括经历一段时间后实体状态以及实体之间关系的改变。</li>
+<li>语篇分析包括语篇结构分析和逻辑分析也是不可忽视的问题。对于汉语文本而言，自动分词也是必须的。</li>
+</ul>
+<p>3、知识存储，知识融合：在获得新知识之后，需要对其进行整合，以消除矛盾和歧义，比如某些实体可能有多种表达，某个特定称谓也许对应于多个不同的实体等；</p>
+<p>4、知识推理，知识挖掘</p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
+<li><a href="https://blog.csdn.net/weixin_36105362/article/details/84932943" target="_blank" rel="noopener">知识图谱发展的难点 &amp; 构建行业知识图谱的重要性</a></li>
+<li><a href="https://blog.csdn.net/qq_35273499/article/details/80259821" target="_blank" rel="noopener">项目实战：如何构建知识图谱</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/09/27/machine_learn_nlp_tools/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1949,608 +2561,6 @@ SELECT column_name(s) FROM table_name2
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/06/24/machine_learn_用户画像/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/06/24/machine_learn_用户画像/" class="post-title-link" itemprop="url">大数据用户画像</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-06-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-06-24T14:50:25+08:00">2018-06-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>极致营销：什么日期，什么时间，什么地点，什么终端，什么入口，向什么客户推荐什么产品，正是当前客户需要的或者刚好激发客户产生了新的消费需求，而金额刚刚好足够用户破产。<br>智能话费冲值与加油用户画像信息提取：主题推荐：话费、流量、油卡、小易</p>
-<ol>
-<li>人口属性，用户自然属性包括性别、年龄、地区</li>
-<li>设备属性，用户设备特征包括系统、机型、运营商</li>
-<li>消费特征，用户消费场景及其他包括地区、地点、渠道（终端渠道、入口页面）、日期、时间、金额大小、频率</li>
-<li>行为数据，用户操作行为系统监控行为数据包括浏览行为、下单支付行为、移动行为、使用行为（如最近频繁电话等），行为包括时间、路径、速度等</li>
-<li>因果数据，影响用户消费行为的数据天气变化、自然灾害、节日、周期行为（月底、工资日）</li>
-<li>关系数据，待探索的可能影响用户行为的数据包括其他平台的消费数据、某物品的消费关联、某行为的波动影响（如社交视频增多）</li>
-<li>内部推导的用户类型：用户年龄层、消费层级、社会身份、当前平台生命周期（新老用户、僵死用户）、有车无车族、家庭信息、关联推导</li>
-</ol>
-<h1 id="技术实现点："><a href="#技术实现点：" class="headerlink" title="技术实现点："></a>技术实现点：</h1><h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><pre><code>标签解决的是描述（或命名）问题，但在实际应用中，还需要解决数据之间的关联，所以通常将标签作为一个体系来设计，以解决数据之间的关联问题。即：树
-
-标签包含：名称、分类、级别、属性、赋值
-</code></pre><ol>
-<li><p>标签命名&amp;赋值<br> 名称和值，如生日 0828</p>
-</li>
-<li><p>标签级别（标签的体系结构）</p>
-<p> 分级有两个层面的含义，其一是：指标到最低层级的涵盖的层级；其二是指：指标的运算层级。其一非常好理解，这里重点说运算层级。</p>
-<pre><code>标签从运算层级角度可以分为三层：事实标签、模型标签、预测标签。
-
-事实标签：是通过对于原始数据库的数据进行统计分析而来的，比如用户投诉次数，是基于用户一段时间内实际投诉的行为做的统计。
-
-模型标签：模型标签是以事实标签为基础，通过构建事实标签与业务问题之间的模型，进行模型分析得到。比如，结合用户实际投诉次数、用户购买品类、用户支付的金额等，进行用户投诉倾向类型的识别，方便客服进行分类处理。
-
-预测标签：则是在模型的基础上做预测，比如针对投诉倾向类型结构的变化，预测平台舆情风险指数。
-</code></pre></li>
-<li><p>标签属性</p>
-<pre><code>标签属性可以理解为针对标签进行的再标注，这一环节的工作主要目的是帮助内部理解标签赋值的来源，进而理解指标的含义。如图所示，可以总结为5种来源：
-
-固有属性：是指这些指标的赋值体现的是用户生而有之或者事实存在的，不以外界条件或者自身认知的改变而改变的属性。比如：性别、年龄、是否生育等。
-</code></pre><p> 推导属性：由其他属性推导而来的属性，比如星座，我们可以通过用户的生日推导，比如用户的品类偏好，则可以通过日常购买来推导。</p>
-<p> 行为属性：产品内外实际发生的行为被记录后形成的赋值，比如用户的登陆时间，页面停留时长等。</p>
-<p> 态度属性：用户自我表达的态度和意愿。比如说我们通过一份问卷向用户询问一些问题，并形成标签，如询问用户：是否愿意结婚，是否喜欢某个品牌等。当然在大数据的需求背景下，利用问卷收集用户标签的方法效率显得过低，更多的是利用产品中相关的模块做了用户态度信息收集。</p>
-<p> 测试属性：测试属性是指来自用户的态度表达，但并不是用户直接表达的内容，而是通过分析用户的表达，结构化处理后，得出的测试结论。比如，用户填答了一系列的态度问卷，推导出用户的价值观类型等。</p>
-</li>
-</ol>
-<h1 id="技术实现流程："><a href="#技术实现流程：" class="headerlink" title="技术实现流程："></a>技术实现流程：</h1><p>原始数据</p>
-<p>加工清洗分类基础数据</p>
-<p>训练数据、测试数据</p>
-<p>分类、预测、聚类发现</p>
-<p>应用：产品创新、优化体验、服务升级、提升效率、防范风险</p>
-<p>（1）原始输入层</p>
-<pre><code>主要指用户的历史数据信息，如会员信息、消费信息、网络行为信息。经过数据的清洗，从而达到用户标签体系的事实层。
-</code></pre><p>（2）事实层</p>
-<pre><code>事实层是用户信息的准确描述层，其最重要的特点是，可以从用户身上得到确定与肯定的验证。如用户的人口属性、性别、年龄、籍贯、会员信息等。
-</code></pre><p>（3）模型预测层</p>
-<pre><code>通过利用统计建模，数据挖掘、机器学习的思想，对事实层的数据进行分析利用，从而得到描述用户更为深刻的信息。如通过建模分析，可以对用户的性别偏好进行预测，从而能对没有收集到性别数据的新用户进行预测。还可以通过建模与数据挖掘，使用聚类、关联思想，发现人群的聚集特征。
-</code></pre><p>（4）营销模型预测</p>
-<pre><code>利用模型预测层结果，对不同用户群体，相同需求的客户，通过打标签，建立营销模型，从而分析用户的活跃度、忠诚度、流失度、影响力等可以用来进行营销的数据。
-</code></pre><p>（5）业务层</p>
-<pre><code>业务层可以是展现层。它是业务逻辑的直接体现，如图中所表示的，有车一族、有房一族等。
-</code></pre>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/27/machine_learn_特征工程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/27/machine_learn_特征工程/" class="post-title-link" itemprop="url">ML机器学习关于特征工程</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-27 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-27T14:50:25+08:00">2018-05-27</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>指的是把原始数据转变为模型的训练数据的过程，目的是为了获得更好的训练数据特征，提高机器学习的上限，使得机器学习模型逼近这个上限（附图）。</p>
-<h1 id="数据特征准备"><a href="#数据特征准备" class="headerlink" title="数据特征准备"></a>数据特征准备</h1><ol>
-<li>基于业务需求与理解，要实现目标需求需要哪些数据，确定变量</li>
-<li>可用性评估：获取难度，覆盖率，准确率</li>
-<li>获取方法</li>
-<li>存储方法</li>
-</ol>
-<h1 id="一般步骤流程"><a href="#一般步骤流程" class="headerlink" title="一般步骤流程"></a>一般步骤流程</h1><p>处理流程不分先后，以达到训练模型的最佳期望为目的。</p>
-<ol>
-<li><p>数据预处理（清洗与构建）</p>
-</li>
-<li><p>数据补充</p>
-</li>
-<li><p>数据降维</p>
-</li>
-<li><p>特征监控</p>
-</li>
-</ol>
-<h2 id="数据预处理（清洗与构建）"><a href="#数据预处理（清洗与构建）" class="headerlink" title="数据预处理（清洗与构建）"></a>数据预处理（清洗与构建）</h2><ol>
-<li>数据规整：清洗异常样本，如删除极值</li>
-</ol>
-<ol start="2">
-<li>数据转换：标准化，归一化，离散化（二值化），one-hot(dummy coding)哑编码，其他变换</li>
-</ol>
-<p>2.1 标准化（无量纲化）<br>基于特征矩阵的列，将特征值转换至服从标准正态分布,去除均值和方差缩放，通过(X-X_mean)/std计算每个属性(每列)，进而使所有数据聚集在0附近，方差为1，公式为：x’ = (X-X_mean)/std<br>使用sklearn.preprocessing库的StandardScaler类对数据进行标准化的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import StandardScaler</span><br><span class="line"># 标准化，返回值为标准化后的数据</span><br><span class="line">StandardScaler().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
-<p>2.2 归一化：区间缩放<br>区间缩放法的思路有多种，常见的一种为利用两个最值进行缩放即基于最大最小值，将特征值转换到[0, 1]区间上，公式表达为：x’ = x-min/max-min<br>使用preproccessing库的MinMaxScaler类对数据进行区间缩放的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import MinMaxScaler</span><br><span class="line">#区间缩放，返回值为缩放到[0, 1]区间的数据</span><br><span class="line">MinMaxScaler().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
-<p>2.3 归一化：正则化<br>标准化是依照特征矩阵的列处理数据，其通过求z-score的方法，将样本的特征值转换到同一量纲下。归一化是依照特征矩阵的行处理数据，其目的在于样本向量在点乘运算或其他核函数计算相似性时，拥有统一的标准，也就是说都转化为“单位向量”。规则为l2的归一化公式如下：x’ = x/(Ej-&gt;m x[j]^2)^1/2</p>
-<p>使用preproccessing库的Normalizer类对数据进行归一化的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import Normalizer</span><br><span class="line">#归一化，返回值为归一化后的数据</span><br><span class="line">Normalizer().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
-<p>2.4 二值化<br>定量特征二值化的核心在于设定一个阈值，大于阈值的赋值为1，小于等于阈值的赋值为0，公式表达如下：<br>x’= { 1, x &gt; threshold; 0, x &lt;= threashold</p>
-<p>使用preproccessing库的Binarizer类对数据进行二值化的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import Binarizer</span><br><span class="line">#二值化，阈值设置为3，返回值为二值化后的数据</span><br><span class="line">Binarizer(threshold=3).fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
-<p>2.5 哑编码<br>对定性特征用定量表示，为避免数值大小对模型产生影响所有用dummy coding<br>使用preproccessing库的OneHotEncoder类对数据进行哑编码的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import OneHotEncoder</span><br><span class="line">#哑编码，对IRIS数据集的目标值，返回值为哑编码后的数据</span><br><span class="line">OneHotEncoder().fit_transform(iris.target.reshape((-1,1)))</span><br></pre></td></tr></table></figure></p>
-<p>2.6 数据变换<br>常见的数据变换有基于多项式的、基于指数函数的、基于对数函数的。4个特征，度为2的多项式转换公式如下：</p>
-<p>x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15 = 1,x1,x2,x3,x4,x1^2,x1<em>x2,x1</em>x3,x1<em>x4,x2^2,x2</em>x3,x2<em>x4,x3^2,x3</em>x4,x4^2</p>
-<p>使用preproccessing库的PolynomialFeatures类对数据进行多项式转换的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.preprocessing import PolynomialFeatures</span><br><span class="line">#多项式转换</span><br><span class="line">#参数degree为度，默认值为2</span><br><span class="line">PolynomialFeatures().fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
-<p>基于单变元函数的数据变换可以使用一个统一的方式完成，使用preproccessing库的FunctionTransformer对数据进行对数函数转换的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from numpy import log1p</span><br><span class="line">from sklearn.preprocessing import FunctionTransformer</span><br><span class="line">#自定义转换函数为对数函数的数据变换</span><br><span class="line">#第一个参数是单变元函数</span><br><span class="line">FunctionTransformer(log1p).fit_transform(iris.data)</span><br></pre></td></tr></table></figure></p>
-<ol start="3">
-<li>数据补充<br>3.1 缺失值计算</li>
-</ol>
-<p>特征值为NaN（not a number）,表示数据缺失。<br>使用preproccessing库的Imputer类对数据进行缺失值计算的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from numpy import vstack, array, nan</span><br><span class="line">from sklearn.preprocessing import Imputer</span><br><span class="line">#缺失值计算，返回值为计算缺失值后的数据</span><br><span class="line">#参数missing_value为缺失值的表示形式，默认为NaN</span><br><span class="line">#参数strategy为缺失值填充方式，默认为mean（均值）</span><br><span class="line">Imputer().fit_transform(vstack((array([nan, nan, nan, nan]), iris.data)))</span><br></pre></td></tr></table></figure></p>
-<p>3.2 特征衍生：</p>
-<ul>
-<li>对原始数据加工，生成符合训练需求的变量</li>
-</ul>
-<h2 id="数据选择方法"><a href="#数据选择方法" class="headerlink" title="数据选择方法"></a>数据选择方法</h2><ol>
-<li>filter：方差选择法，相关系数，卡方检验，信息增益、互信息<br>过滤法，按照发散性或者相关性对各个特征进行评分，设定阈值或者待选择阈值的个数，选择特征。</li>
-<li>wrapper： 递归特征消除法<br>包装法，根据目标函数（通常是预测效果评分），每次选择若干特征，或者排除若干特征。</li>
-<li>embedded： 基于惩罚项的特征选择法，基于树形模型的特征选择法<br>嵌入法，先使用某些机器学习的算法和模型进行训练，得到各个特征的权值系数，根据系数从大到小选择特征。类似于Filter方法，但是是通过训练来确定特征的优劣。</li>
-</ol>
-<h2 id="数据降维"><a href="#数据降维" class="headerlink" title="数据降维"></a>数据降维</h2><ul>
-<li>PCA主成分分析法 </li>
-<li>LDA线性判别分析法</li>
-</ul>
-<h2 id="数据特征验证与监控"><a href="#数据特征验证与监控" class="headerlink" title="数据特征验证与监控"></a>数据特征验证与监控</h2><ol>
-<li>有效性分析：重要性，权重</li>
-<li>监控重要特征</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/hadoop_cdh5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/hadoop_cdh5/" class="post-title-link" itemprop="url">hadoop 部署</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>基于cloudera,oracle jdk 1.8.0.111, centos 6.8</p>
-<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a><strong>环境配置</strong></h3><ol start="0">
-<li><p>要求：CENTOS6(el6)，主4C8G，从2C4G 20G</p>
-</li>
-<li><p>关闭selinux</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/selinux/config</span><br><span class="line"></span><br><span class="line">SELINUX=disabled</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">2. 配置hostname, host????????????????????</span><br></pre></td></tr></table></figure>
-<p>vi /etc/sysconfig/network<br>vi /etc/hosts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. ssh打通</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line">ssh-keygen -t rsa  </span><br><span class="line">cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys  </span><br><span class="line">scp ~/.ssh/authorized_keys root@datanode1:~/.ssh/</span><br><span class="line">(ssh-copy-id hosts)  </span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. 主从时间同步ntp</span><br><span class="line">```  </span><br><span class="line"># vim /etc/ntp.conf   </span><br><span class="line">driftfile /var/lib/ntp/drift</span><br><span class="line">restrict 127.0.0.1</span><br><span class="line">restrict -6 ::1</span><br><span class="line">restrict default nomodify notrap </span><br><span class="line">server ntp3.aliyun.com prefer </span><br><span class="line">server ntp7.aliyun.com iburst</span><br><span class="line">includefile /etc/ntp/crypto/pw</span><br><span class="line">keys /etc/ntp/keys</span><br><span class="line"></span><br><span class="line"># 时间同步</span><br><span class="line">service ntpd start</span><br><span class="line">chkconfig ntpd on</span><br><span class="line"></span><br><span class="line"># 查看</span><br><span class="line">ntpstat </span><br><span class="line"></span><br><span class="line">synchronised to NTP server (203.107.6.88) at stratum 3 </span><br><span class="line">   time correct to within 40 ms</span><br><span class="line">   polling server every 1024 s</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">5. 装mysql </span><br><span class="line">```  </span><br><span class="line">yum install -y mysql mysql-server mysql-devel </span><br><span class="line">chkconfig mysqld on  </span><br><span class="line">service mysqld start  </span><br><span class="line">create database hive DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">create database oozie DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">grant all on *.* to root@&quot;%&quot; Identified by &quot;hadoop&quot;;</span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;%&apos; IDENTIFIED BY &apos;hadoop&apos; WITH GRANT OPTION;   </span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">6. 安装java</span><br><span class="line"></span><br><span class="line">注意需要是 oracle java</span><br></pre></td></tr></table></figure></p>
-<p>#openjdk<br>rpm -e –nodeps java-1.6.0-openjdk-1.6.0.0-1.66.1.13.0.el6.x86_64</p>
-<p>#sun jdk<br>yum -y install oracle-j2sdk1.7.x86_64</p>
-<p>vi /etc/profile</p>
-<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><p>export JAVA_HOME=/opt/java<br>export PATH=$JAVA_HOME/bin:$PATH<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[JDBC 参考](http://dev.mysql.com/downloads/connector/j/)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">7. 内核缓存配置</span><br><span class="line"></span><br><span class="line">`vi /etc/sysctl.conf`  </span><br><span class="line">`vm.swappiness=10`</span><br><span class="line">`vi /etc/rc.local` </span><br><span class="line">`echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag`</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">### **部署**</span><br><span class="line"></span><br><span class="line">1. ????CM.??????????5.9??   </span><br><span class="line"></span><br><span class="line">  &gt; Cloudera Manager 5.9??http://archive-primary.cloudera.com/cm5/cm/5/cloudera-manager-el6-cm5.9.0_x86_64.tar.gz  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 ???????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 sha?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1  </span><br><span class="line"></span><br><span class="line">  &gt; manifest ?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/manifest.json  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2. ????????????????  </span><br><span class="line"></span><br><span class="line">  - ??? tar -zxvf cloudera-manager-el6-cm5.9.0_x86_64.tar.gz -P /opt/cloudera/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1 CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha</span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv manifest.json /opt/clourdera/parcel.repo/  </span><br><span class="line"></span><br><span class="line">3. ?????????  </span><br><span class="line">```  </span><br><span class="line">/opt/cloudera/share/cmf/schema/scm_prepare_database.sh mysql cm -hlocalhost -uroot -phdp --scm-host localhost scm scm scm</span><br><span class="line">??????????????/usr/share/cmf</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. ????????????????cloudera-daemon, cloudera-server</span><br></pre></td></tr></table></figure></p>
-<p>sudo yum –nogpgcheck localinstall cloudera-manager-daemons-<em>.rpm<br>sudo yum –nogpgcheck localinstall cloudera-manager-server-</em>.rpm<br><code>`</code></p>
-<ol start="7">
-<li>????localhost:7180???????,????????</li>
-</ol>
-<p>??????jdbc???????????oozie hive??????jdbc????????????</p>
-<h3 id><a href="#" class="headerlink" title="??????"></a>??????</h3><ol>
-<li><p>jdk ??????????????????????????????yum repo?????</p>
-</li>
-<li><p>????????????????  </p>
-</li>
-</ol>
-<h3 id="-1"><a href="#-1" class="headerlink" title="????????"></a>????????</h3><blockquote>
-<p><a href="http://www.aboutyun.com/thread-9086-1-1.html" target="_blank" rel="noopener">Cloudera Manager 5 ?? CDH5 ????????????????</a><br><a href="https://www.cloudera.com/documentation/enterprise/latest/topics/install_cm_server.html" target="_blank" rel="noopener">Install Cloudera </a><br><a href="https://www.jianshu.com/p/57179e03795f" target="_blank" rel="noopener">?????CDH5??????</a><br><a href="https://blog.csdn.net/qq_30004245/article/details/75735275?locationNum=9&amp;fps=1" target="_blank" rel="noopener">Cloudera Hadoop???????????</a><br><a href="https://zhuanlan.zhihu.com/p/25533211" target="_blank" rel="noopener">??CDH5??hadoop???</a><br><a href="https://blog.csdn.net/hliq5399/article/details/78193113#t5" target="_blank" rel="noopener">??????????Hadoop??????</a><br><a href="https://www.jianshu.com/p/72dc1c591647" target="_blank" rel="noopener">CDH5???????????</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2597,7 +2607,7 @@ SELECT column_name(s) FROM table_name2
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2739,7 +2749,11 @@ SELECT column_name(s) FROM table_name2
                     
                       
                     
-                    <span class="site-state-item-count">48</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>

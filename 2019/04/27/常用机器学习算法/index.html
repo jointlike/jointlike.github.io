@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="常用机器学习算法原理及相关知识理解深度学习常见算法的介绍和比较 降维算法在存储和分析大量数据时，识别多个模式和变量是具有挑战性的。维数简化算法，如决策树、因子分析、缺失值比、随机森林等，有助于寻找相关数据。 梯度提高Gradient Boosting 和演算法 AdaBoost这些算法是在处理大量数据，以作出准确和快速的预测时使用的boosting算法。boosting是一种组合学习算法，它结合了">
+<meta name="keywords" content="机器学习,Machine learning,ML&#x2F;DL,机器学习算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用机器学习算法原理及相关知识理解">
+<meta property="og:url" content="https://jointlike.github.io/2019/04/27/常用机器学习算法/index.html">
+<meta property="og:site_name" content="jointlike by TimWells">
+<meta property="og:description" content="常用机器学习算法原理及相关知识理解深度学习常见算法的介绍和比较 降维算法在存储和分析大量数据时，识别多个模式和变量是具有挑战性的。维数简化算法，如决策树、因子分析、缺失值比、随机森林等，有助于寻找相关数据。 梯度提高Gradient Boosting 和演算法 AdaBoost这些算法是在处理大量数据，以作出准确和快速的预测时使用的boosting算法。boosting是一种组合学习算法，它结合了">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-27T06:50:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="常用机器学习算法原理及相关知识理解">
+<meta name="twitter:description" content="常用机器学习算法原理及相关知识理解深度学习常见算法的介绍和比较 降维算法在存储和分析大量数据时，识别多个模式和变量是具有挑战性的。维数简化算法，如决策树、因子分析、缺失值比、随机森林等，有助于寻找相关数据。 梯度提高Gradient Boosting 和演算法 AdaBoost这些算法是在处理大量数据，以作出准确和快速的预测时使用的boosting算法。boosting是一种组合学习算法，它结合了">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://jointlike.github.io/2019/04/27/常用机器学习算法/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>常用机器学习算法原理及相关知识理解 | jointlike by TimWells</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">jointlike by TimWells</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/04/27/常用机器学习算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">常用机器学习算法原理及相关知识理解
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-04-27 14:50:25" itemprop="dateCreated datePublished" datetime="2019-04-27T14:50:25+08:00">2019-04-27</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="常用机器学习算法原理及相关知识理解"><a href="#常用机器学习算法原理及相关知识理解" class="headerlink" title="常用机器学习算法原理及相关知识理解"></a>常用机器学习算法原理及相关知识理解</h2><p><a href="https://blog.csdn.net/abc200941410128/article/details/79269386" target="_blank" rel="noopener">深度学习常见算法的介绍和比较</a></p>
+<h3 id="降维算法"><a href="#降维算法" class="headerlink" title="降维算法"></a>降维算法</h3><p>在存储和分析大量数据时，识别多个模式和变量是具有挑战性的。维数简化算法，如决策树、因子分析、缺失值比、随机森林等，有助于寻找相关数据。</p>
+<h3 id="梯度提高Gradient-Boosting-和演算法-AdaBoost"><a href="#梯度提高Gradient-Boosting-和演算法-AdaBoost" class="headerlink" title="梯度提高Gradient Boosting 和演算法 AdaBoost"></a>梯度提高Gradient Boosting 和演算法 AdaBoost</h3><p>这些算法是在处理大量数据，以作出准确和快速的预测时使用的boosting算法。boosting是一种组合学习算法，它结合了几种基本估计量的预测能力，以提高效力和功率。</p>
+<p>综上所述，它将所有弱或平均预测因子组合成一个强预测器。</p>
+<h3 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h3><p>工作原理：该算法可以按其权重可视化。但问题是，当你无法真正衡量它时，必须通过观察其高度和宽度来做一些猜测。通过这种可视化的分析，可以获取一个结果。</p>
+<p>回归模型：Y = a * X + b （Y =因变量；a=斜率；X =独立变量；b=截距。）</p>
+<p>通过减少数据点和回归线间距离的平方差的总和，可以导出系数a和b。</p>
+<h3 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h3><p>原理：线性回归的模型是求出输出特征向量Y和输入样本矩阵X之间的线性关系系数θ，满足Y=Xθ。此时我们的Y是连续的，所以是回归模型。如果我们想要Y是离散的话，怎么办呢？一个可以想到的办法是，我们对于这个Y再做一次函数转换，变为g(Y)。如果我们令g(Y)的值在某个实数区间的时候是类别A，在另一个实数区间的时候是类别B，此阶跃函数将Y映射为{0,1}，就得到了一个分类模型。如果结果的类别只有两种，那么就是一个二元分类模型了。逻辑回归的出发点就是从这来的。</p>
+<p>sigmoid函数模型：g(y) = 1/ (1+e ^-z)</p>
+<p>应用：<br>Logistic回归理论之前，我们先从LR分类器说起。LR分类器，即Logistic Regression Classifier。<br>根据一组独立变量，估计离散值。它通过将数据匹配到logit函数来帮助预测事件。</p>
+<p>添加交互项。</p>
+<p>消除功能。</p>
+<p>正则化技术。</p>
+<p>使用非线性模型。</p>
+<p>问题：</p>
+<ol>
+<li>LR与SVM的区别</li>
+</ol>
+<h3 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h3><p>原理：利用监督学习算法对问题进行分类。决策树是一种支持工具，它使用树状图来决定决策或可能的后果、机会事件结果、资源成本和实用程序。根据独立变量，将其划分为两个或多个同构集。</p>
+<p>优点：与回归一样，决策树组合在实践中表现也很好。由于它们的分层结构，它们对离群值、可伸缩性和自然模型的非线性决策边界具有鲁棒性。</p>
+<p>弱点：无约束，单个树容易过度拟合，但这可以通过集成方法来缓解。</p>
+<p>问题：</p>
+<ol>
+<li>决策树节点分裂时如何选择特征，写出Gini index和Information Gain的公式并举例说明</li>
+<li>训练决策树时，其参数是什么？</li>
+<li>在决策树的某个节点处进行分割，其分割标准是什么？</li>
+<li>决策树如何决定在哪个特征处必须进行分割？</li>
+</ol>
+<h3 id="支持向量机（SVM）"><a href="#支持向量机（SVM）" class="headerlink" title="支持向量机（SVM）"></a>支持向量机（SVM）</h3><p>原理：如果训练数据是分布在二维平面上的点，它们按照其分类聚集在不同的区域。基于分类边界的分类算法的目标是，通过训练，找到这些分类之间的边界（直线的――称为线性划分，曲线的――称为非线性划分）。对于多维数据（如N维），可以将它们视为N维空间中的点，而分类边界就是N维空间中的面，称为超面（超面比N维空间少一维）。线性分类器使用超平面类型的边界，非线性分类器使用超曲面。</p>
+<p>优点：SVM可以模拟非线性决策边界，并且有很多内核可供选择。它可用于防止过度拟合，特别是在高维空间中。</p>
+<p>缺点：SVM的内存密集，调优的难度很大，并且不能很好地扩展到更大的数据集。目前在行业中，随机森林通常优于SVM。</p>
+<p>应用：</p>
+<p>显示广告。</p>
+<p>人类剪切位点识别（human splice site recognition）。</p>
+<p>基于图像的性别检测。</p>
+<p>大规模图像分类等。</p>
+<p>问题：</p>
+<ol>
+<li>SVM引入核函数本质？提高维度，增加模型复杂度</li>
+</ol>
+<h3 id="朴素贝叶斯"><a href="#朴素贝叶斯" class="headerlink" title="朴素贝叶斯"></a>朴素贝叶斯</h3><p>原理：朴素贝叶斯认为每个特征都是独立于另一个特征的。即使在计算结果的概率时，它也会考虑每一个单独的关系。</p>
+<p>优点： 尽管条件独立性假设很少成立，但朴素贝叶斯模型在实践中表现出色，特别是它们的简单性。它们易于实现，可以与更多的数据集进行扩展。</p>
+<p>弱点： 由于简单性，朴素贝叶斯模型经常在正确训练和调整之前被以前的算法击败。</p>
+<p>应用:</p>
+<p>它不仅易于使用，而且能有效地使用大量的数据集，甚至超过了高度复杂的分类系统。</p>
+<p>判断垃圾邮件。</p>
+<p>对新闻的类别进行分类，如科技、政治、运动。</p>
+<p>判断文本表达的感情是积极的还是消极的。</p>
+<p>人脸识别。</p>
+<p>问题：<br>为什么朴素？</p>
+<h3 id="KNN-K-最近邻"><a href="#KNN-K-最近邻" class="headerlink" title="KNN(K -最近邻)"></a>KNN(K -最近邻)</h3><p>该算法适用于分类和回归问题。在数据科学行业中，它更常用来解决分类问题。</p>
+<p>这个简单的算法能够存储所有可用的案例，并通过对其k近邻的多数投票来对任何新事件进行分类。然后将事件分配给与之匹配最多的类。一个距离函数执行这个测量过程。</p>
+<p>优点：该算法适用于对样本容量比较大的类域进行自动分类。</p>
+<p>缺点：</p>
+<p>在计算上是昂贵的（计算量比较大）。</p>
+<p>变量应规范化。</p>
+<p>数据需要预处理。</p>
+<h3 id="k-means-K均值"><a href="#k-means-K均值" class="headerlink" title="k-means K均值"></a>k-means K均值</h3><p>这种无监督算法用于解决聚类问题。数据集以这样一种方式列在一个特定数量的集群中：所有数据点都是同质的，并且与其他集群中的数据是异构的。</p>
+<p>优点：算法速度很快。</p>
+<p>缺点：分组的数目k是一个输入参数，不合适的k可能返回较差的结果。</p>
+<p>集群是如何形成的:</p>
+<p>该算法为每个集群选择称为centroid的点。</p>
+<p>数据在最接近的centroid中形成集群。</p>
+<p>新的centroid是基于现有的集群数据点创建的。</p>
+<p>每个数据点之间的距离是确定的。这个过程会重复，直到中心不改变。</p>
+<p>问题：</p>
+<ol>
+<li>列举至少3中定义K-Means聚类算法中K的方法。</li>
+</ol>
+<h3 id="随机森林"><a href="#随机森林" class="headerlink" title="随机森林"></a>随机森林</h3><p>利用多棵决策树对样本进行训练并预测的一种分类器被称为随机森林。为了根据其特性来分类一个新对象，每棵决策树都被排序和分类，然后决策树投票给一个特定的类，那些拥有最多选票的被森林所选择。</p>
+<p>以下是每棵树种植和生长的方式:</p>
+<p>如果在案例中有N个训练集，那么就会随机选择N个案例。</p>
+<p>输入变量是M。</p>
+<p>树会生长到最大水平，不经剪切和修剪。</p>
+<p>问题：</p>
+<ol>
+<li>如何理解“随机”, 随机森林的优势？</li>
+<li>与Random Forest作比较，并以此介绍什么是模型的Bias和Variance</li>
+</ol>
+<h3 id="GB（gradient-boosting），GBDT的原理-XGBoost原理-（理论基础）"><a href="#GB（gradient-boosting），GBDT的原理-XGBoost原理-（理论基础）" class="headerlink" title="GB（gradient boosting），GBDT的原理, XGBoost原理 （理论基础）"></a>GB（gradient boosting），GBDT的原理, XGBoost原理 （理论基础）</h3><p>问题：</p>
+<ol>
+<li>RF,GBDT与XGBoost的区别？</li>
+<li>XGBoost的参数如何调优？其正则化是如何实现的？并行化部分是如何实现的？</li>
+<li>分类树和回归树的区别是什么？</li>
+<li>基尼系数的计算公式是什么？</li>
+</ol>
+<h3 id="adaboost原理"><a href="#adaboost原理" class="headerlink" title="adaboost原理"></a>adaboost原理</h3><p>问题：</p>
+<ol>
+<li>决策树与adaboost的区别？</li>
+</ol>
+<h3 id="条件随机场原理"><a href="#条件随机场原理" class="headerlink" title="条件随机场原理"></a>条件随机场原理</h3><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://blog.csdn.net/jrunw/article/details/79205322" target="_blank" rel="noopener">图解十大经典机器学习算法入门</a></li>
+<li><a href="https://baijiahao.baidu.com/s?id=1576208678687678181&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">机器学习三大类别中常用的10大算法</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/Machine-learning/" rel="tag"># Machine learning</a>
+          
+            <a href="/tags/ML-DL/" rel="tag"># ML/DL</a>
+          
+            <a href="/tags/机器学习算法/" rel="tag"># 机器学习算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/24/NLP自然语言理解入门/" rel="next" title="自然语言处理入门">
+                <i class="fa fa-chevron-left"></i> 自然语言处理入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">TimWells</p>
+              <div class="site-description motion-element" itemprop="description">高效研究，快乐生活，用于python编程知识速查！大家玩的开心！</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/jointlike" title="GitHub &rarr; https://github.com/jointlike" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1807520300@qq.com" title="E-Mail &rarr; mailto:1807520300@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用机器学习算法原理及相关知识理解"><span class="nav-number">1.</span> <span class="nav-text">常用机器学习算法原理及相关知识理解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#降维算法"><span class="nav-number">1.1.</span> <span class="nav-text">降维算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度提高Gradient-Boosting-和演算法-AdaBoost"><span class="nav-number">1.2.</span> <span class="nav-text">梯度提高Gradient Boosting 和演算法 AdaBoost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线性回归"><span class="nav-number">1.3.</span> <span class="nav-text">线性回归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逻辑回归"><span class="nav-number">1.4.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#决策树"><span class="nav-number">1.5.</span> <span class="nav-text">决策树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支持向量机（SVM）"><span class="nav-number">1.6.</span> <span class="nav-text">支持向量机（SVM）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#朴素贝叶斯"><span class="nav-number">1.7.</span> <span class="nav-text">朴素贝叶斯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KNN-K-最近邻"><span class="nav-number">1.8.</span> <span class="nav-text">KNN(K -最近邻)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#k-means-K均值"><span class="nav-number">1.9.</span> <span class="nav-text">k-means K均值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随机森林"><span class="nav-number">1.10.</span> <span class="nav-text">随机森林</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GB（gradient-boosting），GBDT的原理-XGBoost原理-（理论基础）"><span class="nav-number">1.11.</span> <span class="nav-text">GB（gradient boosting），GBDT的原理, XGBoost原理 （理论基础）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#adaboost原理"><span class="nav-number">1.12.</span> <span class="nav-text">adaboost原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件随机场原理"><span class="nav-number">1.13.</span> <span class="nav-text">条件随机场原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TimWells</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

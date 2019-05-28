@@ -341,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/数据结构与算法_常用程序算法/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/cache_about_redis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -361,7 +361,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/数据结构与算法_常用程序算法/" class="post-title-link" itemprop="url">Python常用算法</a>
+                <a href="/2018/05/24/cache_about_redis/" class="post-title-link" itemprop="url">redis 理解</a>
               
             
           </h2>
@@ -390,6 +390,22 @@
             
 
             
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-06-24 14:50:25" itemprop="dateModified" datetime="2018-06-24T14:50:25+08:00">2018-06-24</time>
+              
+            
           </span>
 
           
@@ -404,7 +420,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
 
                 
                 
@@ -441,80 +457,70 @@
       
         
           
-            <h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><p>平均性能为O(n^2)的有：直接插入排序，选择排序，冒泡排序<br>希尔排序对增量的标准没有较为满意的答案，增量对性能会有影响。<br>归并排序效率非常不错，在数据规模较大的情况下，比希尔排序和堆排序要好。<br>多数先进的算法都是因为跳跃式的比较，降低了比较次数，但牺牲了排序的稳定 性。<br>平均性能为O(nlogn)的有：快速排序，归并排序，希尔排序，堆排序。其中，快排是最好的，其次是归并和希尔，堆排序在数据量很大时效果明显（堆排序适合处理大数据）。</p>
-<h3 id="1-冒泡排序-–-重要"><a href="#1-冒泡排序-–-重要" class="headerlink" title="1.冒泡排序 – 重要"></a>1.冒泡排序 – 重要</h3><p>原理：冒泡排序（英语：Bubble Sort）是一种简单的排序算法。它重复地遍历要排序的数列，一次比较两个元素，如果他们的顺序错误就把他们交换过来。遍历数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。这个算法的名字由来是因为越小的元素会经由交换慢慢“浮”到数列的顶端。</p>
-<p>时间复杂度： O(n) - O(n2)</p>
-<p>空间复杂度：n<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def bubble_sort(li):</span><br><span class="line">    for i in range(len(li) - 1):</span><br><span class="line">        for j in range(len(li) - i - 1):</span><br><span class="line">            if li[j] &gt; li[j+1]:</span><br><span class="line">                li[j], li[j+1] = li[j+1], li[j]</span><br><span class="line">    return li</span><br><span class="line"></span><br><span class="line">list1 = [15, 66, 20, 350, 464, 88, 995, 100]</span><br><span class="line">print(bubble_sort(list1))</span><br></pre></td></tr></table></figure></p>
-<h3 id="2-快速排序（二分）-–-重要"><a href="#2-快速排序（二分）-–-重要" class="headerlink" title="2.快速排序（二分） – 重要"></a>2.快速排序（二分） – 重要</h3><p>原理：快速排序（英语：Quicksort），又称划分交换排序（partition-exchange sort），通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。</p>
-<p>实现步骤为：</p>
-<ol>
-<li>从数列中挑出一个元素，称为”基准”（pivot），</li>
-<li>重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区结束之后，该基准就处于数列的中间位置。这个称为分区（partition）操作。</li>
-<li>递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。<br>递归的最底部情形，是数列的大小是零或一，也就是永远都已经被排序好了。虽然一直递归下去，但是这个算法总会结束，因为在每次的迭代（iteration）中，它至少会把一个元素摆到它最后的位置去。</li>
-</ol>
-<p>时间复杂度：O(nlogn) - O(n2)</p>
-<p>空间复杂度：n<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def quick_sort(arr):</span><br><span class="line">    if len(arr) &gt; 1:</span><br><span class="line">        pivot = arr.pop()</span><br><span class="line">    else:</span><br><span class="line">        return arr</span><br><span class="line">    small = []</span><br><span class="line">    big = []</span><br><span class="line">    for i in arr:</span><br><span class="line">        if i &gt; pivot:</span><br><span class="line">            big.append(i)</span><br><span class="line">        else:</span><br><span class="line">            small.append(i)</span><br><span class="line">    return quick_sort(small) + [pivot] + quick_sort(big)</span><br></pre></td></tr></table></figure></p>
-<h3 id="3-归并排序-Merge-Sort（分治）-–-重要"><a href="#3-归并排序-Merge-Sort（分治）-–-重要" class="headerlink" title="3.归并排序 Merge Sort（分治） – 重要"></a>3.归并排序 Merge Sort（分治） – 重要</h3><p>原理：归并排序是采用分治法的一个非常典型的应用。归并排序的思想就是先递归分解数组，再合并数组。<br>将数组分解最小之后，然后合并两个有序数组，基本思路是比较两个数组的最前面的数，谁小就先取谁，取了后相应的指针就往后移一位。然后再比较，直至一个数组为空，最后把另一个数组的剩余部分复制过来即可。</p>
-<p>时间复杂度：O(nlogn) - O(nlogn)</p>
-<p>空间复杂度：n<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">def mergesort(seq):</span><br><span class="line">    &quot;&quot;&quot;归并排序&quot;&quot;&quot;</span><br><span class="line">    if len(seq) &lt;= 1:</span><br><span class="line">        return seq</span><br><span class="line">    mid = len(seq) // 2  # 将列表分成更小的两个列表</span><br><span class="line">    # 分别对左右两个列表进行处理，分别返回两个排序好的列表</span><br><span class="line">    left = mergesort(seq[:mid])</span><br><span class="line">    right = mergesort(seq[mid:])</span><br><span class="line">    # 对排序好的两个列表合并，产生一个新的排序好的列表</span><br><span class="line">    return merge(left, right)</span><br><span class="line"></span><br><span class="line">def merge(left, right):</span><br><span class="line">    &quot;&quot;&quot;合并两个已排序好的列表，产生一个新的已排序好的列表&quot;&quot;&quot;</span><br><span class="line">    result = []  # 新的已排序好的列表</span><br><span class="line">    i = 0  # 下标</span><br><span class="line">    j = 0</span><br><span class="line">    # 对两个列表中的元素 两两对比。</span><br><span class="line">    # 将最小的元素，放到result中，并对当前列表下标加1</span><br><span class="line">    while i &lt; len(left) and j &lt; len(right):</span><br><span class="line">        if left[i] &lt;= right[j]:</span><br><span class="line">            result.append(left[i])</span><br><span class="line">            i += 1</span><br><span class="line">        else:</span><br><span class="line">            result.append(right[j])</span><br><span class="line">            j += 1</span><br><span class="line">    result += left[i:]</span><br><span class="line">    result += right[j:]</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure></p>
-<h3 id="4-插入排序"><a href="#4-插入排序" class="headerlink" title="4.插入排序"></a>4.插入排序</h3><p>原理：排扑克，插入排序（英语：Insertion Sort）是一种简单直观的排序算法。它的工作原理是通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。插入排序在实现上，在从后向前扫描过程中，需要反复把已排序元素逐步向后挪位，为最新元素提供插入空间。<br>时间复杂度：O(n) - O(n2)<br>空间复杂度：比冒泡多</p>
-<h3 id="5-希尔排序-–重要"><a href="#5-希尔排序-–重要" class="headerlink" title="5.希尔排序 –重要"></a>5.希尔排序 –重要</h3><h3 id="6-堆排序-–重要"><a href="#6-堆排序-–重要" class="headerlink" title="6.堆排序 –重要"></a>6.堆排序 –重要</h3><h3 id="7-计数排序-–重要"><a href="#7-计数排序-–重要" class="headerlink" title="7.计数排序 –重要"></a>7.计数排序 –重要</h3><hr>
-<h2 id="查找-遍历"><a href="#查找-遍历" class="headerlink" title="查找/遍历"></a>查找/遍历</h2><p>查找是在大量的信息中寻找一个特定的信息元素，在计算机应用中，查找是常用的基本运算，例如编译程序中符号表的查找。本文简单概括性的介绍了常见的七种查找算法，说是七种，其实二分查找、插值查找以及斐波那契查找都可以归为一类——插值查找。插值查找和斐波那契查找是在二分查找的基础上的优化查找算法。树表查找和哈希查找会在后续的博文中进行详细介绍。</p>
-<p>　　查找定义：根据给定的某个值，在查找表中确定一个其关键字等于给定值的数据元素（或记录）。</p>
-<p>　　查找算法分类：<br>　　1）静态查找和动态查找；<br>　　　　注：静态或者动态都是针对查找表而言的。动态表指查找表中有删除和插入操作的表。<br>　　2）无序查找和有序查找。<br>　　　　无序查找：被查找数列有序无序均可；<br>　　　　有序查找：被查找数列必须为有序数列。<br>　　平均查找长度（Average Search Length，ASL）：需和指定key进行比较的关键字的个数的期望值，称为查找算法在查找成功时的平均查找长度。<br>　　对于含有n个数据元素的查找表，查找成功的平均查找长度为：ASL = Pi*Ci的和。<br>　　Pi：查找表中第i个数据元素的概率。<br>　　Ci：找到第i个数据元素时已经比较过的次数</p>
-<p>1.顺序查找</p>
-<p>说明：顺序查找适合于存储结构为顺序存储或链接存储的线性表。<br>　　基本思想：顺序查找也称为线形查找，属于无序查找算法。从数据结构线形表的一端开始，顺序扫描，依次将扫描到的结点关键字与给定值k相比较，若相等则表示查找成功；若扫描结束仍没有找到关键字等于k的结点，表示查找失败。<br>　　复杂度分析：　<br>　　查找成功时的平均查找长度为：（假设每个数据元素的概率相等） ASL = 1/n(1+2+3+…+n) = (n+1)/2 ;<br>　　当查找不成功时，需要n+1次比较，时间复杂度为O(n);<br>　　所以，顺序查找的时间复杂度为O(n)。</p>
-<p>2.哈希查找：速度快，python字典基本能实现常数，最坏的也只是对数O(log(n))</p>
-<p>3.二分查找</p>
-<p>说明：元素必须是有序的，如果是无序的则要先进行排序操作。</p>
-<p>　　基本思想：也称为是折半查找，属于有序查找算法。用给定值k先与中间结点的关键字比较，中间结点把线形表分成两个子表，若相等则查找成功；若不相等，再根据k与该中间结点关键字的比较结果确定下一步查找哪个子表，这样递归进行，直到查找到或查找结束发现表中没有这样的结点。</p>
-<p>　　复杂度分析：最坏情况下，关键词比较次数为log2(n+1)，且期望时间复杂度为O(log2n)；</p>
-<p>　　注：折半查找的前提条件是需要有序表顺序存储，对于静态查找表，一次排序后不再变化，折半查找能得到不错的效率。但对于需要频繁执行插入或删除操作的数据集来说，维护有序的排序会带来不小的工作量，那就不建议使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">def binary_search(list,item):</span><br><span class="line">    low = 0</span><br><span class="line">    high = len(list)-1</span><br><span class="line">    while low&lt;=high:</span><br><span class="line">        mid = (low+high) // 2</span><br><span class="line">        guess = list[mid]</span><br><span class="line">        if guess&gt;item:</span><br><span class="line">            high = mid-1</span><br><span class="line">        elif guess&lt;item:</span><br><span class="line">            low = mid+1</span><br><span class="line">        else:</span><br><span class="line">            return mid</span><br><span class="line">    return None</span><br><span class="line">mylist = [1,3,5,7,9]</span><br><span class="line">print(binary_search(mylist,3))</span><br></pre></td></tr></table></figure>
-<p>4.斐波那契</p>
-<p>斐波那契数列（Fibonacci sequence），又称黄金分割数列，因数学家列昂纳多·斐波那契（Leonardoda Fibonacci）以兔子繁殖为例子而引入，故又称为“兔子数列”。</p>
-<p>二分查找的改进，运用斐波那契数列设置分隔数<br>基本原理：<br>1.黄金分割比1：0.618，斐波那契数列：1，1，2，3，5，8，13……（两数比接近0.618且和为后一个数）<br>2.查询序列有序，且长度为某斐波那契数-1，即len = F[k] -1,（不足可复制最后一个元素）<br>3.分割点F[k-1]，前F{k-1]-1、后F[k-2]-1，共F[k] -1<br>4.确定查询点位置，在前半部分则k=k-1，在后半部分则k=k-2，3中关系仍然成立</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def fib(n):</span><br><span class="line">    if n &lt; 2:</span><br><span class="line">        return n</span><br><span class="line">    else:</span><br><span class="line">        return fib(n-1)+fib(n-2)</span><br><span class="line"></span><br><span class="line">fib(15)</span><br></pre></td></tr></table></figure>
-<p>5.插值查找</p>
-<p>在介绍插值查找之前，首先考虑一个新问题，为什么上述算法一定要是折半，而不是折四分之一或者折更多呢？<br>　　打个比方，在英文字典里面查“apple”，你下意识翻开字典是翻前面的书页还是后面的书页呢？如果再让你查“zoo”，你又怎么查？很显然，这里你绝对不会是从中间开始查起，而是有一定目的的往前或往后翻。<br>　　同样的，比如要在取值范围1 ~ 10000 之间 100 个元素从小到大均匀分布的数组中查找5， 我们自然会考虑从数组下标较小的开始查找。<br>　　经过以上分析，折半查找这种查找方式，不是自适应的（也就是说是傻瓜式的）。二分查找中查找点计算如下：<br>　　mid=(low+high)/2, 即mid=low+1/2<em>(high-low);<br>　　通过类比，我们可以将查找的点改进为如下：<br>　　mid=low+(key-a[low])/(a[high]-a[low])</em>(high-low)，<br>　　也就是将上述的比例参数1/2改进为自适应的，根据关键字在整个有序表中所处的位置，让mid值的变化更靠近关键字key，这样也就间接地减少了比较次数。<br>　　基本思想：基于二分查找算法，将查找点的选择改进为自适应选择，可以提高查找效率。当然，差值查找也属于有序查找。<br>　　注：对于表长较大，而关键字分布又比较均匀的查找表来说，插值查找算法的平均性能比折半查找要好的多。反之，数组中如果分布非常不均匀，那么插值查找未必是很合适的选择。<br>　　复杂度分析：查找成功或者失败的时间复杂度均为O(log2(log2n))。 </p>
-<p>6.分块查找</p>
-<p>7.二叉树遍历<br>前序（先中间，再左边，后右边）<br>中序（先左边，再中间，后右边）<br>后序（先左边，再右边，后中间）</p>
-<p>8.平衡查找树AVL</p>
-<h2 id="递归与分治"><a href="#递归与分治" class="headerlink" title="递归与分治"></a>递归与分治</h2><p>递归算法：直接或者间接不断反复调用自身来达到解决问题的方法。这就要求原始问题可以分解成相同问题的子问题。<br>示例：阶乘、斐波纳契数列、汉诺塔问题</p>
-<p>斐波纳契数列：又称黄金分割数列，指的是这样一个数列：1、1、2、3、5、8、13、21、……在数学上，斐波纳契数列以如下被以递归的方法定义：F1=1,F2=1,Fn=F（n-1）+F（n-2）（n&gt;2,n∈N*））。</p>
-<p>分治算法：待解决复杂的问题能够简化为几个若干个小规模相同的问题，然后逐步划分，达到易于解决的程度。<br>1、将原问题分解为n个规模较小的子问题，各子问题间独立存在，并且与原问题形式相同<br>2、递归的解决各个子问题<br>3、将各个子问题的解合并得到原问题的解</p>
-<p>示例：棋盘覆盖、找出伪币、求最值</p>
-<p>棋盘覆盖：在一个(2^k)*(2^k)个方格组成的棋盘上，有一个特殊方格与其他方格不同，称为特殊方格，称这样的棋盘为一个特殊棋盘。要求对棋盘的其余部分用L型方块填满</p>
-<h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><p>动态规划（Dynamic programming）是一种在数学、计算机科学和经济学中使用的，通过把原问题分解为相对简单的子问题的方式求解复杂问题的方法。 动态规划常常适用于有重叠子问题和最优子结构性质的问题，动态规划方法所耗时间往往远少于朴素解法。<br>动态规划与分治法相似，都是组合子问题的解来解决原问题的解，与分治法的不同在于：分治法的子问题是相互独立存在的，而动态规划应用于子问题重叠的情况。<br>动态规划背后的基本思想非常简单。大致上，若要解一个给定问题，我们需要解其不同部分（即子问题），再合并子问题的解以得出原问题的解。 通常许多子问题非常相似，为此动态规划法试图仅仅解决每个子问题一次，从而减少计算量： 一旦某个给定子问题的解已经算出，则将其记忆化存储，以便下次需要同一个子问题解之时直接查表。 这种做法在重复子问题的数目关于输入的规模呈指数增长时特别有用。动态规划中三个核心概念：最优子结构，边界，状态转移公式。</p>
-<p>算法步骤：</p>
-<ol>
-<li><p>最优子结构性质。如果问题的最优解所包含的子问题的解也是最优的，我们就称该问题具有最优子结构性质（即满足最优化原理）。最优子结构性质为动态规划算法解决问题提供了重要线索。</p>
+            <p>Redis是典型的Key-Value类型数据库，Key为字符类型，Value的类型常用的为五种类型：String、Hash 、List 、 Set 、 Ordered Set</p>
+<ul>
+<li>Redis 内部使用一个 redisObject 对象来表示所有的 key 和 value。对象包含如下字段：<ul>
+<li>type ：代表一个 value 对象具体是何种数据类型。</li>
+<li>encoding ：是不同数据类型在 redis 内部的存储方式，比如：type=string 代表 value 存储的是一个普通字符串，那么对应的 encoding 可以是 raw 或者是 int，如果是 int 则代表实际 redis 内部是按数值型类存储和表示这个字符串的，当然前提是这个字符串本身可以用数值表示，比如：”123” “456”这样的字符串。</li>
+<li>ptr：数据指针</li>
+<li>vm 字段：只有打开了 Redis 的虚拟内存功能，此字段才会真正的分配内存，该功能默认是关闭状态的。 Redis 使用 redisObject 来表示所有的 key/value 数据是比较浪费内存的，当然这些内存管理成本的付出主要也是为了给 Redis 不同数据类型提供一个统一的管理接口，实际作者也提供了多种方法帮助我们尽量节省内存使用。</li>
+</ul>
 </li>
-<li><p>子问题重叠性质。子问题重叠性质是指在用递归算法自顶向下对问题进行求解时，每次产生的子问题并不总是新问题，有些子问题会被重复计算多次。动态规划算法正是利用了这种子问题的重叠性质，对每一个子问题只计算一次，然后将其计算结果保存在一个表格中，当再次需要计算已经计算过的子问题时，只是在表格中简单地查看一下结果，从而获得较高的效率。</p>
-</li>
+</ul>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ol>
+<li>Redis不仅仅支持简单的k/v类型的数据，同时还提供list，set，zset，hash等数据结构的存储。</li>
+<li>Redis支持数据的备份，即master-slave模式的数据备份。</li>
+<li>Redis支持数据的持久化，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用。</li>
+<li>Redis可以实现主从复制，实现故障恢复。</li>
+<li>Redis的Sharding技术： 很容易将数据分布到多个Redis实例中</li>
+<li>Redis是线程安全的</li>
 </ol>
-<p>优化：</p>
-<ol>
-<li>不要递归(自顶向下），算法复杂度比较大。用迭代（自底向上）算法时间复杂度为常数。</li>
-<li>不要用备忘录算法，存储中间状态，增加空间复杂度。</li>
-</ol>
-<p>例子：</p>
-<ol>
-<li>动态规划,爬台阶问题。10级台阶，每次只能爬1级或2级，10级台阶有多少种爬法?<br>分析问题：下一步方法数总是前两步之和<br>f(n)最优子结构：f(n-1) ,f(n-2)<br>边界：f(1), f(2)<br>状态转移公式：f(n) = f(n-1)+f(n-2)</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">def dynamic_programe(n):</span><br><span class="line">    if n &lt; 1:</span><br><span class="line">        return 0</span><br><span class="line">    if n &lt;= 2:</span><br><span class="line">        return n</span><br><span class="line">    start = 1</span><br><span class="line">    second = 2</span><br><span class="line">    res = start+second</span><br><span class="line">    for i in range(4,n+1):</span><br><span class="line">        second, res = res, res+second</span><br><span class="line">    return res</span><br><span class="line">%time dynamic_programe(10)</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>0/1背包问题：给定种物品和一个容量为300KG的背包，物品的重量是[22,44,65,24,88,99]KG，其价值为[19,39,23,53,43,13]，背包问题是如何使选择装入背包内的物品，使得装入背包中的物品的总价值最大。其中，每种物品只有全部装入背包或不装入背包两种选择。</li>
-</ol>
-<h2 id="贪心算法"><a href="#贪心算法" class="headerlink" title="贪心算法"></a>贪心算法</h2><p>贪心算法是就问题而言，选择当下最好的选择，而不从整体最优考虑，通过局部最优希望导致全局最优。<br>贪心算法的要素<br>1）贪心选择性质：可以通过局部最优选择来构造全局最优解。换言之，直接做出在当前问题中看来最优的选择，而不必考虑子问题的解。<br>2）最优子结构：一个问题的最优解包含其子问题的最优解。<br>贪心算法的设计步骤：<br>1）将最优化问题转换为这样的形式：对其做出一次选择后，只剩下一个子问题需要求解<br>2）证明做出贪心选择后，原问题总是存在最优解，即贪心选择总是安全的<br>3）证明做出贪心选择后，剩余的子问题满足性质：其最优解与贪心选择组合即可得到原问题的最优解，这样就得到了最优子结构。<br>示例：背包问题，均分纸牌，最大整数</p>
-<h2 id="回溯法"><a href="#回溯法" class="headerlink" title="回溯法"></a>回溯法</h2><p>回溯法是一种搜索算法，从根节点出发，按照深度优先搜索的策略进行搜索，到达某一节点后 ，探索该节点是否包含该问题的解，如果包含则进入下一个节点进行搜索，若是不包含则回溯到父节点选择其他支路进行搜索。</p>
-<p>回溯法的设计步骤：<br>1）针对所给的原问题，定义问题的解空间<br>2）确定易于搜索的解空间结构<br>3）以深度优先方式搜索解空间，并在搜索过程中用剪枝函数除去无效搜索。<br>示例：0-背包问题、旅行商问题、八皇后问题</p>
-<h2 id="分支限界法"><a href="#分支限界法" class="headerlink" title="分支限界法"></a>分支限界法</h2><p>和回溯法相似，也是一种搜索算法，但回溯法是找出问题的许多解，而分支限界法是找出原问题的一个解。或是在满足约束条件的解中找出使某一目标函数值达到极大或极小的解，即在某种意义下的最优解<br>在当前节点（扩展节点）处，先生成其所有的儿子节点（分支），然后再从当前的活节点（当前节点的子节点）表中选择下一个扩展节点。为了有效地选择下一个扩展节点，加速搜索的进程，在每一个活节点处，计算一个函数值（限界），并根据函数值，从当前活节点表中选择一个最有利的节点作为扩展节点，使搜索朝着解空间上有最优解的分支推进，以便尽快地找出一个最优解。</p>
-<p>分支限界法：<br>1）FIFO分支限界法<br>3）优先队列分支限界法：按照优先队列中规定的优先级选取优先级最高的节点成为当前扩展节点。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a href="https://www.cnblogs.com/bulingpan/p/6416362.html" target="_blank" rel="noopener">五大常用算法的简单介绍</a></li>
-<li><a href="https://www.cnblogs.com/wujingqiao/articles/8961890.html" target="_blank" rel="noopener">十大排序算法和七大查找算法总结（原理讲解和代码实现）——-（一）排序算法篇</a></li>
-<li><a href="[十大排序算法和七大查找算法总结（原理讲解和代码实现）-------（一）排序算法篇](https://www.cnblogs.com/wujingqiao/articles/8961890.html">排序算法原理参考</a>)</li>
+<h2 id="支持的数据结构"><a href="#支持的数据结构" class="headerlink" title="支持的数据结构"></a>支持的数据结构</h2><p>字符串，双向链表，集合，有序集合，哈希结构</p>
+<blockquote>
+<p><strong>底层数据结构：int\embstr\str , linkedlist\ziplist\skiplist, hashmap, set</strong></p>
+</blockquote>
+<p>string:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">字符串对象的编码可以是int、raw或者embstr。</span><br><span class="line">如果一个字符串的内容可以转换为long，那么该字符串就会被转换成为long类型，对象的ptr就会指向该long，并且对象类型也用int类型表示。</span><br><span class="line">普通的字符串有两种，embstr和raw。embstr应该是Redis 3.0新增的数据结构,在2.8中是没有的。如果字符串对象的长度小于39字节，就用embstr对象。否则用传统的raw对象。</span><br><span class="line">可以是String，也可是是任意的byte[]类型的数组，如图片等。String 在 redis 内部存储默认就是一个字符串，被 redisObject 所引用，当遇到 incr,decr 等操作时会转成数值型进行计算，此时 redisObject 的 encoding 字段为int。</span><br></pre></td></tr></table></figure></p>
+<p>list:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">列表对象的编码可以是ziplist或者linkedlist。</span><br><span class="line">ziplist是一种压缩链表，它的好处是更能节省内存空间，因为它所存储的内容都是在连续的内存区域当中的。当列表对象元素不大，每个元素也不大的时候，就采用ziplist存储。但当数据量过大时就ziplist就不是那么好用了。因为为了保证他存储内容在内存中的连续性，插入的复杂度是O(N)，即每次插入都会重新进行realloc。</span><br><span class="line">&gt; Redis list 的应用场景非常多，也是 Redis 最重要的数据结构之一，比如 twitter 的关注列表，粉丝列表等都可以用 Redis 的 list 结构来实现，还提供了生产者消费者阻塞模式（B开头的命令），常用于任务队列，消息队列等。</span><br><span class="line">以双端链表实现，可以生成压缩列表，以节省空间</span><br><span class="line">如果消费者把job给Pop走了又没处理完就死机了怎么办？</span><br><span class="line">&gt; **生产者处理**</span><br><span class="line">加多一个sorted set，分发的时候同时发到list与sorted set，以分发时间为score，用户把job做完了之后要用ZREM消掉sorted set里的job，并且定时从sorted set中取出超时没有完成的任务，重新放回list。 如果发生重复可以在sorted set中在查询确认一遍，或者将消息的消费接口设计成幂等性。</span><br><span class="line">&gt; **消费者处理**</span><br><span class="line">为每个worker多加一个的list，弹出任务时改用RPopLPush，将job同时放到worker自己的list中，完成时用LREM消掉。如果集群管理(如zookeeper)发现worker已经挂掉，就将worker的list内容重新放回主list</span><br></pre></td></tr></table></figure></p>
+<p>Hash:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">哈希对象的底层实现可以是ziplist或者hashtable。</span><br><span class="line">Redis 的 Hash 实际是内部存储的 Value 为一个 HashMap，并提供了直接存取这个 Map 成员的接口。Hash将对象的各个属性存入Map里，可以只读取/更新对象的某些属性。另外不同的模块可以只更新自己关心的属性而不会互相并发覆盖冲突。</span><br><span class="line">Redis Hash 对应 Value 内部实际就是一个 HashMap，实际这里会有2种不同实现，** 这个 Hash 的成员比较少时 Redis 为了节省内存会采用类似一维数组的方式来紧凑存储，而不会采用真正的 HashMap 结构，对应的 value redisObject 的 encoding 为 zipmap，当成员数量增大时会自动转成真正的 HashMap，此时 encoding 为 ht**。一般操作复杂度是O(1)，要同时操作多个field时就是O(N)，N是field的数量。</span><br></pre></td></tr></table></figure></p>
+<p>集合：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">集合对象的编码可以是intset或者hashtable。intset是一个整数集合，里面存的为某种同一类型的整数</span><br><span class="line">Set就是HashSet，可以将重复的元素随便放入而Set会自动去重，底层实现也是HashMap，并且 set 提供了判断某个成员是否在一个 set 集合内的重要接口，这个也是 list 所不能提供的</span><br></pre></td></tr></table></figure></p>
+<p>有序集合：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">有序集合的编码可能两种，一种是ziplist，另一种是skiplist与dict的结合。</span><br><span class="line">ziplist作为集合和作为哈希对象是一样的，member和score顺序存放。按照score从小到大顺序排列。它的结构不再复述。</span><br><span class="line">skiplist是一种跳跃表，它实现了有序集合中的快速查找，在大多数情况下它的速度都可以和平衡树差不多。但它的实现比较简单，可以作为平衡树的替代品。它的结构比较特殊。</span><br><span class="line">set 不是自动有序的，而** sorted set 可以通过用户额外提供一个优先级（score）的参数来为成员排序，并且是插入有序的，即自动排序**。当你需要一个有序的并且不重复的集合列表，那么可以选择 sorted set 数据结构，比如 twitter 的 public timeline 可以以发表时间作为 score 来存储，这样获取时就是自动按时间排好序的.内部使用 HashMap 和跳跃表（SkipList）来保证数据的存储和有序</span><br></pre></td></tr></table></figure></p>
+<h2 id="内存管理优化"><a href="#内存管理优化" class="headerlink" title="内存管理优化"></a>内存管理优化</h2><blockquote>
+<p>上面的一些实现上的分析可以看出 redis 实际上的内存管理成本非常高，即占用了过多的内存，属于用空间换时间。作者对这点也非常清楚，所以提供了一系列的参数和手段来控制和节省内存</p>
+</blockquote>
+<blockquote>
+<p><strong>建议不要开启VM（虚拟内存）选项</strong><br>VM 选项是作为 Redis 存储超出物理内存数据的一种数据在内存与磁盘换入换出的一个持久化策略，将严重地拖垮系统的运行速度，所以要关闭 VM 功能，请检查你的 redis.conf 文件中 vm-enabled 为 no。</p>
+</blockquote>
+<blockquote>
+<p><strong>设置最大内存选项</strong><br>最好设置下 redis.conf 中的 maxmemory 选项，该选项是告诉 Redis 当使用了多少物理内存后就开始拒绝后续的写入请求，该参数能很好的保护好你的 Redis 不会因为使用了过多的物理内存而导致 swap，最终严重影响性能甚至崩溃。</p>
+</blockquote>
+<blockquote>
+<p><strong>通过不同数据类型控制内存使用设置</strong></p>
+<pre><code>- Hash
+    hash-max-zipmap-entries 64
+    hash-max-zipmap-value 512
+- List
+    list-max-ziplist-entries 512
+    list 数据类型多少节点以下会采用去指针的紧凑存储格式ziplist
+    list-max-ziplist-value 64
+    list 数据类型节点值大小小于多少字节会采用紧凑存储格式ziplist。
+- Set
+    set-max-intset-entries 512
+    set 数据类型内部数据如果全部是数值型，且包含多少节点以下会采用紧凑格式存储
+</code></pre></blockquote>
+<h2 id="时效性"><a href="#时效性" class="headerlink" title="时效性"></a>时效性</h2><p>Redis使用了一种相对务实的做法： 当client主动访问key会先对key进行超时判断，过时的key会立刻删除。 如果clien永远都不再get那条key呢？ 它会在Master的后台，每秒10次的执行如下操作： 随机选取100个key校验是否过期，如果有25个以上的key过期了，立刻额外随机选取下100个key(不计算在10次之内)</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><pre><code>1. 根据业务需要选择合适的数据类型，并为不同的应用场景设置相应的紧凑存储参数。
+
+2. 当业务场景不需要数据持久化时，关闭所有的持久化方式可以获得最佳的性能以及最大的内存使用量。
+
+3. 如果需要使用持久化，根据是否可以容忍重启丢失部分数据在快照方式与语句追加方式之间选择其一，不要使用虚拟内存以及 diskstore 方式。
+
+4. 不要让你的 Redis 所在机器物理内存使用超过实际内存总量的3/5。
+</code></pre><blockquote>
+<p>Redis 的持久化使用了 Buffer IO ，所谓 Buffer IO 是指 Redis 对持久化文件的写入和读取操作都会使用物理内存的 Page Cache，而当 Redis 的持久化文件过大操作系统会进行Swap，这时你的系统就会有内存还有余量但是系统不稳定或者崩溃的风险。</p>
+</blockquote>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
+<li><a href="https://blog.csdn.net/wcf373722432/article/details/78678504" target="_blank" rel="noopener">redis底层原理</a></li>
+<li><a href="https://www.cnblogs.com/guanghe/p/9122684.html" target="_blank" rel="noopener">Redis之数据存储结构</a></li>
 </ol>
 
           
@@ -572,7 +578,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_配置热更新/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源有效性/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -592,7 +598,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/k8s_配置热更新/" class="post-title-link" itemprop="url">Kubernetes ConfigMap热更新</a>
+                <a href="/2018/05/24/k8s_资源有效性/" class="post-title-link" itemprop="url">Kubernetes之健康检查与服务依赖处理</a>
               
             
           </h2>
@@ -672,25 +678,948 @@
       
         
           
-            <h2 id="Kubernetes-ConfigMap热更新"><a href="#Kubernetes-ConfigMap热更新" class="headerlink" title="Kubernetes ConfigMap热更新"></a><a href="https://www.kubernetes.org.cn/3138.html" target="_blank" rel="noopener">Kubernetes ConfigMap热更新</a></h2><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>ConfigMap是用来存储配置文件的kubernetes资源对象，所有的配置内容都存储在etcd中</p>
-<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><ol>
-<li><p>文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: env-config</span><br><span class="line">  namespace: default</span><br><span class="line">data:</span><br><span class="line">  log_level: INFO</span><br></pre></td></tr></table></figure>
+            <h1 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h1><h2 id="使用Liveness及Readness探针"><a href="#使用Liveness及Readness探针" class="headerlink" title="使用Liveness及Readness探针"></a>使用Liveness及Readness探针</h2><p>1.Liveness探针：主要用于判断Container是否处于运行状态，比如当服务crash或者死锁等情况发生时，kubelet会kill掉Container, 然后根据其设置的restart policy进行相应操作（可能会在本机重新启动Container，或者因为设置Kubernetes QoS，本机没有资源情况下会被分发的其他机器上重新启动）。<br>2.Readness探针：主要用于进一步判断服务是否已经正常工作，如果服务没有加载完成或工作异常，服务所在的Pod的IP地址会从服务的endpoints中被移除，也就是说，当服务没有ready时，会将其从服务的load balancer中移除，不会再接受或响应任何请求。</p>
+<p>liveness可用不一定readness可用，容器存活期间服务可能卡死状态。因此服务检查周期要短于健康检查周期。</p>
+<hr>
+<h2 id="探针处理Handler类型"><a href="#探针处理Handler类型" class="headerlink" title="探针处理Handler类型"></a>探针处理Handler类型</h2><p>无论对于Readness或Liveness探针，Handler均支持以下3种类型：ExecAction, TCPSocketAction, HTTPGetAction。每种类型说明与举例如下：</p>
+<ol>
+<li><p>ExecAction：Container内部执行某个具体的命令，成功返回：shell命令返回0。<br>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">   exec:</span><br><span class="line">     command:</span><br><span class="line">     - cat</span><br><span class="line">     - /tmp/healthy</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 5</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap ...</span><br></pre></td></tr></table></figure>
+<li><p>TCPSocketAction：通过container的IP、port执行tcp进行检查，确认port是否打开，类似telnet<br>例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">readinessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 10</span><br><span class="line"> livenessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 15</span><br><span class="line">   periodSeconds: 20</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>HTTPGetAction: 通过container的IP、port、path，用HTTP Get请求进行检查，程序自定义返回结果及程序可用标准。<br>例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">  httpGet:</span><br><span class="line">    path: /healthz</span><br><span class="line">    port: 8080</span><br><span class="line">    httpHeaders:</span><br><span class="line">    - name: X-Custom-Header</span><br><span class="line">      value: Awesome</span><br><span class="line">  initialDelaySeconds: 3</span><br><span class="line">  periodSeconds: 3</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ol>
-<li><p>evn挂载：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">envFrom:</span><br><span class="line">- configMapRef:</span><br><span class="line">    name: env-config</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>volume挂载：</p>
-</li>
+<hr>
+<h2 id="服务可用性与自动恢复"><a href="#服务可用性与自动恢复" class="headerlink" title="服务可用性与自动恢复"></a>服务可用性与自动恢复</h2><ol>
+<li>如果服务的健康检查（readiness）失败，故障的服务实例从service endpoint中下线，外部请求将不会再转发到该服务上，一定程度上保证正在提供的服务的正确性，如果服务自我恢复了（比如网络问题），会自动重新加入service endpoint对外提供服务。</li>
+<li>如果设置了Container（liveness）的探针，对故障服务的Container（liveness）的探针同样会失败，container会被kill掉，并根据原设置的container重启策略，系统倾向于在其原所在的机器上重启该container、或其他机器重新创建一个pod。</li>
+<li>由于上面的机制，整个服务实现了自身可用与自动恢复。</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">volumeMounts:</span><br><span class="line">- name: config-volume</span><br><span class="line">  mountPath: /etc/config</span><br><span class="line">volumes:</span><br><span class="line">  - name: config-volume</span><br><span class="line">    configMap:</span><br><span class="line">      name: special-config</span><br></pre></td></tr></table></figure>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>更新 ConfigMap 后：</p>
-<p>使用该 ConfigMap 挂载的 Env 不会同步更新<br>使用该 ConfigMap 挂载的 Volume 中的数据需要一段时间（实测大概10秒）才能同步更新<br>ENV 是在容器启动的时候注入的，启动之后 kubernetes 就不会再改变环境变量的值，且同一个 namespace 中的 pod 的环境变量是不断累加的，参考 <a href="https://jimmysong.io/posts/exploring-kubernetes-env-with-docker/" target="_blank" rel="noopener">Kubernetes中的服务发现与docker容器间的环境变量传递源码探究</a>。为了更新容器中使用 ConfigMap 挂载的配置，可以通过滚动更新 pod 的方式来强制重新挂载 ConfigMap，也可以在更新了 ConfigMap 后，先将副本数设置为 0，然后再扩容。</p>
+<hr>
+<p>##使用建议：</p>
+<ol>
+<li>建议对全部服务同时设置服务（readiness）和Container（liveness）的健康检查</li>
+<li>通过TCP对端口检查形式（TCPSocketAction），仅适用于端口已关闭或进程停止情况。因为即使服务异常，只要端口是打开状态，健康检查仍然是通过的。</li>
+<li>基于第二点，一般建议用ExecAction自定义健康检查逻辑，或采用HTTP Get请求进行检查（HTTPGetAction）。</li>
+<li>无论采用哪种类型的探针，一般建议设置检查服务（readiness）的时间短于检查Container（liveness）的时间，也可以将检查服务（readiness）的探针与Container（liveness）的探针设置为一致。目的是故障服务先下线，如果过一段时间还无法自动恢复，那么根据重启策略，重启该container、或其他机器重新创建一个pod恢复故障服务。</li>
+</ol>
+<hr>
+<h1 id="服务依赖"><a href="#服务依赖" class="headerlink" title="服务依赖"></a>服务依赖</h1><h2 id="理解Init-Container"><a href="#理解Init-Container" class="headerlink" title="理解Init Container"></a>理解Init Container</h2><p>一个pod中可以有一或多个Init Container。Pod的中多个Init Container启动顺序为yaml文件中的描述顺序，且串行方式启动，下一个Init/app Container必须等待上一个Init Container完成后方可启动</p>
+<p>由于Init Container必须要在pod状态变为Ready之前完成，所以其不需要readiness探针。另外在资源的requests与limits上与普通Container有细微差别，详见 Resources，除以上2点外，Init Container与普通Container并无明显区别</p>
+<p>Init Containers用途</p>
+<ol>
+<li>前文已经提及，由于Init Container必须在app Containers启动之前完成，所以可利用其特性，用作服务依赖处理。比如某一个服务A，需依赖db或memcached，那么可以利用服务A pod的Init Container判断db/memcached是否正常提供服务，如果启动服务失败或工作异常，设置Init Container启动失败，那么pod中的服务A就不会被启动了。</li>
+<li>应用镜像因安全原因等没办法安装或运行的工具，可放到Init Container中运行。另外，Init Container独立于业务服务，与业务无关的工具如sed, awk, python, dig等也可以按需放到Init Container之中。最后，Init Container也可以被授权访问应用Container无权访问的内容。</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_那些年我们踩过的那些坑/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/python_那些年我们踩过的那些坑/" class="post-title-link" itemprop="url">转：python的那些坑</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="那些年我们踩过的那些坑"><a href="#那些年我们踩过的那些坑" class="headerlink" title="那些年我们踩过的那些坑"></a>那些年我们踩过的那些坑</h2><h3 id="坑1-整数比较的坑"><a href="#坑1-整数比较的坑" class="headerlink" title="坑1 - 整数比较的坑"></a>坑1 - 整数比较的坑</h3><p>在 Python 中一切都是对象，整数也是对象，在比较两个整数时有两个运算符<code>==</code>和<code>is</code>，它们的区别是：</p>
+<ul>
+<li><code>is</code>比较的是两个整数对象的id值是否相等，也就是比较两个引用是否代表了内存中同一个地址。</li>
+<li><code>==</code>比较的是两个整数对象的内容是否相等，使用<code>==</code>时其实是调用了对象的<code>__eq__()</code>方法。</li>
+</ul>
+<p>知道了<code>is</code>和<code>==</code>的区别之后，我们可以来看看下面的代码，了解Python中整数比较有哪些坑：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	x = y = <span class="number">-1</span></span><br><span class="line">	<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">		x += <span class="number">1</span></span><br><span class="line">		y += <span class="number">1</span></span><br><span class="line">		<span class="keyword">if</span> x <span class="keyword">is</span> y:</span><br><span class="line">			print(<span class="string">'%d is %d'</span> % (x, y))</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			print(<span class="string">'Attention! %d is not %d'</span> % (x, y))</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">			</span><br><span class="line">	x = y = <span class="number">0</span></span><br><span class="line">	<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">		x -= <span class="number">1</span></span><br><span class="line">		y -= <span class="number">1</span></span><br><span class="line">		<span class="keyword">if</span> x <span class="keyword">is</span> y:</span><br><span class="line">			print(<span class="string">'%d is %d'</span> % (x, y))</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			print(<span class="string">'Attention! %d is not %d'</span> % (x, y))</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+<p>上面代码的部分运行结果如下图所示，出现这个结果的原因是Python出于对性能的考虑所做的一项优化。对于整数对象，Python把一些频繁使用的整数对象缓存起来，保存到一个叫<code>small_ints</code>的链表中，在Python的整个生命周期内，任何需要引用这些整数对象的地方，都不再重新创建新的对象，而是直接引用缓存中的对象。Python把频繁使用的整数对象的值定在[-5, 256]这个区间，如果需要这个范围的整数，就直接从<code>small_ints</code>中获取引用而不是临时创建新的对象。因为大于256或小于-5的整数不在该范围之内，所以就算两个整数的值是一样，但它们是不同的对象。</p>
+<p><img src="./res/int-is-comparation.png" alt></p>
+<p>当然仅仅如此这个坑就不值一提了，如果你理解了上面的规则，我们就再看看下面的代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> dis</span><br><span class="line">a = <span class="number">257</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	b = <span class="number">257</span>  <span class="comment"># 第6行</span></span><br><span class="line">	c = <span class="number">257</span>  <span class="comment"># 第7行</span></span><br><span class="line">	print(b <span class="keyword">is</span> c)  <span class="comment"># True</span></span><br><span class="line">	print(a <span class="keyword">is</span> b)  <span class="comment"># False</span></span><br><span class="line">	print(a <span class="keyword">is</span> c)  <span class="comment"># False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+<p>程序的执行结果已经用注释写在代码上了。够坑吧！看上去<code>a</code>、<code>b</code>和<code>c</code>的值都是一样的，但是<code>is</code>运算的结果却不一样。为什么会出现这样的结果，首先我们来说说Python程序中的代码块。所谓代码块是程序的一个最小的基本执行单位，一个模块文件、一个函数体、一个类、交互式命令中的单行代码都叫做一个代码块。上面的代码由两个代码块构成，<code>a = 257</code>是一个代码块，<code>main</code>函数是另外一个代码块。Python内部为了进一步提高性能，凡是在一个代码块中创建的整数对象，如果值不在<code>small_ints</code>缓存范围之内，但在同一个代码块中已经存在一个值与其相同的整数对象了，那么就直接引用该对象，否则创建一个新的对象出来，这条规则对不在<code>small_ints</code>范围的负数并不适用，对负数值浮点数也不适用，但对非负浮点数和字符串都是适用的，这一点读者可以自行证明。所以 <code>b is c</code>返回了<code>True</code>，而<code>a</code>和<code>b</code>不在同一个代码块中，虽然值都是257，但却是两个不同的对象，<code>is</code>运算的结果自然是<code>False</code>了。<br>为了验证刚刚的结论，我们可以借用<code>dis</code>模块（听名字就知道是进行反汇编的模块）从字节码的角度来看看这段代码。如果不理解什么是字节码，可以先看看<a href="(http://www.cnblogs.com/restran/p/4903056.html">《谈谈 Python 程序的运行原理》</a>)这篇文章。可以先用<code>import dis</code>导入<code>dis</code>模块并按照如下所示的方式修改代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">	main()</span><br><span class="line">	dis.dis(main)</span><br></pre></td></tr></table></figure>
+<p>代码的执行结果如下图所示。可以看出代码第6行和第7行，也就是<code>main</code>函数中的257是从同一个位置加载的，因此是同一个对象；而代码第9行的<code>a</code>明显是从不同的地方加载的，因此引用的是不同的对象。</p>
+<p><img src="./res/result-of-dis.png" alt></p>
+<p>如果还想对这个问题进行进一步深挖，推荐大家阅读<a href="https://foofish.net/python_int_implement.html" target="_blank" rel="noopener">《Python整数对象实现原理》</a>这篇文章。</p>
+<h3 id="坑2-嵌套列表的坑"><a href="#坑2-嵌套列表的坑" class="headerlink" title="坑2 - 嵌套列表的坑"></a>坑2 - 嵌套列表的坑</h3><p>Python中有一种内置的数据类型叫列表，它是一种容器，可以用来承载其他的对象（准确的说是其他对象的引用），列表中的对象可以称为列表的元素，很明显我们可以把列表作为列表中的元素，这就是所谓的嵌套列表。嵌套列表可以模拟出现实中的表格、矩阵、2D游戏的地图（如植物大战僵尸的花园）、棋盘（如国际象棋、黑白棋）等。但是在使用嵌套的列表时要小心，否则很可能遭遇非常尴尬的情况，下面是一个小例子。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	names = [<span class="string">'关羽'</span>, <span class="string">'张飞'</span>, <span class="string">'赵云'</span>, <span class="string">'马超'</span>, <span class="string">'黄忠'</span>]</span><br><span class="line">	subjs = [<span class="string">'语文'</span>, <span class="string">'数学'</span>, <span class="string">'英语'</span>]</span><br><span class="line">	scores = [[<span class="number">0</span>] * <span class="number">3</span>] * <span class="number">5</span></span><br><span class="line">	<span class="keyword">for</span> row, name <span class="keyword">in</span> enumerate(names):</span><br><span class="line">		print(<span class="string">'请输入%s的成绩'</span> % name)</span><br><span class="line">		<span class="keyword">for</span> col, subj <span class="keyword">in</span> enumerate(subjs):</span><br><span class="line">			scores[row][col] = float(input(subj + <span class="string">': '</span>))</span><br><span class="line">	print(scores)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+<p>我们希望录入5个学生3门课程的成绩，于是定义了一个有5个元素的列表，而列表中的每个元素又是一个由3个元素构成的列表，这样一个列表的列表刚好跟一个表格是一致的，相当于有5行3列，接下来我们通过嵌套的for-in循环输入每个学生3门课程的成绩。程序执行完成后我们发现，每个学生3门课程的成绩是一模一样的，而且就是最后录入的那个学生的成绩。</p>
+<p>要想把这个坑填平，我们首先要区分对象和对象的引用这两个概念，而要区分这两个概念，还得先说说内存中的栈和堆。我们经常会听人说起“堆栈”这个词，但实际上“堆”和“栈”是两个不同的概念。众所周知，一个程序运行时需要占用一些内存空间来存储数据和代码，那么这些内存从逻辑上又可以做进一步的划分。对底层语言（如C语言）有所了解的程序员大都知道，程序中可以使用的内存从逻辑上可以为五个部分，按照地址从高到低依次是：栈（stack）、堆（heap）、数据段（data segment）、只读数据段（static area）和代码段（code segment）。其中，栈用来存储局部、临时变量，以及函数调用时保存现场和恢复现场需要用到的数据，这部分内存在代码块开始执行时自动分配，代码块执行结束时自动释放，通常由编译器自动管理；堆的大小不固定，可以动态的分配和回收，因此如果程序中有大量的数据需要处理，这些数据通常都放在堆上，如果堆空间没有正确的被释放会引发内存泄露的问题，而像Python、Java等编程语言都使用了垃圾回收机制来实现自动化的内存管理（自动回收不再使用的堆空间）。所以下面的代码中，变量<code>a</code>并不是真正的对象，它是对象的引用，相当于记录了对象在堆空间的地址，通过这个地址我们可以访问到对应的对象；同理，变量<code>b</code>是列表容器的引用，它引用了堆空间上的列表容器，而列表容器中并没有保存真正的对象，它保存的也仅仅是对象的引用。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = object()</span><br><span class="line">b = [<span class="string">'apple'</span>, <span class="string">'pitaya'</span>, <span class="string">'grape'</span>]</span><br></pre></td></tr></table></figure>
+<p>知道了这一点，我们可以回过头看看刚才的程序，我们对列表进行<code>[[0] * 3] * 5</code>操作时，仅仅是将<code>[0, 0, 0]</code>这个列表的地址进行了复制，并没有创建新的列表对象，所以容器中虽然有5个元素，但是这5个元素引用了同一个列表对象，这一点可以通过<code>id</code>函数检查<code>scores[0]</code>和<code>scores[1]</code>的地址得到证实。所以正确的代码应该按照如下的方式进行修改。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	names = [<span class="string">'关羽'</span>, <span class="string">'张飞'</span>, <span class="string">'赵云'</span>, <span class="string">'马超'</span>, <span class="string">'黄忠'</span>]</span><br><span class="line">	subjs = [<span class="string">'语文'</span>, <span class="string">'数学'</span>, <span class="string">'英语'</span>]</span><br><span class="line">	scores = [[]] * <span class="number">5</span></span><br><span class="line">	<span class="keyword">for</span> row, name <span class="keyword">in</span> enumerate(names):</span><br><span class="line">		print(<span class="string">'请输入%s的成绩'</span> % name)</span><br><span class="line">		scores[row] = [<span class="number">0</span>] * <span class="number">3</span></span><br><span class="line">		<span class="keyword">for</span> col, subj <span class="keyword">in</span> enumerate(subjs):</span><br><span class="line">			scores[row][col] = float(input(subj + <span class="string">': '</span>))</span><br><span class="line">	print(scores)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	names = [<span class="string">'关羽'</span>, <span class="string">'张飞'</span>, <span class="string">'赵云'</span>, <span class="string">'马超'</span>, <span class="string">'黄忠'</span>]</span><br><span class="line">	subjs = [<span class="string">'语文'</span>, <span class="string">'数学'</span>, <span class="string">'英语'</span>]</span><br><span class="line">	scores = [[<span class="number">0</span>] * <span class="number">3</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">5</span>)]</span><br><span class="line">	<span class="keyword">for</span> row, name <span class="keyword">in</span> enumerate(names):</span><br><span class="line">		print(<span class="string">'请输入%s的成绩'</span> % name)</span><br><span class="line">		scores[row] = [<span class="number">0</span>] * <span class="number">3</span></span><br><span class="line">		<span class="keyword">for</span> col, subj <span class="keyword">in</span> enumerate(subjs):</span><br><span class="line">			scores[row][col] = float(input(subj + <span class="string">': '</span>))</span><br><span class="line">	print(scores)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+<p>如果对内存的使用不是很理解，可以看看<a href="http://www.pythontutor.com/" target="_blank" rel="noopener">PythonTutor网站</a>上提供的代码可视化执行功能，通过可视化执行，我们可以看到内存是如何分配的，从而避免在使用嵌套列表或者复制对象时可能遇到的坑。</p>
+<p><img src="./res/python-tutor-visualize.png" alt></p>
+<p><img src="./res/python-tutor-visualize2.png" alt></p>
+<h3 id="坑3-访问修饰符的坑"><a href="#坑3-访问修饰符的坑" class="headerlink" title="坑3 - 访问修饰符的坑"></a>坑3 - 访问修饰符的坑</h3><p>用Python做过面向对象编程的人都知道，Python的类提供了两种访问控制权限，一种是公开，一种是私有（在属性或方法前加上双下划线）。而用惯了Java或C#这类编程语言的人都知道，类中的属性（数据抽象）通常都是私有的，其目的是为了将数据保护起来；而类中的方法（行为抽象）通常都是公开的，因为方法是对象向外界提供的服务。但是Python并没有从语法层面确保私有成员的私密性，因为它只是对类中所谓的私有成员进行了命名的变换，如果知道命名的规则照样可以直接访问私有成员，请看下面的代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></span><br><span class="line">        self.__name = name</span><br><span class="line">        self.__age = age</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.__name + <span class="string">': '</span> + str(self.__age)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    stu = Student(<span class="string">'骆昊'</span>, <span class="number">38</span>)</span><br><span class="line">    <span class="comment"># 'Student' object has no attribute '__name'</span></span><br><span class="line">    <span class="comment"># print(stu.__name)</span></span><br><span class="line">    <span class="comment"># 用下面的方式照样可以访问类中的私有成员</span></span><br><span class="line">    print(stu._Student__name)</span><br><span class="line">    print(stu._Student__age)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>Python为什么要做出这样的设定呢？用一句广为流传的格言来解释这个问题：“We are all consenting adults here”（我们都是成年人）。这句话表达了很多Python程序员的一个共同观点，那就是开放比封闭要好，我们应该自己对自己的行为负责而不是从语言层面来限制对数据或方法的访问。</p>
+<p>所以在Python中我们实在没有必要将类中的属性或方法用双下划线开头的命名处理成私有的成员，因为这并没有任何实际的意义。如果想对属性或方法进行保护，我们建议用单下划线开头的受保护成员，虽然它也不能真正保护这些属性或方法，但是它相当于给调用者一个暗示，让调用者知道这是不应该直接访问的属性或方法，而且这样做并不影响子类去继承这些东西。</p>
+<p>需要提醒大家注意的是，Python类中的那些魔法方法，如<code>__str__</code>、<code>__repr__</code>等，这些方法并不是私有成员哦，虽然它们以双下划线开头，但是他们也是以双下划线结尾的，这种命名并不是私有成员的命名，这一点对初学者来说真的很坑。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/ceph_cmd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/ceph_cmd/" class="post-title-link" itemprop="url">ceph 概念命令</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p> 结合网络、官网、手动查询等多方渠道，整理ceph维护管理常用命令，并且梳理常规命令在使用过程中的逻辑顺序。另外整理期间发现ceph 集群的命令体系有点乱，详细情况各自体验。</p>
+<p>一：ceph集群启动、重启、停止</p>
+<p>1：ceph 命令的选项如下：</p>
+<p>选项    简写    描述</p>
+<p>–verbose    -v    详细的日志。</p>
+<p>–valgrind    N/A    （只适合开发者和质检人员）用 Valgrind 调试。</p>
+<p>–allhosts    -a    在 ceph.conf 里配置的所有主机上执行，否 则它只在本机执行。</p>
+<p>–restart    N/A    核心转储后自动重启。</p>
+<p>–norestart    N/A    核心转储后不自动重启。</p>
+<p>–conf    -c    使用另外一个配置文件。</p>
+<p>Ceph 子命令包括：</p>
+<p>命令    描述</p>
+<p>start    启动守护进程。</p>
+<p>stop    停止守护进程。</p>
+<p>forcestop    暴力停止守护进程，等价于 kill -9</p>
+<p>killall    杀死某一类守护进程。</p>
+<p>cleanlogs    清理掉日志目录。</p>
+<p>cleanalllogs    清理掉日志目录内的所有文件。</p>
+<p>2：启动所有守护进程</p>
+<pre><code>要启动、关闭、重启 Ceph 集群，执行 ceph 时加上 相关命令，语法如下：
+</code></pre><p>/etc/init.d/ceph [options] [start|restart|stop] [daemonType|daemonID]</p>
+<p>下面是个典型启动实例：</p>
+<p>sudo /etc/init.d/ceph -a start</p>
+<p>加 -a （即在所有节点上执行）执行完成后Ceph本节点所有进程启动。</p>
+<p>把 CEPH 当服务运行，按此语法：</p>
+<p>service ceph [options] [start|restart] [daemonType|daemonID] </p>
+<p>典型实例：  service ceph -a start</p>
+<p>3:启动单一实例</p>
+<pre><code>要启动、关闭、重启一类守护进程  本例以要启动本节点上某一类的所有 Ceph 守护进程，
+</code></pre><p>/etc/init.d/ceph  [start|restart|stop] [daemonType|daemonID]</p>
+<p>/etc/init.d/ceph start osd.0</p>
+<p> 把ceph当做服务运行，启动一节点上某个 Ceph 守护进程，</p>
+<p>按此语法： service ceph  start {daemon-type}.{instance} </p>
+<p>service ceph  start osd.0</p>
+<p>二：集群维护常用命令概览</p>
+<p>1：检查集群健康状况</p>
+<pre><code>启动集群后、读写数据前，先检查下集群的健康状态。你可以用下面的命令检查：
+</code></pre><p>ceph health   或者 ceph health detail （输出信息更详细）</p>
+<pre><code>要观察集群内正发生的事件，打开一个新终端，然后输入：
+</code></pre><p>ceph -w</p>
+<p>输出信息里包含：</p>
+<p>集群唯一标识符</p>
+<p>集群健康状况</p>
+<p>监视器图元版本和监视器法定人数状态</p>
+<p>OSD 版本和 OSD 状态摘要</p>
+<p>其内存储的数据和对象数量的粗略统计，以及数据总量等。</p>
+<p>新版本新增选项如下：</p>
+<p>  -s, –status          show cluster status</p>
+<p>  -w, –watch           watch live cluster changes</p>
+<p>  –watch-debug         watch debug events</p>
+<p>  –watch-info          watch info events</p>
+<p>  –watch-sec           watch security events</p>
+<p>  –watch-warn          watch warn events</p>
+<p>  –watch-error         watch error events</p>
+<p>  –version, -v         display version</p>
+<p>  –verbose             make verbose</p>
+<p>  –concise             make less verbose</p>
+<p>使用方法演示：</p>
+<p>ceph -w –watch-info</p>
+<p>2：检查集群的使用情况</p>
+<pre><code>检查集群的数据用量及其在存储池内的分布情况，可以用 df 选项，它和 Linux 上的 df 相似。如下：
+</code></pre><p>ceph df</p>
+<p>输出的 GLOBAL 段展示了数据所占用集群存储空间的概要。</p>
+<p>SIZE: 集群的总容量；</p>
+<p>AVAIL: 集群的空闲空间总量；</p>
+<p>RAW USED: 已用存储空间总量；</p>
+<p>% RAW USED: 已用存储空间比率。用此值参照 full ratio 和 near full \ ratio 来确保不会用尽集群空间。</p>
+<p>详情见存储容量。</p>
+<p>输出的 POOLS 段展示了存储池列表及各存储池的大致使用率。没有副本、克隆品和快照占用情况。例如，如果你把 1MB 的数据存储为对象，理论使用率将是 1MB ，但考虑到副本数、克隆数、和快照数，实际使用率可能是 2MB 或更多。</p>
+<p>NAME: 存储池名字；</p>
+<p>ID: 存储池唯一标识符；</p>
+<p>USED: 大概数据量，单位为 KB 、 MB 或 GB ；</p>
+<p>%USED: 各存储池的大概使用率；</p>
+<p>Objects: 各存储池内的大概对象数。</p>
+<p>新版本新增ceph osd df  命令，可以详细列出集群每块磁盘的使用情况，包括大小、权重、使用多少空间、使用率等等</p>
+<p>3：检查集群状态</p>
+<pre><code>要检查集群的状态，执行下面的命令：:
+</code></pre><p>ceph status</p>
+<p>4：检查MONITOR状态</p>
+<pre><code>查看监视器图，执行下面的命令：:
+</code></pre><p>ceph mon stat</p>
+<p>或者：</p>
+<p>ceph mon dump</p>
+<pre><code>要检查监视器的法定人数状态，执行下面的命令：
+</code></pre><p>ceph quorum_status</p>
+<p>5：检查 MDS 状态:</p>
+<pre><code>元数据服务器为 Ceph 文件系统提供元数据服务，元数据服务器有两种状态： up | \ down 和 active | inactive ，执行下面的命令查看元数据服务器状态为 up 且 active ：
+</code></pre><p>ceph mds stat</p>
+<pre><code>要展示元数据集群的详细状态，执行下面的命令：
+</code></pre><p>ceph mds dump</p>
+<p>三：集群命令详解</p>
+<p>######################mon 相关####################</p>
+<p>1：查看mon的状态信息</p>
+<p>[mon@ptmind~]# ceph mon stat</p>
+<p>2：查看mon的选举状态</p>
+<p>[mon@ptmind~]# ceph quorum_status</p>
+<p>3：查看mon的映射信息</p>
+<p>[mon@ptmind~]# ceph mon dump</p>
+<p>4：删除一个mon节点</p>
+<p>[mon@ptmind~]# ceph mon remove cs1</p>
+<p>5：获得一个正在运行的mon map，并保存在1.txt文件中</p>
+<p>[mon@ptmind~]# ceph mon getmap -o 1.txt</p>
+<p>6：读取上面获得的map</p>
+<p>[mon@ptmind~]# monmaptool –print 1.txt </p>
+<p>7：把上面的mon map注入新加入的节点</p>
+<p>[mon@ptmind~]# ceph-mon -i nc3 –inject-monmap 1.txt</p>
+<p>8：查看mon的amin socket</p>
+<p>[mon@ptmind~]# ceph-conf –name mon.nc3 –show-config-value admin_socket</p>
+<p>9：查看ceph mon log日志所在的目录</p>
+<p>[mon@ptmind~]# ceph-conf –name mon.nc1 –show-config-value log_file    </p>
+<p>/var/log/ceph/ceph-mon.nc1.log</p>
+<p>10：查看一个集群ceph-mon.nc3参数的配置、输出信息特别详细，集群所有配置生效可以在此参数下确认</p>
+<p>[mon@ptmind~]# ceph –admin-daemon /var/run/ceph/ceph-mon.nc3.asok config show | less</p>
+<p>######################### msd 相关 ###################</p>
+<p>1：查看msd状态</p>
+<p>[mon@ptmind~]# ceph mds stat</p>
+<p>2：删除一个mds节点</p>
+<p>[mon@ptmind~]# ceph  mds rm 0 mds.nc1</p>
+<p>3：设置mds状态为失败</p>
+<p>[mon@ptmind~]# ceph mds rmfailed &lt;int[0-]&gt;   </p>
+<p>4：新建pool </p>
+<p>[mon@ptmind~]# ceph mds add_data_pool <poolname></poolname></p>
+<p>5：关闭mds集群</p>
+<p>[mon@ptmind~]# mds cluster_down</p>
+<p>6：启动mds集群</p>
+<p>[mon@ptmind~]# mds cluster_up</p>
+<p>7：设置cephfs文件系统存储方式最大单个文件尺寸</p>
+<p>[mon@ptmind~]# ceph mds set max_file_size 1024000000000</p>
+<h3 id="清除cephfs-文件系统步骤"><a href="#清除cephfs-文件系统步骤" class="headerlink" title="清除cephfs 文件系统步骤"></a>清除cephfs 文件系统步骤</h3><p>强制mds状态为featrue</p>
+<p>[mon@ptmind~]# ceph mds fail 0</p>
+<p>删除mds文件系统</p>
+<p>[mon@ptmind~]# ceph fs rm leadorfs –yes-i-really-mean-it</p>
+<p>#删除fs数据文件夹</p>
+<p>[mon@ptmind~]# ceph osd pool delete cephfs_data cephfs_data –yes-i-really-really-mean-it </p>
+<p>#删除元数据文件夹</p>
+<p>[mon@ptmind~]# ceph osd pool delete cephfs_metadata cephfs_metadata –yes-i-really-really-mean-it </p>
+<p>然后再删除 mds key  ，残留文件等</p>
+<p>拆除文件系统前推荐先删除节点，待验证</p>
+<p>[mon@ptmind~]# ceph  mds rm 0 mds.node242</p>
+<p>################################ ceph auth 相关 ################################</p>
+<p>1：查看ceph集群中的认证用户及相关的key</p>
+<p>[mon@ptmind~]# ceph auth list</p>
+<p>2：为ceph创建一个admin用户并为admin用户创建一个密钥，把密钥保存到/etc/ceph目录下：</p>
+<p>[mon@ptmind~]# ceph auth get-or-create client.admin mds ‘allow‘ osd ‘allow <em>‘ mon ‘allow </em>‘ &gt; /etc/ceph/ceph.client.admin.keyring</p>
+<p>或</p>
+<p>[mon@ptmind~]# ceph auth get-or-create client.admin mds ‘allow‘ osd ‘allow <em>‘ mon ‘allow </em>‘ -o /etc/ceph/ceph.client.admin.keyring</p>
+<p>3：为osd.0创建一个用户并创建一个key</p>
+<p>[mon@ptmind~]# ceph auth get-or-create osd.0 mon ‘allow rwx‘ osd ‘allow *‘ -o /var/lib/ceph/osd/ceph-0/keyring</p>
+<p>4：为mds.nc3创建一个用户并创建一个key</p>
+<p>[mon@ptmind~]# ceph auth get-or-create mds.nc3 mon ‘allow rwx‘ osd ‘allow <em>‘ mds ‘allow </em>‘ -o /var/lib/ceph/mds/ceph-cs1/keyring</p>
+<p>5：导入key信息</p>
+<p>[mon@ptmind~]# ceph auth import   /var/lib/ceph/mds/ceph-cs1/keyring</p>
+<p>6：删除集群中的一个认证用户</p>
+<p>[mon@ptmind~]# ceph auth del osd.0</p>
+<p>################################ osd  相关 ################################</p>
+<p>1：查看osd列表</p>
+<p>[mon@ptmind~]# ceph osd tree</p>
+<p>2：查看数据延迟</p>
+<p>[mon@ptmind~]# ceph osd perf </p>
+<p>osd fs_commit_latency(ms) fs_apply_latency(ms) </p>
+<p>  0                     3                    4 </p>
+<p>  1                   333                  871 </p>
+<p>  2                    33                   49 </p>
+<p>  3                     1                    2 </p>
+<p>。。。。。。。。。。。。</p>
+<p>3：详细列出集群每块磁盘的使用情况，包括大小、权重、使用多少空间、使用率等等</p>
+<p>[mon@ptmind~]# ceph osd df </p>
+<p>4：down掉一个osd硬盘</p>
+<p>[mon@ptmind~]# ceph osd down 0   #down掉osd.0节点</p>
+<p>5：在集群中删除一个osd硬盘</p>
+<p>[mon@ptmind~]# ceph osd rm 0</p>
+<p>6：在集群中删除一个osd 硬盘 crush map</p>
+<p>[mon@ptmind~]# ceph osd crush rm osd.0</p>
+<p>7：在集群中删除一个osd的host节点</p>
+<p>[mon@ptmind~]# ceph osd crush rm cs1</p>
+<p>8：查看最大osd的个数 </p>
+<p> [mon@ptmind~]# ceph osd getmaxosd</p>
+<p>max_osd = 90 in epoch 1202     #默认最大是90个osd节点</p>
+<p>9：设置最大的osd的个数（当扩大osd节点的时候必须扩大这个值）</p>
+<p> [mon@ptmind~]# ceph osd setmaxosd 2048</p>
+<p>10：设置osd crush的权重为1.0</p>
+<p>ceph osd crush set {id} {weight} [{loc1} [{loc2} …]]</p>
+<p>例如：</p>
+<p>[mon@ptmind~]# ceph osd crush set osd.1 0.5 host=node241</p>
+<p>11：设置osd的权重</p>
+<p>[mon@ptmind~]# ceph osd reweight 3 0.5</p>
+<p>reweighted osd.3 to 0.5 (8327682)</p>
+<p>或者用下面的方式</p>
+<p>[mon@ptmind~]# ceph osd crush reweight osd.1 1.0</p>
+<p>12：把一个osd节点逐出集群</p>
+<p>[mon@ptmind~]# ceph osd out osd.3:</p>
+<p>3       1    osd.3   up      0      # osd.3的reweight变为0了就不再分配数据，但是设备还是存活的</p>
+<p>13：把逐出的osd加入集群</p>
+<p>[mon@ptmind~]# ceph osd in osd.3</p>
+<p>marked in osd.3. </p>
+<p>14：暂停osd （暂停后整个集群不再接收数据）</p>
+<p>[mon@ptmind~]# ceph osd pause</p>
+<p>15：再次开启osd （开启后再次接收数据） </p>
+<p>[mon@ptmind~]# ceph osd unpause</p>
+<p>16：查看一个集群osd.0参数的配置、输出信息特别详细，集群所有配置生效可以在此参数下确认</p>
+<p>[mon@ptmind~]# ceph –admin-daemon /var/run/ceph/ceph-osd.0.asok config show | less</p>
+<p>17：设置标志 flags ，不允许关闭osd、解决网络不稳定，osd 状态不断切换的问题</p>
+<p>[mon@ptmind~]# ceph osd set nodown</p>
+<p>取消设置</p>
+<p>[mon@ptmind~]# ceph osd unset nodown</p>
+<p>################################pool  相关################################</p>
+<p>1：查看ceph集群中的pool数量</p>
+<p>[mon@ptmind~]# ceph osd lspools   或者 ceph osd pool ls</p>
+<p>2：在ceph集群中创建一个pool</p>
+<p>[mon@ptmind~]# ceph osd pool create rbdtest 100            #这里的100指的是PG组:</p>
+<p>3：查看集群中所有pool的副本尺寸</p>
+<p>[mon@ptmind~]# ceph osd dump | grep ‘replicated size‘</p>
+<p>4：查看pool 最大副本数量</p>
+<p>[mon@ptmind~]# ceph osd pool get rbdpool size</p>
+<p>size: 3</p>
+<p>5：查看pool 最小副本数量</p>
+<p>[root@node241 ~]# ceph osd pool get rbdpool min_size</p>
+<p>min_size: 2</p>
+<p>6：设置一个pool的pg数量</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdtest pg_num 100</p>
+<p>7：设置一个pool的pgp数量</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdtest pgp_num 100</p>
+<p>8: 修改ceph，数据最小副本数、和副本数</p>
+<p>ceph osd pool set $pool_name min_size 1</p>
+<p>ceph osd pool set $pool_name size 2</p>
+<p>示例：</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdpool min_size 1</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdpool size 2</p>
+<p>验证：</p>
+<p>[mon@ptmind~]# ceph osd dump</p>
+<p>pool 3 ‘rbdpool‘ replicated size 2 min_size 1 </p>
+<p>9:设置rbdtest池的最大存储空间为100T（默认是1T)</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdtest target_max_bytes 100000000000000</p>
+<p>10: 为一个ceph pool配置配额、达到配额前集群会告警，达到上限后无法再写入数据</p>
+<p>[mon@ptmind~]# ceph osd pool set-quota rbdtest max_objects 10000</p>
+<p>11: 在集群中删除一个pool,注意删除poolpool 映射的image 会直接被删除，线上操作要谨慎。</p>
+<p>[mon@ptmind~]# ceph osd pool delete rbdtest  rbdtest  –yes-i-really-really-mean-it  #集群名字需要重复两次</p>
+<p>12: 给一个pool创建一个快照</p>
+<p>[mon@ptmind~]# ceph osd pool mksnap rbdtest   rbdtest-snap20150924</p>
+<p>13: 查看快照信息</p>
+<p>[mon@ptmind~]# rados lssnap -p rbdtest</p>
+<p>1       rbdtest-snap20150924    2015.09.24 19:58:55</p>
+<p>2       rbdtest-snap2015092401  2015.09.24 20:31:21</p>
+<p>2 snaps</p>
+<p>14:删除pool的快照</p>
+<p>[mon@ptmind~]# ceph osd pool rmsnap rbdtest  rbdtest-snap20150924</p>
+<p>验证，剩余一个snap</p>
+<p>[mon@ptmind~]# rados lssnap -p rbdtest</p>
+<p>2       rbdtest-snap2015092401  2015.09.24 20:31:21</p>
+<p>1 snaps</p>
+<p>################################rados命令相关##################</p>
+<p>rados 是和Ceph的对象存储集群（RADOS），Ceph的分布式文件系统的一部分进行交互是一种实用工具。</p>
+<p>1：查看ceph集群中有多少个pool （只是查看pool)</p>
+<p>[mon@ptmind~]# rados lspools    同  ceph osd pool ls 输出结果一致</p>
+<p>2：显示整个系统和被池毁掉的使用率统计，包括磁盘使用（字节）和对象计数</p>
+<p>[mon@ptmind~]# rados df </p>
+<p>3：创建一个pool</p>
+<p>[mon@ptmind~]# rados mkpool test</p>
+<p>4：创建一个对象object </p>
+<p>[mon@ptmind~]# rados create test-object -p test</p>
+<p>5：查看对象文件</p>
+<p>[mon@ptmind~]# rados -p test ls</p>
+<p>test-object</p>
+<p>6：删除一个对象</p>
+<p>[mon@ptmind~]# rados rm test-object-1 -p test</p>
+<p>7：删除foo池 (和它所有的数据)</p>
+<p>[mon@ptmind~]# rados rmpool test test –yes-i-really-really-mean-it </p>
+<p>8：查看ceph pool中的ceph object （这里的object是以块形式存储的）</p>
+<p>[mon@ptmind~]# rados ls -p test | more</p>
+<p>9：为test pool创建快照</p>
+<p>[mon@ptmind~]# rados -p test mksnap testsnap</p>
+<p>created pool test snap testsnap</p>
+<p>10：列出给定池的快照</p>
+<p>[mon@ptmind~]# rados -p test lssnap         </p>
+<p>1       testsnap        2015.09.24 21:14:34</p>
+<p>11：删除快照</p>
+<p>[mon@ptmind~]# rados -p test rmsnap testsnap</p>
+<p>removed pool test snap testsnap</p>
+<p>12：上传一个对象到test pool</p>
+<p>[mon@ptmind~]# rados -p test put myobject blah.txt</p>
+<p>################################ PG 相关 ################################</p>
+<p>PG =“放置组”。当集群中的数据，对象映射到编程器，被映射到这些PGS的OSD。</p>
+<p>1：查看pg组的映射信息</p>
+<p>[mon@ptmind~]# ceph pg dump    或者 ceph pg ls</p>
+<p>2：查看一个PG的map</p>
+<p>[mon@ptmind~]# ceph pg map 0.3f</p>
+<p>osdmap e88 pg 0.3f (0.3f) -&gt; up [0,2] acting [0,2]   #其中的[0,2]代表存储在osd.0、osd.2节点，osd.0代表主副本的存储位置</p>
+<p>3：查看PG状态</p>
+<p>[mon@ptmind~]# ceph pg stat</p>
+<p>4：查询一个pg的详细信息</p>
+<p>[mon@ptmind~]# ceph pg  0.26 query</p>
+<p>5：要洗刷一个pg组，执行命令：</p>
+<p>[mon@ptmind~]# ceph pg scrub {pg-id}</p>
+<p>6：查看pg中stuck的状态</p>
+<p>要获取所有卡在某状态的归置组统计信息，执行命令：</p>
+<p>ceph pg dump_stuck inactive|unclean|stale [–format <format>] [-t|–threshold <seconds>]</seconds></format></p>
+<p>[mon@ptmind~]# ceph pg dump_stuck unclean</p>
+<p>[mon@ptmind~]# ceph pg dump_stuck inactive</p>
+<p>[mon@ptmind~]# ceph pg dump_stuck stale</p>
+<p>Inactive （不活跃）归置组不能处理读写，因为它们在等待一个有最新数据的 OSD 复活且进入集群。</p>
+<p>Unclean （不干净）归置组含有复制数未达到期望数量的对象，它们应该在恢复中。</p>
+<p>Stale （不新鲜）归置组处于未知状态：存储它们的 OSD 有段时间没向监视器报告了（由 mon_osd_report_timeout 配置）。</p>
+<p>可用格式有 plain （默认）和 json 。阀值定义的是，归置组被认为卡住前等待的最小时间（默认 300 秒）</p>
+<p>7：显示一个集群中的所有的pg统计</p>
+<p>[mon@ptmind~]# ceph pg dump –format plain</p>
+<p>8：恢复一个丢失的pg</p>
+<p>如果集群丢了一个或多个对象，而且必须放弃搜索这些数据，你就要把未找到的对象标记为丢失（ lost ）。</p>
+<p>如果所有可能的位置都查询过了，而仍找不到这些对象，你也许得放弃它们了。这可能是罕见的失败组合导致的，集群在写入完成前，未能得知写入是否已执行。</p>
+<p>当前只支持 revert 选项，它使得回滚到对象的前一个版本（如果它是新对象）或完全忽略它。要把 unfound 对象标记为 lost ，执行命令：</p>
+<p>ceph pg {pg-id} mark_unfound_lost revert|delete</p>
+<p>9：查看某个PG内分布的数据状态，具体状态可以使用选项过滤输出</p>
+<p>ceph pg ls {<int>} {active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|</int></p>
+<p>backfill_toofull|recovery_wait|undersized [active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|</p>
+<p>deep_scrub|backfill|backfill_toofull|recovery_wait|undersized…]} :  list pg with specific pool, osd, state</p>
+<p>实例如下：</p>
+<pre><code>pg号   过滤输出的状态
+</code></pre><p>[mon@ptmind~]# ceph   pg   ls       1     clean</p>
+<p>10：查询osd 包含pg 的信息，过滤输出pg的状态信息</p>
+<p>pg ls-by-osd <osdname (id|osd.id)>       list pg on osd [osd]</osdname></p>
+<p> {<int>} {active|clean|down|replay|splitting|scrubbing|scrubq|degraded|    </int></p>
+<p> inconsistent|peering|repair|recovering| backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|backfill_toofull|recovery_wait|undersized[active|clean|down|replay|splitting|    </p>
+<p> scrubbing|scrubq|degraded|inconsistent| peering|repair|recovering|backfill_ wait|incomplete|stale|remapped|deep_scrub|backfill|backfill_toofull|recovery_wait|undersized…]} </p>
+<p>实例如下：</p>
+<p>[mon@ptmind~]# ceph pg ls-by-osd osd.5 </p>
+<p>11：查询pool包含pg 的信息，过滤输出pg的状态信息</p>
+<p>ceph pg  ls-by-pool   poolname   选项</p>
+<p>ceph pg ls-by-pool   <poolstr>  {active|clean| down|replay|splitting|scrubbing|scrubq|  degraded|inconsistent|peering|repair| recovering|backfill_wait|incomplete|  stale|remapped|deep_scrub|backfill|     </poolstr></p>
+<p> backfill_toofull|recovery_wait| undersized [active|clean|down|replay|  splitting|scrubbing|scrubq|degraded| inconsistent|peering|repair|recovering| backfill_wait|incomplete|stale| remapped|deep_scrub|backfill|backfill_ </p>
+<p>实例如下：</p>
+<p>[mon@ptmind~]# ceph pg ls-by-pool test  </p>
+<p>12：查询某个osd状态为 primary pg ，可以根据需要过滤状态</p>
+<p>pg ls-by-primary <osdname (id|osd.id)> {<int>} {active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|</int></osdname></p>
+<p>backfill_toofull|recovery_wait|undersized [active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|</p>
+<p>backfill_toofull|recovery_wait|undersized…]} :  list pg with primary = [osd]</p>
+<p> 实例如下：</p>
+<pre><code>osd号   过滤输出的状态
+</code></pre><p>[mon@ptmind~]# ceph pg ls-by-primary    osd.3    clean </p>
+<p>############################### rbd命令相关 #########################3 </p>
+<p>1：在test池中创建一个命名为kjh的10000M的镜像</p>
+<p>[mon@ptmind~]# rbd create -p test –size 10000 kjh</p>
+<p>2：查看ceph中一个pool里的所有镜像</p>
+<p>[mon@ptmind~]# rbd ls test</p>
+<p>kjh</p>
+<p>3：查看新建的镜像的信息</p>
+<p>[mon@ptmind~]# rbd -p test info kjh    </p>
+<p>4：查看ceph pool中一个镜像的信息</p>
+<p>[mon@ptmind~]# rbd info -p test  –image kjh</p>
+<p>rbd image ‘kjh‘:</p>
+<pre><code>size 1000 MB in 250 objects
+
+order 22 (4096 kB objects)
+
+block_name_prefix: rb.0.92bd.74b0dc51
+
+format: 1
+</code></pre><p>5：删除一个镜像</p>
+<p>[mon@ptmind~]# rbd rm  -p test  kjh</p>
+<p>6：调整一个镜像的尺寸</p>
+<p>[mon@ptmind~]# rbd resize -p test –size 20000 kjh</p>
+<p>[mon@ptmind~]# rbd -p test info kjh   #调整后的镜像大小</p>
+<p>rbd image ‘kjh‘:</p>
+<pre><code>size 2000 MB in 500 objects
+
+order 22 (4096 kB objects)
+
+block_name_prefix: rb.0.92c1.74b0dc51
+
+format: 1
+</code></pre><p>#########rbd pool 快照功能测试###########</p>
+<p>1：新建个pool叫’ptmindpool’同时在下面创建一个’kjhimage’</p>
+<p>[mon@ptmind~]# ceph osd pool create ptmindpool 256 256</p>
+<p>pool ‘ptmindpool‘ created</p>
+<p>2:创建镜像</p>
+<p>[mon@ptmind~]# rbd create kjhimage –size 1024 –pool ptmindpool</p>
+<p>3:查看镜像</p>
+<p>[mon@ptmind~]# rbd –pool ptmindpool ls</p>
+<p>kjhimage</p>
+<p>4:创建snap,快照名字叫’snapkjhimage’</p>
+<p>[mon@ptmind~]# rbd snap create ptmindpool/kjhimage@snapkjhimage</p>
+<p>5:查看kjhimage的snap</p>
+<p>[mon@ptmind~]# rbd snap ls ptmindpool/kjhimage</p>
+<p>SNAPID NAME         SIZE</p>
+<pre><code>2 snapkjhimage 1024 MB
+</code></pre><p>6:回滚快照，</p>
+<p>[mon@ptmind~]# rbd snap rollback ptmindpool/kjhimage@snapkjhimage</p>
+<p>7:删除snap 删除snap报（rbd: snapshot ‘snapshot-xxxx‘ is protected from removal.）写保护 ，使用 rbd snap unprotect volumes/snapshot-xxx‘ 解锁，然后再删除</p>
+<p>[mon@ptmind~]# rbd snap rm ptmindpool/kjhimage@snapkjhimage</p>
+<p>8:删除kjhimage的全部snapshot</p>
+<p>[mon@ptmind~]# rbd snap purge ptmindpool/kjhimage</p>
+<p>9: 把ceph pool中的一个镜像导出</p>
+<p>导出镜像</p>
+<p>[mon@ptmind~]# rbd export -p ptmindpool –image kjhimage /tmp/kjhimage.img            </p>
+<p>Exporting image: 100% complete…done.</p>
+<p>验证查看导出文件</p>
+<p>l /tmp/kjhimage.img        </p>
+<p>-rw-r–r– 1 root root 1073741824 Sep 24 23:15 /tmp/kjhimage.img</p>
+<p>10:把一个镜像导入ceph中</p>
+<p>[mon@ptmind~]# rbd import /tmp/kjhimage.img  -p ptmindpool –image importmyimage1</p>
+<p>Importing image: 100% complete…done.</p>
+<p>验证查看导入镜像文件</p>
+<p>rbd -pptmindpool ls</p>
+<p>importmyimage1</p>
+<p>本文出自 “康建华” 博客，转载请与作者联系！</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/nlp_sentence/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/nlp_sentence/" class="post-title-link" itemprop="url">NLP句法表述</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p><img src="/images/ml_nlp/nlu_sentence.png" alt="NLP句法表述"></p>
 
           
         
@@ -951,7 +1880,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -1093,7 +2022,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">48</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
