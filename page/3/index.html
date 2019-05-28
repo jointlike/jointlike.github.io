@@ -193,7 +193,7 @@
   </div>
 
   <div class="site-nav-toggle">
-    <button aria-label="Toggle navigation bar">
+    <button aria-label="Navigationsleiste an/ausschalten">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -221,7 +221,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
 
   </li>
         
@@ -238,7 +238,7 @@
 
     
 
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>Über</a>
 
   </li>
         
@@ -255,7 +255,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Schlagwörter</a>
 
   </li>
         
@@ -272,7 +272,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Kategorien</a>
 
   </li>
         
@@ -289,7 +289,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
 
   </li>
 
@@ -341,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/hadoop_guide/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/hadoop_cdh5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -361,7 +361,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/hadoop_guide/" class="post-title-link" itemprop="url">hadoop 使用</a>
+                <a href="/2018/05/24/hadoop_cdh5/" class="post-title-link" itemprop="url">hadoop 部署</a>
               
             
           </h2>
@@ -379,14 +379,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+              <time title="Erstellt: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
             
 
             
@@ -401,7 +401,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
@@ -441,71 +441,33 @@
       
         
           
-            <h2 id="模块与概念解释"><a href="#模块与概念解释" class="headerlink" title="模块与概念解释"></a>模块与概念解释</h2><h3 id="存储组件"><a href="#存储组件" class="headerlink" title="存储组件"></a>存储组件</h3><ul>
-<li>存储方式</li>
-</ul>
-<ul>
-<li><p>列式存储，整个文件被切割为若干列数据，每一列数据一起存储。文件类型有：Parquet , RCFile, ORCFile。面向列的格式使得读取数据时，可以跳过不需要的列，适合于只处于行的一小部分字段的情况。但是这种格式的读写需要更多的内存空间，因为需要缓存行在内存中（为了获取多行中的某一列）。同时不适合流式写入，因为一旦写入失败，当前文件无法恢复，而面向行的数据在写入失败时可以重新同步到最后一个同步点，所以Flume采用的是面向行的存储格式。</p>
+            <p>基于cloudera,oracle jdk 1.8.0.111, centos 6.8</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a><strong>环境配置</strong></h3><ol start="0">
+<li><p>要求：CENTOS6(el6)，主4C8G，从2C4G 20G</p>
 </li>
-<li><p>行式存储，同一行的数据存储在一起，即连续存储。文件类型有：SequenceFile, MapFile, Avro Datafile。采用这种方式，如果只需要访问行的一小部分数据，亦需要将整行读入内存，推迟序列化一定程度上可以缓解这个问题，但是从磁盘读取整行数据的开销却无法避免。面向行的存储适合于整行数据需要同时处理的情况。其中，Avro是一个数据序列化系统。序列化就是将对象转换成二进制流,相应的反序列化就是将二进制流再转换成对应的对象，设计用于支持大批量数据交换的应用。</p>
-</li>
-</ul>
-<ul>
-<li>存储结构<br>HBase是一个针对结构化数据的可伸缩、高可靠、高性能、分布式和面向列的动态模式数据库。和传统关系数据库不同，HBase采用了BigTable的数据模型：增强的稀疏排序映射表（Key/Value），其中，键由行关键字、列关键字和时间戳构成。HBase提供了对大规模数据的随机、实时读写访问，同时，HBase中保存的数据可以使用MapReduce来处理，它将数据存储和并行计算完美地结合在一起。</li>
-</ul>
-<h2 id="hadoop数据存储"><a href="#hadoop数据存储" class="headerlink" title="hadoop数据存储"></a>hadoop数据存储</h2><p> 需要着重考虑以下几个问题：数据存储格式，多租户（支持多个用户、多个组以及多种应用类型），模式设计（输入输出的目录结构等及HBase hive数据结构），元数据管理。存储的选择关系到数据的安全，计算的效率，及存储的效益。</p>
-<ol>
-<li><p>数据存储选择</p>
-<ul>
-<li>文件格式选择（考虑：是否可压缩，是否可分片，序列化方式，列式存储或行式存储格式，SequenceFile、Avro 等容器格式是文本等大部分文件类型的优选格式）</li>
-<li>压缩格式选择（压缩比例，是否支持分片，计算时需要的转换消耗，分记录级压缩、块级压缩）</li>
-<li>数据存储系统选择（HBase, HDFS）</li>
-</ul>
-<p>一般来说，在与容器文件格式（Avro、SequenceFile 等）一起使用时，任何压缩格式都可以是分片式的，因为容器文件格式能够单独压缩记录构成的数据块，也可以进行记录级的压缩。如果在压缩整个文件时没有使用容器文件格式，那么就需要使用本身支持可分片的压缩格式，比如在数据块之间插入同步标记的 bzip2</p>
+<li><p>关闭selinux</p>
 </li>
 </ol>
-<h3 id="查询计算组件"><a href="#查询计算组件" class="headerlink" title="查询计算组件"></a>查询计算组件</h3><ul>
-<li>hadoop HSQL、hbaseSQL、impala、pig计算框架<br>分布式离线计算框架主要适用于大批量的集群任务，由于是批量执行，故时效性偏低。</li>
-</ul>
-<ul>
-<li><p>hive<br>A data warehouse infrastructure that provides data summarization and ad hoc querying.<br>Hive定义了一种类似SQL的查询语言(HQL),将SQL转化为MapReduce任务在Hadoop上执行。通常用于离线分析。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/selinux/config</span><br><span class="line"></span><br><span class="line">SELINUX=disabled</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">2. 配置hostname, host????????????????????</span><br></pre></td></tr></table></figure>
+<p>vi /etc/sysconfig/network<br>vi /etc/hosts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. ssh打通</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line">ssh-keygen -t rsa  </span><br><span class="line">cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys  </span><br><span class="line">scp ~/.ssh/authorized_keys root@datanode1:~/.ssh/</span><br><span class="line">(ssh-copy-id hosts)  </span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. 主从时间同步ntp</span><br><span class="line">```  </span><br><span class="line"># vim /etc/ntp.conf   </span><br><span class="line">driftfile /var/lib/ntp/drift</span><br><span class="line">restrict 127.0.0.1</span><br><span class="line">restrict -6 ::1</span><br><span class="line">restrict default nomodify notrap </span><br><span class="line">server ntp3.aliyun.com prefer </span><br><span class="line">server ntp7.aliyun.com iburst</span><br><span class="line">includefile /etc/ntp/crypto/pw</span><br><span class="line">keys /etc/ntp/keys</span><br><span class="line"></span><br><span class="line"># 时间同步</span><br><span class="line">service ntpd start</span><br><span class="line">chkconfig ntpd on</span><br><span class="line"></span><br><span class="line"># 查看</span><br><span class="line">ntpstat </span><br><span class="line"></span><br><span class="line">synchronised to NTP server (203.107.6.88) at stratum 3 </span><br><span class="line">   time correct to within 40 ms</span><br><span class="line">   polling server every 1024 s</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">5. 装mysql </span><br><span class="line">```  </span><br><span class="line">yum install -y mysql mysql-server mysql-devel </span><br><span class="line">chkconfig mysqld on  </span><br><span class="line">service mysqld start  </span><br><span class="line">create database hive DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">create database oozie DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">grant all on *.* to root@&quot;%&quot; Identified by &quot;hadoop&quot;;</span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;%&apos; IDENTIFIED BY &apos;hadoop&apos; WITH GRANT OPTION;   </span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">6. 安装java</span><br><span class="line"></span><br><span class="line">注意需要是 oracle java</span><br></pre></td></tr></table></figure></p>
+<p>#openjdk<br>rpm -e –nodeps java-1.6.0-openjdk-1.6.0.0-1.66.1.13.0.el6.x86_64</p>
+<p>#sun jdk<br>yum -y install oracle-j2sdk1.7.x86_64</p>
+<p>vi /etc/profile</p>
+<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><p>export JAVA_HOME=/opt/java<br>export PATH=$JAVA_HOME/bin:$PATH<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[JDBC 参考](http://dev.mysql.com/downloads/connector/j/)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">7. 内核缓存配置</span><br><span class="line"></span><br><span class="line">`vi /etc/sysctl.conf`  </span><br><span class="line">`vm.swappiness=10`</span><br><span class="line">`vi /etc/rc.local` </span><br><span class="line">`echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag`</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">### **部署**</span><br><span class="line"></span><br><span class="line">1. ????CM.??????????5.9??   </span><br><span class="line"></span><br><span class="line">  &gt; Cloudera Manager 5.9??http://archive-primary.cloudera.com/cm5/cm/5/cloudera-manager-el6-cm5.9.0_x86_64.tar.gz  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 ???????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 sha?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1  </span><br><span class="line"></span><br><span class="line">  &gt; manifest ?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/manifest.json  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2. ????????????????  </span><br><span class="line"></span><br><span class="line">  - ??? tar -zxvf cloudera-manager-el6-cm5.9.0_x86_64.tar.gz -P /opt/cloudera/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1 CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha</span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv manifest.json /opt/clourdera/parcel.repo/  </span><br><span class="line"></span><br><span class="line">3. ?????????  </span><br><span class="line">```  </span><br><span class="line">/opt/cloudera/share/cmf/schema/scm_prepare_database.sh mysql cm -hlocalhost -uroot -phdp --scm-host localhost scm scm scm</span><br><span class="line">??????????????/usr/share/cmf</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. ????????????????cloudera-daemon, cloudera-server</span><br></pre></td></tr></table></figure></p>
+<p>sudo yum –nogpgcheck localinstall cloudera-manager-daemons-<em>.rpm<br>sudo yum –nogpgcheck localinstall cloudera-manager-server-</em>.rpm<br><code>`</code></p>
+<ol start="7">
+<li>????localhost:7180???????,????????</li>
+</ol>
+<p>??????jdbc???????????oozie hive??????jdbc????????????</p>
+<h3 id><a href="#" class="headerlink" title="??????"></a>??????</h3><ol>
+<li><p>jdk ??????????????????????????????yum repo?????</p>
 </li>
-<li><p>Impala 相对于hive的实时查询系统，它提供SQL语义抛弃了MapReduce这个不太适合做SQL查询的范式，能查询存储在Hadoop的HDFS和HBase中的PB级大数据。已有的Hive系统虽然也提供了SQL语义，但由于Hive底层执行使用的是MapReduce引擎，仍然是一个批处理过程，难以满足查询的交互性。相比之下，Impala的最大特点也是最大卖点就是它的快速，启动速度和省去磁盘IO。</p>
+<li><p>????????????????  </p>
 </li>
-<li><p>pig<br>A high-level data-flow language and execution framework for parallel computation.<br>定义了一种数据流语言—Pig Latin，将脚本转换为MapReduce任务在Hadoop上执行。通常用于进行离线分析。</p>
-</li>
-<li><p>Mahout<br>Mahout起源于2008年，最初是Apache Lucent的子项目，它在极短的时间内取得了长足的发展，现在是Apache的顶级项目。Mahout的主要目标是创建一些可扩展的机器学习领域经典算法的实现，旨在帮助开发人员更加方便快捷地创建智能应用程序。Mahout现在已经包含了聚类、分类、推荐引擎（协同过滤）和频繁集挖掘等广泛使用的数据挖掘方法。除了算法，Mahout还包含数据的输入/输出工具、与其他存储系统（如数据库、MongoDB 或Cassandra）集成等数据挖掘支持架构。</p>
-</li>
-</ul>
-<ul>
-<li>solr 搜索计算框架</li>
-</ul>
-<ul>
-<li>solr Apache Solr是一个功能强大的搜索服务器，它支持REST风格API。Solr是基于Lucene的，Lucene 支持强大的匹配能力，如短语，通配符，连接，分组和更多不同的数据类型。</li>
-</ul>
-<ul>
-<li>spark 准实时框架<br>Spark 是专为大规模数据处理而设计的快速通用的计算引擎，其是基于内存的迭代式计算。</li>
-</ul>
-<ul>
-<li>Spark Core：包含Spark的基本功能；尤其是定义RDD的API、操作以及这两者上的动作。其他Spark的库都是构建在RDD和Spark Core之上的</li>
-<li>Spark SQL：提供通过Apache Hive的SQL变体Hive查询语言（HiveQL）与Spark进行交互的API。每个数据库表被当做一个RDD，Spark SQL查询被转换为Spark操作。</li>
-<li>Spark Streaming：对实时数据流进行处理和控制。Spark Streaming允许程序能够像普通RDD一样处理实时数据</li>
-<li>MLlib：一个常用机器学习算法库，算法被实现为对RDD的Spark操作。这个库包含可扩展的学习算法，比如分类、回归等需要对大量数据集进行迭代的操作。</li>
-<li>GraphX：控制图、并行图操作和计算的一组算法和工具的集合。GraphX扩展了RDD API，包含控制图、创建子图、访问路径上所有顶点的操作Spark架构的组成图如下</li>
-</ul>
-<ul>
-<li>Storm实时框架<br>Storm是一个分布式的、可靠的、容错的流式计算框架。Storm 一开始就是为实时处理设计，因此在实时分析/性能监测等需要高时效性的领域广泛采用。Storm在理论上支持所有语言，只需要少量代码即可完成适配。</li>
-</ul>
-<h3 id="CDH管理监控组件"><a href="#CDH管理监控组件" class="headerlink" title="CDH管理监控组件"></a>CDH管理监控组件</h3><ul>
-<li>Cloudera Manager. 监控管理组件。</li>
-<li>Navigator是企业版的。CDH 平台的端到端数据管理工具。Cloudera Navigator 使管理员、数据经理和分析师能够了解 Hadoop 中的大量数据。</li>
-</ul>
-<h3 id="通用集群管理组件"><a href="#通用集群管理组件" class="headerlink" title="通用集群管理组件"></a>通用集群管理组件</h3><ul>
-<li><p>Zookeeper<br>分布式协作服务，Zookeeper是google Chubby克隆版,解决分布式环境下的数据管理问题：统一命名，状态同步，集群管理，配置同步等。</p>
-</li>
-<li><p>Sqoop<br>数据同步工具，Sqoop是SQL-to-Hadoop的缩写，主要用于传统数据库和Hadoop之间传输数据， 数据的导入和导出本质上是Mapreduce程序，充分利用了MR的并行化和容错性。</p>
-</li>
-</ul>
+</ol>
+<h3 id="-1"><a href="#-1" class="headerlink" title="????????"></a>????????</h3><blockquote>
+<p><a href="http://www.aboutyun.com/thread-9086-1-1.html" target="_blank" rel="noopener">Cloudera Manager 5 ?? CDH5 ????????????????</a><br><a href="https://www.cloudera.com/documentation/enterprise/latest/topics/install_cm_server.html" target="_blank" rel="noopener">Install Cloudera </a><br><a href="https://www.jianshu.com/p/57179e03795f" target="_blank" rel="noopener">?????CDH5??????</a><br><a href="https://blog.csdn.net/qq_30004245/article/details/75735275?locationNum=9&amp;fps=1" target="_blank" rel="noopener">Cloudera Hadoop???????????</a><br><a href="https://zhuanlan.zhihu.com/p/25533211" target="_blank" rel="noopener">??CDH5??hadoop???</a><br><a href="https://blog.csdn.net/hliq5399/article/details/78193113#t5" target="_blank" rel="noopener">??????????Hadoop??????</a><br><a href="https://www.jianshu.com/p/72dc1c591647" target="_blank" rel="noopener">CDH5???????????</a></p>
+</blockquote>
 
           
         
@@ -600,14 +562,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+              <time title="Erstellt: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
             
 
             
@@ -622,7 +584,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
@@ -725,6 +687,190 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_PEP 8风格指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/python_PEP 8风格指南/" class="post-title-link" itemprop="url">转：PEP 8风格指南</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Erstellt: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="PEP-8风格指南"><a href="#PEP-8风格指南" class="headerlink" title="PEP 8风格指南"></a>PEP 8风格指南</h2><p>PEP是Python Enhancement Proposal的缩写，通常翻译为“Python增强提案”。每个PEP都是一份为Python社区提供的指导Python往更好的方向发展的技术文档，其中的第8号增强提案（PEP 8）是针对Python语言编订的代码风格指南。尽管我们可以在保证语法没有问题的前提下随意书写Python代码，但是在实际开发中，采用一致的风格书写出可读性强的代码是每个专业的程序员应该做到的事情，也是每个公司的编程规范中会提出的要求，这些在多人协作开发一个项目（团队开发）的时候显得尤为重要。我们可以从Python官方网站的<a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="noopener">PEP 8链接</a>中找到该文档，下面我们对该文档的关键部分做一个简单的总结。</p>
+<h3 id="空格的使用"><a href="#空格的使用" class="headerlink" title="空格的使用"></a>空格的使用</h3><ol>
+<li><u>使用空格来表示缩进而不要用制表符（Tab）。</u>这一点对习惯了其他编程语言的人来说简直觉得不可理喻，因为绝大多数的程序员都会用Tab来表示缩进，但是要知道Python并没有像C/C++或Java那样的用花括号来构造一个代码块的语法，在Python中分支和循环结构都使用缩进来表示哪些代码属于同一个级别，鉴于此Python代码对缩进以及缩进宽度的依赖比其他很多语言都强得多。在不同的编辑器中，Tab的宽度可能是2、4或8个字符，甚至是其他更离谱的值，用Tab来表示缩进对Python代码来说可能是一场灾难。</li>
+<li><u>和语法相关的每一层缩进都用4个空格来表示。</u></li>
+<li><u>每行的字符数不要超过79个字符，如果表达式因太长而占据了多行，除了首行之外的其余各行都应该在正常的缩进宽度上再加上4个空格。</u></li>
+<li><u>函数和类的定义，代码前后都要用两个空行进行分隔。</u></li>
+<li><u>在同一个类中，各个方法之间应该用一个空行进行分隔。</u></li>
+<li><u>二元运算符的左右两侧应该保留一个空格，而且只要一个空格就好。</u></li>
+</ol>
+<h3 id="标识符命名"><a href="#标识符命名" class="headerlink" title="标识符命名"></a>标识符命名</h3><p>PEP 8倡导用不同的命名风格来命名Python中不同的标识符，以便在阅读代码时能够通过标识符的名称来确定该标识符在Python中扮演了怎样的角色（在这一点上，Python自己的内置模块以及某些第三方模块都做得并不是很好）。</p>
+<ol>
+<li><u>变量、函数和属性应该使用小写字母来拼写，如果有多个单词就使用下划线进行连接。</u></li>
+<li><u>类中受保护的实例属性，应该以一个下划线开头。</u></li>
+<li><u>类中私有的实例属性，应该以两个下划线开头。</u></li>
+<li><u>类和异常的命名，应该每个单词首字母大写。</u></li>
+<li><u>模块级别的常量，应该采用全大写字母，如果有多个单词就用下划线进行连接。</u></li>
+<li><u>类的实例方法，应该把第一个参数命名为<code>self</code>以表示对象自身。</u></li>
+<li><u>类的类方法，应该把第一个参数命名为<code>cls</code>以表示该类自身。</u></li>
+</ol>
+<h3 id="表达式和语句"><a href="#表达式和语句" class="headerlink" title="表达式和语句"></a>表达式和语句</h3><p>在Python之禅（可以使用<code>import this</code>查看）中有这么一句名言：“There should be one– and preferably only one –obvious way to do it.”，翻译成中文是“做一件事应该有而且最好只有一种确切的做法”，这句话传达的思想在PEP 8中也是无处不在的。</p>
+<ol>
+<li><u>采用内联形式的否定词，而不要把否定词放在整个表达式的前面。</u>例如<code>if a is not b</code>就比<code>if not a is b</code>更容易让人理解。</li>
+<li>不要用检查长度的方式来判断字符串、列表等是否为<code>None</code>或者没有元素，应该用<code>if not x</code>这样的写法来检查它。</li>
+<li><u>就算<code>if</code>分支、<code>for</code>循环、<code>except</code>异常捕获等中只有一行代码，也不要将代码和<code>if</code>、<code>for</code>、<code>except</code>等写在一起，分开写才会让代码更清晰。</u></li>
+<li><u><code>import</code>语句总是放在文件开头的地方。</u></li>
+<li><u>引入模块的时候，<code>from math import sqrt</code>比<code>import math</code>更好。</u></li>
+<li><u>如果有多个<code>import</code>语句，应该将其分为三部分，从上到下分别是Python标准模块、第三方模块和自定义模块，每个部分内部应该按照模块名称的字母表顺序来排列。</u></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_惯例/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -763,14 +909,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+              <time title="Erstellt: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
             
 
             
@@ -785,7 +931,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
@@ -939,7 +1085,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_用函数还是用复杂的表达式/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_配置热更新/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -959,7 +1105,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/python_用函数还是用复杂的表达式/" class="post-title-link" itemprop="url">转：python编程思考</a>
+                <a href="/2018/05/24/k8s_配置热更新/" class="post-title-link" itemprop="url">Kubernetes ConfigMap热更新</a>
               
             
           </h2>
@@ -977,14 +1123,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+              <time title="Erstellt: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
             
 
             
@@ -999,10 +1145,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
 
                 
                 
@@ -1039,22 +1185,25 @@
       
         
           
-            <h2 id="要不要使用复杂表达式"><a href="#要不要使用复杂表达式" class="headerlink" title="要不要使用复杂表达式"></a>要不要使用复杂表达式</h2><p>Perl语言的原作者Larry Wall曾经说过，伟大的程序员都有三个优点：懒惰、暴躁和自负。乍一看这三个词语没有一个是褒义词，但在程序员的世界里，这三个词有不同的意义。首先，懒惰会促使程序员去写一些省事儿的程序来辅助自己或别人更好的完成工作，这样我们就无需做那些重复和繁琐的劳动；同理能够用3行代码解决的事情，我们也绝不会写出10行代码来。其次，暴躁会让程序员主动的去完成一些你还没有提出的工作，去优化自己的代码让它更有效率，能够3秒钟完成的任务，我们绝不能容忍1分钟的等待。最后，自负会促使程序员写出可靠无误的代码，我们写代码不是为了接受批评和指责，而是为了让其他人来膜拜。</p>
-<p>那么接下来就有一个很有意思的问题值得探讨一下，我们需要一个程序从输入的三个数中找出最大的那个数。这个程序对任何会编程的人来说都是小菜一碟，甚至不会编程的人经过10分钟的学习也能搞定。下面是用来解决这个问题的Python代码。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line"><span class="keyword">if</span> a &gt; b:</span><br><span class="line">	the_max = a</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	the_max = b</span><br><span class="line"><span class="keyword">if</span> c &gt; the_max:</span><br><span class="line">	the_max = c</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
-<p>但是我们刚才说了，程序员都是懒惰的，很多程序员都会使用三元条件运算符来改写上面的代码。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">the_max = a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b</span><br><span class="line">the_max = c <span class="keyword">if</span> c &gt; the_max <span class="keyword">else</span> the_max</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
-<p>需要说明的是，Python在2.5版本以前是没有上面代码第4行和第5行中使用的三元条件运算符的，究其原因是Guido van Rossum（Python之父）认为三元条件运算符并不能帮助 Python变得更加简洁，于是那些习惯了在C/C++或Java中使用三元条件运算符（在这些语言中，三元条件运算符也称为“Elvis运算符”，因为<code>?:</code>放在一起很像著名摇滚歌手猫王Elvis的大背头）的程序员试着用<code>and</code>和<code>or</code>运算符的短路特性来模拟出三元操作符，于是在那个年代，上面的代码是这样写的。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">the_max = a &gt; b <span class="keyword">and</span> a <span class="keyword">or</span> b</span><br><span class="line">the_max = c &gt; the_max <span class="keyword">and</span> c <span class="keyword">or</span> the_max</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max)</span><br></pre></td></tr></table></figure>
-<p>但是这种做法在某些场景下是不能成立的，且看下面的代码。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">0</span></span><br><span class="line">b = <span class="number">-100</span></span><br><span class="line"><span class="comment"># 下面的代码本来预期输出a的值，结果却得到了b的值</span></span><br><span class="line"><span class="comment"># 因为a的值0在进行逻辑运算时会被视为False来处理</span></span><br><span class="line">print(<span class="literal">True</span> <span class="keyword">and</span> a <span class="keyword">or</span> b)</span><br><span class="line"><span class="comment"># print(a if True else b)</span></span><br></pre></td></tr></table></figure>
-<p>所以在Python 2.5以后引入了三元条件运算符来避免上面的风险（上面代码被注释掉的最后一句话）。那么，问题又来了，上面的代码还可以写得更简短吗？答案是肯定的。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, (a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b) <span class="keyword">if</span> (a <span class="keyword">if</span> a &gt; b <span class="keyword">else</span> b) &gt; c <span class="keyword">else</span> c)</span><br></pre></td></tr></table></figure>
-<p>但是，这样做真的好吗？如此复杂的表达式是不是让代码变得晦涩了很多呢？我们发现，在实际开发中很多开发者都喜欢过度的使用某种语言的特性或语法糖，于是简单的多行代码变成了复杂的单行表达式，这样做真的好吗？这个问题我也不止一次的问过自己，现在我能给出的答案是下面的代码，使用辅助函数。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">the_max</span><span class="params">(x, y)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> x <span class="keyword">if</span> x &gt; y <span class="keyword">else</span> y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, the_max(the_max(a, b), c))</span><br></pre></td></tr></table></figure>
-<p>上面的代码中，我定义了一个辅助函数<code>the_max</code>用来找出参数传入的两个值中较大的那一个，于是下面的输出语句可以通过两次调用<code>the_max</code>函数来找出三个数中的最大值，现在代码的可读性是不是好了很多。用辅助函数来替代复杂的表达式真的是一个不错的选择，关键是比较大小的逻辑转移到这个辅助函数后不仅可以反复调用它，而且还可以进行级联操作。</p>
-<p>当然，很多语言中比较大小的函数根本没有必要自己来实现（通常都是内置函数），Python也是如此。Python内置的max函数利用了Python对可变参数的支持，允许一次性传入多个值或者一个迭代器并找出那个最大值，所以上面讨论的问题在Python中也就是一句话的事，但是从复杂表达式到使用辅助函数简化复杂表达式这个思想是非常值得玩味的，所以分享出来跟大家做一个交流。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = int(input(<span class="string">'a = '</span>))</span><br><span class="line">b = int(input(<span class="string">'b = '</span>))</span><br><span class="line">c = int(input(<span class="string">'c = '</span>))</span><br><span class="line">print(<span class="string">'The max is:'</span>, max(a, b, c))</span><br></pre></td></tr></table></figure>
+            <h2 id="Kubernetes-ConfigMap热更新"><a href="#Kubernetes-ConfigMap热更新" class="headerlink" title="Kubernetes ConfigMap热更新"></a><a href="https://www.kubernetes.org.cn/3138.html" target="_blank" rel="noopener">Kubernetes ConfigMap热更新</a></h2><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>ConfigMap是用来存储配置文件的kubernetes资源对象，所有的配置内容都存储在etcd中</p>
+<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><ol>
+<li><p>文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: env-config</span><br><span class="line">  namespace: default</span><br><span class="line">data:</span><br><span class="line">  log_level: INFO</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap ...</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ol>
+<li><p>evn挂载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">envFrom:</span><br><span class="line">- configMapRef:</span><br><span class="line">    name: env-config</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>volume挂载：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">volumeMounts:</span><br><span class="line">- name: config-volume</span><br><span class="line">  mountPath: /etc/config</span><br><span class="line">volumes:</span><br><span class="line">  - name: config-volume</span><br><span class="line">    configMap:</span><br><span class="line">      name: special-config</span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>更新 ConfigMap 后：</p>
+<p>使用该 ConfigMap 挂载的 Env 不会同步更新<br>使用该 ConfigMap 挂载的 Volume 中的数据需要一段时间（实测大概10秒）才能同步更新<br>ENV 是在容器启动的时候注入的，启动之后 kubernetes 就不会再改变环境变量的值，且同一个 namespace 中的 pod 的环境变量是不断累加的，参考 <a href="https://jimmysong.io/posts/exploring-kubernetes-env-with-docker/" target="_blank" rel="noopener">Kubernetes中的服务发现与docker容器间的环境变量传递源码探究</a>。为了更新容器中使用 ConfigMap 挂载的配置，可以通过滚动更新 pod 的方式来强制重新挂载 ConfigMap，也可以在更新了 ConfigMap 后，先将副本数设置为 0，然后再扩容。</p>
 
           
         
@@ -1111,7 +1260,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/ceph_deploy/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_about_nginx/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -1131,7 +1280,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/ceph_deploy/" class="post-title-link" itemprop="url">ceph 部署与概念</a>
+                <a href="/2018/05/24/python_about_nginx/" class="post-title-link" itemprop="url">nginx配置优化</a>
               
             
           </h2>
@@ -1149,14 +1298,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+              <time title="Erstellt: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
             
 
             
@@ -1171,10 +1320,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
 
                 
                 
@@ -1211,227 +1360,113 @@
       
         
           
-            <p>-存储类型：<br>1.NAS - Network Attached Storage<br>2.SAN - storage area network<br>3.DAS - Direct Attached Storage</p>
-<p>-存储协议：<br>1.NFS –linux<br>2.SMB –windows</p>
-<p>-存储方案：<br>1.PV:persistant volume (node)<br>2.PVC: persistant volume claim (pod)</p>
-<p>理论：best 官网文档。 kuberneters 英文官网文档。<br><a href="https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html</a></p>
-<p>kubernetes持久化存储：<br><a href="https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc</a></p>
-<p>ceph/daemon 部署：<br><a href="https://hub.docker.com/r/ceph/daemon/" target="_blank" rel="noopener">https://hub.docker.com/r/ceph/daemon/</a><br><a href="https://www.jianshu.com/p/f08ed7287416" target="_blank" rel="noopener">https://www.jianshu.com/p/f08ed7287416</a><br><a href="https://www.linuxidc.com/Linux/2017-10/148041.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/148041.htm</a><br><a href="https://www.kubernetes.org.cn/ingress" target="_blank" rel="noopener">https://www.kubernetes.org.cn/ingress</a></p>
-<p>——实践步骤——-<br>体系结构<br>配置文件<br>部署环境配置<br>部署：</p>
-<ol>
-<li>部署 CEPH 的用户<br>ssh user@ceph-server<br>sudo useradd -d /home/{username} -m {username}<br>sudo passwd {username}</li>
-</ol>
-<p>授权<br>echo “{username} ALL = (root) NOPASSWD:ALL” | sudo tee /etc/sudoers.d/{username}<br>sudo chmod 0440 /etc/sudoers.d/{username}</p>
-<ol start="2">
-<li><p>无密码 SSH 登录<br>ssh-keygen<br>ssh-copy-id {username}@node1<br>ssh-copy-id {username}@node2<br>ssh-copy-id {username}@node3</p>
-</li>
-<li><p>deploy mon<br>docker run -it –net=host \<br>–hostname=cephmonhost \<br>–name=cephtimon \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-e MON_IP=172.20.36.231 \<br>-e CEPH_PUBLIC_NETWORK=172.20.36.0/24 \<br>ceph/daemon mon</p>
-</li>
-</ol>
-<p>ctrl+P+Q</p>
-<ol start="4">
-<li>deploy mgr<br>docker run -d –net=host \<br>–hostname=cephmgrhost \<br>–name=cephtimmgr \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>ceph/daemon mgr</li>
-</ol>
-<ol start="5">
-<li>distribut keyring<h1 id="ssh-root-node2-mkdir-p-var-lib-ceph"><a href="#ssh-root-node2-mkdir-p-var-lib-ceph" class="headerlink" title="ssh root@node2 mkdir -p /var/lib/ceph"></a>ssh root@node2 mkdir -p /var/lib/ceph</h1><h1 id="scp-r-etc-ceph-root-node2-etc"><a href="#scp-r-etc-ceph-root-node2-etc" class="headerlink" title="scp -r /etc/ceph root@node2:/etc"></a>scp -r /etc/ceph root@node2:/etc</h1><h1 id="scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph"><a href="#scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph" class="headerlink" title="scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph"></a>scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph</h1></li>
-</ol>
-<ol start="6">
-<li>zap disk<br>docker run -d –privileged=true \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon zap_device</li>
-</ol>
-<ol start="7">
-<li><p>deploy osd<br>docker run -it –net=host \<br>–hostname=cephosdhost \<br>–name=cephtimosd \<br>–pid=host \<br>–privileged=true \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon osd</p>
-</li>
-<li><p>deploy mds</p>
-</li>
-</ol>
-<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>-e CEPHFS_CREATE=1 \<br>ceph/daemon mds</p>
-<ol start="9">
-<li>deploy rgw</li>
-</ol>
-<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>ceph/daemon rgw</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/hadoop_cdh5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/24/hadoop_cdh5/" class="post-title-link" itemprop="url">hadoop 部署</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>基于cloudera,oracle jdk 1.8.0.111, centos 6.8</p>
-<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a><strong>环境配置</strong></h3><ol start="0">
-<li><p>要求：CENTOS6(el6)，主4C8G，从2C4G 20G</p>
-</li>
-<li><p>关闭selinux</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/selinux/config</span><br><span class="line"></span><br><span class="line">SELINUX=disabled</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">2. 配置hostname, host????????????????????</span><br></pre></td></tr></table></figure>
-<p>vi /etc/sysconfig/network<br>vi /etc/hosts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. ssh打通</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line">ssh-keygen -t rsa  </span><br><span class="line">cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys  </span><br><span class="line">scp ~/.ssh/authorized_keys root@datanode1:~/.ssh/</span><br><span class="line">(ssh-copy-id hosts)  </span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. 主从时间同步ntp</span><br><span class="line">```  </span><br><span class="line"># vim /etc/ntp.conf   </span><br><span class="line">driftfile /var/lib/ntp/drift</span><br><span class="line">restrict 127.0.0.1</span><br><span class="line">restrict -6 ::1</span><br><span class="line">restrict default nomodify notrap </span><br><span class="line">server ntp3.aliyun.com prefer </span><br><span class="line">server ntp7.aliyun.com iburst</span><br><span class="line">includefile /etc/ntp/crypto/pw</span><br><span class="line">keys /etc/ntp/keys</span><br><span class="line"></span><br><span class="line"># 时间同步</span><br><span class="line">service ntpd start</span><br><span class="line">chkconfig ntpd on</span><br><span class="line"></span><br><span class="line"># 查看</span><br><span class="line">ntpstat </span><br><span class="line"></span><br><span class="line">synchronised to NTP server (203.107.6.88) at stratum 3 </span><br><span class="line">   time correct to within 40 ms</span><br><span class="line">   polling server every 1024 s</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">5. 装mysql </span><br><span class="line">```  </span><br><span class="line">yum install -y mysql mysql-server mysql-devel </span><br><span class="line">chkconfig mysqld on  </span><br><span class="line">service mysqld start  </span><br><span class="line">create database hive DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">create database oozie DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line">grant all on *.* to root@&quot;%&quot; Identified by &quot;hadoop&quot;;</span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;%&apos; IDENTIFIED BY &apos;hadoop&apos; WITH GRANT OPTION;   </span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">6. 安装java</span><br><span class="line"></span><br><span class="line">注意需要是 oracle java</span><br></pre></td></tr></table></figure></p>
-<p>#openjdk<br>rpm -e –nodeps java-1.6.0-openjdk-1.6.0.0-1.66.1.13.0.el6.x86_64</p>
-<p>#sun jdk<br>yum -y install oracle-j2sdk1.7.x86_64</p>
-<p>vi /etc/profile</p>
-<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><p>export JAVA_HOME=/opt/java<br>export PATH=$JAVA_HOME/bin:$PATH<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[JDBC 参考](http://dev.mysql.com/downloads/connector/j/)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">7. 内核缓存配置</span><br><span class="line"></span><br><span class="line">`vi /etc/sysctl.conf`  </span><br><span class="line">`vm.swappiness=10`</span><br><span class="line">`vi /etc/rc.local` </span><br><span class="line">`echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag`</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">### **部署**</span><br><span class="line"></span><br><span class="line">1. ????CM.??????????5.9??   </span><br><span class="line"></span><br><span class="line">  &gt; Cloudera Manager 5.9??http://archive-primary.cloudera.com/cm5/cm/5/cloudera-manager-el6-cm5.9.0_x86_64.tar.gz  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 ???????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel  </span><br><span class="line"></span><br><span class="line">  &gt; CDH5.9 sha?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1  </span><br><span class="line"></span><br><span class="line">  &gt; manifest ?????http://archive-primary.cloudera.com/cdh5/parcels/5.9.0.23/manifest.json  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2. ????????????????  </span><br><span class="line"></span><br><span class="line">  - ??? tar -zxvf cloudera-manager-el6-cm5.9.0_x86_64.tar.gz -P /opt/cloudera/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha1 CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha</span><br><span class="line">  - mv CDH-5.9.0-1.cdh5.9.0.p0.23-el6.parcel.sha /opt/clourdera/parcel.repo/  </span><br><span class="line">  - mv manifest.json /opt/clourdera/parcel.repo/  </span><br><span class="line"></span><br><span class="line">3. ?????????  </span><br><span class="line">```  </span><br><span class="line">/opt/cloudera/share/cmf/schema/scm_prepare_database.sh mysql cm -hlocalhost -uroot -phdp --scm-host localhost scm scm scm</span><br><span class="line">??????????????/usr/share/cmf</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">4. ????????????????cloudera-daemon, cloudera-server</span><br></pre></td></tr></table></figure></p>
-<p>sudo yum –nogpgcheck localinstall cloudera-manager-daemons-<em>.rpm<br>sudo yum –nogpgcheck localinstall cloudera-manager-server-</em>.rpm<br><code>`</code></p>
-<ol start="7">
-<li>????localhost:7180???????,????????</li>
-</ol>
-<p>??????jdbc???????????oozie hive??????jdbc????????????</p>
-<h3 id><a href="#" class="headerlink" title="??????"></a>??????</h3><ol>
-<li><p>jdk ??????????????????????????????yum repo?????</p>
-</li>
-<li><p>????????????????  </p>
-</li>
-</ol>
-<h3 id="-1"><a href="#-1" class="headerlink" title="????????"></a>????????</h3><blockquote>
-<p><a href="http://www.aboutyun.com/thread-9086-1-1.html" target="_blank" rel="noopener">Cloudera Manager 5 ?? CDH5 ????????????????</a><br><a href="https://www.cloudera.com/documentation/enterprise/latest/topics/install_cm_server.html" target="_blank" rel="noopener">Install Cloudera </a><br><a href="https://www.jianshu.com/p/57179e03795f" target="_blank" rel="noopener">?????CDH5??????</a><br><a href="https://blog.csdn.net/qq_30004245/article/details/75735275?locationNum=9&amp;fps=1" target="_blank" rel="noopener">Cloudera Hadoop???????????</a><br><a href="https://zhuanlan.zhihu.com/p/25533211" target="_blank" rel="noopener">??CDH5??hadoop???</a><br><a href="https://blog.csdn.net/hliq5399/article/details/78193113#t5" target="_blank" rel="noopener">??????????Hadoop??????</a><br><a href="https://www.jianshu.com/p/72dc1c591647" target="_blank" rel="noopener">CDH5???????????</a></p>
+            <h2 id="nginx配置优化"><a href="#nginx配置优化" class="headerlink" title="nginx配置优化"></a>nginx配置优化</h2><ol>
+<li>全局<blockquote>
+<p>worker_processes  4; nginx运行工作进程个数，一般设置cpu的核心或者核心数x2</p>
 </blockquote>
+</li>
+</ol>
+<blockquote>
+<p>worker_rlimit_nofile 65535; 这个指令是指当一个nginx进程打开的最多文件描述符数目，理论值应该是最多打开文件数（ulimit -n）与nginx进程数相除，但是nginx分配请求并不是那么均匀，所以最好与ulimit -n的值保持一致。</p>
+</blockquote>
+<ol start="2">
+<li>Nginx事件处理模型<blockquote>
+<p>nginx采用epoll事件模型，处理效率高</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>work_connections是单个worker进程允许客户端最大连接数，这个数值一般根据服务器性能和内存来制定，实际最大值就是worker进程数乘以work_connections</p>
+</blockquote>
+<ol start="3">
+<li>开启高效传输模式<blockquote>
+<p>sendfile on；//开启高效文件传输模式，sendfile指令指定nginx是否调用sendfile函数来输出文件，对于普通应用设为 on，如果用来进行下载等应用磁盘IO重负载应用，可设置为off，以平衡磁盘与网络I/O处理速度，降低系统的负载。sendfile()可以在磁盘和TCP socket之间互相拷贝数据(或任意两个文件描述符)。Pre-sendfile是传送数据之前在用户空间申请数据缓冲区。之后用read()将数据从文件拷贝到这个缓冲区，write()将缓冲区数据写入网络。sendfile()是立即将数据从磁盘读到OS缓存。因为这种拷贝是在内核完成的，sendfile()要比组合read()和write()以及打开关闭丢弃缓冲更加有效(更多有关于sendfile)</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>tcp_nopush on；必须在sendfile开启模式才有效，防止网路阻塞，积极的减少网络报文段的数量（将响应头和正文的开始部分一起发送，而不一个接一个的发送。）</p>
+</blockquote>
+<ol start="4">
+<li>限制连接超时时间</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">keepalived_timeout客户端连接保持会话超时时间，超过这个时间，服务器断开这个链接</span><br><span class="line"></span><br><span class="line">tcp_nodelay；也是防止网络阻塞，不过要包涵在keepalived参数才有效</span><br><span class="line"></span><br><span class="line">client_header_buffer_size 4k;</span><br><span class="line">客户端请求头部的缓冲区大小，这个可以根据你的系统分页大小来设置，一般一个请求头的大小不会超过 1k，不过由于一般系统分页都要大于1k，所以这里设置为分页大小。分页大小可以用命令getconf PAGESIZE取得。</span><br><span class="line">open_file_cache max=102400 inactive=20s;</span><br><span class="line">这个将为打开文件指定缓存，默认是没有启用的，max指定缓存数量，建议和打开文件</span><br><span class="line">数一致，inactive 是指经过多长时间文件没被请求后删除缓存。</span><br><span class="line">open_file_cache_valid 30s;</span><br><span class="line">这个是指多长时间检查一次缓存的有效信息。</span><br><span class="line">open_file_cache_min_uses 1;</span><br><span class="line">open_file_cache指令中的inactive 参数时间内文件的最少使用次数，如果超过这个数字，文</span><br><span class="line">件描述符一直是在缓存中打开的，如上例，如果有一个文件在inactive 时间内一次没被使用，它将被移除。</span><br><span class="line"></span><br><span class="line">client_header_timeout设置请求头的超时时间。我们也可以把这个设置低些，如果超过这个时间没有发送任何数据，nginx将返回request time out的错误</span><br><span class="line"></span><br><span class="line">client_body_timeout设置请求体的超时时间。我们也可以把这个设置低些，超过这个时间没有发送任何数据，和上面一样的错误提示</span><br><span class="line"></span><br><span class="line">reset_timeout_connection 告诉nginx关闭不响应的客户端连接。这将会释放那个客户端所占有的内存空间。</span><br><span class="line"></span><br><span class="line">send_timeout响应客户端超时时间，这个超时时间仅限于两个活动之间的时间，如果超过这个时间，客户端没有任何活动，nginx关闭连接</span><br><span class="line"></span><br><span class="line">server_tokens  并不会让nginx执行的速度更快，但它可以关闭在错误页面中的nginx版本数字，这样对于安全性是有好处的。</span><br><span class="line"></span><br><span class="line">client_max_body_size上传文件大小限制</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li><p>fastcgi调优</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">fastcgi_connect_timeout 600; #指定连接到后端FastCGI的超时时间。</span><br><span class="line"></span><br><span class="line">fastcgi_send_timeout 600; #向FastCGI传送请求的超时时间。</span><br><span class="line"></span><br><span class="line">fastcgi_read_timeout 600; #指定接收FastCGI应答的超时时间。</span><br><span class="line"></span><br><span class="line">fastcgi_buffer_size 64k; #指定读取FastCGI应答第一部分需要用多大的缓冲区，默认的缓冲区大小为fastcgi_buffers指令中的每块大小，可以将这个值设置更小。</span><br><span class="line"></span><br><span class="line">fastcgi_buffers 4 64k; #指定本地需要用多少和多大的缓冲区来缓冲FastCGI的应答请求，如果一个php脚本所产生的页面大小为256KB，那么会分配4个64KB的缓冲区来缓存，如果页面大小大于256KB，那么大于256KB的部分会缓存到fastcgi_temp_path指定的路径中，但是这并不是好方法，因为内存中的数据处理速度要快于磁盘。一般这个值应该为站点中php脚本所产生的页面大小的中间值，如果站点大部分脚本所产生的页面大小为256KB，那么可以把这个值设置为“8 32K”、“4 64k”等。</span><br><span class="line"></span><br><span class="line">fastcgi_busy_buffers_size 128k; #建议设置为fastcgi_buffers的两倍，繁忙时候的buffer</span><br><span class="line"></span><br><span class="line">fastcgi_temp_file_write_size 128k;  #在写入fastcgi_temp_path时将用多大的数据块，默认值是fastcgi_buffers的两倍，该数值设置小时若负载上来时可能报502BadGateway</span><br><span class="line"></span><br><span class="line">fastcgi_temp_path #缓存临时目录</span><br><span class="line"></span><br><span class="line">fastcgi_intercept_errors on;#这个指令指定是否传递4xx和5xx错误信息到客户端，或者允许nginx使用error_page处理错误信息。</span><br><span class="line"></span><br><span class="line">注：静态文件不存在会返回404页面，但是php页面则返回空白页！！</span><br><span class="line"></span><br><span class="line">fastcgi_cache_path /usr/local/nginx1.10/fastcgi_cachelevels=1:2 keys_zone=cache_fastcgi:128minactive=1d max_size=10g;# fastcgi_cache缓存目录，可以设置目录层级，比如1:2会生成16*256个子目录，cache_fastcgi是这个缓存空间的名字，cache是用多少内存（这样热门的内容nginx直接放内存，提高访问速度），inactive表示默认失效时间，如果缓存数据在失效时间内没有被访问,将被删除，max_size表示最多用多少硬盘空间。</span><br><span class="line"></span><br><span class="line">fastcgi_cache cache_fastcgi;  #表示开启FastCGI缓存并为其指定一个名称。开启缓存非常有用，可以有效降低CPU的负载，并且防止502的错误放生。cache_fastcgi为proxy_cache_path指令创建的缓存区名称</span><br><span class="line"></span><br><span class="line">fastcgi_cache_valid 200 302 1h; #用来指定应答代码的缓存时间，实例中的值表示将200和302应答缓存一小时，要和fastcgi_cache配合使用</span><br><span class="line"></span><br><span class="line">fastcgi_cache_valid 301 1d;     #将301应答缓存一天</span><br><span class="line"></span><br><span class="line">fastcgi_cache_valid any 1m;     #将其他应答缓存为1分钟</span><br><span class="line"></span><br><span class="line">fastcgi_cache_min_uses 1;       #该指令用于设置经过多少次请求的相同URL将被缓存。</span><br><span class="line"></span><br><span class="line">fastcgi_cache_key http://$host$request_uri; #该指令用来设置web缓存的Key值,nginx根据Key值md5哈希存储.一般根据$host(域名)、$request_uri(请求的路径)等变量组合成proxy_cache_key 。</span><br><span class="line"></span><br><span class="line">fastcgi_pass #指定FastCGI服务器监听端口与地址，可以是本机或者其它</span><br><span class="line"></span><br><span class="line">总结：</span><br><span class="line"></span><br><span class="line">nginx的缓存功能有：proxy_cache / fastcgi_cache</span><br><span class="line"></span><br><span class="line">proxy_cache的作用是缓存后端服务器的内容，可能是任何内容，包括静态的和动态。</span><br><span class="line">fastcgi_cache的作用是缓存fastcgi生成的内容，很多情况是php生成的动态的内容。</span><br><span class="line">proxy_cache缓存减少了nginx与后端通信的次数，节省了传输时间和后端宽带。</span><br><span class="line">fastcgi_cache缓存减少了nginx与php的通信的次数，更减轻了php和数据库(mysql)的压力。</span><br><span class="line"></span><br><span class="line"> CGI是为了保证web server传递过来的数据是标准格式的，方便CGI程序的编写者。Fastcgi是用来提高CGI程序性能的。php-fpm是fastcgi进程的管理器，用来管理fastcgi进程的</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>gzip压缩传输优化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">使用gzip压缩功能，可能为我们节约带宽，加快传输速度，有更好的体验，也为我们节约成本，所以说这是一个重点。</span><br><span class="line"></span><br><span class="line">Nginx启用压缩功能需要你来ngx_http_gzip_module模块，apache使用的是mod_deflate</span><br><span class="line"></span><br><span class="line">一般我们需要压缩的内容有：文本，js，html，css，对于图片，视频，flash什么的不压缩，同时也要注意，我们使用gzip的功能是需要消耗CPU的！</span><br><span class="line"></span><br><span class="line">gzip on;</span><br><span class="line"></span><br><span class="line">gzip_min_length 2k;</span><br><span class="line"></span><br><span class="line">gzip_buffers    4 32k;</span><br><span class="line"></span><br><span class="line">gzip_http_version 1.1;</span><br><span class="line"></span><br><span class="line">gzip_comp_level 6;</span><br><span class="line"></span><br><span class="line">gzip_typestext/plain text/css text/javascriptapplication/json application/javascript application/x-javascriptapplication/xml;</span><br><span class="line"></span><br><span class="line">gzip_vary on;</span><br><span class="line"></span><br><span class="line">gzip_proxied any;</span><br><span class="line"></span><br><span class="line">gzip on;    #开启压缩功能</span><br><span class="line"></span><br><span class="line">gzip_min_length 1k; #设置允许压缩的页面最小字节数，页面字节数从header头的Content-Length中获取，默认值是0，不管页面多大都进行压缩，建议设置成大于1K，如果小与1K可能会越压越大。</span><br><span class="line"></span><br><span class="line">gzip_buffers 4 32k; #压缩缓冲区大小，表示申请4个单位为32K的内存作为压缩结果流缓存，默认值是申请与原始数据大小相同的内存空间来存储gzip压缩结果。</span><br><span class="line"></span><br><span class="line">gzip_http_version 1.1; #压缩版本，用于设置识别HTTP协议版本，默认是1.1，目前大部分浏览器已经支持GZIP解压，使用默认即可</span><br><span class="line"></span><br><span class="line">gzip_comp_level 6; #压缩比例，用来指定GZIP压缩比，1压缩比最小，处理速度最快，9压缩比最大，传输速度快，但是处理慢，也比较消耗CPU资源。</span><br><span class="line"></span><br><span class="line">gzip_types text/css text/xml application/javascript; #用来指定压缩的类型，‘text/html’类型总是会被压缩。</span><br><span class="line"></span><br><span class="line">默认值: gzip_types text/html (默认不对js/css文件进行压缩)</span><br><span class="line"># 压缩类型，匹配MIME��型进行压缩</span><br><span class="line"># 不能用通配符 text/*</span><br><span class="line"># (无论是否指定)text/html默认已经压缩 </span><br><span class="line"># 设置哪压缩种文本文件可参考 conf/mime.types</span><br><span class="line"></span><br><span class="line">gzip_vary on;  #varyheader支持，改选项可以让前端的缓存服务器缓存经过GZIP压缩的页面，例如用Squid缓存经过nginx压缩的数据</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>expires缓存调优</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">缓存，主要针对于图片，css，js等元素更改机会比较少的情况下使用，特别是图片，占用带宽大，我们完全可以设置图片在浏览器本地缓存365d，css，js，html可以缓存个10来天，这样用户第一次打开加载慢一点，第二次，就非常快了！缓存的时候，我们需要将需要缓存的拓展名列出来， Expires缓存配置在server字段里面</span><br><span class="line"></span><br><span class="line">location ~* \.(ico|jpe?g|gif|png|bmp|swf|flv)$ &#123;</span><br><span class="line"></span><br><span class="line">  expires 30d;</span><br><span class="line"></span><br><span class="line">  #log_not_found off;</span><br><span class="line"></span><br><span class="line">  access_log off;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location ~* \.(js|css)$ &#123;</span><br><span class="line"></span><br><span class="line">  expires 7d;</span><br><span class="line"></span><br><span class="line">  log_not_found off;</span><br><span class="line"></span><br><span class="line">  access_log off;</span><br><span class="line"></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">注：log_not_found off;是否在error_log中记录不存在的错误。默认是。</span><br><span class="line"></span><br><span class="line">总结：</span><br><span class="line"></span><br><span class="line">expire功能优点 （1）expires可以降低网站购买的带宽，节约成本（2）同时提升用户访问体验（3）减轻服务的压力，节约服务器成本，是web服务非常重要的功能。 expire功能缺点：被缓存的页面或数据更新了，用户看到的可能还是旧的内容，反而影响用户体验。解决办法：第一个缩短缓存时间，例如：1天，但不彻底，除非更新频率大于1天；第二个对缓存的对象改名。</span><br><span class="line"></span><br><span class="line">网站不希望被缓存的内容 1）网站流量统计工具2）更新频繁的文件（google的logo）</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>防盗链</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">防止别人直接从你网站引用图片等链接，消耗了你的资源和网络流量，那么我们的解决办法由几种： 1：水印，品牌宣传，你的带宽，服务器足够 2：防火墙，直接控制，前提是你知道IP来源 3：防盗链策略下面的方法是直接给予404的错误提示</span><br><span class="line"></span><br><span class="line">location ~*^.+\.(jpg|gif|png|swf|flv|wma|wmv|asf|mp3|mmf|zip|rar)$ &#123;</span><br><span class="line"></span><br><span class="line">    valid_referers noneblocked  www.benet.com benet.com;</span><br><span class="line"></span><br><span class="line">    if($invalid_referer) &#123;</span><br><span class="line"></span><br><span class="line">      #return 302  http://www.benet.com/img/nolink.jpg;</span><br><span class="line"></span><br><span class="line">      return 404;</span><br><span class="line"></span><br><span class="line">        break;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    access_log off;</span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">参数可以使如下形式：</span><br><span class="line">none 意思是不存在的Referer头(表示空的，也就是直接访问，比如直接在浏览器打开一个图片)</span><br><span class="line">blocked 意为根据防火墙伪装Referer头，如：“Referer:XXXXXXX”。</span><br><span class="line">server_names 为一个或多个服务器的列表，0.5.33版本以后可以在名称中使用“*”通配符。</span><br></pre></td></tr></table></figure>
+<ol start="9">
+<li>内核参数优化</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">fs.file-max = 999999：这个参数表示进程（比如一个worker进程）可以同时打开的最大句柄数，这个参数直线限制最大并发连接数，需根据实际情况配置。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_max_tw_buckets = 6000 #这个参数表示操作系统允许TIME_WAIT套接字数量的最大值，如果超过这个数字，TIME_WAIT套接字将立刻被清除并打印警告信息。该参数默认为180000，过多的TIME_WAIT套接字会使Web服务器变慢。</span><br><span class="line"></span><br><span class="line">注：主动关闭连接的服务端会产生TIME_WAIT状态的连接</span><br><span class="line">net.ipv4.ip_local_port_range = 1024 65000 #允许系统打开的端口范围。</span><br><span class="line">net.ipv4.tcp_tw_recycle = 1#启用timewait快速回收。</span><br><span class="line">net.ipv4.tcp_tw_reuse = 1#开启重用。允许将TIME-WAIT sockets重新用于新的TCP连接。这对于服务器来说很有意义，因为服务器上总会有大量TIME-WAIT状态的连接。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_keepalive_time = 30：这个参数表示当keepalive启用时，TCP发送keepalive消息的频度。默认是2小时，若将其设置的小一些，可以更快地清理无效的连接。</span><br><span class="line">net.ipv4.tcp_syncookies = 1#开启SYN Cookies，当出现SYN等待队列溢出时，启用cookies来处理。</span><br><span class="line">net.core.somaxconn = 40960 #web 应用中 listen 函数的 backlog 默认会给我们内核参数的 net.core.somaxconn 限制到128，而nginx定义的NGX_LISTEN_BACKLOG 默认为511，所以有必要调整这个值。</span><br><span class="line"></span><br><span class="line">注：对于一个TCP连接，Server与Client需要通过三次握手来建立网络连接.当三次握手成功后,我们可以看到端口的状态由LISTEN转变为ESTABLISHED,接着这条链路上就可以开始传送数据了.每一个处于监听(Listen)状态的端口,都有自己的监听队列.监听队列的长度与如somaxconn参数和使用该端口的程序中listen()函数有关</span><br><span class="line"></span><br><span class="line">somaxconn参数:定义了系统中每一个端口最大的监听队列的长度,这是个全局的参数,默认值为128，对于一个经常处理新连接的高负载 web服务环境来说，默认的 128 太小了。大多数环境这个值建议增加到 1024 或者更多。大的侦听队列对防止拒绝服务 DoS 攻击也会有所帮助。</span><br><span class="line">net.core.netdev_max_backlog = 262144 #每个网络接口接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目。</span><br><span class="line">net.ipv4.tcp_max_syn_backlog = 262144 #这个参数标示TCP三次握手建立阶段接受SYN请求队列的最大长度，默认为1024，将其设置得大一些可以使出现Nginx繁忙来不及accept新连接的情况时，Linux不至于丢失客户端发起的连接请求。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_rmem = 10240 87380 12582912#这个参数定义了TCP接受缓存（用于TCP接受滑动窗口）的最小值、默认值、最大值。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_wmem = 10240 87380 12582912：这个参数定义了TCP发送缓存（用于TCP发送滑动窗口）的最小值、默认值、最大值。</span><br><span class="line">net.core.rmem_default = 6291456：这个参数表示内核套接字接受缓存区默认的大小。</span><br><span class="line"></span><br><span class="line">net.core.wmem_default = 6291456：这个参数表示内核套接字发送缓存区默认的大小。</span><br><span class="line"></span><br><span class="line">net.core.rmem_max = 12582912：这个参数表示内核套接字接受缓存区的最大大小。</span><br><span class="line"></span><br><span class="line">net.core.wmem_max = 12582912：这个参数表示内核套接字发送缓存区的最大大小。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_syncookies = 1：该参数与性能无关，用于解决TCP的SYN攻击。</span><br></pre></td></tr></table></figure>
+<p>下面贴一个完整的内核优化设置：</p>
+<p>fs.file-max = 999999</p>
+<p>net.ipv4.ip_forward = 0</p>
+<p>net.ipv4.conf.default.rp_filter = 1</p>
+<p>net.ipv4.conf.default.accept_source_route = 0</p>
+<p>kernel.sysrq = 0</p>
+<p>kernel.core_uses_pid = 1</p>
+<p>net.ipv4.tcp_syncookies = 1</p>
+<p>kernel.msgmnb = 65536</p>
+<p>kernel.msgmax = 65536</p>
+<p>kernel.shmmax = 68719476736</p>
+<p>kernel.shmall = 4294967296</p>
+<p>net.ipv4.tcp_max_tw_buckets = 6000</p>
+<p>net.ipv4.tcp_sack = 1</p>
+<p>net.ipv4.tcp_window_scaling = 1</p>
+<p>net.ipv4.tcp_rmem = 10240 87380 12582912</p>
+<p>net.ipv4.tcp_wmem = 10240 87380 12582912</p>
+<p>net.core.wmem_default = 8388608</p>
+<p>net.core.rmem_default = 8388608</p>
+<p>net.core.rmem_max = 16777216</p>
+<p>net.core.wmem_max = 16777216</p>
+<p>net.core.netdev_max_backlog = 262144</p>
+<p>net.core.somaxconn = 40960</p>
+<p>net.ipv4.tcp_max_orphans = 3276800</p>
+<p>net.ipv4.tcp_max_syn_backlog = 262144</p>
+<p>net.ipv4.tcp_timestamps = 0</p>
+<p>net.ipv4.tcp_synack_retries = 1</p>
+<p>net.ipv4.tcp_syn_retries = 1</p>
+<p>net.ipv4.tcp_tw_recycle = 1</p>
+<p>net.ipv4.tcp_tw_reuse = 1</p>
+<p>net.ipv4.tcp_mem = 94500000 915000000 927000000</p>
+<p>net.ipv4.tcp_fin_timeout = 1</p>
+<p>net.ipv4.tcp_keepalive_time = 30</p>
+<p>net.ipv4.ip_local_port_range = 1024 65000</p>
+<p>执行sysctl  -p使内核修改生效</p>
+<p>（10）关于系统连接数的优化：</p>
+<p>linux 默认值 open files为1024</p>
+<p>#ulimit -n</p>
+<p>1024</p>
+<p>说明server只允许同时打开1024个文件</p>
+<p>使用ulimit -a 可以查看当前系统的所有限制值，使用ulimit -n 可以查看当前的最大打开文件数。</p>
+<p>新装的linux 默认只有1024 ，当作负载较大的服务器时，很容易遇到error: too many open files。因此，需要将其改大</p>
+<p>在/etc/security/limits.conf最后增加：</p>
+<ul>
+<li><p>soft    nofile          65535</p>
+</li>
+<li><p>hard    nofile          65535</p>
+</li>
+<li><p>soft    noproc          65535</p>
+</li>
+<li><p>hard    noproc          65535</p>
+</li>
+</ul>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
+<li><a href="https://www.cnblogs.com/huamei2008/p/8747706.html" target="_blank" rel="noopener">Nginx配置性能优化</a></li>
+<li><a href="https://www.cnblogs.com/paul8339/p/6943396.html" target="_blank" rel="noopener">Nginx配置项优化详解【转】</a></li>
+<li><a href="https://blog.csdn.net/aoshilang2249/article/details/68940698" target="_blank" rel="noopener">nginx 关于Nginx的一些优化(突破十万并发)</a></li>
+</ol>
 
           
         
@@ -1526,14 +1561,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+              <time title="Erstellt: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
             
 
             
@@ -1548,7 +1583,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
@@ -1692,14 +1727,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+              <time title="Erstellt: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
             
 
             
@@ -1714,7 +1749,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
@@ -1834,7 +1869,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_authorization/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/ceph_deploy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -1854,7 +1889,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/k8s_authorization/" class="post-title-link" itemprop="url">k8s权限管理</a>
+                <a href="/2018/05/24/ceph_deploy/" class="post-title-link" itemprop="url">ceph 部署与概念</a>
               
             
           </h2>
@@ -1872,14 +1907,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+              <time title="Erstellt: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
             
 
             
@@ -1894,10 +1929,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
 
                 
                 
@@ -1934,108 +1969,44 @@
       
         
           
-            <p>补充：<br><a href="https://www.cnblogs.com/cf532088799/p/7977083.html" target="_blank" rel="noopener">https://www.cnblogs.com/cf532088799/p/7977083.html</a></p>
-<h2 id="原理概述："><a href="#原理概述：" class="headerlink" title="原理概述："></a>原理概述：</h2><p>K8s授权管理分用户认证和授权两部分，授权根据RBAC角色控制方法为不同用户配置不同角色完成权限管理  </p>
-<h2 id="管理组件"><a href="#管理组件" class="headerlink" title="管理组件"></a>管理组件</h2><p>RBAC 是让用户能够访问 Kubernetes API 资源的授权方式。  </p>
-<h2 id="认证顺序"><a href="#认证顺序" class="headerlink" title="认证顺序"></a>认证顺序</h2><ol>
-<li>用户认证  </li>
-<li>权限认证  </li>
+            <p>-存储类型：<br>1.NAS - Network Attached Storage<br>2.SAN - storage area network<br>3.DAS - Direct Attached Storage</p>
+<p>-存储协议：<br>1.NFS –linux<br>2.SMB –windows</p>
+<p>-存储方案：<br>1.PV:persistant volume (node)<br>2.PVC: persistant volume claim (pod)</p>
+<p>理论：best 官网文档。 kuberneters 英文官网文档。<br><a href="https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/3f2d05c34b35eefdc9d333e7.html</a></p>
+<p>kubernetes持久化存储：<br><a href="https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1575913413903593&amp;wfr=spider&amp;for=pc</a></p>
+<p>ceph/daemon 部署：<br><a href="https://hub.docker.com/r/ceph/daemon/" target="_blank" rel="noopener">https://hub.docker.com/r/ceph/daemon/</a><br><a href="https://www.jianshu.com/p/f08ed7287416" target="_blank" rel="noopener">https://www.jianshu.com/p/f08ed7287416</a><br><a href="https://www.linuxidc.com/Linux/2017-10/148041.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/148041.htm</a><br><a href="https://www.kubernetes.org.cn/ingress" target="_blank" rel="noopener">https://www.kubernetes.org.cn/ingress</a></p>
+<p>——实践步骤——-<br>体系结构<br>配置文件<br>部署环境配置<br>部署：</p>
+<ol>
+<li>部署 CEPH 的用户<br>ssh user@ceph-server<br>sudo useradd -d /home/{username} -m {username}<br>sudo passwd {username}</li>
 </ol>
-<h2 id="用户类型"><a href="#用户类型" class="headerlink" title="用户类型"></a>用户类型</h2><p>k8s里面有两种用户，一种是User，一种就是service account，User给人用的，service account给进程用的，让进程有相关的权限。<br>如dasboard就是一个进程，我们就可以创建一个service account给它，让它去访问k8s。</p>
-<h2 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h2><p>角色是一系列的权限的集合，例如一个角色可以包含读取 Pod 的权限和列出 Pod 的权限， ClusterRole 跟 Role 类似，但是可以在集群中到处使用（ Role 是 namespace 一级的）。</p>
-<p>角色绑定 RoleBinding 把角色映射到用户，从而让这些用户继承角色在 namespace 中的权限。ClusterRoleBinding 让用户继承 ClusterRole 在整个集群中的权限。</p>
-<h2 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a>操作流程：</h2><ol>
-<li><p>创建用户，serviceaccount 或 user. user需要自设token。请看下面详细操作  </p>
-</li>
-<li><p>创建角色，分为 ClusterRole, Role. 指定操作资源及操作类型（增删改查等）  </p>
-</li>
-<li><p>绑定用户与角色，kind: ClusterRoleBinding or RoleBinding   </p>
-</li>
-</ol>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><blockquote>
-<p><a href="https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true</a><br><a href="https://www.kubernetes.org.cn/3238.html" target="_blank" rel="noopener">https://www.kubernetes.org.cn/3238.html</a><br><a href="https://kubernetes.io/docs/admin/authentication/" target="_blank" rel="noopener">https://kubernetes.io/docs/admin/authentication/</a><br><a href="http://www.infoq.com/cn/articles/Kubernetes-API" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/Kubernetes-API</a><br><a href="https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/" target="_blank" rel="noopener">https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/</a><br><a href="https://blog.csdn.net/qq_34463875/article/details/78728041" target="_blank" rel="noopener">https://blog.csdn.net/qq_34463875/article/details/78728041</a></p>
-</blockquote>
-<h2 id="更多知识点："><a href="#更多知识点：" class="headerlink" title="更多知识点："></a>更多知识点：</h2><ul>
-<li><p>集群用户权限管理： 内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod<br>（如：dashboard）的权限来访问。serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
-</li>
-<li><p>在 pod 创建之初 service account 就必须已经存在，否则创建将被拒绝设置非默认的 service account，<br>只需要在 pod 的spec.serviceAccountName 字段中将name设置为您想要用的 service account 名字即可。<br>不能更新已创建的 pod 的 service account。</p>
-</li>
-<li><p>可以在现有的serviceaccount 中增加imagePullSecrets 使pod构建镜像时在当前命名空间默认引用私有仓库的认证。</p>
-</li>
-<li><p>内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod的权限来访问。<br>serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
-</li>
-<li><p>kubeconfig namespace 设置可以限定角色可访问的命名空间，若角色权限过大，binding中也可以进一步限定。</p>
-</li>
-</ul>
-<h2 id="案例："><a href="#案例：" class="headerlink" title="案例："></a>案例：</h2><ol>
-<li>service account(sc)案例   </li>
-</ol>
-<p>进程用户（service account）权限管理，是专门为进程用户创建，也可以达到权限管理的目的，然而建议是同一个进程多个用户。作为示例我们这里部署一个进程权限管理作为演示。部署流程如下：</p>
-<p>1). 创建sc   </p>
-<pre><code>apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    k8s-app: admin-dashboard
-  name: admin-dashboard
-  namespace: kube-system
-</code></pre><p>2). 创建角色</p>
-<pre><code>apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  #无命名空间，clusterrole用于全集群
-  name: admin-dashboard-minimal
-rules:
-- apiGroups: [&quot;&quot;]
-  resources: [&quot;secrets&quot;]
-  verbs: [&quot;create&quot;]
-- apiGroups: [&quot;&quot;, &quot;extensions&quot;, &quot;apps&quot;]
-  resources: [&quot;deployments&quot;, &quot;pods&quot;, &quot;services&quot;]
-  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;, &quot;delete&quot;]
-</code></pre><p>3). 绑定角色</p>
-<pre><code>apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: admin-dashboard-rolebinding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: admin-dashboard-minimal
-subjects:
-- kind: ServiceAccount
-  name: admin-dashboard
-  namespace: kube-system
-</code></pre><p>4). kubernetes dashboard必须以nodeport方式部署。</p>
+<p>授权<br>echo “{username} ALL = (root) NOPASSWD:ALL” | sudo tee /etc/sudoers.d/{username}<br>sudo chmod 0440 /etc/sudoers.d/{username}</p>
 <ol start="2">
-<li>普通用户案例</li>
+<li><p>无密码 SSH 登录<br>ssh-keygen<br>ssh-copy-id {username}@node1<br>ssh-copy-id {username}@node2<br>ssh-copy-id {username}@node3</p>
+</li>
+<li><p>deploy mon<br>docker run -it –net=host \<br>–hostname=cephmonhost \<br>–name=cephtimon \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-e MON_IP=172.20.36.231 \<br>-e CEPH_PUBLIC_NETWORK=172.20.36.0/24 \<br>ceph/daemon mon</p>
+</li>
 </ol>
-<p>普通用户权限管理：k8s APIserver不支持普通用户创建，只需生成token（# head -c 16 /dev/urandom | od -An -t x| tr -d ‘ ‘）,<br>将该用户的token追加到kuberentesAPI启动参数中指定的token（通常在/etc/kubernetes/token.csv）文件中即可。设置用户ssh认证，<br>根据绑定的角色权限并追加到kubeconfig文件中，供客户端访问。终端命令行可以通过不同用户用不同上下文达到访问权限管理。<br>这个上下文可以转换成第三方用户管理平台，Header追加。authorization Bearer token 来访问。注意：普通用户需要重启（重新部署）apiserver。</p>
-<p>1). 创建用户token并录入token指定tom用户名。任何Linux终端执行如下（可选）：  </p>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">	head -c 16 /dev/urandom | od -An -t x| tr -d &apos; &apos;  </span><br><span class="line">	```  </span><br><span class="line">	生成的token以&apos;token,user,uid,&quot;group1,group2,group3&quot;&apos;格式写入到其中一个master节点`/etc/kubernetes/ssl/token.csv`文件中。uid不重复的编号即可。如：716c8d3cd0e75dc25d1eb758e4635d39, tom, 10002, dev1    </span><br><span class="line">	然后重启apiserver以是当前新加的token生效，然后继续以下操作。</span><br><span class="line">	说明：此步骤可选, 2）中命令可生成用户</span><br><span class="line"></span><br><span class="line">2). SSH认证并绑定tom：  </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	### 生成证书</span><br><span class="line">	openssl genrsa -out employee.key 2048</span><br><span class="line">	openssl req -new -key employee.key -out employee.csr -subj &quot;/CN=tom/O=dev1&quot;  #用户tom，分组dev1</span><br><span class="line">	openssl x509 -req -in employee.csr -CA /etc/kubernetes/ssl/k8s-root-ca.pem -CAkey /etc/kubernetes/ssl/k8s-root-ca-key.pem -CAcreateserial -out employee.crt -days 5000</span><br><span class="line">	</span><br><span class="line">	### 将证书和tom用户绑定</span><br><span class="line">	kubectl config set-credentials tom --client-certificate=employee.crt --client-key=employee.key </span><br><span class="line">	kubectl config set-context employee-context --cluster=kubernetes --namespace=shelve-mgr --user=tom</span><br><span class="line">	</span><br><span class="line">	## 可用kubectl config view 查看添加是否成功。cluster, context, user</span><br><span class="line"></span><br><span class="line">3). 创建角色   </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	kind: Role</span><br><span class="line">	apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">	metadata:</span><br><span class="line">	  namespace: shelve-mgr</span><br><span class="line">	  name: employee</span><br><span class="line">	rules:</span><br><span class="line">	- apiGroups: [&quot;&quot;]</span><br><span class="line">	  resources: [&quot;pods&quot;]</span><br><span class="line">	  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;]</span><br></pre></td></tr></table></figure>
-</code></pre><p>4). 角色绑定   </p>
-<pre><code>```
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: employee-role-binding
-  namespace: shelve-mgr
-subjects:
-- kind: User
-  name: tom
-roleRef:
-  kind: Role
-  name: employee
-  apiGroup: &quot;&quot;
-```  
-</code></pre><p>完成用户配置，现在用户终端受当前角色权限限制。普通用户需要重启apiserver后方可生效。</p>
-<p>1). 配置kubectl默认终端用户  </p>
-<pre><code>```  
-# 验证
-kubectl --config=employee-context get pods
-# 设置默认会话上下文
-kubectl config use-context employee-context
-```  
-</code></pre><p>2). 其他客户端及api请求以header中携带 Authorization: Bearer + token方式访问。</p>
+<p>ctrl+P+Q</p>
+<ol start="4">
+<li>deploy mgr<br>docker run -d –net=host \<br>–hostname=cephmgrhost \<br>–name=cephtimmgr \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>ceph/daemon mgr</li>
+</ol>
+<ol start="5">
+<li>distribut keyring<h1 id="ssh-root-node2-mkdir-p-var-lib-ceph"><a href="#ssh-root-node2-mkdir-p-var-lib-ceph" class="headerlink" title="ssh root@node2 mkdir -p /var/lib/ceph"></a>ssh root@node2 mkdir -p /var/lib/ceph</h1><h1 id="scp-r-etc-ceph-root-node2-etc"><a href="#scp-r-etc-ceph-root-node2-etc" class="headerlink" title="scp -r /etc/ceph root@node2:/etc"></a>scp -r /etc/ceph root@node2:/etc</h1><h1 id="scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph"><a href="#scp-r-var-lib-ceph-bootstrap-root-node2-var-lib-ceph" class="headerlink" title="scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph"></a>scp -r /var/lib/ceph/bootstrap* root@node2:/var/lib/ceph</h1></li>
+</ol>
+<ol start="6">
+<li>zap disk<br>docker run -d –privileged=true \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon zap_device</li>
+</ol>
+<ol start="7">
+<li><p>deploy osd<br>docker run -it –net=host \<br>–hostname=cephosdhost \<br>–name=cephtimosd \<br>–pid=host \<br>–privileged=true \<br>-v /etc/ceph:/etc/ceph \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /dev/:/dev/ \<br>-e OSD_DEVICE=/dev/sdb \<br>ceph/daemon osd</p>
+</li>
+<li><p>deploy mds</p>
+</li>
+</ol>
+<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>-e CEPHFS_CREATE=1 \<br>ceph/daemon mds</p>
+<ol start="9">
+<li>deploy rgw</li>
+</ol>
+<p>docker run -d –net=host \<br>-v /var/lib/ceph/:/var/lib/ceph/ \<br>-v /etc/ceph:/etc/ceph \<br>ceph/daemon rgw</p>
 
           
         
@@ -2092,7 +2063,7 @@ kubectl config use-context employee-context
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_monitor/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/ceph_cmd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -2112,7 +2083,7 @@ kubectl config use-context employee-context
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/k8s_monitor/" class="post-title-link" itemprop="url">Kubernetes监控</a>
+                <a href="/2018/05/24/ceph_cmd/" class="post-title-link" itemprop="url">ceph 概念命令</a>
               
             
           </h2>
@@ -2130,14 +2101,14 @@ kubectl config use-context employee-context
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
 
               
                 
               
 
-              <time title="Created: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+              <time title="Erstellt: 2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
             
 
             
@@ -2152,10 +2123,10 @@ kubectl config use-context employee-context
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据-区块链-安全相关/" itemprop="url" rel="index"><span itemprop="name">大数据&区块链&安全相关</span></a></span>
 
                 
                 
@@ -2192,34 +2163,409 @@ kubectl config use-context employee-context
       
         
           
-            <h2 id="Node节点"><a href="#Node节点" class="headerlink" title="Node节点"></a>Node节点</h2><ul>
-<li><p>基础命令</p>
-<p>  <code>kubectl describe node node3</code></p>
-</li>
-</ul>
-<h2 id="kubelet"><a href="#kubelet" class="headerlink" title="kubelet"></a>kubelet</h2><ul>
-<li>组件</li>
-</ul>
-<ol>
-<li><strong>cAdvisor</strong><br> 描述：收集本机以及容器的监控数据(cpu,memory,filesystem,network,uptime)</li>
-</ol>
-<h2 id="Heapster"><a href="#Heapster" class="headerlink" title="Heapster"></a>Heapster</h2><ul>
-<li><p>描述</p>
-<blockquote>
-<p>Heapster首先从K8S Master获取集群中所有Node的信息，然后通过这些Node上的kubelet获取有用数据，而kubelet本身的数据则是从cAdvisor得到。所有获取到的数据都被推到Heapster配置的后端存储中，并还支持数据的可视化。现在后端存储 + 可视化的方法，如InfluxDB + grafana。</p>
-</blockquote>
-</li>
-<li><p>组件</p>
-</li>
-</ul>
-<ol>
-<li><strong>InfluxDB</strong><br>描述：存储监控数据</li>
-</ol>
-<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><blockquote>
-<ol>
-<li><a href="https://segmentfault.com/a/1190000007708162" target="_blank" rel="noopener">Kubernetes监控之Heapster介绍</a></li>
-</ol>
-</blockquote>
+            <p> 结合网络、官网、手动查询等多方渠道，整理ceph维护管理常用命令，并且梳理常规命令在使用过程中的逻辑顺序。另外整理期间发现ceph 集群的命令体系有点乱，详细情况各自体验。</p>
+<p>一：ceph集群启动、重启、停止</p>
+<p>1：ceph 命令的选项如下：</p>
+<p>选项    简写    描述</p>
+<p>–verbose    -v    详细的日志。</p>
+<p>–valgrind    N/A    （只适合开发者和质检人员）用 Valgrind 调试。</p>
+<p>–allhosts    -a    在 ceph.conf 里配置的所有主机上执行，否 则它只在本机执行。</p>
+<p>–restart    N/A    核心转储后自动重启。</p>
+<p>–norestart    N/A    核心转储后不自动重启。</p>
+<p>–conf    -c    使用另外一个配置文件。</p>
+<p>Ceph 子命令包括：</p>
+<p>命令    描述</p>
+<p>start    启动守护进程。</p>
+<p>stop    停止守护进程。</p>
+<p>forcestop    暴力停止守护进程，等价于 kill -9</p>
+<p>killall    杀死某一类守护进程。</p>
+<p>cleanlogs    清理掉日志目录。</p>
+<p>cleanalllogs    清理掉日志目录内的所有文件。</p>
+<p>2：启动所有守护进程</p>
+<pre><code>要启动、关闭、重启 Ceph 集群，执行 ceph 时加上 相关命令，语法如下：
+</code></pre><p>/etc/init.d/ceph [options] [start|restart|stop] [daemonType|daemonID]</p>
+<p>下面是个典型启动实例：</p>
+<p>sudo /etc/init.d/ceph -a start</p>
+<p>加 -a （即在所有节点上执行）执行完成后Ceph本节点所有进程启动。</p>
+<p>把 CEPH 当服务运行，按此语法：</p>
+<p>service ceph [options] [start|restart] [daemonType|daemonID] </p>
+<p>典型实例：  service ceph -a start</p>
+<p>3:启动单一实例</p>
+<pre><code>要启动、关闭、重启一类守护进程  本例以要启动本节点上某一类的所有 Ceph 守护进程，
+</code></pre><p>/etc/init.d/ceph  [start|restart|stop] [daemonType|daemonID]</p>
+<p>/etc/init.d/ceph start osd.0</p>
+<p> 把ceph当做服务运行，启动一节点上某个 Ceph 守护进程，</p>
+<p>按此语法： service ceph  start {daemon-type}.{instance} </p>
+<p>service ceph  start osd.0</p>
+<p>二：集群维护常用命令概览</p>
+<p>1：检查集群健康状况</p>
+<pre><code>启动集群后、读写数据前，先检查下集群的健康状态。你可以用下面的命令检查：
+</code></pre><p>ceph health   或者 ceph health detail （输出信息更详细）</p>
+<pre><code>要观察集群内正发生的事件，打开一个新终端，然后输入：
+</code></pre><p>ceph -w</p>
+<p>输出信息里包含：</p>
+<p>集群唯一标识符</p>
+<p>集群健康状况</p>
+<p>监视器图元版本和监视器法定人数状态</p>
+<p>OSD 版本和 OSD 状态摘要</p>
+<p>其内存储的数据和对象数量的粗略统计，以及数据总量等。</p>
+<p>新版本新增选项如下：</p>
+<p>  -s, –status          show cluster status</p>
+<p>  -w, –watch           watch live cluster changes</p>
+<p>  –watch-debug         watch debug events</p>
+<p>  –watch-info          watch info events</p>
+<p>  –watch-sec           watch security events</p>
+<p>  –watch-warn          watch warn events</p>
+<p>  –watch-error         watch error events</p>
+<p>  –version, -v         display version</p>
+<p>  –verbose             make verbose</p>
+<p>  –concise             make less verbose</p>
+<p>使用方法演示：</p>
+<p>ceph -w –watch-info</p>
+<p>2：检查集群的使用情况</p>
+<pre><code>检查集群的数据用量及其在存储池内的分布情况，可以用 df 选项，它和 Linux 上的 df 相似。如下：
+</code></pre><p>ceph df</p>
+<p>输出的 GLOBAL 段展示了数据所占用集群存储空间的概要。</p>
+<p>SIZE: 集群的总容量；</p>
+<p>AVAIL: 集群的空闲空间总量；</p>
+<p>RAW USED: 已用存储空间总量；</p>
+<p>% RAW USED: 已用存储空间比率。用此值参照 full ratio 和 near full \ ratio 来确保不会用尽集群空间。</p>
+<p>详情见存储容量。</p>
+<p>输出的 POOLS 段展示了存储池列表及各存储池的大致使用率。没有副本、克隆品和快照占用情况。例如，如果你把 1MB 的数据存储为对象，理论使用率将是 1MB ，但考虑到副本数、克隆数、和快照数，实际使用率可能是 2MB 或更多。</p>
+<p>NAME: 存储池名字；</p>
+<p>ID: 存储池唯一标识符；</p>
+<p>USED: 大概数据量，单位为 KB 、 MB 或 GB ；</p>
+<p>%USED: 各存储池的大概使用率；</p>
+<p>Objects: 各存储池内的大概对象数。</p>
+<p>新版本新增ceph osd df  命令，可以详细列出集群每块磁盘的使用情况，包括大小、权重、使用多少空间、使用率等等</p>
+<p>3：检查集群状态</p>
+<pre><code>要检查集群的状态，执行下面的命令：:
+</code></pre><p>ceph status</p>
+<p>4：检查MONITOR状态</p>
+<pre><code>查看监视器图，执行下面的命令：:
+</code></pre><p>ceph mon stat</p>
+<p>或者：</p>
+<p>ceph mon dump</p>
+<pre><code>要检查监视器的法定人数状态，执行下面的命令：
+</code></pre><p>ceph quorum_status</p>
+<p>5：检查 MDS 状态:</p>
+<pre><code>元数据服务器为 Ceph 文件系统提供元数据服务，元数据服务器有两种状态： up | \ down 和 active | inactive ，执行下面的命令查看元数据服务器状态为 up 且 active ：
+</code></pre><p>ceph mds stat</p>
+<pre><code>要展示元数据集群的详细状态，执行下面的命令：
+</code></pre><p>ceph mds dump</p>
+<p>三：集群命令详解</p>
+<p>######################mon 相关####################</p>
+<p>1：查看mon的状态信息</p>
+<p>[mon@ptmind~]# ceph mon stat</p>
+<p>2：查看mon的选举状态</p>
+<p>[mon@ptmind~]# ceph quorum_status</p>
+<p>3：查看mon的映射信息</p>
+<p>[mon@ptmind~]# ceph mon dump</p>
+<p>4：删除一个mon节点</p>
+<p>[mon@ptmind~]# ceph mon remove cs1</p>
+<p>5：获得一个正在运行的mon map，并保存在1.txt文件中</p>
+<p>[mon@ptmind~]# ceph mon getmap -o 1.txt</p>
+<p>6：读取上面获得的map</p>
+<p>[mon@ptmind~]# monmaptool –print 1.txt </p>
+<p>7：把上面的mon map注入新加入的节点</p>
+<p>[mon@ptmind~]# ceph-mon -i nc3 –inject-monmap 1.txt</p>
+<p>8：查看mon的amin socket</p>
+<p>[mon@ptmind~]# ceph-conf –name mon.nc3 –show-config-value admin_socket</p>
+<p>9：查看ceph mon log日志所在的目录</p>
+<p>[mon@ptmind~]# ceph-conf –name mon.nc1 –show-config-value log_file    </p>
+<p>/var/log/ceph/ceph-mon.nc1.log</p>
+<p>10：查看一个集群ceph-mon.nc3参数的配置、输出信息特别详细，集群所有配置生效可以在此参数下确认</p>
+<p>[mon@ptmind~]# ceph –admin-daemon /var/run/ceph/ceph-mon.nc3.asok config show | less</p>
+<p>######################### msd 相关 ###################</p>
+<p>1：查看msd状态</p>
+<p>[mon@ptmind~]# ceph mds stat</p>
+<p>2：删除一个mds节点</p>
+<p>[mon@ptmind~]# ceph  mds rm 0 mds.nc1</p>
+<p>3：设置mds状态为失败</p>
+<p>[mon@ptmind~]# ceph mds rmfailed &lt;int[0-]&gt;   </p>
+<p>4：新建pool </p>
+<p>[mon@ptmind~]# ceph mds add_data_pool <poolname></poolname></p>
+<p>5：关闭mds集群</p>
+<p>[mon@ptmind~]# mds cluster_down</p>
+<p>6：启动mds集群</p>
+<p>[mon@ptmind~]# mds cluster_up</p>
+<p>7：设置cephfs文件系统存储方式最大单个文件尺寸</p>
+<p>[mon@ptmind~]# ceph mds set max_file_size 1024000000000</p>
+<h3 id="清除cephfs-文件系统步骤"><a href="#清除cephfs-文件系统步骤" class="headerlink" title="清除cephfs 文件系统步骤"></a>清除cephfs 文件系统步骤</h3><p>强制mds状态为featrue</p>
+<p>[mon@ptmind~]# ceph mds fail 0</p>
+<p>删除mds文件系统</p>
+<p>[mon@ptmind~]# ceph fs rm leadorfs –yes-i-really-mean-it</p>
+<p>#删除fs数据文件夹</p>
+<p>[mon@ptmind~]# ceph osd pool delete cephfs_data cephfs_data –yes-i-really-really-mean-it </p>
+<p>#删除元数据文件夹</p>
+<p>[mon@ptmind~]# ceph osd pool delete cephfs_metadata cephfs_metadata –yes-i-really-really-mean-it </p>
+<p>然后再删除 mds key  ，残留文件等</p>
+<p>拆除文件系统前推荐先删除节点，待验证</p>
+<p>[mon@ptmind~]# ceph  mds rm 0 mds.node242</p>
+<p>################################ ceph auth 相关 ################################</p>
+<p>1：查看ceph集群中的认证用户及相关的key</p>
+<p>[mon@ptmind~]# ceph auth list</p>
+<p>2：为ceph创建一个admin用户并为admin用户创建一个密钥，把密钥保存到/etc/ceph目录下：</p>
+<p>[mon@ptmind~]# ceph auth get-or-create client.admin mds ‘allow‘ osd ‘allow <em>‘ mon ‘allow </em>‘ &gt; /etc/ceph/ceph.client.admin.keyring</p>
+<p>或</p>
+<p>[mon@ptmind~]# ceph auth get-or-create client.admin mds ‘allow‘ osd ‘allow <em>‘ mon ‘allow </em>‘ -o /etc/ceph/ceph.client.admin.keyring</p>
+<p>3：为osd.0创建一个用户并创建一个key</p>
+<p>[mon@ptmind~]# ceph auth get-or-create osd.0 mon ‘allow rwx‘ osd ‘allow *‘ -o /var/lib/ceph/osd/ceph-0/keyring</p>
+<p>4：为mds.nc3创建一个用户并创建一个key</p>
+<p>[mon@ptmind~]# ceph auth get-or-create mds.nc3 mon ‘allow rwx‘ osd ‘allow <em>‘ mds ‘allow </em>‘ -o /var/lib/ceph/mds/ceph-cs1/keyring</p>
+<p>5：导入key信息</p>
+<p>[mon@ptmind~]# ceph auth import   /var/lib/ceph/mds/ceph-cs1/keyring</p>
+<p>6：删除集群中的一个认证用户</p>
+<p>[mon@ptmind~]# ceph auth del osd.0</p>
+<p>################################ osd  相关 ################################</p>
+<p>1：查看osd列表</p>
+<p>[mon@ptmind~]# ceph osd tree</p>
+<p>2：查看数据延迟</p>
+<p>[mon@ptmind~]# ceph osd perf </p>
+<p>osd fs_commit_latency(ms) fs_apply_latency(ms) </p>
+<p>  0                     3                    4 </p>
+<p>  1                   333                  871 </p>
+<p>  2                    33                   49 </p>
+<p>  3                     1                    2 </p>
+<p>。。。。。。。。。。。。</p>
+<p>3：详细列出集群每块磁盘的使用情况，包括大小、权重、使用多少空间、使用率等等</p>
+<p>[mon@ptmind~]# ceph osd df </p>
+<p>4：down掉一个osd硬盘</p>
+<p>[mon@ptmind~]# ceph osd down 0   #down掉osd.0节点</p>
+<p>5：在集群中删除一个osd硬盘</p>
+<p>[mon@ptmind~]# ceph osd rm 0</p>
+<p>6：在集群中删除一个osd 硬盘 crush map</p>
+<p>[mon@ptmind~]# ceph osd crush rm osd.0</p>
+<p>7：在集群中删除一个osd的host节点</p>
+<p>[mon@ptmind~]# ceph osd crush rm cs1</p>
+<p>8：查看最大osd的个数 </p>
+<p> [mon@ptmind~]# ceph osd getmaxosd</p>
+<p>max_osd = 90 in epoch 1202     #默认最大是90个osd节点</p>
+<p>9：设置最大的osd的个数（当扩大osd节点的时候必须扩大这个值）</p>
+<p> [mon@ptmind~]# ceph osd setmaxosd 2048</p>
+<p>10：设置osd crush的权重为1.0</p>
+<p>ceph osd crush set {id} {weight} [{loc1} [{loc2} …]]</p>
+<p>例如：</p>
+<p>[mon@ptmind~]# ceph osd crush set osd.1 0.5 host=node241</p>
+<p>11：设置osd的权重</p>
+<p>[mon@ptmind~]# ceph osd reweight 3 0.5</p>
+<p>reweighted osd.3 to 0.5 (8327682)</p>
+<p>或者用下面的方式</p>
+<p>[mon@ptmind~]# ceph osd crush reweight osd.1 1.0</p>
+<p>12：把一个osd节点逐出集群</p>
+<p>[mon@ptmind~]# ceph osd out osd.3:</p>
+<p>3       1    osd.3   up      0      # osd.3的reweight变为0了就不再分配数据，但是设备还是存活的</p>
+<p>13：把逐出的osd加入集群</p>
+<p>[mon@ptmind~]# ceph osd in osd.3</p>
+<p>marked in osd.3. </p>
+<p>14：暂停osd （暂停后整个集群不再接收数据）</p>
+<p>[mon@ptmind~]# ceph osd pause</p>
+<p>15：再次开启osd （开启后再次接收数据） </p>
+<p>[mon@ptmind~]# ceph osd unpause</p>
+<p>16：查看一个集群osd.0参数的配置、输出信息特别详细，集群所有配置生效可以在此参数下确认</p>
+<p>[mon@ptmind~]# ceph –admin-daemon /var/run/ceph/ceph-osd.0.asok config show | less</p>
+<p>17：设置标志 flags ，不允许关闭osd、解决网络不稳定，osd 状态不断切换的问题</p>
+<p>[mon@ptmind~]# ceph osd set nodown</p>
+<p>取消设置</p>
+<p>[mon@ptmind~]# ceph osd unset nodown</p>
+<p>################################pool  相关################################</p>
+<p>1：查看ceph集群中的pool数量</p>
+<p>[mon@ptmind~]# ceph osd lspools   或者 ceph osd pool ls</p>
+<p>2：在ceph集群中创建一个pool</p>
+<p>[mon@ptmind~]# ceph osd pool create rbdtest 100            #这里的100指的是PG组:</p>
+<p>3：查看集群中所有pool的副本尺寸</p>
+<p>[mon@ptmind~]# ceph osd dump | grep ‘replicated size‘</p>
+<p>4：查看pool 最大副本数量</p>
+<p>[mon@ptmind~]# ceph osd pool get rbdpool size</p>
+<p>size: 3</p>
+<p>5：查看pool 最小副本数量</p>
+<p>[root@node241 ~]# ceph osd pool get rbdpool min_size</p>
+<p>min_size: 2</p>
+<p>6：设置一个pool的pg数量</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdtest pg_num 100</p>
+<p>7：设置一个pool的pgp数量</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdtest pgp_num 100</p>
+<p>8: 修改ceph，数据最小副本数、和副本数</p>
+<p>ceph osd pool set $pool_name min_size 1</p>
+<p>ceph osd pool set $pool_name size 2</p>
+<p>示例：</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdpool min_size 1</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdpool size 2</p>
+<p>验证：</p>
+<p>[mon@ptmind~]# ceph osd dump</p>
+<p>pool 3 ‘rbdpool‘ replicated size 2 min_size 1 </p>
+<p>9:设置rbdtest池的最大存储空间为100T（默认是1T)</p>
+<p>[mon@ptmind~]# ceph osd pool set rbdtest target_max_bytes 100000000000000</p>
+<p>10: 为一个ceph pool配置配额、达到配额前集群会告警，达到上限后无法再写入数据</p>
+<p>[mon@ptmind~]# ceph osd pool set-quota rbdtest max_objects 10000</p>
+<p>11: 在集群中删除一个pool,注意删除poolpool 映射的image 会直接被删除，线上操作要谨慎。</p>
+<p>[mon@ptmind~]# ceph osd pool delete rbdtest  rbdtest  –yes-i-really-really-mean-it  #集群名字需要重复两次</p>
+<p>12: 给一个pool创建一个快照</p>
+<p>[mon@ptmind~]# ceph osd pool mksnap rbdtest   rbdtest-snap20150924</p>
+<p>13: 查看快照信息</p>
+<p>[mon@ptmind~]# rados lssnap -p rbdtest</p>
+<p>1       rbdtest-snap20150924    2015.09.24 19:58:55</p>
+<p>2       rbdtest-snap2015092401  2015.09.24 20:31:21</p>
+<p>2 snaps</p>
+<p>14:删除pool的快照</p>
+<p>[mon@ptmind~]# ceph osd pool rmsnap rbdtest  rbdtest-snap20150924</p>
+<p>验证，剩余一个snap</p>
+<p>[mon@ptmind~]# rados lssnap -p rbdtest</p>
+<p>2       rbdtest-snap2015092401  2015.09.24 20:31:21</p>
+<p>1 snaps</p>
+<p>################################rados命令相关##################</p>
+<p>rados 是和Ceph的对象存储集群（RADOS），Ceph的分布式文件系统的一部分进行交互是一种实用工具。</p>
+<p>1：查看ceph集群中有多少个pool （只是查看pool)</p>
+<p>[mon@ptmind~]# rados lspools    同  ceph osd pool ls 输出结果一致</p>
+<p>2：显示整个系统和被池毁掉的使用率统计，包括磁盘使用（字节）和对象计数</p>
+<p>[mon@ptmind~]# rados df </p>
+<p>3：创建一个pool</p>
+<p>[mon@ptmind~]# rados mkpool test</p>
+<p>4：创建一个对象object </p>
+<p>[mon@ptmind~]# rados create test-object -p test</p>
+<p>5：查看对象文件</p>
+<p>[mon@ptmind~]# rados -p test ls</p>
+<p>test-object</p>
+<p>6：删除一个对象</p>
+<p>[mon@ptmind~]# rados rm test-object-1 -p test</p>
+<p>7：删除foo池 (和它所有的数据)</p>
+<p>[mon@ptmind~]# rados rmpool test test –yes-i-really-really-mean-it </p>
+<p>8：查看ceph pool中的ceph object （这里的object是以块形式存储的）</p>
+<p>[mon@ptmind~]# rados ls -p test | more</p>
+<p>9：为test pool创建快照</p>
+<p>[mon@ptmind~]# rados -p test mksnap testsnap</p>
+<p>created pool test snap testsnap</p>
+<p>10：列出给定池的快照</p>
+<p>[mon@ptmind~]# rados -p test lssnap         </p>
+<p>1       testsnap        2015.09.24 21:14:34</p>
+<p>11：删除快照</p>
+<p>[mon@ptmind~]# rados -p test rmsnap testsnap</p>
+<p>removed pool test snap testsnap</p>
+<p>12：上传一个对象到test pool</p>
+<p>[mon@ptmind~]# rados -p test put myobject blah.txt</p>
+<p>################################ PG 相关 ################################</p>
+<p>PG =“放置组”。当集群中的数据，对象映射到编程器，被映射到这些PGS的OSD。</p>
+<p>1：查看pg组的映射信息</p>
+<p>[mon@ptmind~]# ceph pg dump    或者 ceph pg ls</p>
+<p>2：查看一个PG的map</p>
+<p>[mon@ptmind~]# ceph pg map 0.3f</p>
+<p>osdmap e88 pg 0.3f (0.3f) -&gt; up [0,2] acting [0,2]   #其中的[0,2]代表存储在osd.0、osd.2节点，osd.0代表主副本的存储位置</p>
+<p>3：查看PG状态</p>
+<p>[mon@ptmind~]# ceph pg stat</p>
+<p>4：查询一个pg的详细信息</p>
+<p>[mon@ptmind~]# ceph pg  0.26 query</p>
+<p>5：要洗刷一个pg组，执行命令：</p>
+<p>[mon@ptmind~]# ceph pg scrub {pg-id}</p>
+<p>6：查看pg中stuck的状态</p>
+<p>要获取所有卡在某状态的归置组统计信息，执行命令：</p>
+<p>ceph pg dump_stuck inactive|unclean|stale [–format <format>] [-t|–threshold <seconds>]</seconds></format></p>
+<p>[mon@ptmind~]# ceph pg dump_stuck unclean</p>
+<p>[mon@ptmind~]# ceph pg dump_stuck inactive</p>
+<p>[mon@ptmind~]# ceph pg dump_stuck stale</p>
+<p>Inactive （不活跃）归置组不能处理读写，因为它们在等待一个有最新数据的 OSD 复活且进入集群。</p>
+<p>Unclean （不干净）归置组含有复制数未达到期望数量的对象，它们应该在恢复中。</p>
+<p>Stale （不新鲜）归置组处于未知状态：存储它们的 OSD 有段时间没向监视器报告了（由 mon_osd_report_timeout 配置）。</p>
+<p>可用格式有 plain （默认）和 json 。阀值定义的是，归置组被认为卡住前等待的最小时间（默认 300 秒）</p>
+<p>7：显示一个集群中的所有的pg统计</p>
+<p>[mon@ptmind~]# ceph pg dump –format plain</p>
+<p>8：恢复一个丢失的pg</p>
+<p>如果集群丢了一个或多个对象，而且必须放弃搜索这些数据，你就要把未找到的对象标记为丢失（ lost ）。</p>
+<p>如果所有可能的位置都查询过了，而仍找不到这些对象，你也许得放弃它们了。这可能是罕见的失败组合导致的，集群在写入完成前，未能得知写入是否已执行。</p>
+<p>当前只支持 revert 选项，它使得回滚到对象的前一个版本（如果它是新对象）或完全忽略它。要把 unfound 对象标记为 lost ，执行命令：</p>
+<p>ceph pg {pg-id} mark_unfound_lost revert|delete</p>
+<p>9：查看某个PG内分布的数据状态，具体状态可以使用选项过滤输出</p>
+<p>ceph pg ls {<int>} {active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|</int></p>
+<p>backfill_toofull|recovery_wait|undersized [active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|</p>
+<p>deep_scrub|backfill|backfill_toofull|recovery_wait|undersized…]} :  list pg with specific pool, osd, state</p>
+<p>实例如下：</p>
+<pre><code>pg号   过滤输出的状态
+</code></pre><p>[mon@ptmind~]# ceph   pg   ls       1     clean</p>
+<p>10：查询osd 包含pg 的信息，过滤输出pg的状态信息</p>
+<p>pg ls-by-osd <osdname (id|osd.id)>       list pg on osd [osd]</osdname></p>
+<p> {<int>} {active|clean|down|replay|splitting|scrubbing|scrubq|degraded|    </int></p>
+<p> inconsistent|peering|repair|recovering| backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|backfill_toofull|recovery_wait|undersized[active|clean|down|replay|splitting|    </p>
+<p> scrubbing|scrubq|degraded|inconsistent| peering|repair|recovering|backfill_ wait|incomplete|stale|remapped|deep_scrub|backfill|backfill_toofull|recovery_wait|undersized…]} </p>
+<p>实例如下：</p>
+<p>[mon@ptmind~]# ceph pg ls-by-osd osd.5 </p>
+<p>11：查询pool包含pg 的信息，过滤输出pg的状态信息</p>
+<p>ceph pg  ls-by-pool   poolname   选项</p>
+<p>ceph pg ls-by-pool   <poolstr>  {active|clean| down|replay|splitting|scrubbing|scrubq|  degraded|inconsistent|peering|repair| recovering|backfill_wait|incomplete|  stale|remapped|deep_scrub|backfill|     </poolstr></p>
+<p> backfill_toofull|recovery_wait| undersized [active|clean|down|replay|  splitting|scrubbing|scrubq|degraded| inconsistent|peering|repair|recovering| backfill_wait|incomplete|stale| remapped|deep_scrub|backfill|backfill_ </p>
+<p>实例如下：</p>
+<p>[mon@ptmind~]# ceph pg ls-by-pool test  </p>
+<p>12：查询某个osd状态为 primary pg ，可以根据需要过滤状态</p>
+<p>pg ls-by-primary <osdname (id|osd.id)> {<int>} {active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|</int></osdname></p>
+<p>backfill_toofull|recovery_wait|undersized [active|clean|down|replay|splitting|scrubbing|scrubq|degraded|inconsistent|peering|repair|recovering|backfill_wait|incomplete|stale|remapped|deep_scrub|backfill|</p>
+<p>backfill_toofull|recovery_wait|undersized…]} :  list pg with primary = [osd]</p>
+<p> 实例如下：</p>
+<pre><code>osd号   过滤输出的状态
+</code></pre><p>[mon@ptmind~]# ceph pg ls-by-primary    osd.3    clean </p>
+<p>############################### rbd命令相关 #########################3 </p>
+<p>1：在test池中创建一个命名为kjh的10000M的镜像</p>
+<p>[mon@ptmind~]# rbd create -p test –size 10000 kjh</p>
+<p>2：查看ceph中一个pool里的所有镜像</p>
+<p>[mon@ptmind~]# rbd ls test</p>
+<p>kjh</p>
+<p>3：查看新建的镜像的信息</p>
+<p>[mon@ptmind~]# rbd -p test info kjh    </p>
+<p>4：查看ceph pool中一个镜像的信息</p>
+<p>[mon@ptmind~]# rbd info -p test  –image kjh</p>
+<p>rbd image ‘kjh‘:</p>
+<pre><code>size 1000 MB in 250 objects
+
+order 22 (4096 kB objects)
+
+block_name_prefix: rb.0.92bd.74b0dc51
+
+format: 1
+</code></pre><p>5：删除一个镜像</p>
+<p>[mon@ptmind~]# rbd rm  -p test  kjh</p>
+<p>6：调整一个镜像的尺寸</p>
+<p>[mon@ptmind~]# rbd resize -p test –size 20000 kjh</p>
+<p>[mon@ptmind~]# rbd -p test info kjh   #调整后的镜像大小</p>
+<p>rbd image ‘kjh‘:</p>
+<pre><code>size 2000 MB in 500 objects
+
+order 22 (4096 kB objects)
+
+block_name_prefix: rb.0.92c1.74b0dc51
+
+format: 1
+</code></pre><p>#########rbd pool 快照功能测试###########</p>
+<p>1：新建个pool叫’ptmindpool’同时在下面创建一个’kjhimage’</p>
+<p>[mon@ptmind~]# ceph osd pool create ptmindpool 256 256</p>
+<p>pool ‘ptmindpool‘ created</p>
+<p>2:创建镜像</p>
+<p>[mon@ptmind~]# rbd create kjhimage –size 1024 –pool ptmindpool</p>
+<p>3:查看镜像</p>
+<p>[mon@ptmind~]# rbd –pool ptmindpool ls</p>
+<p>kjhimage</p>
+<p>4:创建snap,快照名字叫’snapkjhimage’</p>
+<p>[mon@ptmind~]# rbd snap create ptmindpool/kjhimage@snapkjhimage</p>
+<p>5:查看kjhimage的snap</p>
+<p>[mon@ptmind~]# rbd snap ls ptmindpool/kjhimage</p>
+<p>SNAPID NAME         SIZE</p>
+<pre><code>2 snapkjhimage 1024 MB
+</code></pre><p>6:回滚快照，</p>
+<p>[mon@ptmind~]# rbd snap rollback ptmindpool/kjhimage@snapkjhimage</p>
+<p>7:删除snap 删除snap报（rbd: snapshot ‘snapshot-xxxx‘ is protected from removal.）写保护 ，使用 rbd snap unprotect volumes/snapshot-xxx‘ 解锁，然后再删除</p>
+<p>[mon@ptmind~]# rbd snap rm ptmindpool/kjhimage@snapkjhimage</p>
+<p>8:删除kjhimage的全部snapshot</p>
+<p>[mon@ptmind~]# rbd snap purge ptmindpool/kjhimage</p>
+<p>9: 把ceph pool中的一个镜像导出</p>
+<p>导出镜像</p>
+<p>[mon@ptmind~]# rbd export -p ptmindpool –image kjhimage /tmp/kjhimage.img            </p>
+<p>Exporting image: 100% complete…done.</p>
+<p>验证查看导出文件</p>
+<p>l /tmp/kjhimage.img        </p>
+<p>-rw-r–r– 1 root root 1073741824 Sep 24 23:15 /tmp/kjhimage.img</p>
+<p>10:把一个镜像导入ceph中</p>
+<p>[mon@ptmind~]# rbd import /tmp/kjhimage.img  -p ptmindpool –image importmyimage1</p>
+<p>Importing image: 100% complete…done.</p>
+<p>验证查看导入镜像文件</p>
+<p>rbd -pptmindpool ls</p>
+<p>importmyimage1</p>
+<p>本文出自 “康建华” 博客，转载请与作者联系！</p>
 
           
         
@@ -2265,7 +2611,7 @@ kubectl config use-context employee-context
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Vorherige Seite"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Nächste Seite"></i></a>
   </nav>
 
 
@@ -2307,8 +2653,8 @@ kubectl config use-context employee-context
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">36</span>
-                    <span class="site-state-item-name">posts</span>
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">Artikel</span>
                   </a>
                 </div>
               
@@ -2336,8 +2682,10 @@ kubectl config use-context employee-context
                     
                       
                     
-                    <span class="site-state-item-count">6</span>
-                    <span class="site-state-item-name">categories</span>
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">Kategorien</span>
                   </a>
                 </div>
               
@@ -2453,8 +2801,14 @@ kubectl config use-context employee-context
                     
                       
                     
-                    <span class="site-state-item-count">50</span>
-                    <span class="site-state-item-name">tags</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">schlagwörter</span>
                   </a>
                 </div>
               
@@ -2537,7 +2891,7 @@ kubectl config use-context employee-context
 
 
 
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
 
 
 
