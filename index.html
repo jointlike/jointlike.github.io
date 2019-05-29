@@ -591,6 +591,229 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/04/24/知识图谱Neo4j/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/04/24/知识图谱Neo4j/" class="post-title-link" itemprop="url">neo4j 图数据库学习</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-24 14:50:25" itemprop="dateCreated datePublished" datetime="2019-04-24T14:50:25+08:00">2019-04-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>图形数据库是NoSQL数据库的一种类型，它应用图形理论存储实体之间的关系信息。图形数据库是一种非关系型数据库，它应用图形理论存储实体之间的关系信息。最常见例子就是社会网络中人与人之间的关系。关系型数据库用于存储“关系型”数据的效果并不好，其查询复杂、缓慢、超出预期，而图形数据库的独特设计恰恰弥补了这个缺陷。</p>
+<h2 id="概念："><a href="#概念：" class="headerlink" title="概念："></a>概念：</h2><p>Neo4j是一个世界领先的开源图形数据库。它是由Neo技术使用Java语言完全开发的。图形数据库也就意味着它的数据并非保存在表或集合中，而是保存为节点以及节点之间的关系。</p>
+<p>Neo4j的数据由以下及部分构成：</p>
+<ul>
+<li>节点 Node</li>
+<li>边 Relationship</li>
+<li>属性 Property</li>
+</ul>
+<p>节点和边由Node或Relationship类实例化。<br>属性存放类似于一个HashMap, Key 为一个字符串，而 Value 必须是基本类型或者是基本类型数组。</p>
+<h2 id="Neo4j的特点："><a href="#Neo4j的特点：" class="headerlink" title="Neo4j的特点："></a>Neo4j的特点：</h2><ul>
+<li>它拥有简单的查询语言 Neo4j CQL</li>
+<li>它遵循属性图数据模型</li>
+<li>它通过使用 Apache Lucence 支持索引</li>
+<li>它支持 UNIQUE 约束</li>
+<li>它包含一个用于执行 CQL 命令的 UI：Neo4j 数据浏览器</li>
+<li>它支持完整的 ACID（原子性，一致性，隔离性和持久性）规则</li>
+<li>它采用原生图形库与本地 GPE（图形处理引擎）</li>
+<li>它支持查询的数据导出到 Json 和 XLS 格式</li>
+<li>它提供了 REST API，可以被任何编程语言（如 Java，Spring，Scala 等）访问</li>
+<li>它提供了可以通过任何 UI MVC 框架（如 Node JS ）访问的 Java 脚本</li>
+<li>它支持两种 Java API：Cypher API 和 Native Java API 来开发 Java 应用程序</li>
+<li>缺点：它不支持Sharding。具有节点数的限制。</li>
+</ul>
+<h2 id="Neo4j-安装"><a href="#Neo4j-安装" class="headerlink" title="Neo4j 安装"></a>Neo4j 安装</h2><p>可以到官网直接下载安装包安装即可，链接：<a href="https://neo4j.com/download/。" target="_blank" rel="noopener">https://neo4j.com/download/。</a></p>
+<h2 id="Neo4j-CQL命令"><a href="#Neo4j-CQL命令" class="headerlink" title="Neo4j CQL命令"></a>Neo4j CQL命令</h2><p>Neo4j 的 CQL 是非常重要的命令，类似于 SQL 语句，具体的用法可以参考：<a href="https://www.w3cschool.cn/neo4j/neo4j_cql_introduction.html。" target="_blank" rel="noopener">https://www.w3cschool.cn/neo4j/neo4j_cql_introduction.html。</a></p>
+<h2 id="Py2Neo用法"><a href="#Py2Neo用法" class="headerlink" title="Py2Neo用法"></a>Py2Neo用法</h2><p><a href="http://py2neo.org/v3/database.html#py2neo.database.Graph" target="_blank" rel="noopener">http://py2neo.org/v3/database.html#py2neo.database.Graph</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> py2neo <span class="keyword">import</span> Node, Relationship</span><br></pre></td></tr></table></figure>
+<h3 id="Node-amp-Relationship"><a href="#Node-amp-Relationship" class="headerlink" title="Node &amp; Relationship"></a>Node &amp; Relationship</h3><blockquote>
+<p>图数据库最主要的数据就是节点和关系（边）。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">a = Node(<span class="string">'Person'</span>, name=<span class="string">'Alice'</span>)</span><br><span class="line">b = Node(<span class="string">'Person'</span>, name=<span class="string">'Bob'</span>)</span><br><span class="line">r = Relationship(a, <span class="string">'KNOWS'</span>, b)</span><br><span class="line">print(a, b, r)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 属性可以字典的形式添加</span></span><br><span class="line">a[<span class="string">'age'</span>] = <span class="number">21</span></span><br><span class="line">print(a)</span><br></pre></td></tr></table></figure>
+<pre><code>(:Person {name: &apos;Alice&apos;}) (:Person {name: &apos;Bob&apos;}) (Alice)-[:KNOWS {}]-&gt;(Bob)
+(:Person {age: {hello: &apos;df&apos;}, name: &apos;Alice&apos;})
+</code></pre><h3 id="Subgraph"><a href="#Subgraph" class="headerlink" title="Subgraph"></a>Subgraph</h3><blockquote>
+<p>子图，是 Node 和 Relationship 的集合，最简单的构造子图的方式是通过关系运算符</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = a|b|r</span><br><span class="line">x.relationships.__dict__</span><br><span class="line">x.keys(),x.labels,x.nodes.__dict__</span><br></pre></td></tr></table></figure>
+<pre><code>(frozenset({&apos;age&apos;, &apos;name&apos;}),
+ frozenset({&apos;Person&apos;}),
+ {&apos;_SetView__collection&apos;: frozenset({(:Person {age: 21, name: &apos;Alice&apos;}),
+             (:Person {name: &apos;Bob&apos;})})})
+</code></pre><h3 id="Walkable"><a href="#Walkable" class="headerlink" title="Walkable"></a>Walkable</h3><blockquote>
+<p>Walkable 是增加了遍历信息的 Subgraph，我们通过 + 号便可以构建一个 Walkable 对象</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> py2neo <span class="keyword">import</span> Node, Relationship</span><br><span class="line"> </span><br><span class="line">a = Node(<span class="string">'Person'</span>, name=<span class="string">'Alice'</span>)</span><br><span class="line">b = Node(<span class="string">'Person'</span>, name=<span class="string">'Bob'</span>)</span><br><span class="line">c = Node(<span class="string">'Person'</span>, name=<span class="string">'Mike'</span>)</span><br><span class="line">ab = Relationship(a, <span class="string">"KNOWS"</span>, b)</span><br><span class="line">ac = Relationship(a, <span class="string">"KNOWS"</span>, c)</span><br><span class="line">w = ab + Relationship(b, <span class="string">"LIKES"</span>, c) + ac</span><br><span class="line"><span class="comment"># w</span></span><br></pre></td></tr></table></figure>
+<h3 id="Graph"><a href="#Graph" class="headerlink" title="Graph"></a>Graph</h3><blockquote>
+<p>在 database 模块中包含了和 Neo4j 数据交互的 API，最重要的当属 Graph，它代表了 Neo4j 的图数据库，同时 Graph 也提供了许多方法来操作 Neo4j 数据库。</p>
+</blockquote>
+<h3 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> py2neo <span class="keyword">import</span> Graph</span><br><span class="line">graph = Graph()</span><br><span class="line"><span class="comment"># graph_2 = Graph(host="localhost")</span></span><br><span class="line"><span class="comment"># graph_3 = Graph("http://localhost:7474/db/data/")</span></span><br><span class="line">graph</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;Graph database=&lt;Database uri=&apos;bolt://localhost:7687&apos; secure=False user_agent=&apos;py2neo/4.2.0 neobolt/1.7.12 Python/3.7.1-final-0 (linux)&apos;&gt; name=&apos;data&apos;&gt;
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">a = Node(<span class="string">'Person'</span>, name=<span class="string">'Alice'</span>)</span><br><span class="line">b = Node(<span class="string">'Person'</span>, name=<span class="string">'Bob'</span>)</span><br><span class="line">c = Node(<span class="string">'Person'</span>, name=<span class="string">'Can'</span>)</span><br><span class="line">r = Relationship(a, <span class="string">'KNOWS'</span>, b)</span><br><span class="line">r2 = Relationship(b, <span class="string">'KNOWS'</span>, c)</span><br><span class="line">r3 = Relationship(c, <span class="string">'LIKES'</span>, a)</span><br><span class="line">s = a | b | c | r | r2 | r3</span><br><span class="line"><span class="comment"># graph.create(s)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者 一个个创建</span></span><br><span class="line"><span class="comment"># graph.create(a)</span></span><br><span class="line"><span class="comment"># graph.create(b)</span></span><br><span class="line"><span class="comment"># graph.create(c)</span></span><br><span class="line"><span class="comment"># graph.create(r)</span></span><br><span class="line">graph.create(r2)</span><br><span class="line"><span class="comment"># graph.create(r3)</span></span><br></pre></td></tr></table></figure>
+<h3 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除关系，则相关的两个节点都删除</span></span><br><span class="line">relate = graph.match(r_type=<span class="string">"LIKES"</span>).first()</span><br><span class="line">graph.delete(relate)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除节点</span></span><br><span class="line">matcher = NodeMatcher(graph)</span><br><span class="line">person = matcher.match(<span class="string">"Person"</span>, name=<span class="string">"Can"</span>).first()</span><br><span class="line"><span class="comment"># graph.delete(person)</span></span><br></pre></td></tr></table></figure>
+<h3 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cql 语句查询</span></span><br><span class="line">d = graph_1.run(<span class="string">'MATCH (p:Person) return p'</span>)</span><br><span class="line"><span class="keyword">from</span> pandas <span class="keyword">import</span> DataFrame</span><br><span class="line">df = DataFrame(list(d))</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>    </tr><br>  </thead><br>  <tbody><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># py2neo 框架语法查询</span></span><br><span class="line">matcher = NodeMatcher(graph)</span><br><span class="line">person = matcher.match(<span class="string">"Person"</span>, name=<span class="string">"Alice"</span>).first()</span><br></pre></td></tr></table></figure>
+<h3 id="NodeSelector-条件查询"><a href="#NodeSelector-条件查询" class="headerlink" title="NodeSelector 条件查询"></a>NodeSelector 条件查询</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">a = Node(<span class="string">'Person'</span>, name=<span class="string">'Alice'</span>, age=<span class="number">21</span>, location=<span class="string">'广州'</span>)</span><br><span class="line">b = Node(<span class="string">'Person'</span>, name=<span class="string">'Bob'</span>, age=<span class="number">22</span>, location=<span class="string">'上海'</span>)</span><br><span class="line">c = Node(<span class="string">'Person'</span>, name=<span class="string">'Mike'</span>, age=<span class="number">21</span>, location=<span class="string">'北京'</span>)</span><br><span class="line">r1 = Relationship(a, <span class="string">'KNOWS'</span>, b)</span><br><span class="line">r2 = Relationship(b, <span class="string">'KNOWS'</span>, c)</span><br><span class="line">graph.create(a)</span><br><span class="line">graph.create(r1)</span><br><span class="line">graph.create(r2)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> py2neo <span class="keyword">import</span> </span><br><span class="line"></span><br><span class="line">selector = selector(graph)</span><br><span class="line">persons = selector.select(<span class="string">'Person'</span>,age=<span class="number">21</span>)</span><br><span class="line">persons</span><br></pre></td></tr></table></figure>
+<pre><code>  File &quot;&lt;ipython-input-166-e7db880b13c6&gt;&quot;, line 1
+    from py2neo import
+                       ^
+SyntaxError: invalid syntax
+</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">matcher = NodeMatcher(graph)</span><br><span class="line">Node?</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/04/24/知识图谱KG入门/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1054,6 +1277,197 @@
         
           
             <h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p><img src="/images/ml_nlp/models_choice.jpg" alt="ML机器学习速查"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/09/24/python异步/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/09/24/python异步/" class="post-title-link" itemprop="url">python asyncio使用</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-09-24T14:50:25+08:00">2018-09-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><p><a href="https://docs.python.org/3/library/asyncio.html" target="_blank" rel="noopener">https://docs.python.org/3/library/asyncio.html</a></p>
+<h2 id="quick-start案例"><a href="#quick-start案例" class="headerlink" title="quick start案例"></a>quick start案例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import asyncio</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; async def main():</span><br><span class="line">...     print(&apos;hello&apos;)</span><br><span class="line">...     await asyncio.sleep(1)</span><br><span class="line">...     print(&apos;world&apos;)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; asyncio.run(main())</span><br></pre></td></tr></table></figure>
+<p>解析：</p>
+<ol>
+<li>async修饰符，3.5之后用于替代<a href="mailto:`@asyncio.coroutine" target="_blank" rel="noopener">`@asyncio.coroutine</a>`装饰器。</li>
+<li>await修饰符，3.5之后用于替代<code>yield from</code>。简写</li>
+<li>asyncio.sleep，表示一个io进程。</li>
+<li>asyncio.run，简化了自己管理loop，包装了一个协程调用。</li>
+</ol>
+<p>注意：</p>
+<ol>
+<li>await 后面必须时一个coroutine对象，否则无法实现异步IO，将同步执行。因此注意无法直接用requests</li>
+</ol>
+<h2 id="streams形式的网络请求（客户端）"><a href="#streams形式的网络请求（客户端）" class="headerlink" title="streams形式的网络请求（客户端）"></a>streams形式的网络请求（客户端）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import urllib.parse</span><br><span class="line">all_data = []</span><br><span class="line">async def hello(url,port=80,message=&apos;&apos;):</span><br><span class="line">    url = urllib.parse.urlsplit(url)</span><br><span class="line">    if url.scheme == &apos;https&apos;:</span><br><span class="line">        reader, writer = await asyncio.open_connection(</span><br><span class="line">            url.hostname, 443, ssl=True)</span><br><span class="line">    else:</span><br><span class="line">        reader, writer = await asyncio.open_connection(</span><br><span class="line">            url.hostname, port)</span><br><span class="line"></span><br><span class="line">    query = (</span><br><span class="line">        f&quot;HEAD &#123;url.path or &apos;/&apos;&#125; HTTP/1.0\r\n&quot;</span><br><span class="line">        f&quot;Host: &#123;url.hostname&#125;\r\n&quot;</span><br><span class="line">        f&quot;\r\n&quot;</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    writer.write(query.encode(&apos;latin-1&apos;))</span><br><span class="line">	</span><br><span class="line">    data = await reader.read()</span><br><span class="line">    print(f&apos;Received: &#123;data.decode()!r&#125;&apos;)</span><br><span class="line">    all_data.append(data)</span><br><span class="line">    print(&apos;Close the connection&apos;)</span><br><span class="line">    writer.close()</span><br><span class="line">    await writer.wait_closed()</span><br><span class="line">	</span><br><span class="line">asyncio.run(hello(&apos;https://docs.python.org/3/library/asyncio-stream.html#examples&apos;,8888,&apos;test message&apos;))</span><br><span class="line">print(all_data)</span><br></pre></td></tr></table></figure>
+<p>解析：</p>
+<ol>
+<li><code>asyncio.open_connection</code>打开一个tcp连接，是一个coroutine对象</li>
+<li>reader, writer 对应 StreamReader, StreamWriter的实例。</li>
+<li><code>writer.close()</code> Close the stream. 和 <code>wait_closed()</code> Wait until the stream is closed.</li>
+</ol>
+<h2 id="streams-服务端"><a href="#streams-服务端" class="headerlink" title="streams 服务端"></a>streams 服务端</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line"></span><br><span class="line">async def handle_echo(reader, writer):</span><br><span class="line">    data = await reader.read(100)</span><br><span class="line">    message = data.decode()</span><br><span class="line">    addr = writer.get_extra_info(&apos;peername&apos;)</span><br><span class="line"></span><br><span class="line">    print(f&quot;Received &#123;message!r&#125; from &#123;addr!r&#125;&quot;)</span><br><span class="line"></span><br><span class="line">    print(f&quot;Send: &#123;message!r&#125;&quot;)</span><br><span class="line">    writer.write(data)</span><br><span class="line">    await writer.drain()</span><br><span class="line"></span><br><span class="line">    print(&quot;Close the connection&quot;)</span><br><span class="line">    writer.close()</span><br><span class="line"></span><br><span class="line">async def main():</span><br><span class="line">    server = await asyncio.start_server(</span><br><span class="line">        handle_echo, &apos;127.0.0.1&apos;, 8888)</span><br><span class="line"></span><br><span class="line">    addr = server.sockets[0].getsockname()</span><br><span class="line">    print(f&apos;Serving on &#123;addr&#125;&apos;)</span><br><span class="line"></span><br><span class="line">    async with server:</span><br><span class="line">        await server.serve_forever()</span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+<p>解析：</p>
+<ol>
+<li>类似于tcp客户端。handle用来处理请求。main跑在run服务中不断监听请求。</li>
+</ol>
+<h2 id="高阶库aiohttp"><a href="#高阶库aiohttp" class="headerlink" title="高阶库aiohttp"></a>高阶库aiohttp</h2><p>需要先安装 aiohttp: pip install aiohttp<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">import aiohttp</span><br><span class="line">queue = asyncio.Queue()</span><br><span class="line">async def fetch_page(url):</span><br><span class="line">    async with aiohttp.ClientSession() as session:</span><br><span class="line">        async with session.get(url) as response:</span><br><span class="line">		    # queue.put_nowait(await response.text())</span><br><span class="line">            return await response.text()</span><br><span class="line"></span><br><span class="line">res = asyncio.run(fetch_page(&apos;https://www.baidu.com&apos;))</span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure></p>
+<p>解析：</p>
+<ol>
+<li><strong> aiohttp 可以理解为一个支持异步 I/O 的 requests </strong></li>
+<li>可以用queue 存入数据</li>
+</ol>
+<h2 id="lock-协程异步锁"><a href="#lock-协程异步锁" class="headerlink" title="lock 协程异步锁"></a>lock 协程异步锁</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">import functools</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def unlock(lock):</span><br><span class="line">    print(&apos;callback releasing lock&apos;)</span><br><span class="line">    lock.release()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def test(locker, lock):</span><br><span class="line">    print(f&apos;&#123;locker&#125; waiting for the lock&apos;)</span><br><span class="line">    with await lock:</span><br><span class="line">        print(f&apos;&#123;locker&#125; acquired lock&apos;)</span><br><span class="line">    print(f&apos;&#123;locker&#125; released lock&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def main(loop):</span><br><span class="line">    lock = asyncio.Lock()</span><br><span class="line">    await lock.acquire()</span><br><span class="line">    loop.call_later(0.1, functools.partial(unlock, lock)) # call_later() 表达推迟一段时间的回调, 第一个参数是以秒为单位的延迟, 第二个参数是回调函数</span><br><span class="line">    await asyncio.wait([test(&apos;l1&apos;, lock), test(&apos;l2&apos;, lock)])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    asyncio.run(main(loop))</span><br><span class="line"></span><br><span class="line"># 输出:</span><br><span class="line">l1 waiting for the lock</span><br><span class="line">l2 waiting for the lock</span><br><span class="line">callback releasing lock</span><br><span class="line">l1 acquired lock</span><br><span class="line">l1 released lock</span><br><span class="line">l2 acquired lock</span><br><span class="line">l2 released lock</span><br></pre></td></tr></table></figure>
+<h2 id="Semaphore-信号量"><a href="#Semaphore-信号量" class="headerlink" title="Semaphore(信号量)"></a>Semaphore(信号量)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import aiohttp</span><br><span class="line">import asyncio</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NUMBERS = range(6)</span><br><span class="line">URL = &apos;http://httpbin.org/get?a=&#123;&#125;&apos;</span><br><span class="line">sema = asyncio.Semaphore(3)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def fetch_async(a):</span><br><span class="line">    async with aiohttp.request(&apos;GET&apos;, URL.format(a)) as r:</span><br><span class="line">        data = await r.json()</span><br><span class="line">    return data[&apos;args&apos;][&apos;a&apos;]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def print_result(a):</span><br><span class="line">    with (await sema):</span><br><span class="line">        r = await fetch_async(a)</span><br><span class="line">        print(f&apos;fetch(&#123;a&#125;) = &#123;r&#125;&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    f = asyncio.wait([print_result(num) for num in NUMBERS])</span><br><span class="line">    loop.run_until_complete(f)</span><br><span class="line">    loop.close()</span><br><span class="line"></span><br><span class="line"># 输出:</span><br><span class="line">fetch(1) = 1</span><br><span class="line">fetch(4) = 4</span><br><span class="line">fetch(5) = 5</span><br><span class="line">fetch(2) = 2</span><br><span class="line">fetch(0) = 0</span><br><span class="line">fetch(3) = 3</span><br></pre></td></tr></table></figure>
+<h2 id="Condition-条件"><a href="#Condition-条件" class="headerlink" title="Condition 条件"></a>Condition 条件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">import functools</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def consumer(cond, name, second):</span><br><span class="line">    await asyncio.sleep(second)</span><br><span class="line">    with await cond:</span><br><span class="line">        await cond.wait()</span><br><span class="line">        print(&apos;&#123;&#125;: Resource is available to consumer&apos;.format(name))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def producer(cond):</span><br><span class="line">    await asyncio.sleep(2)</span><br><span class="line">    for n in range(1, 3):</span><br><span class="line">        with await cond:</span><br><span class="line">            print(&apos;notifying consumer &#123;&#125;&apos;.format(n))</span><br><span class="line">            cond.notify(n=n) # 挨个通知单个消费者</span><br><span class="line">        await asyncio.sleep(0.1)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def producer2(cond):</span><br><span class="line">    await asyncio.sleep(2)</span><br><span class="line">    with await cond:</span><br><span class="line">        print(&apos;Making resource available&apos;)</span><br><span class="line">        cond.notify_all() # 一次性通知全部的消费者</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def main(loop):</span><br><span class="line">    condition = asyncio.Condition()</span><br><span class="line">    task = loop.create_task(producer(condition)) # producer 和 producer2 是两个协程, 不能使用 call_later(), 需要用到 create_task() 把它们创建成一个 task</span><br><span class="line">    consumers = [consumer(condition, name, index) for index, name in enumerate((&apos;c1&apos;, &apos;c2&apos;))]</span><br><span class="line">    await asyncio.wait(consumers)</span><br><span class="line">    task.cancel()</span><br><span class="line">    task = loop.create_task(producer2(condition))</span><br><span class="line">    consumers = [consumer(condition, name, index) for index, name in enumerate((&apos;c1&apos;, &apos;c2&apos;))]</span><br><span class="line">    await asyncio.wait(consumers)</span><br><span class="line">    task.cancel() # 取消任务</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    loop.run_until_complete(main(loop))</span><br><span class="line">    loop.close()</span><br><span class="line"></span><br><span class="line"># 输出:</span><br><span class="line">notifying consumer 1</span><br><span class="line">c1: Resource is available to consumer</span><br><span class="line">notifying consumer 2</span><br><span class="line">c2: Resource is available to consumer</span><br><span class="line">Making resource available</span><br><span class="line">c1: Resource is available to consumer</span><br><span class="line">c2: Resource is available to consumer</span><br></pre></td></tr></table></figure>
+<h2 id="Event-事件）"><a href="#Event-事件）" class="headerlink" title="Event(事件）"></a>Event(事件）</h2><p>下面代码是模仿 Lock(锁) 的例子实现的一个事件, 与 Lock(锁) 不同的是, 事件被触发的时候, 两个消费者不用获取锁, 就要尽快地执行下去了:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">import functools</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def set_event(event):</span><br><span class="line">    print(&apos;setting event in callback&apos;)</span><br><span class="line">    event.set()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def test(name, event):</span><br><span class="line">    print(&apos;&#123;&#125; waiting for event&apos;.format(name))</span><br><span class="line">    await event.wait()</span><br><span class="line">    print(&apos;&#123;&#125; triggered&apos;.format(name))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def main(loop):</span><br><span class="line">    event = asyncio.Event()</span><br><span class="line">    print(&apos;event start state: &#123;&#125;&apos;.format(event.is_set()))</span><br><span class="line">    loop.call_later(0.1, functools.partial(set_event, event))</span><br><span class="line">    await asyncio.wait([test(&apos;e1&apos;, event), test(&apos;e2&apos;, event)])</span><br><span class="line">    print(&apos;event end state: &#123;&#125;&apos;.format(event.is_set()))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    loop.run_until_complete(main(loop))</span><br><span class="line">    loop.close()</span><br><span class="line"></span><br><span class="line"># 输出:</span><br><span class="line">event start state: False</span><br><span class="line">e1 waiting for event</span><br><span class="line">e2 waiting for event</span><br><span class="line">setting event in callback</span><br><span class="line">e1 triggered</span><br><span class="line">e2 triggered</span><br><span class="line">event end state: True</span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -2132,435 +2546,6 @@ SELECT column_name(s) FROM table_name2
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/07/24/machine_learn_concept/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/07/24/machine_learn_concept/" class="post-title-link" itemprop="url">ML机器学习入门</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-07-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-07-24T14:50:25+08:00">2018-07-24</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-08-24 14:50:25" itemprop="dateModified" datetime="2018-08-24T14:50:25+08:00">2018-08-24</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概念备忘："><a href="#概念备忘：" class="headerlink" title="概念备忘："></a>概念备忘：</h2><p>对数，是幂运算的逆运算。2 的三次方为8 。 log8 = 3。3为对数的值。</p>
-<p>大O表示法，操作数。</p>
-<p>数组与链表各自优势不足</p>
-<p>选择排序，O(n^2)</p>
-<p>循环，递归与尾递归</p>
-<p>调用栈</p>
-<p>快速排序</p>
-<p>合并排序</p>
-<p>散列表（字典）</p>
-<p>图模拟</p>
-<p>广度优先，狄克斯特拉算法（广度加权）</p>
-<p>动态规划</p>
-<p>K邻近算法 KNN 特征靠近谁就是谁（ocr） - 创建推荐系统 - 机器学习</p>
-<p>其他：</p>
-<p>树结构（二分法只有在有序时才管用，可提高二分法的插入效率） B树、红黑树</p>
-<p>反向索引（散列-字典技术） - 用户搜索引擎</p>
-<p>傅里叶变换 （分解技术） - 剔除无用的音符，像素点等 MP3技术及jpg图片压缩技术，地震预测，DNA等</p>
-<p>mapreduce hadoop 并行计算</p>
-<p>布隆过滤器 - 概率性数据结构 。 hyperloglog</p>
-<p>SHA （secure hash algorithm）算法. - 可用于比较两个很大的文件是否相同。加密后的结果一样即可。用户存储密码 ， 算法特征：局部不敏感，改一点全不同<br>simhash 局部敏感，改一点细微差别，可用于比较相似度。</p>
-<p>线性规划<br>：用于在给定约束条件下最大限度地改善指定的指标。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/07/01/python_高并发/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/07/01/python_高并发/" class="post-title-link" itemprop="url">python高并发的详解</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-07-01 19:54:55" itemprop="dateCreated datePublished" datetime="2018-07-01T19:54:55+08:00">2018-07-01</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-07-24 14:50:25" itemprop="dateModified" datetime="2018-07-24T14:50:25+08:00">2018-07-24</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="转：python高并发的详解"><a href="#转：python高并发的详解" class="headerlink" title="转：python高并发的详解"></a>转：python高并发的详解</h1><h2 id="一、什么是高并发"><a href="#一、什么是高并发" class="headerlink" title="一、什么是高并发"></a>一、什么是高并发</h2><p>高并发（High Concurrency）是互联网分布式系统架构设计中必须考虑的因素之一，它通常是指，通过设计保证系统能够同时并行处理很多请求。</p>
-<p>高并发相关常用的一些指标有响应时间（Response Time），吞吐量（Throughput），每秒查询率QPS（Query Per Second），并发用户数等。</p>
-<p>响应时间：系统对请求做出响应的时间。例如系统处理一个HTTP请求需要200ms，这个200ms就是系统的响应时间。</p>
-<p>吞吐量：单位时间内处理的请求数量。</p>
-<p>QPS：每秒响应请求数。在互联网领域，这个指标和吞吐量区分的没有这么明显。</p>
-<p>并发用户数：同时承载正常使用系统功能的用户数量。例如一个即时通讯系统，同时在线量一定程度上代表了系统的并发用户数。</p>
-<h2 id="二、如何提升系统的并发能力"><a href="#二、如何提升系统的并发能力" class="headerlink" title="二、如何提升系统的并发能力"></a>二、如何提升系统的并发能力</h2><p>互联网分布式架构设计，提高系统并发能力的方式，方法论上主要有两种：垂直扩展（Scale Up）与水平扩展（Scale Out）。</p>
-<p>垂直扩展：提升单机处理能力。垂直扩展的方式又有两种：</p>
-<p>（1）增强单机硬件性能，例如：增加CPU核数如32核，升级更好的网卡如万兆，升级更好的硬盘如SSD，扩充硬盘容量如2T，扩充系统内存如128G；</p>
-<p>（2）提升单机架构性能，例如：使用Cache来减少IO次数，使用异步来增加单服务吞吐量，使用无锁数据结构来减少响应时间； </p>
-<p>在互联网业务发展非常迅猛的早期，如果预算不是问题，强烈建议使用“增强单机硬件性能”的方式提升系统并发能力，因为这个阶段，公司的战略往往是发展业务抢时间，而“增强单机硬件性能”往往是最快的方法。</p>
-<p>不管是提升单机硬件性能，还是提升单机架构性能，都有一个致命的不足：单机性能总是有极限的。所以互联网分布式架构设计高并发终极解决方案还是水平扩展。</p>
-<p>水平扩展：只要增加服务器数量，就能线性扩充系统性能。水平扩展对系统架构设计是有要求的，如何在架构各层进行可水平扩展的设计，以及互联网公司架构各层常见的水平扩展实践，是本文重点讨论的内容。</p>
-<p>python解决高并发的几种方式<br>1.HTML页面静态化<br>2.图片服务器分离（我使用的是fastdfs轻量级的分布式文件存储系统）<br>3.使用缓存（缓存存在于内存中读取快我的项目中使用redis作为缓存的数据库，redis是内存型数据作为存储缓存的数据库挺适合）<br>4.数据库集群、库表散列<br>5.使用负载均衡的方法（简单的配置可以用nginx来配置负载均衡，只需要设置 如下代码，即可实现简单的负载均衡<br> upstream djangoserver {<br>             server 192.168.72.49:8080;<br>             server 192.168.72.49:8081;<br>          }<br>6.镜像<br>镜像是大型网站常采用的提高性能和数据安全性的方式，镜像的技术可以解决不同网络接入商和地域带来的用户访问速度差异，比如ChinaNet和EduNet之间的差异就促使了很多网站在教育网内搭建镜像站点，数据进行定时更新或者实时更新。在镜像的细节技术方面，这里不阐述太深，有很多专业的现成的解决架构和产品可选。也有廉价的通过软件实现的思路，比如Linux上的rsync等工具。<br>7.最新：CDN加速技术（此技术还在了解阶段，可自行去网上查找相关的资料）</p>
-<h2 id="三、常见的互联网分层架构"><a href="#三、常见的互联网分层架构" class="headerlink" title="三、常见的互联网分层架构"></a>三、常见的互联网分层架构</h2><p>常见互联网分布式架构如上，分为：</p>
-<p>（1）客户端层：典型调用方是浏览器browser或者手机应用APP</p>
-<p>（2）反向代理层：系统入口，反向代理</p>
-<p>（3）站点应用层：实现核心应用逻辑，返回html或者json</p>
-<p>（4）服务层：如果实现了服务化，就有这一层</p>
-<p>（5）数据-缓存层：缓存加速访问存储</p>
-<p>（6）数据-数据库层：数据库固化数据存储</p>
-<p>整个系统各层次的水平扩展，又分别是如何实施的呢？</p>
-<h2 id="四、分层水平扩展架构实践"><a href="#四、分层水平扩展架构实践" class="headerlink" title="四、分层水平扩展架构实践"></a>四、分层水平扩展架构实践</h2><p>反向代理层的水平扩展<br>反向代理层的水平扩展，是通过“DNS轮询”实现的：dns-server对于一个域名配置了多个解析ip，每次DNS解析请求来访问dns-server，会轮询返回这些ip。</p>
-<p>当nginx成为瓶颈的时候，只要增加服务器数量，新增nginx服务的部署，增加一个外网ip，就能扩展反向代理层的性能，做到理论上的无限高并发。</p>
-<p>站点层的水平扩展<br>站点层的水平扩展，是通过“nginx”实现的。通过修改nginx.conf，可以设置多个web后端。</p>
-<p>当web后端成为瓶颈的时候，只要增加服务器数量，新增web服务的部署，在nginx配置中配置上新的web后端，就能扩展站点层的性能，做到理论上的无限高并发。</p>
-<p>服务层的水平扩展<br>服务层的水平扩展，是通过“服务连接池”实现的。</p>
-<p>站点层通过RPC-client调用下游的服务层RPC-server时，RPC-client中的连接池会建立与下游服务多个连接，当服务成为瓶颈的时候，只要增加服务器数量，新增服务部署，在RPC-client处建立新的下游服务连接，就能扩展服务层性能，做到理论上的无限高并发。如果需要优雅的进行服务层自动扩容，这里可能需要配置中心里服务自动发现功能的支持。</p>
-<p>数据层的水平扩展<br>在数据量很大的情况下，数据层（缓存，数据库）涉及数据的水平扩展，将原本存储在一台服务器上的数据（缓存，数据库）水平拆分到不同服务器上去，以达到扩充系统性能的目的。</p>
-<p>互联网数据层常见的水平拆分方式有这么几种，以数据库为例：</p>
-<p>按照范围水平拆分<br>每一个数据服务，存储一定范围的数据，上图为例：</p>
-<p>user0库，存储uid范围1-1kw</p>
-<p>user1库，存储uid范围1kw-2kw</p>
-<p>这个方案的好处是：</p>
-<p>（1）规则简单，service只需判断一下uid范围就能路由到对应的存储服务；</p>
-<p>（2）数据均衡性较好；</p>
-<p>（3）比较容易扩展，可以随时加一个uid[2kw,3kw]的数据服务；</p>
-<p>不足是：</p>
-<p>　　请求的负载不一定均衡，一般来说，新注册的用户会比老用户更活跃，大range的服务请求压力会更大；</p>
-<p>按照哈希水平拆分<br>每一个数据库，存储某个key值hash后的部分数据，上图为例：</p>
-<p>user0库，存储偶数uid数据</p>
-<p>user1库，存储奇数uid数据</p>
-<p>这个方案的好处是：</p>
-<p>（1）规则简单，service只需对uid进行hash能路由到对应的存储服务；</p>
-<p>（2）数据均衡性较好；</p>
-<p>（3）请求均匀性较好；</p>
-<p>不足是：</p>
-<p>　　不容易扩展，扩展一个数据服务，hash方法改变时候，可能需要进行数据迁移；</p>
-<p>这里需要注意的是，通过水平拆分来扩充系统性能，与主从同步读写分离来扩充数据库性能的方式有本质的不同。</p>
-<p>通过水平拆分扩展数据库性能：<br>（1）每个服务器上存储的数据量是总量的1/n，所以单机的性能也会有提升；</p>
-<p>（2）n个服务器上的数据没有交集，那个服务器上数据的并集是数据的全集；</p>
-<p>（3）数据水平拆分到了n个服务器上，理论上读性能扩充了n倍，写性能也扩充了n倍（其实远不止n倍，因为单机的数据量变为了原来的1/n）；</p>
-<p>通过主从同步读写分离扩展数据库性能：<br>（1）每个服务器上存储的数据量是和总量相同；</p>
-<p>（2）n个服务器上的数据都一样，都是全集；</p>
-<p>（3）理论上读性能扩充了n倍，写仍然是单点，写性能不变；</p>
-<p>缓存层的水平拆分和数据库层的水平拆分类似，也是以范围拆分和哈希拆分的方式居多，就不再展开。</p>
-<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><p>高并发（High Concurrency）是互联网分布式系统架构设计中必须考虑的因素之一，它通常是指，通过设计保证系统能够同时并行处理很多请求。</p>
-<p>提高系统并发能力的方式，方法论上主要有两种：垂直扩展（Scale Up）与水平扩展（Scale Out）。前者垂直扩展可以通过提升单机硬件性能，或者提升单机架构性能，来提高并发性，但单机性能总是有极限的，互联网分布式架构设计高并发终极解决方案还是后者：水平扩展。</p>
-<p>互联网分层架构中，各层次水平扩展的实践又有所不同：</p>
-<p>（1）反向代理层可以通过“DNS轮询”的方式来进行水平扩展；</p>
-<p>（2）站点层可以通过nginx来进行水平扩展；</p>
-<p>（3）服务层可以通过服务连接池来进行水平扩展；</p>
-<p>（4）数据库可以按照数据范围，或者数据哈希的方式来进行水平扩展；</p>
-<p>各层实施水平扩展后，能够通过增加服务器数量的方式来提升系统的性能，做到理论上的性能无限。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2607,7 +2592,7 @@ SELECT column_name(s) FROM table_name2
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">39</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2638,7 +2623,9 @@ SELECT column_name(s) FROM table_name2
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2761,7 +2748,19 @@ SELECT column_name(s) FROM table_name2
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">59</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

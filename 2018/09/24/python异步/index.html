@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="文档https://docs.python.org/3/library/asyncio.html quick start案例12345678&amp;gt;&amp;gt;&amp;gt; import asyncio&amp;gt;&amp;gt;&amp;gt; async def main():...     print(&amp;apos;hello&amp;apos;)...     await asyncio.sleep(1)...     pri">
+<meta name="keywords" content="asyncio,python异步,python,python协程,python 高并发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python asyncio使用">
+<meta property="og:url" content="https://jointlike.github.io/2018/09/24/python异步/index.html">
+<meta property="og:site_name" content="jointlike by TimWells">
+<meta property="og:description" content="文档https://docs.python.org/3/library/asyncio.html quick start案例12345678&amp;gt;&amp;gt;&amp;gt; import asyncio&amp;gt;&amp;gt;&amp;gt; async def main():...     print(&amp;apos;hello&amp;apos;)...     await asyncio.sleep(1)...     pri">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-09-24T06:50:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python asyncio使用">
+<meta name="twitter:description" content="文档https://docs.python.org/3/library/asyncio.html quick start案例12345678&amp;gt;&amp;gt;&amp;gt; import asyncio&amp;gt;&amp;gt;&amp;gt; async def main():...     print(&amp;apos;hello&amp;apos;)...     await asyncio.sleep(1)...     pri">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://jointlike.github.io/2018/09/24/python异步/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>python asyncio使用 | jointlike by TimWells</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">jointlike by TimWells</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/09/24/python异步/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">python asyncio使用
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-09-24T14:50:25+08:00">2018-09-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><p><a href="https://docs.python.org/3/library/asyncio.html" target="_blank" rel="noopener">https://docs.python.org/3/library/asyncio.html</a></p>
+<h2 id="quick-start案例"><a href="#quick-start案例" class="headerlink" title="quick start案例"></a>quick start案例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import asyncio</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; async def main():</span><br><span class="line">...     print(&apos;hello&apos;)</span><br><span class="line">...     await asyncio.sleep(1)</span><br><span class="line">...     print(&apos;world&apos;)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; asyncio.run(main())</span><br></pre></td></tr></table></figure>
+<p>解析：</p>
+<ol>
+<li>async修饰符，3.5之后用于替代<a href="mailto:`@asyncio.coroutine" target="_blank" rel="noopener">`@asyncio.coroutine</a>`装饰器。</li>
+<li>await修饰符，3.5之后用于替代<code>yield from</code>。简写</li>
+<li>asyncio.sleep，表示一个io进程。</li>
+<li>asyncio.run，简化了自己管理loop，包装了一个协程调用。</li>
+</ol>
+<p>注意：</p>
+<ol>
+<li>await 后面必须时一个coroutine对象，否则无法实现异步IO，将同步执行。因此注意无法直接用requests</li>
+</ol>
+<h2 id="streams形式的网络请求（客户端）"><a href="#streams形式的网络请求（客户端）" class="headerlink" title="streams形式的网络请求（客户端）"></a>streams形式的网络请求（客户端）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import urllib.parse</span><br><span class="line">all_data = []</span><br><span class="line">async def hello(url,port=80,message=&apos;&apos;):</span><br><span class="line">    url = urllib.parse.urlsplit(url)</span><br><span class="line">    if url.scheme == &apos;https&apos;:</span><br><span class="line">        reader, writer = await asyncio.open_connection(</span><br><span class="line">            url.hostname, 443, ssl=True)</span><br><span class="line">    else:</span><br><span class="line">        reader, writer = await asyncio.open_connection(</span><br><span class="line">            url.hostname, port)</span><br><span class="line"></span><br><span class="line">    query = (</span><br><span class="line">        f&quot;HEAD &#123;url.path or &apos;/&apos;&#125; HTTP/1.0\r\n&quot;</span><br><span class="line">        f&quot;Host: &#123;url.hostname&#125;\r\n&quot;</span><br><span class="line">        f&quot;\r\n&quot;</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    writer.write(query.encode(&apos;latin-1&apos;))</span><br><span class="line">	</span><br><span class="line">    data = await reader.read()</span><br><span class="line">    print(f&apos;Received: &#123;data.decode()!r&#125;&apos;)</span><br><span class="line">    all_data.append(data)</span><br><span class="line">    print(&apos;Close the connection&apos;)</span><br><span class="line">    writer.close()</span><br><span class="line">    await writer.wait_closed()</span><br><span class="line">	</span><br><span class="line">asyncio.run(hello(&apos;https://docs.python.org/3/library/asyncio-stream.html#examples&apos;,8888,&apos;test message&apos;))</span><br><span class="line">print(all_data)</span><br></pre></td></tr></table></figure>
+<p>解析：</p>
+<ol>
+<li><code>asyncio.open_connection</code>打开一个tcp连接，是一个coroutine对象</li>
+<li>reader, writer 对应 StreamReader, StreamWriter的实例。</li>
+<li><code>writer.close()</code> Close the stream. 和 <code>wait_closed()</code> Wait until the stream is closed.</li>
+</ol>
+<h2 id="streams-服务端"><a href="#streams-服务端" class="headerlink" title="streams 服务端"></a>streams 服务端</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line"></span><br><span class="line">async def handle_echo(reader, writer):</span><br><span class="line">    data = await reader.read(100)</span><br><span class="line">    message = data.decode()</span><br><span class="line">    addr = writer.get_extra_info(&apos;peername&apos;)</span><br><span class="line"></span><br><span class="line">    print(f&quot;Received &#123;message!r&#125; from &#123;addr!r&#125;&quot;)</span><br><span class="line"></span><br><span class="line">    print(f&quot;Send: &#123;message!r&#125;&quot;)</span><br><span class="line">    writer.write(data)</span><br><span class="line">    await writer.drain()</span><br><span class="line"></span><br><span class="line">    print(&quot;Close the connection&quot;)</span><br><span class="line">    writer.close()</span><br><span class="line"></span><br><span class="line">async def main():</span><br><span class="line">    server = await asyncio.start_server(</span><br><span class="line">        handle_echo, &apos;127.0.0.1&apos;, 8888)</span><br><span class="line"></span><br><span class="line">    addr = server.sockets[0].getsockname()</span><br><span class="line">    print(f&apos;Serving on &#123;addr&#125;&apos;)</span><br><span class="line"></span><br><span class="line">    async with server:</span><br><span class="line">        await server.serve_forever()</span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+<p>解析：</p>
+<ol>
+<li>类似于tcp客户端。handle用来处理请求。main跑在run服务中不断监听请求。</li>
+</ol>
+<h2 id="高阶库aiohttp"><a href="#高阶库aiohttp" class="headerlink" title="高阶库aiohttp"></a>高阶库aiohttp</h2><p>需要先安装 aiohttp: pip install aiohttp<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">import aiohttp</span><br><span class="line">queue = asyncio.Queue()</span><br><span class="line">async def fetch_page(url):</span><br><span class="line">    async with aiohttp.ClientSession() as session:</span><br><span class="line">        async with session.get(url) as response:</span><br><span class="line">		    # queue.put_nowait(await response.text())</span><br><span class="line">            return await response.text()</span><br><span class="line"></span><br><span class="line">res = asyncio.run(fetch_page(&apos;https://www.baidu.com&apos;))</span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure></p>
+<p>解析：</p>
+<ol>
+<li><strong> aiohttp 可以理解为一个支持异步 I/O 的 requests </strong></li>
+<li>可以用queue 存入数据</li>
+</ol>
+<h2 id="lock-协程异步锁"><a href="#lock-协程异步锁" class="headerlink" title="lock 协程异步锁"></a>lock 协程异步锁</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">import functools</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def unlock(lock):</span><br><span class="line">    print(&apos;callback releasing lock&apos;)</span><br><span class="line">    lock.release()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def test(locker, lock):</span><br><span class="line">    print(f&apos;&#123;locker&#125; waiting for the lock&apos;)</span><br><span class="line">    with await lock:</span><br><span class="line">        print(f&apos;&#123;locker&#125; acquired lock&apos;)</span><br><span class="line">    print(f&apos;&#123;locker&#125; released lock&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def main(loop):</span><br><span class="line">    lock = asyncio.Lock()</span><br><span class="line">    await lock.acquire()</span><br><span class="line">    loop.call_later(0.1, functools.partial(unlock, lock)) # call_later() 表达推迟一段时间的回调, 第一个参数是以秒为单位的延迟, 第二个参数是回调函数</span><br><span class="line">    await asyncio.wait([test(&apos;l1&apos;, lock), test(&apos;l2&apos;, lock)])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    asyncio.run(main(loop))</span><br><span class="line"></span><br><span class="line"># 输出:</span><br><span class="line">l1 waiting for the lock</span><br><span class="line">l2 waiting for the lock</span><br><span class="line">callback releasing lock</span><br><span class="line">l1 acquired lock</span><br><span class="line">l1 released lock</span><br><span class="line">l2 acquired lock</span><br><span class="line">l2 released lock</span><br></pre></td></tr></table></figure>
+<h2 id="Semaphore-信号量"><a href="#Semaphore-信号量" class="headerlink" title="Semaphore(信号量)"></a>Semaphore(信号量)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import aiohttp</span><br><span class="line">import asyncio</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NUMBERS = range(6)</span><br><span class="line">URL = &apos;http://httpbin.org/get?a=&#123;&#125;&apos;</span><br><span class="line">sema = asyncio.Semaphore(3)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def fetch_async(a):</span><br><span class="line">    async with aiohttp.request(&apos;GET&apos;, URL.format(a)) as r:</span><br><span class="line">        data = await r.json()</span><br><span class="line">    return data[&apos;args&apos;][&apos;a&apos;]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def print_result(a):</span><br><span class="line">    with (await sema):</span><br><span class="line">        r = await fetch_async(a)</span><br><span class="line">        print(f&apos;fetch(&#123;a&#125;) = &#123;r&#125;&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    f = asyncio.wait([print_result(num) for num in NUMBERS])</span><br><span class="line">    loop.run_until_complete(f)</span><br><span class="line">    loop.close()</span><br><span class="line"></span><br><span class="line"># 输出:</span><br><span class="line">fetch(1) = 1</span><br><span class="line">fetch(4) = 4</span><br><span class="line">fetch(5) = 5</span><br><span class="line">fetch(2) = 2</span><br><span class="line">fetch(0) = 0</span><br><span class="line">fetch(3) = 3</span><br></pre></td></tr></table></figure>
+<h2 id="Condition-条件"><a href="#Condition-条件" class="headerlink" title="Condition 条件"></a>Condition 条件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">import functools</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def consumer(cond, name, second):</span><br><span class="line">    await asyncio.sleep(second)</span><br><span class="line">    with await cond:</span><br><span class="line">        await cond.wait()</span><br><span class="line">        print(&apos;&#123;&#125;: Resource is available to consumer&apos;.format(name))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def producer(cond):</span><br><span class="line">    await asyncio.sleep(2)</span><br><span class="line">    for n in range(1, 3):</span><br><span class="line">        with await cond:</span><br><span class="line">            print(&apos;notifying consumer &#123;&#125;&apos;.format(n))</span><br><span class="line">            cond.notify(n=n) # 挨个通知单个消费者</span><br><span class="line">        await asyncio.sleep(0.1)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def producer2(cond):</span><br><span class="line">    await asyncio.sleep(2)</span><br><span class="line">    with await cond:</span><br><span class="line">        print(&apos;Making resource available&apos;)</span><br><span class="line">        cond.notify_all() # 一次性通知全部的消费者</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def main(loop):</span><br><span class="line">    condition = asyncio.Condition()</span><br><span class="line">    task = loop.create_task(producer(condition)) # producer 和 producer2 是两个协程, 不能使用 call_later(), 需要用到 create_task() 把它们创建成一个 task</span><br><span class="line">    consumers = [consumer(condition, name, index) for index, name in enumerate((&apos;c1&apos;, &apos;c2&apos;))]</span><br><span class="line">    await asyncio.wait(consumers)</span><br><span class="line">    task.cancel()</span><br><span class="line">    task = loop.create_task(producer2(condition))</span><br><span class="line">    consumers = [consumer(condition, name, index) for index, name in enumerate((&apos;c1&apos;, &apos;c2&apos;))]</span><br><span class="line">    await asyncio.wait(consumers)</span><br><span class="line">    task.cancel() # 取消任务</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    loop.run_until_complete(main(loop))</span><br><span class="line">    loop.close()</span><br><span class="line"></span><br><span class="line"># 输出:</span><br><span class="line">notifying consumer 1</span><br><span class="line">c1: Resource is available to consumer</span><br><span class="line">notifying consumer 2</span><br><span class="line">c2: Resource is available to consumer</span><br><span class="line">Making resource available</span><br><span class="line">c1: Resource is available to consumer</span><br><span class="line">c2: Resource is available to consumer</span><br></pre></td></tr></table></figure>
+<h2 id="Event-事件）"><a href="#Event-事件）" class="headerlink" title="Event(事件）"></a>Event(事件）</h2><p>下面代码是模仿 Lock(锁) 的例子实现的一个事件, 与 Lock(锁) 不同的是, 事件被触发的时候, 两个消费者不用获取锁, 就要尽快地执行下去了:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line">import functools</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def set_event(event):</span><br><span class="line">    print(&apos;setting event in callback&apos;)</span><br><span class="line">    event.set()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def test(name, event):</span><br><span class="line">    print(&apos;&#123;&#125; waiting for event&apos;.format(name))</span><br><span class="line">    await event.wait()</span><br><span class="line">    print(&apos;&#123;&#125; triggered&apos;.format(name))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">async def main(loop):</span><br><span class="line">    event = asyncio.Event()</span><br><span class="line">    print(&apos;event start state: &#123;&#125;&apos;.format(event.is_set()))</span><br><span class="line">    loop.call_later(0.1, functools.partial(set_event, event))</span><br><span class="line">    await asyncio.wait([test(&apos;e1&apos;, event), test(&apos;e2&apos;, event)])</span><br><span class="line">    print(&apos;event end state: &#123;&#125;&apos;.format(event.is_set()))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    loop.run_until_complete(main(loop))</span><br><span class="line">    loop.close()</span><br><span class="line"></span><br><span class="line"># 输出:</span><br><span class="line">event start state: False</span><br><span class="line">e1 waiting for event</span><br><span class="line">e2 waiting for event</span><br><span class="line">setting event in callback</span><br><span class="line">e1 triggered</span><br><span class="line">e2 triggered</span><br><span class="line">event end state: True</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/asyncio/" rel="tag"># asyncio</a>
+          
+            <a href="/tags/python异步/" rel="tag"># python异步</a>
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/python协程/" rel="tag"># python协程</a>
+          
+            <a href="/tags/python-高并发/" rel="tag"># python 高并发</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/31/DB_SQL速查与浏览记忆/" rel="next" title="SQL速查与浏览记忆">
+                <i class="fa fa-chevron-left"></i> SQL速查与浏览记忆
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/27/machine_learn_nlp_tools/" rel="prev" title="ML机器学习速查">
+                ML机器学习速查 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">TimWells</p>
+              <div class="site-description motion-element" itemprop="description">高效研究，快乐生活，用于python编程知识速查！大家玩的开心！</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/jointlike" title="GitHub &rarr; https://github.com/jointlike" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1807520300@qq.com" title="E-Mail &rarr; mailto:1807520300@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文档"><span class="nav-number">1.</span> <span class="nav-text">文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#quick-start案例"><span class="nav-number">2.</span> <span class="nav-text">quick start案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#streams形式的网络请求（客户端）"><span class="nav-number">3.</span> <span class="nav-text">streams形式的网络请求（客户端）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#streams-服务端"><span class="nav-number">4.</span> <span class="nav-text">streams 服务端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高阶库aiohttp"><span class="nav-number">5.</span> <span class="nav-text">高阶库aiohttp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lock-协程异步锁"><span class="nav-number">6.</span> <span class="nav-text">lock 协程异步锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Semaphore-信号量"><span class="nav-number">7.</span> <span class="nav-text">Semaphore(信号量)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Condition-条件"><span class="nav-number">8.</span> <span class="nav-text">Condition 条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Event-事件）"><span class="nav-number">9.</span> <span class="nav-text">Event(事件）</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TimWells</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

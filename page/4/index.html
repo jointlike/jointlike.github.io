@@ -341,6 +341,378 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_setup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/k8s_setup/" class="post-title-link" itemprop="url">kubernetes 部署</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ol>
+<li><p>准备虚拟机，配置环境，关闭防火墙<br>systemctl disable firewalld<br>systemctl stop firewalld </p>
+</li>
+<li><p>安装etcd<br>yum install etcd -y</p>
+</li>
+</ol>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#[member]  </span><br><span class="line">ETCD_NAME=etcd1  </span><br><span class="line">ETCD_DATA_DIR=&quot;/var/lib/etcd/test.etcd&quot;  </span><br><span class="line">#ETCD_WAL_DIR=&quot;&quot;  </span><br><span class="line">#ETCD_SNAPSHOT_COUNT=&quot;10000&quot;  </span><br><span class="line">#ETCD_HEARTBEAT_INTERVAL=&quot;100&quot;  </span><br><span class="line">#ETCD_ELECTION_TIMEOUT=&quot;1000&quot;  </span><br><span class="line">ETCD_LISTEN_PEER_URLS=&quot;http://0.0.0.0:2380&quot;  </span><br><span class="line">ETCD_LISTEN_CLIENT_URLS=&quot;http://0.0.0.0:2379,http://0.0.0.0:4001&quot;  </span><br><span class="line">#ETCD_MAX_SNAPSHOTS=&quot;5&quot;  </span><br><span class="line">#ETCD_MAX_WALS=&quot;5&quot;  </span><br><span class="line">#ETCD_CORS=&quot;&quot;  </span><br><span class="line">#  </span><br><span class="line">#[cluster]  </span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;http://master1:2380&quot;  </span><br><span class="line"># if you use different ETCD_NAME (e.g. test), set ETCD_INITIAL_CLUSTER value for this name, i.e. &quot;test=http://...&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER=&quot;etcd1=http://master1:2380,etcd2=http://master2:2380,etcd3=http://master3:2380&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;  </span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster-baby&quot;  </span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS=&quot;http://master1:2379,http://master1:4001&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker -y  </span><br><span class="line">chkconfig docker on  </span><br><span class="line">service docker start </span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+<h3 id="安装k8s"><a href="#安装k8s" class="headerlink" title="安装k8s"></a>安装k8s</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install kubernetes -y</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>修改配置 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure the kube-apiserver  </span><br><span class="line">#  </span><br><span class="line">  </span><br><span class="line"># The address on the local server to listen to.  </span><br><span class="line">KUBE_API_ADDRESS=&quot;--insecure-bind-address=0.0.0.0&quot;  </span><br><span class="line">  </span><br><span class="line"># The port on the local server to listen on.  </span><br><span class="line">KUBE_API_PORT=&quot;--port=8080&quot;  </span><br><span class="line">  </span><br><span class="line"># Port minions listen on  </span><br><span class="line"># KUBELET_PORT=&quot;--kubelet-port=10250&quot;  </span><br><span class="line">  </span><br><span class="line"># Comma separated list of nodes in the etcd cluster  </span><br><span class="line">KUBE_ETCD_SERVERS=&quot;--etcd-servers=http://etcd:2379&quot;  </span><br><span class="line">  </span><br><span class="line"># Address range to use for services  </span><br><span class="line">KUBE_SERVICE_ADDRESSES=&quot;--service-cluster-ip-range=10.254.0.0/16&quot;  </span><br><span class="line">  </span><br><span class="line"># default admission control policies  </span><br><span class="line"># KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota&quot;  </span><br><span class="line">KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ResourceQuota&quot;  </span><br><span class="line">  </span><br><span class="line"># Add your own!  </span><br><span class="line">KUBE_API_ARGS=&quot;&quot;  </span><br><span class="line">---</span><br><span class="line">###  </span><br><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure various aspects of all  </span><br><span class="line"># kubernetes services, including  </span><br><span class="line">#  </span><br><span class="line">#   kube-apiserver.service  </span><br><span class="line">#   kube-controller-manager.service  </span><br><span class="line">#   kube-scheduler.service  </span><br><span class="line">#   kubelet.service  </span><br><span class="line">#   kube-proxy.service  </span><br><span class="line"># logging to stderr means we get it in the systemd journal  </span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;  </span><br><span class="line">  </span><br><span class="line"># journal message level, 0 is debug  </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;  </span><br><span class="line">  </span><br><span class="line"># Should this cluster be allowed to run privileged docker containers  </span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;  </span><br><span class="line">  </span><br><span class="line"># How the controller-manager, scheduler, and proxy find the apiserver  </span><br><span class="line">KUBE_MASTER=&quot;--master=http://master1:8080&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动<br>systemctl enable kube-apiserver<br>systemctl start kube-apiserver<br>systemctl enable kube-controller-manager<br>systemctl start kube-controller-manager<br>systemctl enable kube-scheduler<br>systemctl start kube-scheduler  </p>
+</li>
+</ul>
+<ul>
+<li><p>deploy node</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker -y  </span><br><span class="line">chkconfig docker on  </span><br><span class="line">service docker start  </span><br><span class="line">yum install kubernetes -y</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"># kubernetes system config  </span><br><span class="line">#  </span><br><span class="line"># The following values are used to configure various aspects of all  </span><br><span class="line"># kubernetes services, including  </span><br><span class="line">#  </span><br><span class="line">#   kube-apiserver.service  </span><br><span class="line">#   kube-controller-manager.service  </span><br><span class="line">#   kube-scheduler.service  </span><br><span class="line">#   kubelet.service  </span><br><span class="line">#   kube-proxy.service  </span><br><span class="line"># logging to stderr means we get it in the systemd journal  </span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot;  </span><br><span class="line">  </span><br><span class="line"># journal message level, 0 is debug  </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;  </span><br><span class="line">  </span><br><span class="line"># Should this cluster be allowed to run privileged docker containers  </span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;  </span><br><span class="line">  </span><br><span class="line"># How the controller-manager, scheduler, and proxy find the apiserver  </span><br><span class="line">KUBE_MASTER=&quot;--master=http://etcd:8080&quot;  </span><br><span class="line">###  </span><br><span class="line"># kubernetes kubelet (minion) config  </span><br><span class="line">  </span><br><span class="line"># The address for the info server to serve on (set to 0.0.0.0 or &quot;&quot; for all interfaces)  </span><br><span class="line">KUBELET_ADDRESS=&quot;--address=0.0.0.0&quot;  </span><br><span class="line">  </span><br><span class="line"># The port for the info server to serve on  </span><br><span class="line"># KUBELET_PORT=&quot;--port=10250&quot;  </span><br><span class="line">  </span><br><span class="line"># You may leave this blank to use the actual hostname  </span><br><span class="line">KUBELET_HOSTNAME=&quot;--hostname-override=node1&quot;  </span><br><span class="line">  </span><br><span class="line"># location of the api-server  </span><br><span class="line">KUBELET_API_SERVER=&quot;--api-servers=http://etcd:8080&quot;  </span><br><span class="line">  </span><br><span class="line"># pod infrastructure container  </span><br><span class="line">KUBELET_POD_INFRA_CONTAINER=&quot;--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest&quot;  </span><br><span class="line">  </span><br><span class="line"># Add your own!  </span><br><span class="line">KUBELET_ARGS=&quot;&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable kubelet  </span><br><span class="line">systemctl start kubelet  </span><br><span class="line">systemctl enable kube-proxy  </span><br><span class="line">systemctl start kube-proxy</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建覆盖网络flannel</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install flannel -y  </span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">- 在master、node上均编辑 /etc/sysconfig/flanneld 文件</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="Flanneld-configuration-options"><a href="#Flanneld-configuration-options" class="headerlink" title="Flanneld configuration options"></a>Flanneld configuration options</h1><h1 id="etcd-url-location-Point-this-to-the-server-where-etcd-runs"><a href="#etcd-url-location-Point-this-to-the-server-where-etcd-runs" class="headerlink" title="etcd url location.  Point this to the server where etcd runs"></a>etcd url location.  Point this to the server where etcd runs</h1><p>FLANNEL_ETCD_ENDPOINTS=”<a href="http://etcd:2379&quot;" target="_blank" rel="noopener">http://etcd:2379&quot;</a>  </p>
+<h1 id="etcd-config-key-This-is-the-configuration-key-that-flannel-queries"><a href="#etcd-config-key-This-is-the-configuration-key-that-flannel-queries" class="headerlink" title="etcd config key.  This is the configuration key that flannel queries"></a>etcd config key.  This is the configuration key that flannel queries</h1><h1 id="For-address-range-assignment"><a href="#For-address-range-assignment" class="headerlink" title="For address range assignment"></a>For address range assignment</h1><p>FLANNEL_ETCD_PREFIX=”/atomic.io/network”  </p>
+<h1 id="Any-additional-options-that-you-want-to-pass"><a href="#Any-additional-options-that-you-want-to-pass" class="headerlink" title="Any additional options that you want to pass"></a>Any additional options that you want to pass</h1><p>#FLANNEL_OPTIONS=””<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 配置etcd中关于flannel的key--</span><br></pre></td></tr></table></figure></p>
+<p>etcdctl mk /atomic.io/network/config ‘{ “Network”: “10.0.0.0/16” }’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 重新启动</span><br><span class="line">启动修改后的 flannel</span><br></pre></td></tr></table></figure></p>
+<p>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kube-apiserver<br>systemctl restart kube-controller-manager<br>systemctl restart kube-scheduler  </p>
+<p>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kubelet<br>systemctl restart kube-proxy<br><code>`</code> </p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/数据结构与算法_常用数据结构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/数据结构与算法_常用数据结构/" class="post-title-link" itemprop="url">Python数据结构</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="常用数据结构"><a href="#常用数据结构" class="headerlink" title="常用数据结构"></a>常用数据结构</h2><p><a href="http://data.biancheng.net/intro/" target="_blank" rel="noopener">数据结构与算法教程【全】</a></p>
+<h3 id="数据的逻辑结构"><a href="#数据的逻辑结构" class="headerlink" title="数据的逻辑结构"></a>数据的逻辑结构</h3><p>一、集合结构:结构中的数据元素之间除了同属于一个集合的关系外，无任何其他关系。</p>
+<p>二、线性表</p>
+<ol>
+<li>数组/栈/队列：顺序存储，随机访问</li>
+<li>链表：链表存储，顺序访问</li>
+</ol>
+<p>三、散列表<br>前面使用的探查技术（probing），如果发生冲突，则将尝试列表中的下一个位置。<br>如果使用二度哈希（rehashing），则将导致所有的哈希被重新计算。<br>而链接技术（chaining）将采用额外的数据结构来处理冲突。Dictionary&lt;K,T&gt; 中的每个位置（slot）都映射到了一个链表。当冲突发生时，冲突的元素将被添加到桶（bucket）列表中。</p>
+<p>四、树与二叉树<br>  1.二叉树<br>  2.堆<br>  3.查找树<br>  4.平衡树<br>  5.线索</p>
+<p>五、图</p>
+<h3 id="数据的存储结构"><a href="#数据的存储结构" class="headerlink" title="数据的存储结构"></a>数据的存储结构</h3><p>存储结构是指数据结构在计算机中的表示（又称映像），也称物理结构。它包括数据元素的表示和关系的表示。<br>数据的存储结构是逻辑结构用计算机语言的实现，它依赖于计算机语言。<br>数据的存储结构主要有：顺序存储、链式存储、索引存储和散列存储。</p>
+<p>1.顺序存储:把逻辑上相邻的元素存储在物理位置上也相邻的存储单元里，元素之间的关系由存储单元的邻接关系来体现。<br>其优点是可以实现随机存取，每个元素占用最少的存储空间；缺点是只能使用相邻的一整块存储单元，因此可能产生较多的外部碎片。<br>通常借助于程序语言的数组实现。</p>
+<p>2.链接存储：不要求逻辑上相邻的元素在物理位置上也相邻，借助指示元素存储地址的指针表示元素之间的逻辑关系。<br>其优点是不会出现碎片现象，充分利用所有存储单元；缺点是每个元素因存储指针而占用额外的存储空间，并且只能实现顺序存取。</p>
+<p>3.索引存储：在存储元素信息的同时，还建立附加的索引表。索引表中的每一项称为索引项，索引项的一般形式是：（关键字，地址）。<br>其优点是检索速度快；缺点是增加了附加的索引表，会占用较多的存储空间。另外，在增加和删除数据时要修改索引表，因而会花费较多的时间。<br>若每个结点在索引表中都有一个索引项，则该索引表称之为稠密索引(Dense Index)。若一组结点在索引表中只对应一个索引项，则该索引表称为稀疏索引(Spare Index)。索引项的一般形式是：<br>关键字是能唯一标识一个结点的那些数据项。稠密索引中索引项的地址指示结点所在的存储位置;稀疏索引中索引项的地址指示一组结点的起始存储位置。</p>
+<p>4.散列存储：该方法的基本思想是：根据结点的关键字直接计算出该结点的存储地址。</p>
+<h3 id="数据运算"><a href="#数据运算" class="headerlink" title="数据运算"></a>数据运算</h3><p>施加在数据上的运算包括运算的定义和实现。运算的定义是针对逻辑结构的，指出运算的功能；运算的实现是针对存储结构的，指出运算的具体操作步骤。</p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><ol>
+<li><a href="https://blog.fundebug.com/2018/08/27/code-interview-data-structure/" target="_blank" rel="noopener">代码面试需要知道的8种数据结构(附面试题及答案链接)</a></li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://www.cnblogs.com/wanghuaijun/p/7302303.html" target="_blank" rel="noopener">常见数据结构与算法整理总结（上）</a></li>
+<li><a href="https://blog.csdn.net/yeyazhishang/article/details/82353846" target="_blank" rel="noopener">数据结构：八大数据结构分类</a></li>
+<li><a href="https://www.cnblogs.com/gaochundong/p/data_structures_and_asymptotic_analysis.html" target="_blank" rel="noopener">数据结构：八大数据结构分类</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/block_chain/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -940,7 +1312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/MQ_about_message_queue/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源有效性/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -960,7 +1332,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/MQ_about_message_queue/" class="post-title-link" itemprop="url">消息队列中间件基本理解</a>
+                <a href="/2018/05/24/k8s_资源有效性/" class="post-title-link" itemprop="url">Kubernetes之健康检查与服务依赖处理</a>
               
             
           </h2>
@@ -1003,7 +1375,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
 
                 
                 
@@ -1040,28 +1412,42 @@
       
         
           
-            <h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><p>消息队列中间件是分布式系统中重要的组件，主要解决应用耦合，异步消息，流量削锋等问题<br>实现高性能，高可用，可伸缩和最终一致性架构</p>
-<p>使用较多的消息队列有ActiveMQ，RabbitMQ，ZeroMQ，Kafka，MetaMQ，RocketMQ</p>
-<h2 id="主要用途"><a href="#主要用途" class="headerlink" title="主要用途"></a>主要用途</h2><ol>
-<li>流量削峰</li>
-<li>异步消息</li>
-<li>应用解耦</li>
-<li>日志处理</li>
-<li>消息通讯</li>
+            <h1 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h1><h2 id="使用Liveness及Readness探针"><a href="#使用Liveness及Readness探针" class="headerlink" title="使用Liveness及Readness探针"></a>使用Liveness及Readness探针</h2><p>1.Liveness探针：主要用于判断Container是否处于运行状态，比如当服务crash或者死锁等情况发生时，kubelet会kill掉Container, 然后根据其设置的restart policy进行相应操作（可能会在本机重新启动Container，或者因为设置Kubernetes QoS，本机没有资源情况下会被分发的其他机器上重新启动）。<br>2.Readness探针：主要用于进一步判断服务是否已经正常工作，如果服务没有加载完成或工作异常，服务所在的Pod的IP地址会从服务的endpoints中被移除，也就是说，当服务没有ready时，会将其从服务的load balancer中移除，不会再接受或响应任何请求。</p>
+<p>liveness可用不一定readness可用，容器存活期间服务可能卡死状态。因此服务检查周期要短于健康检查周期。</p>
+<hr>
+<h2 id="探针处理Handler类型"><a href="#探针处理Handler类型" class="headerlink" title="探针处理Handler类型"></a>探针处理Handler类型</h2><p>无论对于Readness或Liveness探针，Handler均支持以下3种类型：ExecAction, TCPSocketAction, HTTPGetAction。每种类型说明与举例如下：</p>
+<ol>
+<li><p>ExecAction：Container内部执行某个具体的命令，成功返回：shell命令返回0。<br>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">   exec:</span><br><span class="line">     command:</span><br><span class="line">     - cat</span><br><span class="line">     - /tmp/healthy</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 5</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>TCPSocketAction：通过container的IP、port执行tcp进行检查，确认port是否打开，类似telnet<br>例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">readinessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 10</span><br><span class="line"> livenessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 15</span><br><span class="line">   periodSeconds: 20</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>HTTPGetAction: 通过container的IP、port、path，用HTTP Get请求进行检查，程序自定义返回结果及程序可用标准。<br>例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">  httpGet:</span><br><span class="line">    path: /healthz</span><br><span class="line">    port: 8080</span><br><span class="line">    httpHeaders:</span><br><span class="line">    - name: X-Custom-Header</span><br><span class="line">      value: Awesome</span><br><span class="line">  initialDelaySeconds: 3</span><br><span class="line">  periodSeconds: 3</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<h2 id="Python常用消息中间件对比"><a href="#Python常用消息中间件对比" class="headerlink" title="Python常用消息中间件对比"></a>Python常用消息中间件对比</h2><p>RabbitMQ</p>
-<blockquote>
-<p>RabbitMQ是一个AMQP实现，传统的messaging queue系统实现，基于Erlang。老牌MQ产品了。AMQP协议更多用在企业系统内，对数据一致性、稳定性和可靠性要求很高的场景，对性能和吞吐量还在其次。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">消息队列的使用过程，如下：</span><br><span class="line">（1）客户端连接到消息队列服务器，打开一个channel。</span><br><span class="line">（2）客户端声明一个exchange，并设置相关属性。</span><br><span class="line">（3）客户端声明一个queue，并设置相关属性。</span><br><span class="line">（4）客户端使用routing key，在exchange和queue之间建立好绑定关系。</span><br><span class="line">（5）客户端投递消息到exchange。</span><br><span class="line">exchange接收到消息后，就根据消息的key和已经设置的binding，进行消息路由，将消息投递到一个或多个队列里。</span><br><span class="line"></span><br><span class="line">分布式集群:</span><br><span class="line">RabbitMQ可以通过三种方法来部署分布式集群系统，分别是：cluster,federation,shovel</span><br><span class="line">cluster：</span><br><span class="line">不支持跨网段，用于同一个网段内的局域网</span><br><span class="line">可以随意的动态增加或者减少</span><br><span class="line">节点之间需要运行相同版本的RabbitMQ和Erlang</span><br><span class="line"></span><br><span class="line">federation:应用于广域网，允许单台服务器上的交换机或队列接收发布到另一台服务器上交换机或队列的消息，可以是单独机器或集群。federation队列类似于单向点对点连接，消息会在联盟队列之间转发任意次，直到被消费者接受。通常使用federation来连接internet上的中间服务器，用作订阅分发消息或工作队列。</span><br><span class="line"></span><br><span class="line">shovel:连接方式与federation的连接方式类似，但它工作在更低层次。可以应用于广域网。</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>Kafka</p>
-<blockquote>
-<p>Kafka是一种高吞吐量的分布式发布订阅消息系统，它可以处理消费者规模的网站中的所有动作流数据。 这种动作（网页浏览，搜索和其他用户的行动）是在现代网络上的许多社会功能的一个关键因素。 这些数据通常是由于吞吐量的要求而通过处理日志和日志聚合来解决。 对于像Hadoop的一样的日志数据和离线分析系统，但又要求实时处理的限制，这是一个可行的解决方案。Kafka的目的是通过Hadoop的并行加载机制来统一线上和离线的消息处理，也是为了通过集群机来提供实时的消费。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Kafka是一种高吞吐量的分布式发布订阅消息系统，有如下特性：</span><br><span class="line">通过O(1)的磁盘数据结构提供消息的持久化，这种结构对于即使数以TB的消息存储也能够保持长时间的稳定性能。（文件追加的方式写入数据，过期的数据定期删除）</span><br><span class="line">高吞吐量：即使是非常普通的硬件Kafka也可以支持每秒数百万的消息</span><br><span class="line">支持通过Kafka服务器和消费机集群来分区消息</span><br><span class="line">支持Hadoop并行数据加载</span><br><span class="line"></span><br><span class="line">Broker</span><br><span class="line">Kafka集群包含一个或多个服务器，这种服务器被称为broker [5] </span><br><span class="line">Topic</span><br><span class="line">每条发布到Kafka集群的消息都有一个类别，这个类别被称为Topic。（物理上不同Topic的消息分开存储，逻辑上一个Topic的消息虽然保存于一个或多个broker上但用户只需指定消息的Topic即可生产或消费数据而不必关心数据存于何处）</span><br><span class="line">Partition</span><br><span class="line">Partition是物理上的概念，每个Topic包含一个或多个Partition.</span><br><span class="line">Producer</span><br><span class="line">负责发布消息到Kafka broker</span><br><span class="line">Consumer</span><br><span class="line">消息消费者，向Kafka broker读取消息的客户端。</span><br><span class="line">Consumer Group</span><br><span class="line">每个Consumer属于一个特定的Consumer Group（可为每个Consumer指定group name，若不指定group name则属于默认的group）。</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>RocketMQ(java)</p>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
-<li><a href="https://blog.csdn.net/dj2008/article/details/78872889" target="_blank" rel="noopener">消息队列的应用场景和常见的消息队列之间的比较</a></li>
-<li><a href="https://www.cnblogs.com/wangiqngpei557/p/6158094.html" target="_blank" rel="noopener">RabbitMQ 高可用集群搭建及电商平台使用经验总结</a></li>
-<li><a href="https://blog.csdn.net/lingbo229/article/details/80761778" target="_blank" rel="noopener">Kafka史上最详细原理总结 —-看完绝对不后悔</a></li>
+<hr>
+<h2 id="服务可用性与自动恢复"><a href="#服务可用性与自动恢复" class="headerlink" title="服务可用性与自动恢复"></a>服务可用性与自动恢复</h2><ol>
+<li>如果服务的健康检查（readiness）失败，故障的服务实例从service endpoint中下线，外部请求将不会再转发到该服务上，一定程度上保证正在提供的服务的正确性，如果服务自我恢复了（比如网络问题），会自动重新加入service endpoint对外提供服务。</li>
+<li>如果设置了Container（liveness）的探针，对故障服务的Container（liveness）的探针同样会失败，container会被kill掉，并根据原设置的container重启策略，系统倾向于在其原所在的机器上重启该container、或其他机器重新创建一个pod。</li>
+<li>由于上面的机制，整个服务实现了自身可用与自动恢复。</li>
+</ol>
+<hr>
+<p>##使用建议：</p>
+<ol>
+<li>建议对全部服务同时设置服务（readiness）和Container（liveness）的健康检查</li>
+<li>通过TCP对端口检查形式（TCPSocketAction），仅适用于端口已关闭或进程停止情况。因为即使服务异常，只要端口是打开状态，健康检查仍然是通过的。</li>
+<li>基于第二点，一般建议用ExecAction自定义健康检查逻辑，或采用HTTP Get请求进行检查（HTTPGetAction）。</li>
+<li>无论采用哪种类型的探针，一般建议设置检查服务（readiness）的时间短于检查Container（liveness）的时间，也可以将检查服务（readiness）的探针与Container（liveness）的探针设置为一致。目的是故障服务先下线，如果过一段时间还无法自动恢复，那么根据重启策略，重启该container、或其他机器重新创建一个pod恢复故障服务。</li>
+</ol>
+<hr>
+<h1 id="服务依赖"><a href="#服务依赖" class="headerlink" title="服务依赖"></a>服务依赖</h1><h2 id="理解Init-Container"><a href="#理解Init-Container" class="headerlink" title="理解Init Container"></a>理解Init Container</h2><p>一个pod中可以有一或多个Init Container。Pod的中多个Init Container启动顺序为yaml文件中的描述顺序，且串行方式启动，下一个Init/app Container必须等待上一个Init Container完成后方可启动</p>
+<p>由于Init Container必须要在pod状态变为Ready之前完成，所以其不需要readiness探针。另外在资源的requests与limits上与普通Container有细微差别，详见 Resources，除以上2点外，Init Container与普通Container并无明显区别</p>
+<p>Init Containers用途</p>
+<ol>
+<li>前文已经提及，由于Init Container必须在app Containers启动之前完成，所以可利用其特性，用作服务依赖处理。比如某一个服务A，需依赖db或memcached，那么可以利用服务A pod的Init Container判断db/memcached是否正常提供服务，如果启动服务失败或工作异常，设置Init Container启动失败，那么pod中的服务A就不会被启动了。</li>
+<li>应用镜像因安全原因等没办法安装或运行的工具，可放到Init Container中运行。另外，Init Container独立于业务服务，与业务无关的工具如sed, awk, python, dig等也可以按需放到Init Container之中。最后，Init Container也可以被授权访问应用Container无权访问的内容。</li>
 </ol>
 
           
@@ -1728,7 +2114,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">39</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1759,7 +2145,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1882,7 +2270,19 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">59</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
