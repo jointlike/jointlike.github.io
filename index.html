@@ -341,6 +341,404 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/06/24/helm入门学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/24/helm入门学习/" class="post-title-link" itemprop="url">Helm Charts 快速入门</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-24 14:50:25" itemprop="dateCreated datePublished" datetime="2019-06-24T14:50:25+08:00">2019-06-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/运维开发/" itemprop="url" rel="index"><span itemprop="name">运维开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>Kubernetes 是一个基于云平台跨云虚机集群管理操作系统。类似于linux</p>
+<p>Helm是用于Kubernetes的这个生态系统的一个软件包管理工具，主要用来管理 Charts。类似于yum / apt，相对于rpm，它主要用途就是管理了应用依赖问题。</p>
+<h2 id="解决Kubectl部署问题"><a href="#解决Kubectl部署问题" class="headerlink" title="解决Kubectl部署问题"></a>解决Kubectl部署问题</h2><ul>
+<li>如何管理、编辑和更新这些这些分散的 Kubernetes 应用配置文件。</li>
+<li>如何把一套相关的配置文件作为一个应用进行管理。</li>
+<li>如何分发和重用 Kubernetes 的应用配置。</li>
+</ul>
+<h2 id="功能描述"><a href="#功能描述" class="headerlink" title="功能描述"></a>功能描述</h2><p>Helm Chart 是用来封装 Kubernetes 原生应用程序的一系列 YAML 文件。可以在你部署应用的时候自定义应用程序的一些 Metadata，以便于应用程序的分发。</p>
+<p>对于应用发布者而言，可以通过 Helm 打包应用、管理应用依赖关系、管理应用版本并发布应用到软件仓库。</p>
+<p>对于使用者而言，使用 Helm 后不用需要编写复杂的应用部署文件，可以以简单的方式在 Kubernetes 上查找、安装、升级、回滚、卸载应用程序。</p>
+<h2 id="功能组件"><a href="#功能组件" class="headerlink" title="功能组件"></a>功能组件</h2><ul>
+<li><p>Helm<br>Helm 是一个命令行下的客户端工具。主要用于 Kubernetes 应用程序 Chart 的创建、打包、发布以及创建和管理本地和远程的 Chart 仓库。</p>
+</li>
+<li><p>Tiller<br>Tiller 是 Helm 的服务端，部署在 Kubernetes 集群中。Tiller用于接收 Helm 的请求，并根据 Chart 生成 Kubernetes 的部署文件（ Helm 称为 Release ），然后提交给 Kubernetes 创建应用。Tiller 还提供了 Release 的升级、删除、回滚等一系列功能。</p>
+</li>
+<li><p>Chart<br>Helm 的软件包，采用 TAR 格式。类似于APT的DEB包或者YUM的RPM包，其包含了一组定义 Kubernetes 资源相关的 YAML 文件。</p>
+</li>
+<li><p>Repoistory<br>Helm 的软件仓库，Repository 本质上是一个 Web 服务器，该服务器保存了一系列的 Chart 软件包以供用户下载，并且提供了一个该 Repository 的 Chart 包的清单文件以供查询。Helm 可以同时管理多个不同的 Repository。</p>
+</li>
+<li><p>Release<br>使用 helm install 命令在 Kubernetes 集群中部署的 Chart 称为 Release。</p>
+<blockquote>
+<p>需要注意的是：Helm 中提到的 Release 和我们通常概念中的版本有所不同，这里的 Release 可以理解为 Helm 使用 Chart 包部署的一个应用实例。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="Helm-工作原理"><a href="#Helm-工作原理" class="headerlink" title="Helm 工作原理"></a>Helm 工作原理</h2><ul>
+<li><strong>Chart Install 过程</strong></li>
+</ul>
+<ul>
+<li>Helm 从指定的目录或者 TAR 文件中解析出 Chart 结构信息。</li>
+<li>Helm 将指定的 Chart 结构和 Values 信息通过 gRPC 传递给 Tiller。</li>
+<li>Tiller 根据 Chart 和 Values 生成一个 Release。</li>
+<li>Tiller 将 Release 发送给 Kubernetes 用于生成 Release。</li>
+</ul>
+<ul>
+<li><strong>Chart Update 过程</strong></li>
+</ul>
+<ul>
+<li>Helm 从指定的目录或者 TAR 文件中解析出 Chart 结构信息。</li>
+<li>Helm 将需要更新的 Release 的名称、Chart 结构和 Values 信息传递给 Tiller。</li>
+<li>Tiller 生成 Release 并更新指定名称的 Release 的 History。</li>
+<li>Tiller 将 Release 发送给 Kubernetes 用于更新 Release。</li>
+</ul>
+<ul>
+<li><strong>Chart Rollback 过程</strong></li>
+</ul>
+<ul>
+<li>Helm 将要回滚的 Release 的名称传递给 Tiller。</li>
+<li>Tiller 根据 Release 的名称查找 History。</li>
+<li>Tiller 从 History 中获取上一个 Release。</li>
+<li>Tiller 将上一个 Release 发送给 Kubernetes 用于替换当前 Release。</li>
+</ul>
+<ul>
+<li><strong>Chart 处理依赖说明</strong><br>Tiller 在处理 Chart 时，直接将 Chart 以及其依赖的所有 Charts 合并为一个 Release，同时传递给 Kubernetes。因此 Tiller 并不负责管理依赖之间的启动顺序。Chart 中的应用需要能够自行处理依赖关系。</li>
+</ul>
+<h2 id="构建一个Helm-Chart"><a href="#构建一个Helm-Chart" class="headerlink" title="构建一个Helm Chart"></a>构建一个Helm Chart</h2><p>命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm create mychart</span><br></pre></td></tr></table></figure></p>
+<p>查看<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ tree mychart/</span><br><span class="line">mychart/</span><br><span class="line">├── charts</span><br><span class="line">├── Chart.yaml</span><br><span class="line">├── templates</span><br><span class="line">│   ├── deployment.yaml</span><br><span class="line">│   ├── _helpers.tpl</span><br><span class="line">│   ├── ingress.yaml</span><br><span class="line">│   ├── NOTES.txt</span><br><span class="line">│   └── service.yaml</span><br><span class="line">└── values.yaml</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>Chart.yaml 用于描述这个 Chart的相关信息，包括名字、描述信息以及版本等。</li>
+<li>NOTES.txt 用于介绍 Chart 部署后的一些信息，例如：如何使用这个 Chart、列出缺省的设置等。</li>
+<li>Templates 目录下是 YAML 文件的模板，该模板文件遵循 Go template 语法。</li>
+<li>values.yaml 用于存储 templates 目录中模板文件中用到变量的值。</li>
+</ul>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ol>
+<li><a href="https://www.hi-linux.com/posts/21466.html" target="_blank" rel="noopener">Helm 入门指南</a></li>
+<li><a href="http://cloud.51cto.com/art/201903/594141.htm" target="_blank" rel="noopener">十六种实用的Kubernetes Helm Charts工具</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/05/24/web安全-跨域与同源策略/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/24/web安全-跨域与同源策略/" class="post-title-link" itemprop="url">Python Web安全之跨域与同源策略及django安全</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2019-05-24T14:50:25+08:00">2019-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="同源"><a href="#同源" class="headerlink" title="同源"></a>同源</h3><p>同源策略（Same origin policy）是一种约定，它是浏览器最核心也最基本的安全功能，如果缺少了同源策略，则浏览器的正常功能可能都会受到影响。可以说Web是构建在同源策略基础之上的，浏览器只是针对同源策略的一种实现。</p>
+<p>所谓同源是指，域名，协议，端口相同。</p>
+<p>同源策略是浏览器的行为，是为了保护<strong>本地数据</strong>不被JavaScript代码获取回来的数据污染，因此拦截的是客户端发出的请求回来的数据接收，即请求发送了，服务器响应了，但是无法被浏览器接收。</p>
+<h3 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h3><p>非同源即为跨域</p>
+<h2 id="为什么实际开发中会有跨域ajax请求"><a href="#为什么实际开发中会有跨域ajax请求" class="headerlink" title="为什么实际开发中会有跨域ajax请求"></a>为什么实际开发中会有跨域ajax请求</h2><blockquote>
+<p>当你调用一个现有的API或公开API：想象一下，你接到了一个新需求，需要在当前开发的新闻详细页<a href="http://www.yournews.com/p/123展示该新闻的相关推荐。令人欣慰的是，推荐的接口已经在你们公司的其他产品线里实现了，你只需要给该接口一个query即可：http://www.mynews.com/recommend?query=123。然而问题来了——你发起了一个跨域请求。" target="_blank" rel="noopener">http://www.yournews.com/p/123展示该新闻的相关推荐。令人欣慰的是，推荐的接口已经在你们公司的其他产品线里实现了，你只需要给该接口一个query即可：http://www.mynews.com/recommend?query=123。然而问题来了——你发起了一个跨域请求。</a></p>
+</blockquote>
+<blockquote>
+<p>前后端分离的开发模式下，在本地进行接口联调时：也许在你的项目里，你想尝试前后端分离的开发模式。你在本地开发时，mock了一些假数据来帮助自己本地开发。而有一天，你希望在本地和后端同学进行联调。此时，后端rd的接口地址和你发生了跨域问题。这阻止了你们的联调，你只能继续使用你mock的假数据。</p>
+</blockquote>
+<h2 id="跨域的一些方案"><a href="#跨域的一些方案" class="headerlink" title="跨域的一些方案"></a>跨域的一些方案</h2><ol>
+<li>使用代理（proxy）,将浏览器跨域请求转到代理/服务端</li>
+<li>CORS(Cross-Origin Resource Sharing）,即服务器端的Header中添加: Access-Control-Allow-Origin:*/allow hosts 允许跨域</li>
+<li>Jsonp(JSON with Padding) 是 json 的一种”使用模式”，可以让网页从别的域名（网站）那获取资料，即跨域读取数据。原理Web页面上调用js文件时则不受是否跨域的影响（不仅如此，我们还发现凡是拥有”src”这个属性的标签都拥有跨域的能力，比如&lt;\script&gt;、&lt;\img&gt;、&lt;\iframe&gt;),那么可以在后端callback时,生成一个前端脚本并自动执行该脚本获取跨域数据.</li>
+</ol>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ol>
+<li><a href="https://www.jianshu.com/p/438183ddcea8" target="_blank" rel="noopener">浏览器同源策略与ajax跨域方法汇总</a></li>
+<li><a href="https://blog.csdn.net/javali1995/article/details/78516742" target="_blank" rel="noopener">Django的安全防护-Django在安全问题上的处理详解</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/04/27/常用机器学习算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -814,6 +1212,177 @@ SyntaxError: invalid syntax
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/04/24/NLP自然语言理解入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/04/24/NLP自然语言理解入门/" class="post-title-link" itemprop="url">自然语言处理入门</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-24 14:50:25" itemprop="dateCreated datePublished" datetime="2019-04-24T14:50:25+08:00">2019-04-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="自然语言处理一般流程"><a href="#自然语言处理一般流程" class="headerlink" title="自然语言处理一般流程"></a>自然语言处理一般流程</h2><ol>
+<li>中文分词，工具包jieba,nltk,stanfordnlp,hanlp</li>
+<li>词性识别</li>
+<li>命名实体识别，包括人名，地名，机构等关键命名实体识别等</li>
+<li>关键词提取，自动摘要，短语块。工具包有jieba的textRank</li>
+<li>句法依存，语义依存</li>
+<li>词向量，语言模型</li>
+</ol>
+<h2 id="公司要求与技能目标"><a href="#公司要求与技能目标" class="headerlink" title="公司要求与技能目标"></a>公司要求与技能目标</h2><p>一、自然语言处理面试技能要求：</p>
+<p>1.熟练掌握自然语言处理NLP相关理论与技术方法</p>
+<p>文本分类、中文分词、词性分类、命名实体识别、词义消歧、共指处理、句法分析、<br>情感分析、信息抽取（实体、关系、事件抽取）、知识库构建、自动摘要、智能问答、<br>等自然语言处理技术，熟悉语义分析方法和技术（相似度计算、本体理论、语义推理等）</p>
+<p>2.熟悉常见的机器学习算法（逻辑回归、SVM、决策树、贝叶斯以及各种深度学习网络包括CNN、RNN、LSTM等）</p>
+<p>3.熟练使用TensorFlow, Theano, Torch, Caffe, MXNet等深度学习框架</p>
+<p>4.<a href="https://blog.csdn.net/xwd18280820053/article/details/76026523" target="_blank" rel="noopener">面试常问的深度学习(DNN、CNN、RNN)的相关问题</a></p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p>1.<a href="http://www.sohu.com/a/224284175_629694" target="_blank" rel="noopener">为何自然语言处理领域难以出现“独角兽”？</a><br>2.<a href="https://www.sohu.com/a/197318926_206784" target="_blank" rel="noopener">NLP中自动生产文摘（auto text summarization）</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/04/24/知识图谱KG入门/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1005,7 +1574,7 @@ SyntaxError: invalid syntax
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/04/24/NLP自然语言理解入门/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2019/03/24/运维-正向代理与反向代理区别/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -1025,7 +1594,7 @@ SyntaxError: invalid syntax
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2019/04/24/NLP自然语言理解入门/" class="post-title-link" itemprop="url">自然语言处理入门</a>
+                <a href="/2019/03/24/运维-正向代理与反向代理区别/" class="post-title-link" itemprop="url">正向代理和反向代理的区别</a>
               
             
           </h2>
@@ -1050,7 +1619,7 @@ SyntaxError: invalid syntax
                 
               
 
-              <time title="创建时间：2019-04-24 14:50:25" itemprop="dateCreated datePublished" datetime="2019-04-24T14:50:25+08:00">2019-04-24</time>
+              <time title="创建时间：2019-03-24 14:50:25" itemprop="dateCreated datePublished" datetime="2019-03-24T14:50:25+08:00">2019-03-24</time>
             
 
             
@@ -1068,7 +1637,7 @@ SyntaxError: invalid syntax
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/运维开发/" itemprop="url" rel="index"><span itemprop="name">运维开发</span></a></span>
 
                 
                 
@@ -1105,21 +1674,51 @@ SyntaxError: invalid syntax
       
         
           
-            <h2 id="自然语言处理一般流程"><a href="#自然语言处理一般流程" class="headerlink" title="自然语言处理一般流程"></a>自然语言处理一般流程</h2><ol>
-<li>中文分词，工具包jieba,nltk,stanfordnlp,hanlp</li>
-<li>词性识别</li>
-<li>命名实体识别，包括人名，地名，机构等关键命名实体识别等</li>
-<li>关键词提取，自动摘要，短语块。工具包有jieba的textRank</li>
-<li>句法依存，语义依存</li>
-<li>词向量，语言模型</li>
+            <p>看过很多次正向代理，反向代理。但是其最大的区别有时候想来又混乱了，所以记录以下：</p>
+<h2 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">正向代理</th>
+<th style="text-align:center">反向代理 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">概念理解</td>
+<td style="text-align:center">代理客户端</td>
+<td style="text-align:center">代理服务端 </td>
+</tr>
+<tr>
+<td style="text-align:center">比喻理解</td>
+<td style="text-align:center">服务员代理客户订餐</td>
+<td style="text-align:center">服务员代理厨师供应</td>
+</tr>
+<tr>
+<td style="text-align:center">数字理解</td>
+<td style="text-align:center">*-&gt;agent-&gt;server</td>
+<td style="text-align:center">client-&gt;agent-&gt;*</td>
+</tr>
+<tr>
+<td style="text-align:center">LAN网络模型</td>
+<td style="text-align:center">前端+proxy</td>
+<td style="text-align:center">proxy+后端</td>
+</tr>
+<tr>
+<td style="text-align:center">作用</td>
+<td style="text-align:center">安全、翻墙、Cache</td>
+<td style="text-align:center">安全、负载均衡</td>
+</tr>
+<tr>
+<td style="text-align:center">典型案例</td>
+<td style="text-align:center">翻墙、VPN</td>
+<td style="text-align:center">Nginx负载均衡 </td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ol>
+<li><a href="https://www.zhihu.com/question/36412304" target="_blank" rel="noopener">正向代理 反向代理 本质区别？</a></li>
 </ol>
-<h2 id="公司要求与技能目标"><a href="#公司要求与技能目标" class="headerlink" title="公司要求与技能目标"></a>公司要求与技能目标</h2><p>一、自然语言处理面试技能要求：</p>
-<p>1.熟练掌握自然语言处理NLP相关理论与技术方法</p>
-<p>文本分类、中文分词、词性分类、命名实体识别、词义消歧、共指处理、句法分析、<br>情感分析、信息抽取（实体、关系、事件抽取）、知识库构建、自动摘要、智能问答、<br>等自然语言处理技术，熟悉语义分析方法和技术（相似度计算、本体理论、语义推理等）</p>
-<p>2.熟悉常见的机器学习算法（逻辑回归、SVM、决策树、贝叶斯以及各种深度学习网络包括CNN、RNN、LSTM等）</p>
-<p>3.熟练使用TensorFlow, Theano, Torch, Caffe, MXNet等深度学习框架</p>
-<p>4.<a href="https://blog.csdn.net/xwd18280820053/article/details/76026523" target="_blank" rel="noopener">面试常问的深度学习(DNN、CNN、RNN)的相关问题</a></p>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p>1.<a href="http://www.sohu.com/a/224284175_629694" target="_blank" rel="noopener">为何自然语言处理领域难以出现“独角兽”？</a><br>2.<a href="https://www.sohu.com/a/197318926_206784" target="_blank" rel="noopener">NLP中自动生产文摘（auto text summarization）</a></p>
 
           
         
@@ -1864,693 +2463,11 @@ SELECT column_name(s) FROM table_name2
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/08/31/DB_Mysql性能优化技巧套路/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/08/31/DB_Mysql性能优化技巧套路/" class="post-title-link" itemprop="url">数据库mysql性能优化套路</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-08-31 17:54:54" itemprop="dateCreated datePublished" datetime="2018-08-31T17:54:54+08:00">2018-08-31</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>所谓技术，都是套路。–Tim</p>
-</blockquote>
-<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><p>数据库优化常伴随如下问题：</p>
-<ul>
-<li>面对的是生产环境数据库系统</li>
-<li>任何优化技巧本身都有风险</li>
-<li>任何优化技巧都有副作用</li>
-</ul>
-<h1 id="套路"><a href="#套路" class="headerlink" title="套路"></a>套路</h1><p>SQL及索引优化 &gt; 数据库表结构优化 &gt; 数据库配置优化 &gt; 系统配置优化 &gt; 硬件优化</p>
-<h2 id="SQL及索引优化"><a href="#SQL及索引优化" class="headerlink" title="SQL及索引优化"></a>SQL及索引优化</h2><p>分析sql方法–EXPLAIN：EXPLAIN SELECT * FROM employees.titles WHERE emp_no=’10001’;</p>
-<h3 id="推荐："><a href="#推荐：" class="headerlink" title="推荐："></a>推荐：</h3><p>建索引，一般在 where 及 order by 中涉及到的列上建索引，尽量不要对可以重复的字段建索引。</p>
-<p>善用 limit</p>
-<p>I/O规划与配置，开启查询缓存</p>
-<h3 id="不推荐："><a href="#不推荐：" class="headerlink" title="不推荐："></a>不推荐：</h3><p>避免在 where 中使用 != 或 &lt;&gt;，因为会放弃索引，也不要进行 null 值判断。</p>
-<p>避免在 where 中对字段进行函数操作、表达式操作。</p>
-<p>避免使用select * from …</p>
-<p>避免在 where 中使用or，可以用union all代替：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select id from t where num=10 or num=20</span><br><span class="line"></span><br><span class="line">//改为</span><br><span class="line"></span><br><span class="line">select id from t where num=10</span><br><span class="line">union all</span><br><span class="line">select id from t where num=20</span><br></pre></td></tr></table></figure></p>
-<p>避免使用 like- %，在此种情况下可以进行全文索引。</p>
-<p>避免某些 SQL 函数直接在 SQL 语句中使用，从而导致 Mysql 缓存失效。</p>
-<p>避免使用没有意义的查询，如需晚餐一个空表结构，select col1 into #t from t where l=0</p>
-<p>避免使用大事务操作，提高系统并发能力。</p>
-<p>避免向客户端返回大数据量，仅返回必要的数据。</p>
-<p>慎重使用 in / not in，否则会导致全表扫描。能用between就不要用in, 或用exists代替，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select num from a where exists(select l from b where num=a.num)</span><br></pre></td></tr></table></figure></p>
-<p>不是所有的索引都对查询有效，SQL是根据表中数据进行查询优化的，当索引列有大量数据重复时，SQL查询可能不会取利用索引。适当的索引数量减少空间占用，并且不会影响insert 及 update 的效率。</p>
-<h2 id="数据库表结构优化"><a href="#数据库表结构优化" class="headerlink" title="数据库表结构优化"></a>数据库表结构优化</h2><p>表的设计。垂直分割表，使得固定表与变长表分割，从而降低表的复杂度和字段的数目。</p>
-<p>字段大小合宜。字段的取值是有限而且是固定的，这种情况下可以用 enum，IP 字段可以用 unsigned int 来存储。</p>
-<h2 id="数据库配置优化"><a href="#数据库配置优化" class="headerlink" title="数据库配置优化"></a>数据库配置优化</h2><h3 id="存储引擎层（innodb基础优化参数）"><a href="#存储引擎层（innodb基础优化参数）" class="headerlink" title="存储引擎层（innodb基础优化参数）"></a>存储引擎层（innodb基础优化参数）</h3><p>default-storage-engine</p>
-<p>innodb_buffer_pool_size# 没有固定大小，50%测试值，看看情况再微调。但是尽量设置不要超过物理内存70% innodb_file_per_table=(1,0) </p>
-<p>innodb_flush_log_at_trx_commit=(0,1,2)#1是最安全的，0是性能最高，2折中 </p>
-<p>binlog_sync</p>
-<p>Innodb_flush_method=(O_DIRECT, fdatasync)</p>
-<p>innodb_log_buffer_size#100M以下 </p>
-<p>innodb_log_file_size#100M 以下 </p>
-<p>innodb_log_files_in_group#5个成员以下,一般2-3个够用（iblogfile0-N） </p>
-<p>innodb_max_dirty_pages_pct#达到百分之75的时候刷写 内存脏页到磁盘。 log_bin </p>
-<p>max_binlog_cache_size#可以不设置 </p>
-<p>max_binlog_size#可以不设置 </p>
-<p>innodb_additional_mem_pool_size#小于2G内存的机器，推荐值是20M。32G内存以上100M</p>
-<h3 id="数据库参数优化"><a href="#数据库参数优化" class="headerlink" title="数据库参数优化"></a>数据库参数优化</h3><p>调整：<br>实例整体（高级优化，扩展）</p>
-<p>thread_concurrency#并发线程数量个数 </p>
-<p>sort_buffer_size#排序缓存 </p>
-<p>read_buffer_size#顺序读取缓存 </p>
-<p>read_rnd_buffer_size#随机读取缓存 </p>
-<p>key_buffer_size#索引缓存 </p>
-<p>thread_cache_size#线程缓存(1G—&gt;8, 2G—&gt;16, 3G—&gt;32, &gt;3G—&gt;64)</p>
-<p>连接层（基础优化）</p>
-<p>设置合理的连接客户和连接方式</p>
-<p>max_connections#最大连接数，看交易笔数设置 </p>
-<p>max_connect_errors#最大错误连接数，能大则大 </p>
-<p>connect_timeout#连接超时 </p>
-<p>max_user_connections#最大用户连接数 </p>
-<p>skip-name-resolve#跳过域名解析 </p>
-<p>wait_timeout#等待超时 </p>
-<p>back_log#可以在堆栈中的连接数量</p>
-<p>SQL层（基础优化）</p>
-<p>query_cache_size： 查询缓存</p>
-<p>OLAP类型数据库,需要重点加大此内存缓存.</p>
-<p>但是一般不会超过GB.</p>
-<p>对于经常被修改的数据，缓存会立马失效。</p>
-<p>我们可以实用内存数据库（redis、memecache），替代他的功能。</p>
-<h2 id="系统配置优化"><a href="#系统配置优化" class="headerlink" title="系统配置优化"></a>系统配置优化</h2><h3 id="底层系统"><a href="#底层系统" class="headerlink" title="底层系统"></a>底层系统</h3><p>Cpu：基本不需要调整，在硬件选择方面下功夫即可。</p>
-<p>内存：基本不需要调整，在硬件选择方面下功夫即可。</p>
-<p>SWAP：MySQL尽量避免使用swap。阿里云的服务器中默认swap为0</p>
-<p>IO：raid、no lvm、 ext4或xfs、ssd、IO调度策略</p>
-<p>Swap调整(不使用swap分区)</p>
-<p>/proc/sys/vm/swappiness的内容改成0（临时）</p>
-<p>/etc/sysctl.conf上添加vm.swappiness=0（永久）</p>
-<p>这个参数决定了Linux是倾向于使用swap，还是倾向于释放文件系统cache。在内存紧张的情况下，数值越低越倾向于释放文件系统cache。当然，这个参数只能减少使用swap的概率，并不能避免Linux使用swap。</p>
-<p>修改MySQL的配置参数innodb_flush_method，开启O_DIRECT模式。这种情况下，InnoDB的buffer pool会直接绕过文件系统cache来访问磁盘，但是redo log依旧会使用文件系统cache。值得注意的是，Redo log是覆写模式的，即使使用了文件系统的cache，也不会占用太多</p>
-<p>IO调度策略</p>
-<p>echo deadline&gt;/sys/block/sda/queue/scheduler#临时修改为deadline</p>
-<p>永久修改如下：</p>
-<p>vi /boot/grub/grub.conf</p>
-<p>更改到如下内容:</p>
-<p>kernel /boot/vmlinuz-2.6.18-8.el5 ro root=LABEL=/ elevator=deadline rhgb quiet</p>
-<p>Linux系统内核参数优化</p>
-<p>vim/etc/sysctl.conf</p>
-<p>net.ipv4.ip_local_port_range =102465535# 用户端口范围 </p>
-<p>net.ipv4.tcp_max_syn_backlog =4096</p>
-<p>net.ipv4.tcp_fin_timeout =30</p>
-<p>fs.file-max=65535# 系统最大文件句柄，控制的是能打开文件最大数量</p>
-<p>用户限制参数（mysql可以不设置以下配置）</p>
-<p>vim/etc/security/limits.conf</p>
-<ul>
-<li><p>soft nproc65535</p>
-</li>
-<li><p>hard nproc65535</p>
-</li>
-<li><p>soft nofile65535</p>
-</li>
-<li><p>hard nofile65535</p>
-</li>
-</ul>
-<h2 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h2><p>CPU计算性能优化<br>IO高性能硬盘优化<br>网络优化</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a href="https://www.cnblogs.com/excellencesy/p/9770619.html" target="_blank" rel="noopener">史上最全的 MySQL 高性能优化实战总结！</a></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/08/31/DB_Mysql数据库索引技术原理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/08/31/DB_Mysql数据库索引技术原理/" class="post-title-link" itemprop="url">Mysql数据库索引技术原理</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-08-31 17:54:54" itemprop="dateCreated datePublished" datetime="2018-08-31T17:54:54+08:00">2018-08-31</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="mysql索引"><a href="#mysql索引" class="headerlink" title="mysql索引"></a>mysql索引</h2><p>索引是帮助mysql高效获取数据的数据结构，是数据库系统为满足高效的查找算法而维护的一种特殊数据结构，这些数据结构以某种映射关系指向数据。这种数据结构就是索引。</p>
-<h2 id="索引的类型"><a href="#索引的类型" class="headerlink" title="索引的类型"></a>索引的类型</h2><p>根据数据库的功能，可以在数据库设计器中创建四种常用索引：普通索引、唯一索引、主键索引和聚集索引。</p>
-<p>CREATE [UNIQUE] [CLUSTERED| NONCLUSTERED] INDEX &lt;索引名&gt;<br>ON &lt;表名&gt;(&lt;列名&gt;[ASC|DESC] [, &lt;列名&gt;[ASC|DESC]…])</p>
-<h3 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">最基本的索引类型，没有唯一性之类的限制。普通索引可以通过以下几种方式创建：</span><br><span class="line">创建索引，例如CREATE INDEX &lt;索引的名字&gt; ON tablename (列的列表)；</span><br><span class="line">修改表，例如ALTER TABLE tablename ADD INDEX [索引的名字] (列的列表)；</span><br><span class="line">创建表的时候指定索引，例如CREATE TABLE tablename ( [...], INDEX [索引的名字] (列的列表) )；</span><br></pre></td></tr></table></figure>
-<h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">唯一索引是不允许其中任何两行具有相同索引值的索引。</span><br><span class="line">当现有数据中存在重复的键值时，大多数数据库不允许将新创建的唯一索引与表一起保存。数据库还可能防止添加将在表中创建重复键值的新数据。例如，如果在 employee 表中职员的姓 (lname) 上创建了唯一索引，则任何两个员工都不能同姓。</span><br><span class="line">对某个列建立UNIQUE索引后，插入新记录时，数据库管理系统会自动检查新纪录在该列上是否取了重复值，在CREATE TABLE 命令中的UNIQE约束将隐式创建UNIQUE索引。</span><br><span class="line">创建唯一索引的几种方式：</span><br><span class="line">创建索引，例如CREATE UNIQUE INDEX &lt;索引的名字&gt; ON tablename (列的列表)；</span><br><span class="line">修改表，例如ALTER TABLE tablename ADD UNIQUE [索引的名字] (列的列表); ；</span><br><span class="line">创建表的时候指定索引，例如CREATE TABLE tablename ( [...], UNIQUE [索引的名字] (列的列表) )；</span><br></pre></td></tr></table></figure>
-<h3 id="主键索引"><a href="#主键索引" class="headerlink" title="主键索引"></a>主键索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">简称为主索引，数据库表中一列或列组合（字段）的值唯一标识表中的每一行。该列称为表的主键。</span><br><span class="line">在数据库关系图中为表定义主键将自动创建主键索引，主键索引是唯一索引的特定类型。该索引要求主键中的每个值都唯一。当在查询中使用主键索引时，它还允许对数据的快速访问。</span><br><span class="line">提示尽管唯一索引有助于定位信息，但为获得最佳性能结果，建议改用主键索引。</span><br></pre></td></tr></table></figure>
-<h3 id="候选索引"><a href="#候选索引" class="headerlink" title="候选索引"></a>候选索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">与主索引一样要求字段值的唯一性，并决定了处理记录的顺序。在数据库和自由表中，可以为每个表建立多个候选索引。</span><br></pre></td></tr></table></figure>
-<h3 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">也称为聚簇索引，在聚集索引中，表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引， 即如果存在聚集索引，就不能再指定CLUSTERED 关键字。</span><br><span class="line">索引不是聚集索引，则表中行的物理顺序与键值的逻辑顺序不匹配。与非聚集索引相比，聚集索引通常提供更快的数据访问速度。聚集索引更适用于对很少对基表进行增删改操作的情况。</span><br><span class="line">如果在表中创建了主键约束，SQL Server将自动为其产生唯一性约束。在创建主键约束时，指定了CLUSTERED关键字或干脆没有制定该关键字，SQL Sever将会自动为表生成唯一聚集索引。</span><br></pre></td></tr></table></figure>
-<h3 id="非聚集索引"><a href="#非聚集索引" class="headerlink" title="非聚集索引"></a>非聚集索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">也叫非簇索引，在非聚集索引中，数据库表中记录的物理顺序与索引顺序可以不相同。一个表中只能有一个聚集索引，但表中的每一列都可以有自己的非聚集索引。如果在表中创建了主键约束，SQL Server将自动为其产生唯一性约束。在创建主键约束时，如果制定CLUSTERED关键字，则将为表产生唯一聚集索引。</span><br></pre></td></tr></table></figure>
-<h2 id="索引底层数据结构"><a href="#索引底层数据结构" class="headerlink" title="索引底层数据结构"></a>索引底层数据结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">B-Tree B+Tree 相比红黑树的优势：磁盘预读取多余的数据到内存，BTree由于高度较小水平分叉较多，一次读取的数据较快较多，减少磁盘读取，提高效率。</span><br><span class="line">如果按照B-tree索引，可以直接返回，带顺序的数据，但这个数据只是该索引列含有的信息</span><br><span class="line"></span><br><span class="line">InnoDb引擎与MyIsAm区别：InnoDB是索引字段值索引，MyIsAm是字段地址索引。</span><br><span class="line"></span><br><span class="line">了解不同存储引擎的索引实现方式对于正确使用和优化索引都非常有帮助，例如知道了InnoDB的索引实现后，就很容易明白为什么不建议使用过长的字段作为主键，因为所有辅助索引都引用主索引，过长的主索引会令辅助索引变得过大。再例如，用非单调的字段作为主键在InnoDB中不是个好主意，因为InnoDB数据文件本身是一颗B+Tree，非单调的主键会造成在插入新记录时数据文件为了维持B+Tree的特性而频繁的分裂调整，十分低效，而使用自增字段作为主键则是一个很好的选择。</span><br></pre></td></tr></table></figure>
-<h2 id="索引查询算法"><a href="#索引查询算法" class="headerlink" title="索引查询算法"></a>索引查询算法</h2><pre><code>- 顺序查找，无索引情况下
-- 索引查找，目前数据库系统及文件系统都采用B-Tree 或其变种 B+Tree作为索引结构。
-</code></pre><h2 id="索引结构优化"><a href="#索引结构优化" class="headerlink" title="索引结构优化"></a>索引结构优化</h2><ul>
-<li><p>高效使用索引的首要条件是知道什么样的查询会使用到索引，这个问题和B+Tree中的“最左前缀原理”有关。一般在WHERE 和 JOIN子句都是索引可以选择的对象。</p>
-</li>
-<li><p>范围查询（in, &gt; ,&lt; ) 后面的数据会用不上索引。</p>
-</li>
-<li><p>查询条件中含有函数或表达式会用不上索引。</p>
-</li>
-<li><p>索引选择性与前缀索引：只在查询频繁的字段增加索引，联合索引不必要全字段，用列的前缀代替整个列作为索引key，短索引速度更快。</p>
-</li>
-<li><p>考虑已在表上创建的索引数量。最好避免在单个表上有很多索引。</p>
-</li>
-<li><p>对新索引进行试验以检查它对运行查询性能的影响。</p>
-</li>
-<li><p>检查已在表上创建的索引的定义。最好避免包含共享列的重叠索引。</p>
-</li>
-<li><p>检查某列中唯一数据值的数量，并将该数量与表中的行数进行比较。比较的结果就是该列的可选择性，这有助于确定该列是否适合建立索引，如果适合，确定索引的类型。</p>
-</li>
-<li><p>InnoDB的主键选择与插入优化：自增主键索引会按顺序插入最后，非自增主键索引会导致乱序插入的开销</p>
-</li>
-</ul>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
-<li><a href="https://blog.csdn.net/gitchat/article/details/78787837" target="_blank" rel="noopener">深入理解 MySQL 底层实现</a></li>
-<li><a href="https://www.cnblogs.com/sanwenyu/p/6129082.html" target="_blank" rel="noopener">MySQL索引背后的数据结构及算法原理</a></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/07/26/machine_learn_start/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/07/26/machine_learn_start/" class="post-title-link" itemprop="url">ML机器学习概念理解</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-07-26 14:50:25" itemprop="dateCreated datePublished" datetime="2018-07-26T14:50:25+08:00">2018-07-26</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习与自然语言理解/" itemprop="url" rel="index"><span itemprop="name">机器学习与自然语言理解</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概念理解："><a href="#概念理解：" class="headerlink" title="概念理解："></a>概念理解：</h2><p>机器学习是对依据经验提升自身性能或丰富自身知识的各种算法和系统的系统性研究。<br>机器学习所关注的问题是使用正确的特征来构建正确的模型，以完成既定的任务。（任务，模型，特征）<br>模型赋予机器学习领域以多样性，而特征和任务则为其带来某种程度的一致性。</p>
-<p>常见的分类模型有逻辑回归（LR）、朴素贝叶斯、SVM、GBDT和随机森林（RandomForest）、FFM 等</p>
-<p>LR(Logistic Regression)</p>
-<p>SVM(Support Vector Machine)</p>
-<p>GBDT(Gradient Boosting Decision Tree)</p>
-<p>FM（Factorization Machine） </p>
-<p>FFM（Field-aware Factorization Machine）</p>
-<p>标称型数据（类别）：一般在有限的数据中取，而且只存在‘是’和‘否’两种不同的结果（一般用于分类）<br>数值型数据：可以在无限的数据中取，而且数值比较具体化，例如4.02,6.23这种值（一般用于回归分析）</p>
-<p>系统性能体现在是否能真正达到目标期望，但存在过拟合问题，可能在某一方面相同问题上表现优异而相似问题上则表现糟糕，因此要考虑系统的推广性，适应性，个性化。</p>
-<h2 id="机器学习分类："><a href="#机器学习分类：" class="headerlink" title="机器学习分类："></a>机器学习分类：</h2><ul>
-<li><ol>
-<li>监督学习</li>
-</ol>
-</li>
-</ul>
-<p>有目标期望的学习</p>
-<ul>
-<li><p>1) 分类<br>目标变量是离散型，如是/否、1/2/3、A/B/C或者红/黄/黑等<br>常用分类器算法：<br>k-近邻算法、朴素贝叶斯算法、支持向量机、决策树</p>
-</li>
-<li><p>2) 回归<br>目标变量是连续型的数值，如0.0～100.00、999～999或者+∞～∞等<br>常用回归算法：<br>线性回归、局部加权线性回归、Ridge 回归、Lasso 最小回归系数估计</p>
-</li>
-</ul>
-<ul>
-<li><ol start="2">
-<li>无监督学习</li>
-</ol>
-</li>
-</ul>
-<p>无目标期望的学习</p>
-<ul>
-<li><p>1）聚类<br>自分类<br>常用算法：<br>K-均值（K-mean）、DBSCAN </p>
-</li>
-<li><p>2）密度估计<br>估计数据与每个分组的相似程度<br>常用算法：<br>最大期望算法、Parzen窗设计</p>
-</li>
-</ul>
-<p>另外，还可以根据模型的输出是否含有目标变量来划分模型，如果有则称其为预测性模型，否则称其为描述性模型。</p>
-<h2 id="机器学习方法论："><a href="#机器学习方法论：" class="headerlink" title="机器学习方法论："></a>机器学习方法论：</h2><ul>
-<li><ol>
-<li>理解数据</li>
-</ol>
-</li>
-</ul>
-<ul>
-<li>数据类型，离散型或连续型</li>
-<li>数据缺陷，是否缺失等</li>
-<li>数据噪声，是否存在干扰数据</li>
-</ul>
-<ul>
-<li><ol start="2">
-<li>一般从训练集中拿出一定比例数据做测试，避免真实数据过拟合影响准确率。抽取的方法为了避免运气不好，常使用交叉验证（cross validation）。交叉验证：对数据集中的数据分块，对训练集数据和测试集数据轮流交互验证，让每一部分数据都可以作为测试数据，最后对测试集性能取平均值。交叉验证主要用于有监督数据。</li>
-</ol>
-</li>
-</ul>
-<h2 id="机器学习的步骤："><a href="#机器学习的步骤：" class="headerlink" title="机器学习的步骤："></a>机器学习的步骤：</h2><ul>
-<li><ol>
-<li>收集数据</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>存储数据</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>分析数据（人工和自动化）</li>
-</ol>
-</li>
-<li><ol start="4">
-<li>训练算法–模型（无监督学习不需要训练）</li>
-</ol>
-</li>
-<li><ol start="5">
-<li>测试算法</li>
-</ol>
-</li>
-<li><ol start="6">
-<li>使用算法</li>
-</ol>
-</li>
-</ul>
-<h2 id="术语："><a href="#术语：" class="headerlink" title="术语："></a>术语：</h2><p>损失函数或代价函数：用来验证并作为回归函数的目标函数，越逼近拟合效果越好。即代价函数值越小越好。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2592,7 +2509,7 @@ SELECT column_name(s) FROM table_name2
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2625,7 +2542,9 @@ SELECT column_name(s) FROM table_name2
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2760,7 +2679,19 @@ SELECT column_name(s) FROM table_name2
                     
                       
                     
-                    <span class="site-state-item-count">59</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">65</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

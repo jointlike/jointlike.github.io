@@ -341,6 +341,457 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源有效性/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/k8s_资源有效性/" class="post-title-link" itemprop="url">Kubernetes之健康检查与服务依赖处理</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h1><h2 id="使用Liveness及Readness探针"><a href="#使用Liveness及Readness探针" class="headerlink" title="使用Liveness及Readness探针"></a>使用Liveness及Readness探针</h2><p>1.Liveness探针：主要用于判断Container是否处于运行状态，比如当服务crash或者死锁等情况发生时，kubelet会kill掉Container, 然后根据其设置的restart policy进行相应操作（可能会在本机重新启动Container，或者因为设置Kubernetes QoS，本机没有资源情况下会被分发的其他机器上重新启动）。<br>2.Readness探针：主要用于进一步判断服务是否已经正常工作，如果服务没有加载完成或工作异常，服务所在的Pod的IP地址会从服务的endpoints中被移除，也就是说，当服务没有ready时，会将其从服务的load balancer中移除，不会再接受或响应任何请求。</p>
+<p>liveness可用不一定readness可用，容器存活期间服务可能卡死状态。因此服务检查周期要短于健康检查周期。</p>
+<hr>
+<h2 id="探针处理Handler类型"><a href="#探针处理Handler类型" class="headerlink" title="探针处理Handler类型"></a>探针处理Handler类型</h2><p>无论对于Readness或Liveness探针，Handler均支持以下3种类型：ExecAction, TCPSocketAction, HTTPGetAction。每种类型说明与举例如下：</p>
+<ol>
+<li><p>ExecAction：Container内部执行某个具体的命令，成功返回：shell命令返回0。<br>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">   exec:</span><br><span class="line">     command:</span><br><span class="line">     - cat</span><br><span class="line">     - /tmp/healthy</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 5</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>TCPSocketAction：通过container的IP、port执行tcp进行检查，确认port是否打开，类似telnet<br>例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">readinessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 10</span><br><span class="line"> livenessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 15</span><br><span class="line">   periodSeconds: 20</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>HTTPGetAction: 通过container的IP、port、path，用HTTP Get请求进行检查，程序自定义返回结果及程序可用标准。<br>例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">  httpGet:</span><br><span class="line">    path: /healthz</span><br><span class="line">    port: 8080</span><br><span class="line">    httpHeaders:</span><br><span class="line">    - name: X-Custom-Header</span><br><span class="line">      value: Awesome</span><br><span class="line">  initialDelaySeconds: 3</span><br><span class="line">  periodSeconds: 3</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h2 id="服务可用性与自动恢复"><a href="#服务可用性与自动恢复" class="headerlink" title="服务可用性与自动恢复"></a>服务可用性与自动恢复</h2><ol>
+<li>如果服务的健康检查（readiness）失败，故障的服务实例从service endpoint中下线，外部请求将不会再转发到该服务上，一定程度上保证正在提供的服务的正确性，如果服务自我恢复了（比如网络问题），会自动重新加入service endpoint对外提供服务。</li>
+<li>如果设置了Container（liveness）的探针，对故障服务的Container（liveness）的探针同样会失败，container会被kill掉，并根据原设置的container重启策略，系统倾向于在其原所在的机器上重启该container、或其他机器重新创建一个pod。</li>
+<li>由于上面的机制，整个服务实现了自身可用与自动恢复。</li>
+</ol>
+<hr>
+<p>##使用建议：</p>
+<ol>
+<li>建议对全部服务同时设置服务（readiness）和Container（liveness）的健康检查</li>
+<li>通过TCP对端口检查形式（TCPSocketAction），仅适用于端口已关闭或进程停止情况。因为即使服务异常，只要端口是打开状态，健康检查仍然是通过的。</li>
+<li>基于第二点，一般建议用ExecAction自定义健康检查逻辑，或采用HTTP Get请求进行检查（HTTPGetAction）。</li>
+<li>无论采用哪种类型的探针，一般建议设置检查服务（readiness）的时间短于检查Container（liveness）的时间，也可以将检查服务（readiness）的探针与Container（liveness）的探针设置为一致。目的是故障服务先下线，如果过一段时间还无法自动恢复，那么根据重启策略，重启该container、或其他机器重新创建一个pod恢复故障服务。</li>
+</ol>
+<hr>
+<h1 id="服务依赖"><a href="#服务依赖" class="headerlink" title="服务依赖"></a>服务依赖</h1><h2 id="理解Init-Container"><a href="#理解Init-Container" class="headerlink" title="理解Init Container"></a>理解Init Container</h2><p>一个pod中可以有一或多个Init Container。Pod的中多个Init Container启动顺序为yaml文件中的描述顺序，且串行方式启动，下一个Init/app Container必须等待上一个Init Container完成后方可启动</p>
+<p>由于Init Container必须要在pod状态变为Ready之前完成，所以其不需要readiness探针。另外在资源的requests与limits上与普通Container有细微差别，详见 Resources，除以上2点外，Init Container与普通Container并无明显区别</p>
+<p>Init Containers用途</p>
+<ol>
+<li>前文已经提及，由于Init Container必须在app Containers启动之前完成，所以可利用其特性，用作服务依赖处理。比如某一个服务A，需依赖db或memcached，那么可以利用服务A pod的Init Container判断db/memcached是否正常提供服务，如果启动服务失败或工作异常，设置Init Container启动失败，那么pod中的服务A就不会被启动了。</li>
+<li>应用镜像因安全原因等没办法安装或运行的工具，可放到Init Container中运行。另外，Init Container独立于业务服务，与业务无关的工具如sed, awk, python, dig等也可以按需放到Init Container之中。最后，Init Container也可以被授权访问应用Container无权访问的内容。</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_authorization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/k8s_authorization/" class="post-title-link" itemprop="url">k8s权限管理</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>补充：<br><a href="https://www.cnblogs.com/cf532088799/p/7977083.html" target="_blank" rel="noopener">https://www.cnblogs.com/cf532088799/p/7977083.html</a></p>
+<h2 id="原理概述："><a href="#原理概述：" class="headerlink" title="原理概述："></a>原理概述：</h2><p>K8s授权管理分用户认证和授权两部分，授权根据RBAC角色控制方法为不同用户配置不同角色完成权限管理  </p>
+<h2 id="管理组件"><a href="#管理组件" class="headerlink" title="管理组件"></a>管理组件</h2><p>RBAC 是让用户能够访问 Kubernetes API 资源的授权方式。  </p>
+<h2 id="认证顺序"><a href="#认证顺序" class="headerlink" title="认证顺序"></a>认证顺序</h2><ol>
+<li>用户认证  </li>
+<li>权限认证  </li>
+</ol>
+<h2 id="用户类型"><a href="#用户类型" class="headerlink" title="用户类型"></a>用户类型</h2><p>k8s里面有两种用户，一种是User，一种就是service account，User给人用的，service account给进程用的，让进程有相关的权限。<br>如dasboard就是一个进程，我们就可以创建一个service account给它，让它去访问k8s。</p>
+<h2 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h2><p>角色是一系列的权限的集合，例如一个角色可以包含读取 Pod 的权限和列出 Pod 的权限， ClusterRole 跟 Role 类似，但是可以在集群中到处使用（ Role 是 namespace 一级的）。</p>
+<p>角色绑定 RoleBinding 把角色映射到用户，从而让这些用户继承角色在 namespace 中的权限。ClusterRoleBinding 让用户继承 ClusterRole 在整个集群中的权限。</p>
+<h2 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a>操作流程：</h2><ol>
+<li><p>创建用户，serviceaccount 或 user. user需要自设token。请看下面详细操作  </p>
+</li>
+<li><p>创建角色，分为 ClusterRole, Role. 指定操作资源及操作类型（增删改查等）  </p>
+</li>
+<li><p>绑定用户与角色，kind: ClusterRoleBinding or RoleBinding   </p>
+</li>
+</ol>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30684413?from_voters_page=true</a><br><a href="https://www.kubernetes.org.cn/3238.html" target="_blank" rel="noopener">https://www.kubernetes.org.cn/3238.html</a><br><a href="https://kubernetes.io/docs/admin/authentication/" target="_blank" rel="noopener">https://kubernetes.io/docs/admin/authentication/</a><br><a href="http://www.infoq.com/cn/articles/Kubernetes-API" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/Kubernetes-API</a><br><a href="https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/" target="_blank" rel="noopener">https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/</a><br><a href="https://blog.csdn.net/qq_34463875/article/details/78728041" target="_blank" rel="noopener">https://blog.csdn.net/qq_34463875/article/details/78728041</a></p>
+</blockquote>
+<h2 id="更多知识点："><a href="#更多知识点：" class="headerlink" title="更多知识点："></a>更多知识点：</h2><ul>
+<li><p>集群用户权限管理： 内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod<br>（如：dashboard）的权限来访问。serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
+</li>
+<li><p>在 pod 创建之初 service account 就必须已经存在，否则创建将被拒绝设置非默认的 service account，<br>只需要在 pod 的spec.serviceAccountName 字段中将name设置为您想要用的 service account 名字即可。<br>不能更新已创建的 pod 的 service account。</p>
+</li>
+<li><p>可以在现有的serviceaccount 中增加imagePullSecrets 使pod构建镜像时在当前命名空间默认引用私有仓库的认证。</p>
+</li>
+<li><p>内部集群之间访问只能根据serviceaccount定义的角色权限绑定每一个deploy pod的权限来访问。<br>serviceaccount若限制了权限，可以追加，减少权限只能重新绑定发布无法更改。</p>
+</li>
+<li><p>kubeconfig namespace 设置可以限定角色可访问的命名空间，若角色权限过大，binding中也可以进一步限定。</p>
+</li>
+</ul>
+<h2 id="案例："><a href="#案例：" class="headerlink" title="案例："></a>案例：</h2><ol>
+<li>service account(sc)案例   </li>
+</ol>
+<p>进程用户（service account）权限管理，是专门为进程用户创建，也可以达到权限管理的目的，然而建议是同一个进程多个用户。作为示例我们这里部署一个进程权限管理作为演示。部署流程如下：</p>
+<p>1). 创建sc   </p>
+<pre><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: admin-dashboard
+  name: admin-dashboard
+  namespace: kube-system
+</code></pre><p>2). 创建角色</p>
+<pre><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  #无命名空间，clusterrole用于全集群
+  name: admin-dashboard-minimal
+rules:
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;secrets&quot;]
+  verbs: [&quot;create&quot;]
+- apiGroups: [&quot;&quot;, &quot;extensions&quot;, &quot;apps&quot;]
+  resources: [&quot;deployments&quot;, &quot;pods&quot;, &quot;services&quot;]
+  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;, &quot;delete&quot;]
+</code></pre><p>3). 绑定角色</p>
+<pre><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-dashboard-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin-dashboard-minimal
+subjects:
+- kind: ServiceAccount
+  name: admin-dashboard
+  namespace: kube-system
+</code></pre><p>4). kubernetes dashboard必须以nodeport方式部署。</p>
+<ol start="2">
+<li>普通用户案例</li>
+</ol>
+<p>普通用户权限管理：k8s APIserver不支持普通用户创建，只需生成token（# head -c 16 /dev/urandom | od -An -t x| tr -d ‘ ‘）,<br>将该用户的token追加到kuberentesAPI启动参数中指定的token（通常在/etc/kubernetes/token.csv）文件中即可。设置用户ssh认证，<br>根据绑定的角色权限并追加到kubeconfig文件中，供客户端访问。终端命令行可以通过不同用户用不同上下文达到访问权限管理。<br>这个上下文可以转换成第三方用户管理平台，Header追加。authorization Bearer token 来访问。注意：普通用户需要重启（重新部署）apiserver。</p>
+<p>1). 创建用户token并录入token指定tom用户名。任何Linux终端执行如下（可选）：  </p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">	head -c 16 /dev/urandom | od -An -t x| tr -d &apos; &apos;  </span><br><span class="line">	```  </span><br><span class="line">	生成的token以&apos;token,user,uid,&quot;group1,group2,group3&quot;&apos;格式写入到其中一个master节点`/etc/kubernetes/ssl/token.csv`文件中。uid不重复的编号即可。如：716c8d3cd0e75dc25d1eb758e4635d39, tom, 10002, dev1    </span><br><span class="line">	然后重启apiserver以是当前新加的token生效，然后继续以下操作。</span><br><span class="line">	说明：此步骤可选, 2）中命令可生成用户</span><br><span class="line"></span><br><span class="line">2). SSH认证并绑定tom：  </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	### 生成证书</span><br><span class="line">	openssl genrsa -out employee.key 2048</span><br><span class="line">	openssl req -new -key employee.key -out employee.csr -subj &quot;/CN=tom/O=dev1&quot;  #用户tom，分组dev1</span><br><span class="line">	openssl x509 -req -in employee.csr -CA /etc/kubernetes/ssl/k8s-root-ca.pem -CAkey /etc/kubernetes/ssl/k8s-root-ca-key.pem -CAcreateserial -out employee.crt -days 5000</span><br><span class="line">	</span><br><span class="line">	### 将证书和tom用户绑定</span><br><span class="line">	kubectl config set-credentials tom --client-certificate=employee.crt --client-key=employee.key </span><br><span class="line">	kubectl config set-context employee-context --cluster=kubernetes --namespace=shelve-mgr --user=tom</span><br><span class="line">	</span><br><span class="line">	## 可用kubectl config view 查看添加是否成功。cluster, context, user</span><br><span class="line"></span><br><span class="line">3). 创建角色   </span><br><span class="line"></span><br><span class="line">	```  </span><br><span class="line">	kind: Role</span><br><span class="line">	apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">	metadata:</span><br><span class="line">	  namespace: shelve-mgr</span><br><span class="line">	  name: employee</span><br><span class="line">	rules:</span><br><span class="line">	- apiGroups: [&quot;&quot;]</span><br><span class="line">	  resources: [&quot;pods&quot;]</span><br><span class="line">	  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;]</span><br></pre></td></tr></table></figure>
+</code></pre><p>4). 角色绑定   </p>
+<pre><code>```
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: employee-role-binding
+  namespace: shelve-mgr
+subjects:
+- kind: User
+  name: tom
+roleRef:
+  kind: Role
+  name: employee
+  apiGroup: &quot;&quot;
+```  
+</code></pre><p>完成用户配置，现在用户终端受当前角色权限限制。普通用户需要重启apiserver后方可生效。</p>
+<p>1). 配置kubectl默认终端用户  </p>
+<pre><code>```  
+# 验证
+kubectl --config=employee-context get pods
+# 设置默认会话上下文
+kubectl config use-context employee-context
+```  
+</code></pre><p>2). 其他客户端及api请求以header中携带 Authorization: Bearer + token方式访问。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_setup/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -533,7 +984,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/数据结构与算法_常用数据结构/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_配置热更新/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -553,7 +1004,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/数据结构与算法_常用数据结构/" class="post-title-link" itemprop="url">Python数据结构</a>
+                <a href="/2018/05/24/k8s_配置热更新/" class="post-title-link" itemprop="url">Kubernetes ConfigMap热更新</a>
               
             
           </h2>
@@ -596,7 +1047,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python数据结构与算法/" itemprop="url" rel="index"><span itemprop="name">Python数据结构与算法</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python测试与运维开发/" itemprop="url" rel="index"><span itemprop="name">Python测试与运维开发</span></a></span>
 
                 
                 
@@ -633,30 +1084,25 @@
       
         
           
-            <h2 id="常用数据结构"><a href="#常用数据结构" class="headerlink" title="常用数据结构"></a>常用数据结构</h2><p><a href="http://data.biancheng.net/intro/" target="_blank" rel="noopener">数据结构与算法教程【全】</a></p>
-<h3 id="数据的逻辑结构"><a href="#数据的逻辑结构" class="headerlink" title="数据的逻辑结构"></a>数据的逻辑结构</h3><p>一、集合结构:结构中的数据元素之间除了同属于一个集合的关系外，无任何其他关系。</p>
-<p>二、线性表</p>
-<ol>
-<li>数组/栈/队列：顺序存储，随机访问</li>
-<li>链表：链表存储，顺序访问</li>
+            <h2 id="Kubernetes-ConfigMap热更新"><a href="#Kubernetes-ConfigMap热更新" class="headerlink" title="Kubernetes ConfigMap热更新"></a><a href="https://www.kubernetes.org.cn/3138.html" target="_blank" rel="noopener">Kubernetes ConfigMap热更新</a></h2><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>ConfigMap是用来存储配置文件的kubernetes资源对象，所有的配置内容都存储在etcd中</p>
+<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><ol>
+<li><p>文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: env-config</span><br><span class="line">  namespace: default</span><br><span class="line">data:</span><br><span class="line">  log_level: INFO</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap ...</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<p>三、散列表<br>前面使用的探查技术（probing），如果发生冲突，则将尝试列表中的下一个位置。<br>如果使用二度哈希（rehashing），则将导致所有的哈希被重新计算。<br>而链接技术（chaining）将采用额外的数据结构来处理冲突。Dictionary&lt;K,T&gt; 中的每个位置（slot）都映射到了一个链表。当冲突发生时，冲突的元素将被添加到桶（bucket）列表中。</p>
-<p>四、树与二叉树<br>  1.二叉树<br>  2.堆<br>  3.查找树<br>  4.平衡树<br>  5.线索</p>
-<p>五、图</p>
-<h3 id="数据的存储结构"><a href="#数据的存储结构" class="headerlink" title="数据的存储结构"></a>数据的存储结构</h3><p>存储结构是指数据结构在计算机中的表示（又称映像），也称物理结构。它包括数据元素的表示和关系的表示。<br>数据的存储结构是逻辑结构用计算机语言的实现，它依赖于计算机语言。<br>数据的存储结构主要有：顺序存储、链式存储、索引存储和散列存储。</p>
-<p>1.顺序存储:把逻辑上相邻的元素存储在物理位置上也相邻的存储单元里，元素之间的关系由存储单元的邻接关系来体现。<br>其优点是可以实现随机存取，每个元素占用最少的存储空间；缺点是只能使用相邻的一整块存储单元，因此可能产生较多的外部碎片。<br>通常借助于程序语言的数组实现。</p>
-<p>2.链接存储：不要求逻辑上相邻的元素在物理位置上也相邻，借助指示元素存储地址的指针表示元素之间的逻辑关系。<br>其优点是不会出现碎片现象，充分利用所有存储单元；缺点是每个元素因存储指针而占用额外的存储空间，并且只能实现顺序存取。</p>
-<p>3.索引存储：在存储元素信息的同时，还建立附加的索引表。索引表中的每一项称为索引项，索引项的一般形式是：（关键字，地址）。<br>其优点是检索速度快；缺点是增加了附加的索引表，会占用较多的存储空间。另外，在增加和删除数据时要修改索引表，因而会花费较多的时间。<br>若每个结点在索引表中都有一个索引项，则该索引表称之为稠密索引(Dense Index)。若一组结点在索引表中只对应一个索引项，则该索引表称为稀疏索引(Spare Index)。索引项的一般形式是：<br>关键字是能唯一标识一个结点的那些数据项。稠密索引中索引项的地址指示结点所在的存储位置;稀疏索引中索引项的地址指示一组结点的起始存储位置。</p>
-<p>4.散列存储：该方法的基本思想是：根据结点的关键字直接计算出该结点的存储地址。</p>
-<h3 id="数据运算"><a href="#数据运算" class="headerlink" title="数据运算"></a>数据运算</h3><p>施加在数据上的运算包括运算的定义和实现。运算的定义是针对逻辑结构的，指出运算的功能；运算的实现是针对存储结构的，指出运算的具体操作步骤。</p>
-<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><ol>
-<li><a href="https://blog.fundebug.com/2018/08/27/code-interview-data-structure/" target="_blank" rel="noopener">代码面试需要知道的8种数据结构(附面试题及答案链接)</a></li>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ol>
+<li><p>evn挂载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">envFrom:</span><br><span class="line">- configMapRef:</span><br><span class="line">    name: env-config</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>volume挂载：</p>
+</li>
 </ol>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a href="https://www.cnblogs.com/wanghuaijun/p/7302303.html" target="_blank" rel="noopener">常见数据结构与算法整理总结（上）</a></li>
-<li><a href="https://blog.csdn.net/yeyazhishang/article/details/82353846" target="_blank" rel="noopener">数据结构：八大数据结构分类</a></li>
-<li><a href="https://www.cnblogs.com/gaochundong/p/data_structures_and_asymptotic_analysis.html" target="_blank" rel="noopener">数据结构：八大数据结构分类</a></li>
-</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">volumeMounts:</span><br><span class="line">- name: config-volume</span><br><span class="line">  mountPath: /etc/config</span><br><span class="line">volumes:</span><br><span class="line">  - name: config-volume</span><br><span class="line">    configMap:</span><br><span class="line">      name: special-config</span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>更新 ConfigMap 后：</p>
+<p>使用该 ConfigMap 挂载的 Env 不会同步更新<br>使用该 ConfigMap 挂载的 Volume 中的数据需要一段时间（实测大概10秒）才能同步更新<br>ENV 是在容器启动的时候注入的，启动之后 kubernetes 就不会再改变环境变量的值，且同一个 namespace 中的 pod 的环境变量是不断累加的，参考 <a href="https://jimmysong.io/posts/exploring-kubernetes-env-with-docker/" target="_blank" rel="noopener">Kubernetes中的服务发现与docker容器间的环境变量传递源码探究</a>。为了更新容器中使用 ConfigMap 挂载的配置，可以通过滚动更新 pod 的方式来强制重新挂载 ConfigMap，也可以在更新了 ConfigMap 后，先将副本数设置为 0，然后再扩容。</p>
 
           
         
@@ -830,6 +1276,269 @@
 <h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><blockquote>
 <p>1.<a href="https://www.cnblogs.com/tinyxiong/p/7878468.html" target="_blank" rel="noopener">以太坊</a><br>2.<a href="https://www.btctrade.com/ethcoin/2706.html" target="_blank" rel="noopener">以太坊（ETH）为什么如此火爆 最短的时间内读懂以太坊</a><br>3.<a href="http://www.cocoachina.com/blockchain/20180226/22352.html" target="_blank" rel="noopener">以太坊开发入门，完整入门</a></p>
 </blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/python_about_nginx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TimWells">
+      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="jointlike by TimWells">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/24/python_about_nginx/" class="post-title-link" itemprop="url">nginx配置优化</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-05-24T14:50:25+08:00">2018-05-24</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web大型服务开发/" itemprop="url" rel="index"><span itemprop="name">web大型服务开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="nginx配置优化"><a href="#nginx配置优化" class="headerlink" title="nginx配置优化"></a>nginx配置优化</h2><ol>
+<li>全局<blockquote>
+<p>worker_processes  4; nginx运行工作进程个数，一般设置cpu的核心或者核心数x2</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>worker_rlimit_nofile 65535; 这个指令是指当一个nginx进程打开的最多文件描述符数目，理论值应该是最多打开文件数（ulimit -n）与nginx进程数相除，但是nginx分配请求并不是那么均匀，所以最好与ulimit -n的值保持一致。</p>
+</blockquote>
+<ol start="2">
+<li>Nginx事件处理模型<blockquote>
+<p>nginx采用epoll事件模型，处理效率高</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>work_connections是单个worker进程允许客户端最大连接数，这个数值一般根据服务器性能和内存来制定，实际最大值就是worker进程数乘以work_connections</p>
+</blockquote>
+<ol start="3">
+<li>开启高效传输模式<blockquote>
+<p>sendfile on；//开启高效文件传输模式，sendfile指令指定nginx是否调用sendfile函数来输出文件，对于普通应用设为 on，如果用来进行下载等应用磁盘IO重负载应用，可设置为off，以平衡磁盘与网络I/O处理速度，降低系统的负载。sendfile()可以在磁盘和TCP socket之间互相拷贝数据(或任意两个文件描述符)。Pre-sendfile是传送数据之前在用户空间申请数据缓冲区。之后用read()将数据从文件拷贝到这个缓冲区，write()将缓冲区数据写入网络。sendfile()是立即将数据从磁盘读到OS缓存。因为这种拷贝是在内核完成的，sendfile()要比组合read()和write()以及打开关闭丢弃缓冲更加有效(更多有关于sendfile)</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>tcp_nopush on；必须在sendfile开启模式才有效，防止网路阻塞，积极的减少网络报文段的数量（将响应头和正文的开始部分一起发送，而不一个接一个的发送。）</p>
+</blockquote>
+<ol start="4">
+<li>限制连接超时时间</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">keepalived_timeout客户端连接保持会话超时时间，超过这个时间，服务器断开这个链接</span><br><span class="line"></span><br><span class="line">tcp_nodelay；也是防止网络阻塞，不过要包涵在keepalived参数才有效</span><br><span class="line"></span><br><span class="line">client_header_buffer_size 4k;</span><br><span class="line">客户端请求头部的缓冲区大小，这个可以根据你的系统分页大小来设置，一般一个请求头的大小不会超过 1k，不过由于一般系统分页都要大于1k，所以这里设置为分页大小。分页大小可以用命令getconf PAGESIZE取得。</span><br><span class="line">open_file_cache max=102400 inactive=20s;</span><br><span class="line">这个将为打开文件指定缓存，默认是没有启用的，max指定缓存数量，建议和打开文件</span><br><span class="line">数一致，inactive 是指经过多长时间文件没被请求后删除缓存。</span><br><span class="line">open_file_cache_valid 30s;</span><br><span class="line">这个是指多长时间检查一次缓存的有效信息。</span><br><span class="line">open_file_cache_min_uses 1;</span><br><span class="line">open_file_cache指令中的inactive 参数时间内文件的最少使用次数，如果超过这个数字，文</span><br><span class="line">件描述符一直是在缓存中打开的，如上例，如果有一个文件在inactive 时间内一次没被使用，它将被移除。</span><br><span class="line"></span><br><span class="line">client_header_timeout设置请求头的超时时间。我们也可以把这个设置低些，如果超过这个时间没有发送任何数据，nginx将返回request time out的错误</span><br><span class="line"></span><br><span class="line">client_body_timeout设置请求体的超时时间。我们也可以把这个设置低些，超过这个时间没有发送任何数据，和上面一样的错误提示</span><br><span class="line"></span><br><span class="line">reset_timeout_connection 告诉nginx关闭不响应的客户端连接。这将会释放那个客户端所占有的内存空间。</span><br><span class="line"></span><br><span class="line">send_timeout响应客户端超时时间，这个超时时间仅限于两个活动之间的时间，如果超过这个时间，客户端没有任何活动，nginx关闭连接</span><br><span class="line"></span><br><span class="line">server_tokens  并不会让nginx执行的速度更快，但它可以关闭在错误页面中的nginx版本数字，这样对于安全性是有好处的。</span><br><span class="line"></span><br><span class="line">client_max_body_size上传文件大小限制</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li><p>fastcgi调优</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">fastcgi_connect_timeout 600; #指定连接到后端FastCGI的超时时间。</span><br><span class="line"></span><br><span class="line">fastcgi_send_timeout 600; #向FastCGI传送请求的超时时间。</span><br><span class="line"></span><br><span class="line">fastcgi_read_timeout 600; #指定接收FastCGI应答的超时时间。</span><br><span class="line"></span><br><span class="line">fastcgi_buffer_size 64k; #指定读取FastCGI应答第一部分需要用多大的缓冲区，默认的缓冲区大小为fastcgi_buffers指令中的每块大小，可以将这个值设置更小。</span><br><span class="line"></span><br><span class="line">fastcgi_buffers 4 64k; #指定本地需要用多少和多大的缓冲区来缓冲FastCGI的应答请求，如果一个php脚本所产生的页面大小为256KB，那么会分配4个64KB的缓冲区来缓存，如果页面大小大于256KB，那么大于256KB的部分会缓存到fastcgi_temp_path指定的路径中，但是这并不是好方法，因为内存中的数据处理速度要快于磁盘。一般这个值应该为站点中php脚本所产生的页面大小的中间值，如果站点大部分脚本所产生的页面大小为256KB，那么可以把这个值设置为“8 32K”、“4 64k”等。</span><br><span class="line"></span><br><span class="line">fastcgi_busy_buffers_size 128k; #建议设置为fastcgi_buffers的两倍，繁忙时候的buffer</span><br><span class="line"></span><br><span class="line">fastcgi_temp_file_write_size 128k;  #在写入fastcgi_temp_path时将用多大的数据块，默认值是fastcgi_buffers的两倍，该数值设置小时若负载上来时可能报502BadGateway</span><br><span class="line"></span><br><span class="line">fastcgi_temp_path #缓存临时目录</span><br><span class="line"></span><br><span class="line">fastcgi_intercept_errors on;#这个指令指定是否传递4xx和5xx错误信息到客户端，或者允许nginx使用error_page处理错误信息。</span><br><span class="line"></span><br><span class="line">注：静态文件不存在会返回404页面，但是php页面则返回空白页！！</span><br><span class="line"></span><br><span class="line">fastcgi_cache_path /usr/local/nginx1.10/fastcgi_cachelevels=1:2 keys_zone=cache_fastcgi:128minactive=1d max_size=10g;# fastcgi_cache缓存目录，可以设置目录层级，比如1:2会生成16*256个子目录，cache_fastcgi是这个缓存空间的名字，cache是用多少内存（这样热门的内容nginx直接放内存，提高访问速度），inactive表示默认失效时间，如果缓存数据在失效时间内没有被访问,将被删除，max_size表示最多用多少硬盘空间。</span><br><span class="line"></span><br><span class="line">fastcgi_cache cache_fastcgi;  #表示开启FastCGI缓存并为其指定一个名称。开启缓存非常有用，可以有效降低CPU的负载，并且防止502的错误放生。cache_fastcgi为proxy_cache_path指令创建的缓存区名称</span><br><span class="line"></span><br><span class="line">fastcgi_cache_valid 200 302 1h; #用来指定应答代码的缓存时间，实例中的值表示将200和302应答缓存一小时，要和fastcgi_cache配合使用</span><br><span class="line"></span><br><span class="line">fastcgi_cache_valid 301 1d;     #将301应答缓存一天</span><br><span class="line"></span><br><span class="line">fastcgi_cache_valid any 1m;     #将其他应答缓存为1分钟</span><br><span class="line"></span><br><span class="line">fastcgi_cache_min_uses 1;       #该指令用于设置经过多少次请求的相同URL将被缓存。</span><br><span class="line"></span><br><span class="line">fastcgi_cache_key http://$host$request_uri; #该指令用来设置web缓存的Key值,nginx根据Key值md5哈希存储.一般根据$host(域名)、$request_uri(请求的路径)等变量组合成proxy_cache_key 。</span><br><span class="line"></span><br><span class="line">fastcgi_pass #指定FastCGI服务器监听端口与地址，可以是本机或者其它</span><br><span class="line"></span><br><span class="line">总结：</span><br><span class="line"></span><br><span class="line">nginx的缓存功能有：proxy_cache / fastcgi_cache</span><br><span class="line"></span><br><span class="line">proxy_cache的作用是缓存后端服务器的内容，可能是任何内容，包括静态的和动态。</span><br><span class="line">fastcgi_cache的作用是缓存fastcgi生成的内容，很多情况是php生成的动态的内容。</span><br><span class="line">proxy_cache缓存减少了nginx与后端通信的次数，节省了传输时间和后端宽带。</span><br><span class="line">fastcgi_cache缓存减少了nginx与php的通信的次数，更减轻了php和数据库(mysql)的压力。</span><br><span class="line"></span><br><span class="line"> CGI是为了保证web server传递过来的数据是标准格式的，方便CGI程序的编写者。Fastcgi是用来提高CGI程序性能的。php-fpm是fastcgi进程的管理器，用来管理fastcgi进程的</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>gzip压缩传输优化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">使用gzip压缩功能，可能为我们节约带宽，加快传输速度，有更好的体验，也为我们节约成本，所以说这是一个重点。</span><br><span class="line"></span><br><span class="line">Nginx启用压缩功能需要你来ngx_http_gzip_module模块，apache使用的是mod_deflate</span><br><span class="line"></span><br><span class="line">一般我们需要压缩的内容有：文本，js，html，css，对于图片，视频，flash什么的不压缩，同时也要注意，我们使用gzip的功能是需要消耗CPU的！</span><br><span class="line"></span><br><span class="line">gzip on;</span><br><span class="line"></span><br><span class="line">gzip_min_length 2k;</span><br><span class="line"></span><br><span class="line">gzip_buffers    4 32k;</span><br><span class="line"></span><br><span class="line">gzip_http_version 1.1;</span><br><span class="line"></span><br><span class="line">gzip_comp_level 6;</span><br><span class="line"></span><br><span class="line">gzip_typestext/plain text/css text/javascriptapplication/json application/javascript application/x-javascriptapplication/xml;</span><br><span class="line"></span><br><span class="line">gzip_vary on;</span><br><span class="line"></span><br><span class="line">gzip_proxied any;</span><br><span class="line"></span><br><span class="line">gzip on;    #开启压缩功能</span><br><span class="line"></span><br><span class="line">gzip_min_length 1k; #设置允许压缩的页面最小字节数，页面字节数从header头的Content-Length中获取，默认值是0，不管页面多大都进行压缩，建议设置成大于1K，如果小与1K可能会越压越大。</span><br><span class="line"></span><br><span class="line">gzip_buffers 4 32k; #压缩缓冲区大小，表示申请4个单位为32K的内存作为压缩结果流缓存，默认值是申请与原始数据大小相同的内存空间来存储gzip压缩结果。</span><br><span class="line"></span><br><span class="line">gzip_http_version 1.1; #压缩版本，用于设置识别HTTP协议版本，默认是1.1，目前大部分浏览器已经支持GZIP解压，使用默认即可</span><br><span class="line"></span><br><span class="line">gzip_comp_level 6; #压缩比例，用来指定GZIP压缩比，1压缩比最小，处理速度最快，9压缩比最大，传输速度快，但是处理慢，也比较消耗CPU资源。</span><br><span class="line"></span><br><span class="line">gzip_types text/css text/xml application/javascript; #用来指定压缩的类型，‘text/html’类型总是会被压缩。</span><br><span class="line"></span><br><span class="line">默认值: gzip_types text/html (默认不对js/css文件进行压缩)</span><br><span class="line"># 压缩类型，匹配MIME��型进行压缩</span><br><span class="line"># 不能用通配符 text/*</span><br><span class="line"># (无论是否指定)text/html默认已经压缩 </span><br><span class="line"># 设置哪压缩种文本文件可参考 conf/mime.types</span><br><span class="line"></span><br><span class="line">gzip_vary on;  #varyheader支持，改选项可以让前端的缓存服务器缓存经过GZIP压缩的页面，例如用Squid缓存经过nginx压缩的数据</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>expires缓存调优</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">缓存，主要针对于图片，css，js等元素更改机会比较少的情况下使用，特别是图片，占用带宽大，我们完全可以设置图片在浏览器本地缓存365d，css，js，html可以缓存个10来天，这样用户第一次打开加载慢一点，第二次，就非常快了！缓存的时候，我们需要将需要缓存的拓展名列出来， Expires缓存配置在server字段里面</span><br><span class="line"></span><br><span class="line">location ~* \.(ico|jpe?g|gif|png|bmp|swf|flv)$ &#123;</span><br><span class="line"></span><br><span class="line">  expires 30d;</span><br><span class="line"></span><br><span class="line">  #log_not_found off;</span><br><span class="line"></span><br><span class="line">  access_log off;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location ~* \.(js|css)$ &#123;</span><br><span class="line"></span><br><span class="line">  expires 7d;</span><br><span class="line"></span><br><span class="line">  log_not_found off;</span><br><span class="line"></span><br><span class="line">  access_log off;</span><br><span class="line"></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">注：log_not_found off;是否在error_log中记录不存在的错误。默认是。</span><br><span class="line"></span><br><span class="line">总结：</span><br><span class="line"></span><br><span class="line">expire功能优点 （1）expires可以降低网站购买的带宽，节约成本（2）同时提升用户访问体验（3）减轻服务的压力，节约服务器成本，是web服务非常重要的功能。 expire功能缺点：被缓存的页面或数据更新了，用户看到的可能还是旧的内容，反而影响用户体验。解决办法：第一个缩短缓存时间，例如：1天，但不彻底，除非更新频率大于1天；第二个对缓存的对象改名。</span><br><span class="line"></span><br><span class="line">网站不希望被缓存的内容 1）网站流量统计工具2）更新频繁的文件（google的logo）</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>防盗链</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">防止别人直接从你网站引用图片等链接，消耗了你的资源和网络流量，那么我们的解决办法由几种： 1：水印，品牌宣传，你的带宽，服务器足够 2：防火墙，直接控制，前提是你知道IP来源 3：防盗链策略下面的方法是直接给予404的错误提示</span><br><span class="line"></span><br><span class="line">location ~*^.+\.(jpg|gif|png|swf|flv|wma|wmv|asf|mp3|mmf|zip|rar)$ &#123;</span><br><span class="line"></span><br><span class="line">    valid_referers noneblocked  www.benet.com benet.com;</span><br><span class="line"></span><br><span class="line">    if($invalid_referer) &#123;</span><br><span class="line"></span><br><span class="line">      #return 302  http://www.benet.com/img/nolink.jpg;</span><br><span class="line"></span><br><span class="line">      return 404;</span><br><span class="line"></span><br><span class="line">        break;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    access_log off;</span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">参数可以使如下形式：</span><br><span class="line">none 意思是不存在的Referer头(表示空的，也就是直接访问，比如直接在浏览器打开一个图片)</span><br><span class="line">blocked 意为根据防火墙伪装Referer头，如：“Referer:XXXXXXX”。</span><br><span class="line">server_names 为一个或多个服务器的列表，0.5.33版本以后可以在名称中使用“*”通配符。</span><br></pre></td></tr></table></figure>
+<ol start="9">
+<li>内核参数优化</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">fs.file-max = 999999：这个参数表示进程（比如一个worker进程）可以同时打开的最大句柄数，这个参数直线限制最大并发连接数，需根据实际情况配置。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_max_tw_buckets = 6000 #这个参数表示操作系统允许TIME_WAIT套接字数量的最大值，如果超过这个数字，TIME_WAIT套接字将立刻被清除并打印警告信息。该参数默认为180000，过多的TIME_WAIT套接字会使Web服务器变慢。</span><br><span class="line"></span><br><span class="line">注：主动关闭连接的服务端会产生TIME_WAIT状态的连接</span><br><span class="line">net.ipv4.ip_local_port_range = 1024 65000 #允许系统打开的端口范围。</span><br><span class="line">net.ipv4.tcp_tw_recycle = 1#启用timewait快速回收。</span><br><span class="line">net.ipv4.tcp_tw_reuse = 1#开启重用。允许将TIME-WAIT sockets重新用于新的TCP连接。这对于服务器来说很有意义，因为服务器上总会有大量TIME-WAIT状态的连接。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_keepalive_time = 30：这个参数表示当keepalive启用时，TCP发送keepalive消息的频度。默认是2小时，若将其设置的小一些，可以更快地清理无效的连接。</span><br><span class="line">net.ipv4.tcp_syncookies = 1#开启SYN Cookies，当出现SYN等待队列溢出时，启用cookies来处理。</span><br><span class="line">net.core.somaxconn = 40960 #web 应用中 listen 函数的 backlog 默认会给我们内核参数的 net.core.somaxconn 限制到128，而nginx定义的NGX_LISTEN_BACKLOG 默认为511，所以有必要调整这个值。</span><br><span class="line"></span><br><span class="line">注：对于一个TCP连接，Server与Client需要通过三次握手来建立网络连接.当三次握手成功后,我们可以看到端口的状态由LISTEN转变为ESTABLISHED,接着这条链路上就可以开始传送数据了.每一个处于监听(Listen)状态的端口,都有自己的监听队列.监听队列的长度与如somaxconn参数和使用该端口的程序中listen()函数有关</span><br><span class="line"></span><br><span class="line">somaxconn参数:定义了系统中每一个端口最大的监听队列的长度,这是个全局的参数,默认值为128，对于一个经常处理新连接的高负载 web服务环境来说，默认的 128 太小了。大多数环境这个值建议增加到 1024 或者更多。大的侦听队列对防止拒绝服务 DoS 攻击也会有所帮助。</span><br><span class="line">net.core.netdev_max_backlog = 262144 #每个网络接口接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目。</span><br><span class="line">net.ipv4.tcp_max_syn_backlog = 262144 #这个参数标示TCP三次握手建立阶段接受SYN请求队列的最大长度，默认为1024，将其设置得大一些可以使出现Nginx繁忙来不及accept新连接的情况时，Linux不至于丢失客户端发起的连接请求。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_rmem = 10240 87380 12582912#这个参数定义了TCP接受缓存（用于TCP接受滑动窗口）的最小值、默认值、最大值。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_wmem = 10240 87380 12582912：这个参数定义了TCP发送缓存（用于TCP发送滑动窗口）的最小值、默认值、最大值。</span><br><span class="line">net.core.rmem_default = 6291456：这个参数表示内核套接字接受缓存区默认的大小。</span><br><span class="line"></span><br><span class="line">net.core.wmem_default = 6291456：这个参数表示内核套接字发送缓存区默认的大小。</span><br><span class="line"></span><br><span class="line">net.core.rmem_max = 12582912：这个参数表示内核套接字接受缓存区的最大大小。</span><br><span class="line"></span><br><span class="line">net.core.wmem_max = 12582912：这个参数表示内核套接字发送缓存区的最大大小。</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_syncookies = 1：该参数与性能无关，用于解决TCP的SYN攻击。</span><br></pre></td></tr></table></figure>
+<p>下面贴一个完整的内核优化设置：</p>
+<p>fs.file-max = 999999</p>
+<p>net.ipv4.ip_forward = 0</p>
+<p>net.ipv4.conf.default.rp_filter = 1</p>
+<p>net.ipv4.conf.default.accept_source_route = 0</p>
+<p>kernel.sysrq = 0</p>
+<p>kernel.core_uses_pid = 1</p>
+<p>net.ipv4.tcp_syncookies = 1</p>
+<p>kernel.msgmnb = 65536</p>
+<p>kernel.msgmax = 65536</p>
+<p>kernel.shmmax = 68719476736</p>
+<p>kernel.shmall = 4294967296</p>
+<p>net.ipv4.tcp_max_tw_buckets = 6000</p>
+<p>net.ipv4.tcp_sack = 1</p>
+<p>net.ipv4.tcp_window_scaling = 1</p>
+<p>net.ipv4.tcp_rmem = 10240 87380 12582912</p>
+<p>net.ipv4.tcp_wmem = 10240 87380 12582912</p>
+<p>net.core.wmem_default = 8388608</p>
+<p>net.core.rmem_default = 8388608</p>
+<p>net.core.rmem_max = 16777216</p>
+<p>net.core.wmem_max = 16777216</p>
+<p>net.core.netdev_max_backlog = 262144</p>
+<p>net.core.somaxconn = 40960</p>
+<p>net.ipv4.tcp_max_orphans = 3276800</p>
+<p>net.ipv4.tcp_max_syn_backlog = 262144</p>
+<p>net.ipv4.tcp_timestamps = 0</p>
+<p>net.ipv4.tcp_synack_retries = 1</p>
+<p>net.ipv4.tcp_syn_retries = 1</p>
+<p>net.ipv4.tcp_tw_recycle = 1</p>
+<p>net.ipv4.tcp_tw_reuse = 1</p>
+<p>net.ipv4.tcp_mem = 94500000 915000000 927000000</p>
+<p>net.ipv4.tcp_fin_timeout = 1</p>
+<p>net.ipv4.tcp_keepalive_time = 30</p>
+<p>net.ipv4.ip_local_port_range = 1024 65000</p>
+<p>执行sysctl  -p使内核修改生效</p>
+<p>（10）关于系统连接数的优化：</p>
+<p>linux 默认值 open files为1024</p>
+<p>#ulimit -n</p>
+<p>1024</p>
+<p>说明server只允许同时打开1024个文件</p>
+<p>使用ulimit -a 可以查看当前系统的所有限制值，使用ulimit -n 可以查看当前的最大打开文件数。</p>
+<p>新装的linux 默认只有1024 ，当作负载较大的服务器时，很容易遇到error: too many open files。因此，需要将其改大</p>
+<p>在/etc/security/limits.conf最后增加：</p>
+<ul>
+<li><p>soft    nofile          65535</p>
+</li>
+<li><p>hard    nofile          65535</p>
+</li>
+<li><p>soft    noproc          65535</p>
+</li>
+<li><p>hard    noproc          65535</p>
+</li>
+</ul>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
+<li><a href="https://www.cnblogs.com/huamei2008/p/8747706.html" target="_blank" rel="noopener">Nginx配置性能优化</a></li>
+<li><a href="https://www.cnblogs.com/paul8339/p/6943396.html" target="_blank" rel="noopener">Nginx配置项优化详解【转】</a></li>
+<li><a href="https://blog.csdn.net/aoshilang2249/article/details/68940698" target="_blank" rel="noopener">nginx 关于Nginx的一些优化(突破十万并发)</a></li>
+</ol>
 
           
         
@@ -1312,7 +2021,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源有效性/">
+    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/05/24/k8s_资源等级/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TimWells">
@@ -1332,7 +2041,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/24/k8s_资源有效性/" class="post-title-link" itemprop="url">Kubernetes之健康检查与服务依赖处理</a>
+                <a href="/2018/05/24/k8s_资源等级/" class="post-title-link" itemprop="url">Kubernetes之QoS</a>
               
             
           </h2>
@@ -1412,43 +2121,13 @@
       
         
           
-            <h1 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h1><h2 id="使用Liveness及Readness探针"><a href="#使用Liveness及Readness探针" class="headerlink" title="使用Liveness及Readness探针"></a>使用Liveness及Readness探针</h2><p>1.Liveness探针：主要用于判断Container是否处于运行状态，比如当服务crash或者死锁等情况发生时，kubelet会kill掉Container, 然后根据其设置的restart policy进行相应操作（可能会在本机重新启动Container，或者因为设置Kubernetes QoS，本机没有资源情况下会被分发的其他机器上重新启动）。<br>2.Readness探针：主要用于进一步判断服务是否已经正常工作，如果服务没有加载完成或工作异常，服务所在的Pod的IP地址会从服务的endpoints中被移除，也就是说，当服务没有ready时，会将其从服务的load balancer中移除，不会再接受或响应任何请求。</p>
-<p>liveness可用不一定readness可用，容器存活期间服务可能卡死状态。因此服务检查周期要短于健康检查周期。</p>
-<hr>
-<h2 id="探针处理Handler类型"><a href="#探针处理Handler类型" class="headerlink" title="探针处理Handler类型"></a>探针处理Handler类型</h2><p>无论对于Readness或Liveness探针，Handler均支持以下3种类型：ExecAction, TCPSocketAction, HTTPGetAction。每种类型说明与举例如下：</p>
-<ol>
-<li><p>ExecAction：Container内部执行某个具体的命令，成功返回：shell命令返回0。<br>例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">   exec:</span><br><span class="line">     command:</span><br><span class="line">     - cat</span><br><span class="line">     - /tmp/healthy</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 5</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>TCPSocketAction：通过container的IP、port执行tcp进行检查，确认port是否打开，类似telnet<br>例子。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">readinessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 5</span><br><span class="line">   periodSeconds: 10</span><br><span class="line"> livenessProbe:</span><br><span class="line">   tcpSocket:</span><br><span class="line">     port: 8080</span><br><span class="line">   initialDelaySeconds: 15</span><br><span class="line">   periodSeconds: 20</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>HTTPGetAction: 通过container的IP、port、path，用HTTP Get请求进行检查，程序自定义返回结果及程序可用标准。<br>例子。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">  httpGet:</span><br><span class="line">    path: /healthz</span><br><span class="line">    port: 8080</span><br><span class="line">    httpHeaders:</span><br><span class="line">    - name: X-Custom-Header</span><br><span class="line">      value: Awesome</span><br><span class="line">  initialDelaySeconds: 3</span><br><span class="line">  periodSeconds: 3</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<hr>
-<h2 id="服务可用性与自动恢复"><a href="#服务可用性与自动恢复" class="headerlink" title="服务可用性与自动恢复"></a>服务可用性与自动恢复</h2><ol>
-<li>如果服务的健康检查（readiness）失败，故障的服务实例从service endpoint中下线，外部请求将不会再转发到该服务上，一定程度上保证正在提供的服务的正确性，如果服务自我恢复了（比如网络问题），会自动重新加入service endpoint对外提供服务。</li>
-<li>如果设置了Container（liveness）的探针，对故障服务的Container（liveness）的探针同样会失败，container会被kill掉，并根据原设置的container重启策略，系统倾向于在其原所在的机器上重启该container、或其他机器重新创建一个pod。</li>
-<li>由于上面的机制，整个服务实现了自身可用与自动恢复。</li>
-</ol>
-<hr>
-<p>##使用建议：</p>
-<ol>
-<li>建议对全部服务同时设置服务（readiness）和Container（liveness）的健康检查</li>
-<li>通过TCP对端口检查形式（TCPSocketAction），仅适用于端口已关闭或进程停止情况。因为即使服务异常，只要端口是打开状态，健康检查仍然是通过的。</li>
-<li>基于第二点，一般建议用ExecAction自定义健康检查逻辑，或采用HTTP Get请求进行检查（HTTPGetAction）。</li>
-<li>无论采用哪种类型的探针，一般建议设置检查服务（readiness）的时间短于检查Container（liveness）的时间，也可以将检查服务（readiness）的探针与Container（liveness）的探针设置为一致。目的是故障服务先下线，如果过一段时间还无法自动恢复，那么根据重启策略，重启该container、或其他机器重新创建一个pod恢复故障服务。</li>
-</ol>
-<hr>
-<h1 id="服务依赖"><a href="#服务依赖" class="headerlink" title="服务依赖"></a>服务依赖</h1><h2 id="理解Init-Container"><a href="#理解Init-Container" class="headerlink" title="理解Init Container"></a>理解Init Container</h2><p>一个pod中可以有一或多个Init Container。Pod的中多个Init Container启动顺序为yaml文件中的描述顺序，且串行方式启动，下一个Init/app Container必须等待上一个Init Container完成后方可启动</p>
-<p>由于Init Container必须要在pod状态变为Ready之前完成，所以其不需要readiness探针。另外在资源的requests与limits上与普通Container有细微差别，详见 Resources，除以上2点外，Init Container与普通Container并无明显区别</p>
-<p>Init Containers用途</p>
-<ol>
-<li>前文已经提及，由于Init Container必须在app Containers启动之前完成，所以可利用其特性，用作服务依赖处理。比如某一个服务A，需依赖db或memcached，那么可以利用服务A pod的Init Container判断db/memcached是否正常提供服务，如果启动服务失败或工作异常，设置Init Container启动失败，那么pod中的服务A就不会被启动了。</li>
-<li>应用镜像因安全原因等没办法安装或运行的工具，可放到Init Container中运行。另外，Init Container独立于业务服务，与业务无关的工具如sed, awk, python, dig等也可以按需放到Init Container之中。最后，Init Container也可以被授权访问应用Container无权访问的内容。</li>
-</ol>
+            <p><a href="http://dockone.io/article/2592" target="_blank" rel="noopener">Kubernetes之服务质量保证（QoS）</a></p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>在kubernetes中，每个POD都有个QoS标记，通过这个Qos标记来对POD进行服务质量管理。QoS的英文全称为”Quality of Service”,中文名为”服务质量”，它取决于用户对服务质量的预期，也就是期望的服务质量。对于POD来说，服务质量体现在两个指标上，一个指标是CPU，另一个指标是内存。在实际运行过程中，当NODE节点上内存资源紧张的时候，kubernetes根据POD具有的不同QoS标记，采取不同的处理策略。</p>
+<p>QoS优先级<br>3种QoS优先级从有低到高（从左向右）：<br>Best-Effort pods -&gt; Burstable pods -&gt; Guaranteed pods （服务优先级最高，优先保障服务可用）</p>
+<p>Best-Effort：如果对于全部的resources来说requests与limits均未设置，该pod的QoS即为Best-Effort<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">    name: bar</span><br><span class="line"></span><br><span class="line">        resources:</span><br></pre></td></tr></table></figure></p>
+<p>Burstable: pod中只要有一个容器的requests和limits的设置不相同，该pod的QoS即为Burstable。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"># 一：</span><br><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line">            requests:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">    name: bar</span><br><span class="line"></span><br><span class="line"># 二：</span><br><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            requests:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">    name: bar</span><br></pre></td></tr></table></figure></p>
+<p>Guaranteed：pod中所有容器都必须统一设置limits，并且设置参数都一致，如果有一个容器要设置requests，那么所有容器都要设置，并设置参数同limits一致，那么这个pod的QoS就是Guaranteed级别。<br>注：如果一个容器只指明limit而未设定request，则request的值等于limit值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line">    name: bar</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 100m</span><br><span class="line"></span><br><span class="line">                memory: 100Mi</span><br><span class="line"></span><br><span class="line">containers:</span><br><span class="line"></span><br><span class="line">    name: foo</span><br><span class="line"></span><br><span class="line">        resources:</span><br><span class="line"></span><br><span class="line">            limits:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br><span class="line"></span><br><span class="line">            requests:</span><br><span class="line"></span><br><span class="line">                cpu: 10m</span><br><span class="line"></span><br><span class="line">                memory: 1Gi</span><br></pre></td></tr></table></figure></p>
+<p>OOM分数值根据OOM_ADJ参数计算得出，对于Guaranteed级别的pod，OOM_ADJ参数设置成了-998，对于BestEffort级别的pod，OOM_ADJ参数设置成了1000，对于Burstable级别的POD，OOM_ADJ参数取值从2到999。对于kuberntes保留资源，比如kubelet，docker，OOM_ADJ参数设置成了-999，表示不会被OOM kill掉。OOM_ADJ参数设置的越大，通过OOM_ADJ参数计算出来OOM分数越高，表明该pod优先级就越低，当出现资源竞争时会越早被kill掉，对于OOM_ADJ参数是-999的表示kubernetes永远不会因为OOM而被kill掉。</p>
 
           
         
@@ -1721,358 +2400,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2018/03/24/python刷单/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/03/24/python刷单/" class="post-title-link" itemprop="url">python selenium实现自动运营之刷单</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-03-24 14:50:25" itemprop="dateCreated datePublished" datetime="2018-03-24T14:50:25+08:00">2018-03-24</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-02-24 14:50:25" itemprop="dateModified" datetime="2018-02-24T14:50:25+08:00">2018-02-24</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python做过有趣的事儿/" itemprop="url" rel="index"><span itemprop="name">Python做过有趣的事儿</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>记一次刷单视频：</p>
-<p><a href="https://v.youku.com/v_show/id_XNDE5OTYwMDc3Ng==.html?spm=a2h3j.8428770.3416059.1" target="_blank" rel="noopener">淘宝刷单</a></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jointlike.github.io/2017/05/22/git_cheatsheet/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="TimWells">
-      <meta itemprop="description" content="高效研究，快乐生活，用于python编程知识速查！大家玩的开心！">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jointlike by TimWells">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/05/22/git_cheatsheet/" class="post-title-link" itemprop="url">Git命令速查</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-05-22 14:50:25" itemprop="dateCreated datePublished" datetime="2017-05-22T14:50:25+08:00">2017-05-22</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2017-05-23 14:50:25" itemprop="dateModified" datetime="2017-05-23T14:50:25+08:00">2017-05-23</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/常用工具/" itemprop="url" rel="index"><span itemprop="name">常用工具</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h1><p><img src="/images/tools/git_cheatsheet.png" alt="Git命令速查"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2114,7 +2446,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2147,7 +2479,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2282,7 +2616,19 @@
                     
                       
                     
-                    <span class="site-state-item-count">59</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">65</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
